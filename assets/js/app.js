@@ -21586,6 +21586,7 @@ myForm.loadQuestions(selectedQuestions);
   //myForm.loadQuestions(questionsJSON);
   myForm.setNumberOfQuestions(myForm.getQuestionsCount());
   myForm.setTitle(questionsTitle);
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#countQuestions").html(myForm.getQuestionsCount());
   jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionsTitle").html(myForm.getTitle());
   var displayQuestions = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#displayQuestions");
   var question;
@@ -21632,10 +21633,8 @@ myForm.loadQuestions(selectedQuestions);
 	        questionDisplay.append(answerDivFalse);
     } else if (question.getAnswerType() == "S") {
       var answers = question.getAnswers();
-console.log("Answer= ",question.getAnswerType(),question.getAnswer())
       for (var i = 0; i < answers.length; i++) {
 		const isTrue = question.getAnswer().includes(i)
-		console.log(isTrue)
 		var answerDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(
 			`<div class="answerInputWrapper ${isTrue &&"answer_00"}" data-questionId="${questionId}"></div>`
 			);
@@ -21651,7 +21650,6 @@ console.log("Answer= ",question.getAnswerType(),question.getAnswer())
       }
     } else {
       var answers = question.getAnswers();
-console.log("Answer= ",question.getAnswerType(),question.getAnswer())
       for (var i = 0; i < answers.length; i++) {
 		const isTrue = question.getAnswer().includes(i)
 
