@@ -21626,11 +21626,11 @@ myForm.loadQuestions(selectedQuestions);
       currentInput.attr("value", "0");
 	  currentInput.attr("id", "answer__false__" + questionId);
       var labelFalse = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<label>False</label>");
-	    labelFalse.attr("for", "answer__false__" + questionId)
-		labelFalse.attr("data-questionId", questionId);
+	  labelFalse.attr("for", "answer__false__" + questionId)
+	  labelFalse.attr("data-questionId", questionId);
       answerDivFalse.append(currentInput);
       answerDivFalse.append(labelFalse);
-	        questionDisplay.append(answerDivFalse);
+	  questionDisplay.append(answerDivFalse);
     } else if (question.getAnswerType() == "S") {
       var answers = question.getAnswers();
       for (var i = 0; i < answers.length; i++) {
@@ -21640,6 +21640,7 @@ myForm.loadQuestions(selectedQuestions);
 			);
         currentInput = input.clone();
         currentInput.attr("value", i);
+		currentInput.attr("class", "answerInput");
         currentInput.attr("id", "answer__" + questionId+ "__"+ i);
         var label = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<label>" + answers[i] + "</label>");
 		label.attr("for", "answer__" + questionId+ "__"+ i);
@@ -21650,17 +21651,18 @@ myForm.loadQuestions(selectedQuestions);
       }
     } else {
       var answers = question.getAnswers();
+	  console.log(answers)
       for (var i = 0; i < answers.length; i++) {
 		const isTrue = question.getAnswer().includes(i)
-
 		var answerDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(
-			`<div class="answerInputWrapper ${isTrue &&"answer_00"}" data-questionId="${questionId}"></div>`
+			`<div class="answerInput answerInputWrapper ${isTrue &&"answer_00"}" data-questionId="${questionId}"></div>`
 			);
         currentInput = input.clone();
         currentInput.attr("type", "checkbox");
+		currentInput.attr("class", "answerInput");
         currentInput.attr("name", i);
+        currentInput.attr("value", i);
         currentInput.attr("id", "answer__" + questionId+ "__"+i);
-
         var label = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<label>" + answers[i] + "</label>");
 		  label.attr("for", "answer__" + questionId+ "__"+i )
 		  label.attr("data-questionId", questionId);
@@ -21679,22 +21681,17 @@ myForm.loadQuestions(selectedQuestions);
 
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".currentQuestionInput").val(myForm.getCurrentQuestion() + 1);
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
+  hideAnswers()
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").hide();
   jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionDisplay__0").show();
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionPrevious").attr("disabled", true);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionBeginning").attr("disabled", true);
    var countQuestions = document.getElementById('countQuestions');
 // ANCHOR : Show all questions
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").on("click", function () {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").hide();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").show();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").show();
-  });
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").on("click", ()=> finishQuizz());
   // ANCHOR : Show one question at a time
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").on("click", function () {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
+     hideAnswers()
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").hide();
 	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
 	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").show();
@@ -21703,14 +21700,13 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
 
   // ANCHOR : Show last  question
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionLast").on("click", function () {
-			const elements = document.getElementsByClassName("answer_00");
-			for (const element of elements) {
+	const elements = document.getElementsByClassName("answer_00");
+	for (const element of elements) {
   element.classList.remove("success");
 }
     var currentQuestion = myForm.getCurrentQuestion();
     var newQuestion = myForm.getQuestionsCount() - 1;
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").hide();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
+     hideAnswers()
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").hide();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionDisplay__" + newQuestion).show();
     myForm.setCurrentQuestion(newQuestion);
@@ -21729,14 +21725,13 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
 
   // ANCHOR : Show first question
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionBeginning").on("click", function () {
-			const elements = document.getElementsByClassName("answer_00");
-			for (const element of elements) {
+	const elements = document.getElementsByClassName("answer_00");
+	for (const element of elements) {
   element.classList.remove("success");
 }
     var currentQuestion = myForm.getCurrentQuestion();
     var newQuestion = 0;
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").hide();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
+    hideAnswers()
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").hide();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionDisplay__" + newQuestion).show();
     myForm.setCurrentQuestion(newQuestion);
@@ -21762,8 +21757,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
 }
 	  var currentQuestion = myForm.getCurrentQuestion();
     var newQuestion = currentQuestion - 1;
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").hide();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
+    hideAnswers()
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").hide();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionDisplay__" + newQuestion).show();
     myForm.setCurrentQuestion(newQuestion);
@@ -21788,8 +21782,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
 }
     var currentQuestion = myForm.getCurrentQuestion();
     var newQuestion = currentQuestion + 1;
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").hide();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
+    hideAnswers()
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").hide();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionDisplay__" + newQuestion).show();
     myForm.setCurrentQuestion(newQuestion);
@@ -21805,17 +21798,49 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".currentQuestionInput").val(myForm.getCurrentQuestion() + 1);
 	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".count").val(parseInt(myForm.getQuestionsCount()));
   });
-
-  // ANCHOR : Show the score
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionGetScore").on("click", function () {
+  // Hide class success
+  function hideAnswers(){
+	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").hide();
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
+  }
+  // Show class success
+  function showAnswers() {
 	const elements = document.getElementsByClassName("answer_00");
+	for (const element of elements) {
+  		element.classList.add("success");
+	}
+  }
+  // ANCHOR : Show the score
+  function showScore() {
     var score = myForm.getScore();
     var answersCount = myForm.getAnswersCount();
     var percent = answersCount > 0 ? parseInt(10000.00 * score / answersCount) / 100 + "%" : " " ;
+	showAnswers()
 
-	for (const element of elements) {
-  element.classList.add("success");
-}
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").html("<p class='displayScore-title'>Score actuel</p> <p class='percent'>" + percent+ "</p><p class='score'>"+score + " / " + answersCount +"</p>" );
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").show();
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").show();
+  }
+
+  function finishQuizz() {
+	isFinished = true
+	showScore()
+	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").hide();
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").show();
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").show();
+	// Stop Timer
+	isPaused = true;
+	playPauseButtonIcon.classList.remove("fa-play")
+	playPauseButtonIcon.classList.remove("fa-pause")
+	playPauseButtonIcon.classList.add("fa-rotate")
+  }
+
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionGetScore").on("click",function () {
+	var score = myForm.getScore();
+    var answersCount = myForm.getAnswersCount();
+    var percent = answersCount > 0 ? parseInt(10000.00 * score / answersCount) / 100 + "%" : " " ;
+	showAnswers()
+
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").html("<p class='displayScore-title'>Score actuel</p> <p class='percent'>" + percent+ "</p><p class='score'>"+score + " / " + answersCount +"</p>" );
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").show();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").show();
@@ -21833,8 +21858,6 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
     if (newQuestion <= 0) {
       newQuestion = 0;
     }
-
-
 
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").hide();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
@@ -21872,7 +21895,8 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
 // ANCHOR: Create a countdown of 1hour
 const targetTime = 60 * 60 ; // 60 minutes in seconds
 let seconds = targetTime;
-let isPaused = true;
+let isPaused = false;
+let isFinished = false;
 
 const timerElement = document.getElementById("countdown");
 const timerWrapper = document.getElementById("countdown-wrapper");
@@ -21904,7 +21928,7 @@ const countdown = setInterval(() => {
 }, 1000);
 
 playPauseButton.addEventListener("click", () => {
- if(seconds === 0)  {
+ if(seconds === 0 || isFinished)  {
 window.location.reload()
  } else {
 	 isPaused = !isPaused;
