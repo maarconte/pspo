@@ -21687,15 +21687,10 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionPrevious").attr("disabled", true);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionBeginning").attr("disabled", true);
    var countQuestions = document.getElementById('countQuestions');
-// ANCHOR : Show all questions
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").on("click", ()=> finishQuizz());
-  // ANCHOR : Show one question at a time
+
+  // ANCHOR : Restart
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").on("click", function () {
-     hideAnswers()
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").hide();
-	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
-	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").show();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionDisplay__" + myForm.getCurrentQuestion()).show();
+    window.location.reload()
   });
 
   // ANCHOR : Show last  question
@@ -21798,42 +21793,10 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(".currentQuestionInput").val(myForm.getCurrentQuestion() + 1);
 	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".count").val(parseInt(myForm.getQuestionsCount()));
   });
-  // Hide class success
-  function hideAnswers(){
-	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").hide();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
-  }
-  // Show class success
-  function showAnswers() {
-	const elements = document.getElementsByClassName("answer_00");
-	for (const element of elements) {
-  		element.classList.add("success");
-	}
-  }
-  // ANCHOR : Show the score
-  function showScore() {
-    var score = myForm.getScore();
-    var answersCount = myForm.getAnswersCount();
-    var percent = answersCount > 0 ? parseInt(10000.00 * score / answersCount) / 100 + "%" : " " ;
-	showAnswers()
 
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").html("<p class='displayScore-title'>Score actuel</p> <p class='percent'>" + percent+ "</p><p class='score'>"+score + " / " + answersCount +"</p>" );
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").show();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").show();
-  }
 
-  function finishQuizz() {
-	isFinished = true
-	showScore()
-	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").hide();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").show();
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").show();
-	// Stop Timer
-	isPaused = true;
-	playPauseButtonIcon.classList.remove("fa-play")
-	playPauseButtonIcon.classList.remove("fa-pause")
-	playPauseButtonIcon.classList.add("fa-rotate")
-  }
+  // ANCHOR : Show all questions
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").on("click", () => finishQuizz());
 
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionGetScore").on("click",function () {
 	var score = myForm.getScore();
@@ -21896,8 +21859,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").hide();
 const targetTime = 60 * 60 ; // 60 minutes in seconds
 let seconds = targetTime;
 let isPaused = false;
-let isFinished = false;
-
+  let isFinished = false;
 const timerElement = document.getElementById("countdown");
 const timerWrapper = document.getElementById("countdown-wrapper");
 const playPauseButton = document.getElementById("playPause");
@@ -21936,6 +21898,43 @@ window.location.reload()
 	 playPauseButtonIcon.classList.toggle("fa-pause")
  }
 });
+
+ // Hide class success
+  function hideAnswers(){
+	jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").hide();
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").hide();
+  }
+  // Show class success
+  function showAnswers() {
+	const elements = document.getElementsByClassName("answer_00");
+	for (const element of elements) {
+  		element.classList.add("success");
+	}
+  }
+  // ANCHOR : Show the score
+  function showScore() {
+    var score = myForm.getScore();
+    var answersCount = myForm.getAnswersCount();
+    var percent = answersCount > 0 ? parseInt(10000.00 * score / answersCount) / 100 + "%" : " " ;
+	showAnswers()
+
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").html("<p class='displayScore-title'>Score actuel</p> <p class='percent'>" + percent+ "</p><p class='score'>"+score + " / " + answersCount +"</p>" );
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".displayScore").show();
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionFeedback").show();
+  }
+
+  function finishQuizz() {
+	isFinished = true
+		showScore()
+		jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsAll").hide();
+		jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionsOne").show();
+		jquery__WEBPACK_IMPORTED_MODULE_0___default()(".questionDisplay").show();
+		// Stop Timer
+		isPaused = true;
+		playPauseButtonIcon.classList.remove("fa-play")
+		playPauseButtonIcon.classList.remove("fa-pause")
+		playPauseButtonIcon.classList.add("fa-rotate")
+  }
 
 
 /***/ }),
