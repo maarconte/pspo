@@ -21590,7 +21590,11 @@ myForm.loadQuestions(selectedQuestions);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionsTitle").html(myForm.getTitle());
   var displayQuestions = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#displayQuestions");
   var question;
-
+function bookmarkQuestion(bookmarkElement) {
+	console.log("element",bookmarkElement)
+bookmarkElement.classList.toggle("fa-solid")
+bookmarkElement.classList.toggle("fa-regular")
+}
   while (question = myForm.getNextQuestion()) {
     var questionId = myForm.getQuestionIndex();
     var questionDisplay = jquery__WEBPACK_IMPORTED_MODULE_0___default()("<div>");
@@ -21605,6 +21609,13 @@ myForm.loadQuestions(selectedQuestions);
     questionDisplay.addClass("small-12");
     questionDisplay.addClass("cell");
     questionDisplay.append("<h3>" + (1 + myForm.getQuestionIndex()) + " : " + question.getTitle() + "</h3>");
+	questionDisplay.append(`
+	<div class="bookmark">
+  <input type="checkbox" id="bookmark${questionId}" />
+  <label for="bookmark${questionId}"></label>
+</div>
+	`)
+
 
     if (question.getAnswerType() == "TF") {
       currentInput = input.clone();
@@ -21651,7 +21662,6 @@ myForm.loadQuestions(selectedQuestions);
       }
     } else {
       var answers = question.getAnswers();
-	  console.log(answers)
       for (var i = 0; i < answers.length; i++) {
 		const isTrue = question.getAnswer().includes(i)
 		var answerDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(
