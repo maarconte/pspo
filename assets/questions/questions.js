@@ -2,32 +2,6 @@ var questionsTitle = "Professional Scrum Product Owner";
 var questionsDefaultDuration = 60;
 var questionsDefaultNumberQuestions = 80;
 var questionsJSON = [
-/*
-	{
-		title: 		"",
-		answerType: "TF",
-		answer: 	true,
-		feedback: 	""
-	},
-	{
-		title: 		"",
-		answerType: "S",
-		answers: 	[
-						""
-					],
-		answer: 	0,
-		feedback: 	""
-	},
-	{
-		title: 		"",
-		answerType: "M",
-		answers: 	[
-						""
-					],
-		answer: 	[0],
-		feedback: 	""
-	},
-*/
 	{
 		title: 		"Who should know the most about the progress toward a business objective or a release, and be able to explain the alternatives most clearly?",
 		answerType: "S",
@@ -835,7 +809,7 @@ var questionsJSON = [
 		answerType: "S",
 		answers: 	[
 						"The Development Team",
-						"The Scrum Master",			
+						"The Scrum Master",
 						"The Product Owner",
 						"The most junior member of the team"
 					],
@@ -847,7 +821,7 @@ var questionsJSON = [
 		answerType: "S",
 		answers: 	[
 						"When all Product Backlog items meet their definition of done.",
-						"When the Product Owner says it is done.",			
+						"When the Product Owner says it is done.",
 						"When all the tasks are completed.",
 						"When the time-box expires."
 					],
@@ -1772,7 +1746,7 @@ var questionsJSON = [
 						"Ready for integration",
 						"All work to create software that is ready to be released to end users",
 						"Whatever the Product Owner defines as quality",
-						"All work the Development Team is willing to do"	
+						"All work the Development Team is willing to do"
 					],
 		answer: 	[0,2],
 		feedback: 	""
@@ -1781,10 +1755,10 @@ var questionsJSON = [
 		title: 		"A Product Backlog is : Choose three answers",
 		answerType: "M",
 		answers: 	[
-						"An inventory of things to be done for the Product",	
-						"Ordered based on priority, value, dependencies, and risk",	
-						"An exhaustive list of upfront approved requirements to be implemented for the system",	
-						"Managed by the Product Owner",	
+						"An inventory of things to be done for the Product",
+						"Ordered based on priority, value, dependencies, and risk",
+						"An exhaustive list of upfront approved requirements to be implemented for the system",
+						"Managed by the Product Owner",
 						"Only visible to the Product Owner and stakeholders"
 					],
 		answer: 	[0,1,3],
@@ -1794,10 +1768,10 @@ var questionsJSON = [
 		title: 		"A Project Manager working with your Scrum Team has raised concerns about progress and money spent. What are the two best responses ?",
 		answerType: "M",
 		answers: 	[
-						"Scrum doesn't have Project Managers so disregard",	
-						"Share the Product Backlog and the forecast for the Sprint ",	
-						"Show the Earned Value Analysis for the last 3 Sprints",	
-						"Share the current impediments",	
+						"Scrum doesn't have Project Managers so disregard",
+						"Share the Product Backlog and the forecast for the Sprint ",
+						"Show the Earned Value Analysis for the last 3 Sprints",
+						"Share the current impediments",
 						"Share the last stakeholder briefing document prepared by the Product Owner"
 					],
 		answer: 	[1,3],
@@ -1807,9 +1781,9 @@ var questionsJSON = [
 		title: 		"At the end of a Sprint a Product Backlog item worked on during the Sprint does not meet the Definition of Done. What two things should happen with the undone Product Backlog item ? Choose two answers",
 		answerType: "M",
 		answers: 	[
-						"Put it on the Product Backlog for the Product Owner to decide what to do with it",	
-						"If the stakeholders agree, the Product Owner can accept it and release it to the users",	
-						"Do not include the item in the increment this Sprint",	
+						"Put it on the Product Backlog for the Product Owner to decide what to do with it",
+						"If the stakeholders agree, the Product Owner can accept it and release it to the users",
+						"Do not include the item in the increment this Sprint",
 						"Review the item, add the 'Done' part of the estimate to the velocity and create a story for the remaining work"
 					],
 		answer: 	[0,2],
@@ -1871,7 +1845,7 @@ var questionsJSON = [
 		answerType: "M",
 		answers: 	[
 						"Release burndown diagram",
-						"Burndown chart",			
+						"Burndown chart",
 						"Feature burn-up",
 						"Critical Path Analysis",
 						"Refactoring",
@@ -1900,7 +1874,7 @@ var questionsJSON = [
 		answers: 	[
 						"By being a lightweight framework",
 						"By removing titles for Development Team members",
-						"By preventing stakeholders from entering the development room",			
+						"By preventing stakeholders from entering the development room",
 						"By the Development Team deciding what work to do in a Sprint",
 						"By not allowing documentation"
 					],
@@ -1935,7 +1909,7 @@ var questionsJSON = [
 		title:		"What are two responsibilities of testers in a Development Team ? Choose two answers",
 		answerType: "M",
 		answers: 	[
-						"Scrum has no 'tester' role",	
+						"Scrum has no 'tester' role",
 						"Finding bugs",
 						"Verifying the work of programmers",
 						"Tracking quality metrics",
@@ -2172,7 +2146,7 @@ var questionsJSON = [
 		feedback: 	""
 	},
 	{
-		title:		"Every Development Team should have :",	
+		title:		"Every Development Team should have :",
 		answerType: "S",
 		answers: 	[
 						"The competencies and skills needed to deliver a Done Increment in a Sprint",
@@ -2324,7 +2298,7 @@ var questionsJSON = [
 						"They are stated as User Stories and cannot be epics",
 						"They are stated as User Stories or use cases and test cases must have been identified",
 						"They are clearly stated, refined and understood by the Product Owner and the Development Team such that a forecast of items can be made to implement the Sprint Goal",
-						"They are fully described as User Stories or use cases already decomposed into tasks that will require no more than one-person day to complete by the Development Team"	
+						"They are fully described as User Stories or use cases already decomposed into tasks that will require no more than one-person day to complete by the Development Team"
 					],
 		answer: 	2,
 		feedback: 	""
@@ -2428,7 +2402,7 @@ var questionsJSON = [
 		feedback: 	""
 	},
 	{
-		title:		"What might indicate to a Product Owner that she needs to work more with the Scrum Team ?",	
+		title:		"What might indicate to a Product Owner that she needs to work more with the Scrum Team ?",
 		answerType: "S",
 		answers: 	[
 						"She isn't working full time with the Scrum Team",
@@ -2444,7 +2418,7 @@ var questionsJSON = [
 		answerType: "S",
 		answers: 	[
 						"The Development Team has difficulties creating a forecast of work for the Sprint",
-						"Nothing in particular",		
+						"Nothing in particular",
 						"It is compensated if the Product Owner gives the team a clear Sprint Goal instead",
 						"The meeting in cancelled so refinement can be done first",
 						"The Scrum Master shouldn't allow this to happen. Look for a new Scrum Master and re-start the Sprint"
@@ -2468,7 +2442,7 @@ var questionsJSON = [
 		title:		"When does the second Sprint start ?",
 		answerType: "S",
 		answers: 	[
-						"After the customer completes acceptance testing of the first Sprint",			
+						"After the customer completes acceptance testing of the first Sprint",
 						"Immediately after the first Sprint",
 						"After the Product Backlog for the second Sprint has been selected",
 						"Once the architectural changes for the second Sprint have been approved by the senior architect"
@@ -2521,7 +2495,7 @@ var questionsJSON = [
 						"What can be done and how to do it",
 						"Who is on the team and what team members roles will be ",
 						"What to do and who will do it ",
-						"How conditions have changed and how the Product Backlog should evolve",			
+						"How conditions have changed and how the Product Backlog should evolve",
 						"What went wrong in the last Sprint and what to do differently this Sprint"
 					],
 		answer: 	0,
@@ -2708,7 +2682,7 @@ var questionsJSON = [
 		answers: 	[
 						"You create an independent Product Backlog per Scrum Team",
 						"You identify the dependencies and re-order the Product Backlog for them",
-						"You work with the Development Teams on how to best parse the worked",			
+						"You work with the Development Teams on how to best parse the worked",
 						"You divide Product Backlog items among the six Product Owners",
 						"You raise this as an impediment with the Scrum Master"
 					],
@@ -2782,29 +2756,3 @@ var questionsJSON = [
 		feedback: 	""
 	}
 ];
-/*
-	{
-		title: 		"",
-		answerType: "TF",
-		answer: 	true,
-		feedback: 	""
-	},
-	{
-		title: 		"",
-		answerType: "S",
-		answers: 	[
-						""
-					],
-		answer: 	0,
-		feedback: 	""
-	},
-	{
-		title: 		"",
-		answerType: "M",
-		answers: 	[
-						""
-					],
-		answer: 	[0],
-		feedback: 	""
-	}
-*/
