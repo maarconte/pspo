@@ -252,3 +252,119 @@
 .ml-1 {
   margin-left: 1rem;
 }
+/* Upload */
+#copyButton {
+  display: none;
+}
+.input {
+  display: block;
+  margin-bottom: 1.5em;
+  min-width: 10em;
+}
+
+.input:hover .input__support {
+  border-color: #9fa8b2;
+}
+
+.input:hover .input__support:before {
+  color: #7d8a96;
+}
+
+.input__text {
+  display: block;
+  padding-bottom: 0.5em;
+  margin-left: 0.18em;
+}
+
+
+.input .input__support:before {
+font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+
+}
+
+.input .input__support,
+.input .input__field {
+  border-radius: 0;
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #464a4c;
+  background-color: #fff;
+  background-image: none;
+  background-clip: padding-box;
+  border: 1px solid #c1c7cd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.input__field:focus+.input__support {
+  border-color: #037DE4;
+}
+
+.input__field:valid+.input__support {
+  border-color: #4DD171;
+}
+
+.input__field:valid+.input__support:before {
+  content: '\f00c';
+  color: #4DD171;
+}
+
+.input__field:valid+.input__support .input__helper:before {
+  content: "Prêt à convertir !";
+  color: #7d8a96;
+}
+
+.input__field:invalid+.input__support:before {
+  content: "\f093";
+}
+
+.input__field:invalid+.input__support .input__helper:before {
+  content: "Choisir un fichier";
+}
+
+.input__support {
+  display: flex !important;
+  align-items: center;
+}
+
+.input__support:before {
+  content: "\f093";
+  display: inline-block;
+  color: #9fa8b2;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin: -0.5rem 0.5rem -0.5rem -0.2rem;
+  transition: color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.input__helper:before {
+  font-weight: 200;
+  color: #9fa8b2;
+  content: "Choisir un fichier";
+}
+
+.input--file {
+  cursor: pointer;
+}
+
+.input--file input[type=file] {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+  padding: 0;
+}

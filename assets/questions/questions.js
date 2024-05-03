@@ -1,6 +1,3 @@
-var questionsTitle = "Professional Scrum Product Owner";
-var questionsDefaultDuration = 60;
-var questionsDefaultNumberQuestions = 80;
 var questionsJSON = [
 	{
 		title: 		"Who should know the most about the progress toward a business objective or a release, and be able to explain the alternatives most clearly?",
