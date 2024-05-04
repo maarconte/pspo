@@ -52,7 +52,9 @@
   padding: .5rem 1rem;
   margin-top: 1rem;
 }
-
+.content {
+              justify-content: center;
+}
 .top {
   display: flex;
   align-items: center;
@@ -223,11 +225,13 @@
 }
 
 .currentQuestionInput {
-  width: 50px;
+  width: 50px !important;
   text-align: center;
-  margin-bottom: 0;
+  margin-bottom: 0!important;
 }
-
+.questionPrevious, .questionNext {
+  margin: 0 !important;
+}
 .navigation {
   display: flex;
   justify-content: space-between;
@@ -367,4 +371,48 @@ font-family: 'Font Awesome 6 Free';
   position: absolute;
   z-index: -1;
   padding: 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .grid-container{
+    margin: 0 !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+    height: 100vh;
+    .content {
+          height: 100%;
+          display:flex;
+          flex-direction: column;
+          gap: 1.5rem;
+                      justify-content: flex-start;
+    }
+  }
+  .questions {
+    padding: 1.5rem 1rem;
+    margin-bottom: 0;
+  }
+
+    .questionDisplay {
+      h3 {
+        max-width: 90%;
+      }
+    }
+.navigation {
+  flex-direction: column;
+  gap: 1rem;
+margin-top: auto;
+}
+
+.top {
+  height: initial;
+    margin-bottom: 0 !important;
+}
+h1 {
+  margin-bottom: 0 !important;
+}
+.index .button {
+margin-top: auto;
+}
 }

@@ -21585,9 +21585,9 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).foundation().ready(funct
 myForm.loadQuestions(selectedQuestions);
   //myForm.loadQuestions(questionsJSON);
   myForm.setNumberOfQuestions(myForm.getQuestionsCount());
-  myForm.setTitle(questionsTitle);
+//   myForm.setTitle(questionsTitle);
   jquery__WEBPACK_IMPORTED_MODULE_0___default()("#countQuestions").html(myForm.getQuestionsCount());
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionsTitle").html(myForm.getTitle());
+//   jquery__WEBPACK_IMPORTED_MODULE_0___default()("#questionsTitle").html(myForm.getTitle());
   var displayQuestions = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#displayQuestions");
   var question;
 function bookmarkQuestion(bookmarkElement) {
