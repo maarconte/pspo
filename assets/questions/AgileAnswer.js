@@ -52,11 +52,12 @@ AgileAnswer.prototype.getScore = function(agileQuestion) {
 		if (this.answer.length == 1 && questionAnswers.length == 1 && this.answer[0] == questionAnswers[0]) {
 			score = 1;
 		}
-	} else if (agileQuestion.getAnswerType() == "M") {
-		if (this.answer.length == questionAnswers.length) {
+	} else if (agileQuestion.answerType === "M") {
+		const filteredAnswers = this.answer.filter(element => !Number.isNaN(element));
+		if (filteredAnswers.length === questionAnswers.length) {
 			different = false;
-			for (var i = 0; i < this.answer.length; i++) {
-				if (this.answer[i] != questionAnswers[i]) {
+			for (var i = 0; i < filteredAnswers.length; i++) {
+				if (filteredAnswers[i] != questionAnswers[i]) {
 					different = true;
 				}
 			}

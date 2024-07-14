@@ -21578,7 +21578,8 @@ function selectRandomQuestions(questions, count) {
   // Sélectionne des questions au hasard
   const shuffledQuestions = questions.slice(); // Copie le tableau de questions
   shuffleArray(shuffledQuestions);
-  return shuffledQuestions.slice(0, count); // Retourne les `count` premières questions
+console.log(shuffledQuestions.slice(0, count).filter((question)=> question.answerType == "M"))
+  return shuffledQuestions.slice(0, count).filter((question)=> question.answerType == "M"); // Retourne les `count` premières questions
 }
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).foundation().ready(function () {
 	const selectedQuestions = selectRandomQuestions(questionsJSON, 80);
