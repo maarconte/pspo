@@ -155,7 +155,7 @@ AgileForm.prototype.addAnswer = function(questionId, answer) {
 		this.answers[questionId].setQuestionId(questionId);
 	}
 	var question = this.questions[questionId];
-	console.log(questionId)
+
 	if (question.getAnswerType() == "TF") {
 		if (answer == 1) answer = true;
 		if (answer == 0) answer = false;
@@ -193,7 +193,6 @@ AgileForm.prototype.getScore = function() {
 
 AgileForm.prototype.getAnswersCount = function() {
 	out = 0;
-
 	for (var i = 0; i < this.questions.length; i++) {
 		if (this.answers[i] instanceof AgileAnswer) {
 			out++;
