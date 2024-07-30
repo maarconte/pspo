@@ -21575,10 +21575,10 @@ function shuffleArray(array) {
 }
 
 function selectRandomQuestions(questions, count) {
-  // Sélectionne des questions au hasard
-  const shuffledQuestions = questions.slice(); // Copie le tableau de questions
+  // Sélectionne des questions au hasard sans doublons
+  const uniqueQuestions = new Set(questions); // Crée un ensemble pour éliminer les doublons
+  const shuffledQuestions = [...uniqueQuestions]; // Convertit l'ensemble en tableau et le mélange
   shuffleArray(shuffledQuestions);
-
   return shuffledQuestions.slice(0, count); // Retourne les `count` premières questions
 }
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).foundation().ready(function () {
