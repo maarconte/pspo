@@ -5,7 +5,7 @@ export default function Home() {
     <div className="h-100vh p-2 m-0">
       <div className="content">
         <h1 id="questionsTitle" className="text-center">
-          Teach Agile : PSPO I V2
+          Teach Agile : PSPO I
         </h1>
         <div className="card">
           <h2>Instructions </h2>
