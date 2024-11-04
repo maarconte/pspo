@@ -1,0 +1,19 @@
+@import "./base";
+@import "./headings";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  padding: 1.5rem;
+}
+
+.card {
+  background-color: rgb(236, 233, 246);
+  padding: 1rem;
+  margin: 0 auto;
+  display: block;
+  max-width: 500px;
+}
