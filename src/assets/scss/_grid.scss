@@ -1,0 +1,90 @@
+$GRID_COLUMNS: 12;
+$GRID_GAP: 1rem;
+
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+
+  @include breakpoint(tablet) {
+    max-width: 750px;
+  }
+
+  @include breakpoint(laptop) {
+    max-width: 970px;
+  }
+
+  @include breakpoint(desktop) {
+    max-width: 1170px;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat($GRID_COLUMNS, 1fr);
+  gap: $GRID_GAP;
+}
+
+@for $i from 1 through $GRID_COLUMNS {
+  .col-#{$i} {
+    grid-column: span $i;
+    flex-grow: 0;
+    flex-shrink: 0;
+    max-width: 100%;
+    height: 100%;
+  }
+
+  .col-sm-#{$i} {
+    grid-column: span $i;
+    flex-grow: 0;
+    flex-shrink: 0;
+    max-width: 100%;
+    height: 100%;
+
+    @include breakpoint(mobile) {
+      grid-column: span 12;
+      max-width: 100%;
+    }
+  }
+
+  .col-md-#{$i} {
+    grid-column: span 12;
+    max-width: 100%;
+    height: 100%;
+
+    @include breakpoint(tablet) {
+      grid-column: span $i;
+      flex-grow: 0;
+      flex-shrink: 0;
+      max-width: 100%;
+    }
+  }
+
+  .col-lg-#{$i} {
+    grid-column: span 12;
+    max-width: 100%;
+    height: 100%;
+
+    @include breakpoint(laptop) {
+      grid-column: span $i;
+      flex-grow: 0;
+      flex-shrink: 0;
+      max-width: 100%;
+    }
+  }
+
+  .col-xl-#{$i} {
+    grid-column: span 12;
+    max-width: 100%;
+    height: 100%;
+
+    @include breakpoint(desktop) {
+      grid-column: span $i;
+      flex-grow: 0;
+      flex-shrink: 0;
+      max-width: 100%;
+    }
+  }
+}
