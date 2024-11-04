@@ -1,0 +1,76 @@
+/* Responsive */
+@mixin breakpoint($device) {
+    @if $device == desktop {
+        @media screen and (min-width: 1200px) {
+            @content;
+        }
+    }
+    @else if $device == laptop {
+        @media screen and (min-width: 992px) {
+            @content;
+        }
+    }
+    @else if $device == tablet {
+        @media screen and (min-width: 768px) {
+            @content;
+        }
+    }
+    @else if $device == phablet {
+        @media screen and (min-width: 491px) {
+            @content;
+        }
+    }
+    @else if $device == mobile {
+        @media screen and (max-width: 490px) {
+            @content;
+        }
+    }
+}
+
+/* HEADINGS
+/––––––––––––––––––––––––*/
+// Create a step size
+// Mixin pour gérer les tailles de texte responsives
+@mixin responsive-font-size($size, $line-height: null, $weight: null) {
+    font-size: $size / 16 * 1rem; // Convertit les pixels en rem
+    @if $line-height != null {
+        line-height: $line-height / $size;
+    }
+
+    @if $weight != null {
+        font-weight: $weight;
+    }
+
+    // Media Queries pour les écrans plus petits
+    @media (max-width: 768px) {
+        font-size: $size / 16 * 0.875 * 1rem; // Réduit la taille de police pour les écrans plus petits
+        @if $line-height != null {
+            line-height: $line-height / $size * 1.2; // Ajuste la hauteur de ligne pour les écrans plus petits
+        }
+    }
+
+    // Media Queries pour les écrans encore plus petits
+    @media (max-width: 480px) {
+        max-width: 100%;
+        font-size: $size / 16 * 0.65 * 1rem; // Réduit la taille de police pour les écrans encore plus petits
+        @if $line-height != null {
+            line-height: $line-height / $size * 1.4; // Ajuste la hauteur de ligne pour les écrans encore plus petits
+        }
+    }
+}
+
+/* FLEXBOX */
+@mixin flexbox($direction: row, $justify-content: flex-start, $align-items: stretch, $gap: null) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify-content;
+    align-items: $align-items;
+    gap: $gap;
+}
+
+/* Text truncate */
+@mixin text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
