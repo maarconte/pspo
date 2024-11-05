@@ -128,6 +128,13 @@
   height: 100vh;
 }
 
+// ellipsis
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 //$colors: ("primary": $PRIMARY_40, "secondary": $SECONDARY_40, "success": $SUCCESS_40, "danger": $ERROR_40, "warning": $ACCENT_40, "light": $NEUTRAL_100);
 
 // loop for colors

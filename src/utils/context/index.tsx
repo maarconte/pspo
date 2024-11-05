@@ -6,6 +6,7 @@ import { useFetchFirebase } from "../hooks";
 // Create a context for the questions fetched from Firebase
 interface QuestionsContextValue {
   questions: Question[];
+  allQuestions: Question[];
   score: number;
   setScore: (score: number) => void;
   userAnswers: UserAnswer[];
@@ -14,6 +15,7 @@ interface QuestionsContextValue {
 
 export const QuestionsContext = createContext<QuestionsContextValue>({
   questions: [],
+  allQuestions: [],
   score: 0,
   setScore: () => {},
   userAnswers: [],
@@ -29,6 +31,7 @@ interface QuestionsProviderProps {
 
 export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [score, setScore] = useState<number>(0);
   const [userAnswers, setUserAnswers] = useState<any[]>([]);
   // Fetch questions from Firebase
@@ -37,15 +40,24 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
   useEffect(() => {
     if (!isLoading && !errorMessage) {
       // select 80 random questions
-      data.sort(() => Math.random() - 0.5);
-      data.length = 80;
-      setQuestions(data);
+      const selectedQuestions = [...data];
+      selectedQuestions.sort(() => Math.random() - 0.5);
+      selectedQuestions.length = 80;
+      setQuestions(selectedQuestions);
+      setAllQuestions(data);
     }
   }, [data, isLoading, errorMessage]);
 
   return (
     <QuestionsContext.Provider
-      value={{ questions, score, setScore, userAnswers, setUserAnswers }}
+      value={{
+        questions,
+        score,
+        setScore,
+        userAnswers,
+        setUserAnswers,
+        allQuestions,
+      }}
     >
       {children}
     </QuestionsContext.Provider>

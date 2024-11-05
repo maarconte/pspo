@@ -1,6 +1,8 @@
 @import "./base";
 @import "./headings";
 
+@import "./atoms/atoms";
+
 * {
   box-sizing: border-box;
 }

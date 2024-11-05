@@ -1,0 +1,42 @@
+@import "../../../assets/scss/variables";
+
+.Pagination {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+
+  .pagination__container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pagination__page {
+    font-weight: 700;
+    font-size: 0.875rem;
+    border: none;
+    background: transparent;
+
+    border-bottom: 2px solid transparent;
+
+    &--active {
+      color: $primary-500;
+      border-bottom: 2px solid $primary-900;
+    }
+  }
+
+  .pagination__navigation {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: $primary-500;
+    color: #fff;
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+}

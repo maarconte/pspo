@@ -33,6 +33,11 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    // only add questions once
+    // addQuestions();
+  }, []);
+
   return (
     <QuestionsProvider>
       <HashRouter>
