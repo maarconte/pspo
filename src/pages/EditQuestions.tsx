@@ -6,6 +6,12 @@ export default function EditQuestions() {
     <div className="EditQuestions">
       <div className="container">
         <h1 className="text-center">Edit Questions</h1>
+        {/*
+			  Stats :
+			  - Total questions
+			  - Total questions flagged
+			  - Total questions missing feedback
+			  */}
         <TableQuestions />
       </div>
     </div>

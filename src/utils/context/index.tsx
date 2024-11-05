@@ -1,5 +1,8 @@
+import "react-toastify/dist/ReactToastify.css";
+
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { Question, UserAnswer } from "../types";
+import { ToastContainer, toast } from "react-toastify";
 
 import { useFetchFirebase } from "../hooks";
 
@@ -45,6 +48,9 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
       selectedQuestions.length = 80;
       setQuestions(selectedQuestions);
       setAllQuestions(data);
+    } else if (errorMessage) {
+      const notify = () => toast.error(errorMessage.toString());
+      notify();
     }
   }, [data, isLoading, errorMessage]);
 
@@ -60,6 +66,7 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
       }}
     >
       {children}
+      <ToastContainer autoClose={false} />
     </QuestionsContext.Provider>
   );
 };

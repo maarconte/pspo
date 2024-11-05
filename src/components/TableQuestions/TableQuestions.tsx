@@ -15,7 +15,6 @@ import { TableQuestionsProps } from "./TableQuestions.types";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const getFormatAnswwerType = (answerType: string) => {
   switch (answerType) {

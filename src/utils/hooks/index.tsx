@@ -7,7 +7,7 @@ import { Firebase } from "../../firebase.js";
 export function useFetchFirebase(collectionName: string) {
   const [data, setData] = useState<any>([]);
   const [isLoading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const db = getFirestore(Firebase);
   const collectionDocs = collection(db, collectionName);
   useEffect(() => {
@@ -19,10 +19,10 @@ export function useFetchFirebase(collectionName: string) {
           fetchedDocs.push(doc.data());
         });
         setData(fetchedDocs);
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
         setLoading(false);
-        setErrorMessage("An error occurred");
+        setErrorMessage(err);
       } finally {
         setLoading(false);
       }
