@@ -19,16 +19,13 @@ export default function Quizz() {
     setIsFinished(true);
     setShowAnswer(true);
     setIsPaused(true);
-    console.log("finish");
   };
 
   return (
     <div className="Quizz">
       <div className="container">
         {/* Header */}
-        <h1 id="questionsTitle" className="text-center">
-          Teach Agile : PSPO I
-        </h1>
+        <h1 className="text-center">Teach Agile : PSPO I</h1>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <Counter
             isPaused={isPaused}

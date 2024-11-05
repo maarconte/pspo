@@ -11,4 +11,5 @@ export type Question = {
   answerType: string;
   answer: number | number[] | boolean;
   isFlagged?: boolean;
+  lastModified?: string;
 };

@@ -1,12 +1,13 @@
 import React from "react";
 import TableQuestions from "../components/TableQuestions";
-type Props = {};
 
-export default function EditQuestions({}: Props) {
+export default function EditQuestions() {
   return (
-    <div>
-      <h1>Edit Questions</h1>
-      <TableQuestions />
+    <div className="EditQuestions">
+      <div className="container">
+        <h1 className="text-center">Edit Questions</h1>
+        <TableQuestions />
+      </div>
     </div>
   );
 }
