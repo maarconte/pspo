@@ -44,7 +44,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/quizz" element={<Quizz />} />
-          <Route path="/edit-questions" element={<EditQuestions />} />
+          <Route path="/admin" element={<EditQuestions />} />
         </Routes>
       </HashRouter>
     </QuestionsProvider>
