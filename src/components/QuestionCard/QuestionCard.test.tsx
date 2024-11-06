@@ -11,6 +11,7 @@ describe("QuestionCard", () => {
       answers: ["Answer 1", "Answer 2", "Answer 3"],
       answerType: "single",
       answer: 1,
+      id: "1",
     };
     render(
       <QuestionCard
@@ -29,6 +30,7 @@ describe("QuestionCard", () => {
       answers: ["Answer 1", "Answer 2", "Answer 3"],
       answerType: "single",
       answer: 1,
+      id: "1",
     };
     render(
       <QuestionCard
@@ -47,6 +49,7 @@ describe("QuestionCard", () => {
       answers: ["Answer 1", "Answer 2", "Answer 3"],
       answerType: "single",
       answer: 1,
+      id: "1",
     };
     render(
       <QuestionCard
@@ -67,6 +70,7 @@ describe("QuestionCard", () => {
       answers: ["Answer 1", "Answer 2", "Answer 3"],
       answerType: "single",
       answer: 1,
+      id: "1",
     };
     render(
       <QuestionCard question={question} currentQuestion={1} showAnswer={true} />

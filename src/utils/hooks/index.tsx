@@ -1,33 +1,90 @@
-import { collection, getDocs, getFirestore } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import {
+  DocumentData,
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { useMutation, useQuery } from "react-query";
 
 import { Firebase } from "../../firebase.js";
 
-// create a useFetchFirebase hook
+const db = getFirestore(Firebase);
+
 export function useFetchFirebase(collectionName: string) {
-  const [data, setData] = useState<any>([]);
-  const [isLoading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const db = getFirestore(Firebase);
-  const collectionDocs = collection(db, collectionName);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const querySnapshot = await getDocs(collectionDocs);
-        const fetchedDocs: any = [];
-        querySnapshot.forEach((doc) => {
-          fetchedDocs.push(doc.data());
-        });
-        setData(fetchedDocs);
-      } catch (err: any) {
-        console.log(err);
-        setLoading(false);
-        setErrorMessage(err);
-      } finally {
-        setLoading(false);
-      }
+  const queryKey = ["collection", collectionName];
+
+  const {
+    isLoading,
+    error,
+    data: fetchedDocs = [],
+    refetch,
+  } = useQuery(
+    queryKey,
+    async () => {
+      const collectionDocs = collection(db, collectionName);
+      const querySnapshot = await getDocs(collectionDocs);
+      const fetchedData: any[] = [];
+      querySnapshot.forEach((doc) => {
+        fetchedData.push({ id: doc.id, ...doc.data() });
+      });
+      return fetchedData;
+    },
+    {
+      // Optional configuration options like refetch interval, staleTime etc.
     }
-    fetchData();
-  }, [collectionName]);
-  return { isLoading, data, errorMessage };
+  );
+
+  return {
+    isLoading,
+    data: fetchedDocs,
+    errorMessage: (error as any)?.message ?? "",
+    refetch,
+  };
+}
+
+interface UseUpdateDocProps {
+  collectionName: string;
+  docId: string;
+}
+
+export function useUpdateDoc({ docId, collectionName }: UseUpdateDocProps) {
+  const { data, isLoading, error } = useQuery(["doc", docId], async () => {
+    const docRef = doc(db, collectionName, docId);
+    const docSnap = await getDoc(docRef);
+    return docSnap.data();
+  });
+
+  const updateMutation = useMutation((newData: any) => {
+    const docRef = doc(db, collectionName, docId);
+    return updateDoc(docRef, { ...newData, updatedAt: serverTimestamp() });
+  });
+
+  const handleUpdate = (newData: any) => {
+    updateMutation.mutate(newData);
+  };
+
+  return { data, isLoading, error, handleUpdate };
+}
+
+export function useAddDoc(collectionName: string) {
+  const addMutation = useMutation(async (newData: DocumentData) => {
+    const collectionRef = collection(db, collectionName);
+    return await addDoc(collectionRef, newData);
+  });
+
+  const handleAdd = (newData: DocumentData) => {
+    addMutation.mutate(newData);
+  };
+
+  return { addMutation, handleAdd };
+}
+
+export function formatTimestamp(timestamp: any, locales: Intl.LocalesArgument) {
+  const date = new Date(timestamp?.seconds * 1000).toLocaleDateString(locales);
+  return date.toLocaleString();
 }

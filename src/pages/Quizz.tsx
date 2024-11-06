@@ -10,7 +10,8 @@ import QuizzScore from "../components/QuizzScore";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const { questions, score, setScore } = React.useContext(QuestionsContext);
+  const { questions, allQuestions, setScore } =
+    React.useContext(QuestionsContext);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -20,7 +21,8 @@ export default function Quizz() {
     setShowAnswer(true);
     setIsPaused(true);
   };
-
+  console.log("questions", questions, typeof questions);
+  console.log("allQuestions", allQuestions, typeof allQuestions);
   return (
     <div className="Quizz">
       <div className="container">

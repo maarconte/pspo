@@ -1,6 +1,13 @@
 import "react-toastify/dist/ReactToastify.css";
 
-import { FC, ReactNode, createContext, useEffect, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  createContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Question, UserAnswer } from "../types";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -40,7 +47,7 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
   // Fetch questions from Firebase
   const { data, isLoading, errorMessage } = useFetchFirebase("questions");
   // Set questions in state
-  useEffect(() => {
+  useMemo(() => {
     if (!isLoading && !errorMessage) {
       // select 80 random questions
       const selectedQuestions = [...data];
