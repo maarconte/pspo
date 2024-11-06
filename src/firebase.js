@@ -15,6 +15,6 @@ const firebaseConfig = {
 };
 
 export const Firebase = initializeApp(firebaseConfig);
-const analytics = getAnalytics(Firebase);
+// const analytics = getAnalytics(Firebase);
 //export const auth = getAuth();
 export const Providers = { google: new GoogleAuthProvider() };

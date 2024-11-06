@@ -88,4 +88,28 @@ button {
       border-color: $secondary_200;
     }
   }
+
+  // Error
+  &-solid.btn-error {
+    background-color: $secondary_500;
+
+    &:hover {
+      background-color: $secondary_600;
+    }
+  }
+
+  &-outlined.btn-secondary {
+    background-color: transparent;
+    border: 1px solid $secondary_500;
+    color: $secondary_500;
+
+    &:hover {
+      background-color: $secondary_100;
+    }
+
+    &:disabled {
+      background-color: transparent;
+      border-color: $secondary_200;
+    }
+  }
 }

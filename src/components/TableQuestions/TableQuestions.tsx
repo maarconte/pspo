@@ -1,6 +1,7 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
+import { IconProp, icon } from "@fortawesome/fontawesome-svg-core";
 import React, { FC, useMemo, useState } from "react";
 import {
   getCoreRowModel,
@@ -13,20 +14,32 @@ import { QuestionsContext } from "../../utils/context";
 import Table from "../Table/Table";
 import { TableQuestionsProps } from "./TableQuestions.types";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCircleDot } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faSquareCheck } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faToggleOn } from "@fortawesome/free-solid-svg-icons";
+import { formatTimestamp } from "../../utils/hooks";
 
 const getFormatAnswwerType = (answerType: string) => {
-  switch (answerType) {
-    case "TF":
-      return "True/False";
-    case "S":
-      return "Single choice";
-    case "M":
-      return "Multiple choice";
-    default:
-      return "Unknown";
-  }
+  const answerTypeOptions = [
+    { value: "TF", label: "True/False", icon: faToggleOn as IconProp },
+    { value: "S", label: "Single choice", icon: faCircleDot as IconProp },
+    { value: "M", label: "Multiple choice", icon: faSquareCheck as IconProp },
+  ];
+  const selectedOption = answerTypeOptions.find(
+    (option) => option.value === answerType
+  );
+  return (
+    <div className="d-flex align-items-center gap-05">
+      {selectedOption?.icon && (
+        <span className="tag">
+          <FontAwesomeIcon icon={selectedOption?.icon} color="#8b78c7" />
+        </span>
+      )}
+      <span>{selectedOption?.label}</span>
+    </div>
+  );
 };
 
 const columns = [
@@ -46,26 +59,32 @@ const columns = [
     header: "Answer type",
     accessorKey: "answerType",
     width: 150,
-    cell: (info: any) => (
-      <span className="tag">{getFormatAnswwerType(info.getValue())}</span>
-    ),
+    cell: (info: any) => getFormatAnswwerType(info.getValue()),
   },
   {
     header: "Feedback",
     accessorKey: "feedback",
     width: 80,
     cell: (info: any) => (
-      <FontAwesomeIcon
-        color={info?.getValue() ? "#9fdf6c" : "#e41937"}
-        icon={info?.getValue() ? faCheckCircle : faTimesCircle}
-      />
+      <div className="text-center">
+        <FontAwesomeIcon
+          color={info?.getValue() ? "#9fdf6c" : "#e41937"}
+          icon={info?.getValue() ? faCheckCircle : faTimesCircle}
+        />
+      </div>
     ),
   },
   {
     header: "Last modified",
-    accessorKey: "lastModified",
+    accessorKey: "updatedAt",
     width: 200,
-    cell: (info: any) => <div>{info.getValue()}</div>,
+    cell: (info: any) => {
+      return (
+        <div className="text-center">
+          {info.getValue() && formatTimestamp(info.getValue(), "fr-FR")}
+        </div>
+      );
+    },
   },
   {
     header: "",
@@ -79,7 +98,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const { allQuestions } = React.useContext(QuestionsContext);
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 50,
+    pageSize: 25,
   });
 
   const pagination = useMemo(
@@ -97,11 +116,6 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       pagination,
     },
     getCoreRowModel: getCoreRowModel(),
-    defaultColumn: {
-      size: 100, //starting column size
-      minSize: 50, //enforced during column resizing
-      maxSize: 500, //enforced during column resizing
-    },
     onPaginationChange: setPagination,
     getPaginationRowModel: getPaginationRowModel(),
   });

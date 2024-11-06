@@ -1,6 +1,7 @@
 import "./assets/scss/style.scss";
 
 import { HashRouter, Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import React, { useEffect, useState } from "react";
 import {
   addDoc,
@@ -17,6 +18,8 @@ import Home from "./pages/Home";
 import { QuestionsProvider } from "./utils/context";
 import Quizz from "./pages/Quizz";
 import { questionsJSON } from "./questions.js";
+
+const queryClient = new QueryClient();
 
 function App() {
   const db = getFirestore(Firebase);
@@ -39,15 +42,17 @@ function App() {
   }, []);
 
   return (
-    <QuestionsProvider>
-      <HashRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/quizz" element={<Quizz />} />
-          <Route path="/admin" element={<EditQuestions />} />
-        </Routes>
-      </HashRouter>
-    </QuestionsProvider>
+    <QueryClientProvider client={queryClient}>
+      <QuestionsProvider>
+        <HashRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/quizz" element={<Quizz />} />
+            <Route path="/admin" element={<EditQuestions />} />
+          </Routes>
+        </HashRouter>
+      </QuestionsProvider>
+    </QueryClientProvider>
   );
 }
 
