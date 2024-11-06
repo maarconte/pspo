@@ -3,6 +3,7 @@ import "./style-mobile.scss";
 
 import { Field, FieldArray, Formik } from "formik";
 import React, { FC, useEffect, useState } from "react";
+import { useAddDoc, useFetchFirebase } from "../../utils/hooks";
 
 import Button from "../Button";
 import { Button_Style } from "../Button/Button.types";
@@ -19,6 +20,8 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   question,
   setIsOpen,
 }) => {
+  const { refetch } = useFetchFirebase("questions");
+  const { handleAdd } = useAddDoc("questions");
   const handleAnswerChange = (
     index: number,
     answerType: string,
@@ -34,23 +37,40 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
     }
     return newAnswer;
   };
+
+  useEffect(() => {
+    if (question) {
+      console.log(question);
+    }
+  }, [question]);
+
   return (
     <div className="ModalEditQuestion">
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        setIsClosed={() => {}}
-        title="Edit question"
-        labelOnConfirm="Save"
-        onConfirm={() => {}}
+      <Formik
+        initialValues={
+          question || {
+            title: "",
+            answers: [],
+            feedback: "",
+            answerType: "TF",
+            answer: "",
+          }
+        }
+        onSubmit={(values) => {
+          handleAdd(values);
+          setIsOpen(false);
+          refetch();
+        }}
       >
-        <Formik
-          initialValues={question}
-          onSubmit={(values) => {
-            console.log(values);
-          }}
-        >
-          {({ values, handleChange, handleSubmit }) => (
+        {({ values, handleChange, handleSubmit }) => (
+          <Modal
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            setIsClosed={() => {}}
+            title="Edit question"
+            labelOnConfirm="Save"
+            onConfirm={() => handleSubmit()}
+          >
             <form onSubmit={handleSubmit}>
               <div className="d-flex gap-05 mb-2">
                 <Field
@@ -210,9 +230,9 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 onChange={handleChange}
               />
             </form>
-          )}
-        </Formik>
-      </Modal>
+          </Modal>
+        )}
+      </Formik>
     </div>
   );
 };
