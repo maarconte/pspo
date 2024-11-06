@@ -1,0 +1,107 @@
+.Select {
+  position: relative;
+  width: 100%;
+
+  select {
+    display: none;
+  }
+
+  &__wrapper {
+    position: relative;
+
+    &__trigger {
+      background: #ffffff;
+      border: 1px solid $primary_500;
+      border-radius: 5px;
+      padding: 8px 12px;
+      height: 42px;
+      color: $primary_300;
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.15s ease-in-out;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      line-height: 1.5;
+
+      .isFiled {
+        color: $primary_500;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-42%);
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid $primary_300;
+        pointer-events: none;
+      }
+
+      span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 94%;
+        display: block;
+      }
+    }
+
+    &.opened {
+      &__options {
+        display: block;
+        opacity: 1;
+        width: 100%;
+        visibility: visible;
+        pointer-events: all;
+        transform: translateY(0);
+        max-height: 200px;
+        overflow-y: auto;
+      }
+    }
+  }
+
+  &__options {
+    transition-delay: 0.1s;
+    position: absolute;
+    display: none;
+    top: 100%;
+    left: 0;
+    right: 0;
+    min-width: 100%;
+    background-color: $primary_50;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    transition: all 0.2s ease-in-out;
+    pointer-events: none;
+    transform: translateY(-1rem);
+    z-index: 2;
+    padding: 8px;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &__option {
+    color: $primary_300;
+    cursor: pointer;
+    margin-bottom: 8px;
+    display: block;
+    cursor: pointer;
+    padding: 8px;
+    min-width: 100%;
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      color: $primary_500;
+      background-color: $primary_50;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
