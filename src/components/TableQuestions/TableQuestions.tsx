@@ -1,7 +1,6 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import { IconProp, icon } from "@fortawesome/fontawesome-svg-core";
 import React, { FC, useMemo, useState } from "react";
 import {
   getCoreRowModel,
@@ -10,6 +9,9 @@ import {
 } from "@tanstack/react-table";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import ModalEditQuestion from "../ModalEditQuestion";
+import { Question } from "../../utils/types";
 import { QuestionsContext } from "../../utils/context";
 import Table from "../Table/Table";
 import { TableQuestionsProps } from "./TableQuestions.types";
@@ -42,60 +44,76 @@ const getFormatAnswwerType = (answerType: string) => {
   );
 };
 
-const columns = [
-  {
-    header: "",
-    id: "id",
-    width: 50,
-    cell: ({ row }: any) => row.index + 1,
-  },
-  {
-    header: "Title",
-    accessorKey: "title",
-    width: 200,
-    cell: (info: any) => <div className="ellipsis">{info.getValue()}</div>,
-  },
-  {
-    header: "Answer type",
-    accessorKey: "answerType",
-    width: 150,
-    cell: (info: any) => getFormatAnswwerType(info.getValue()),
-  },
-  {
-    header: "Feedback",
-    accessorKey: "feedback",
-    width: 80,
-    cell: (info: any) => (
-      <div className="text-center">
-        <FontAwesomeIcon
-          color={info?.getValue() ? "#9fdf6c" : "#e41937"}
-          icon={info?.getValue() ? faCheckCircle : faTimesCircle}
-        />
-      </div>
-    ),
-  },
-  {
-    header: "Last modified",
-    accessorKey: "updatedAt",
-    width: 200,
-    cell: (info: any) => {
-      return (
-        <div className="text-center">
-          {info.getValue() && formatTimestamp(info.getValue(), "fr-FR")}
-        </div>
-      );
-    },
-  },
-  {
-    header: "",
-    id: "actions",
-    width: 50,
-    cell: () => <FontAwesomeIcon icon={faEdit} color={"#5236ab"} />,
-  },
-];
-
 const TableQuestions: FC<TableQuestionsProps> = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState<Question>();
   const { allQuestions } = React.useContext(QuestionsContext);
+
+  const columns = [
+    {
+      header: "",
+      id: "id",
+      width: 50,
+      cell: ({ row }: any) => row.index + 1,
+    },
+    {
+      header: "Title",
+      accessorKey: "title",
+      width: 200,
+      cell: (info: any) => <div className="ellipsis">{info.getValue()}</div>,
+    },
+    {
+      header: "Answer type",
+      accessorKey: "answerType",
+      width: 150,
+      cell: (info: any) => getFormatAnswwerType(info.getValue()),
+    },
+    {
+      header: "Feedback",
+      accessorKey: "feedback",
+      width: 80,
+      cell: (info: any) => (
+        <div className="text-center">
+          <FontAwesomeIcon
+            color={info?.getValue() ? "#9fdf6c" : "#e41937"}
+            icon={info?.getValue() ? faCheckCircle : faTimesCircle}
+          />
+        </div>
+      ),
+    },
+    {
+      header: "Last modified",
+      accessorKey: "updatedAt",
+      width: 200,
+      cell: (info: any) => {
+        return (
+          <div className="text-center">
+            {info.getValue() && formatTimestamp(info.getValue(), "fr-FR")}
+          </div>
+        );
+      },
+    },
+    {
+      header: "",
+      id: "actions",
+      width: 50,
+      cell: (info: any) => (
+        <FontAwesomeIcon
+          icon={faEdit}
+          color={"#5236ab"}
+          onClick={() => handleSelectQuestion(info.row.original)}
+        />
+      ),
+    },
+  ];
+
+  // select question
+  const handleSelectQuestion = (question: Question) => {
+    setSelectedQuestion(question);
+    setIsModalOpen(true);
+  };
+
+  // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
     pageSize: 25,
@@ -122,6 +140,13 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   return (
     <div className="TableQuestions">
       <Table data={table} columns={columns} />
+      {selectedQuestion && (
+        <ModalEditQuestion
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          question={selectedQuestion}
+        />
+      )}
     </div>
   );
 };
