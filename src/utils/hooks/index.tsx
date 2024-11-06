@@ -12,6 +12,7 @@ import {
 import { useMutation, useQuery } from "react-query";
 
 import { Firebase } from "../../firebase.js";
+import { create } from "domain";
 
 const db = getFirestore(Firebase);
 
@@ -74,7 +75,10 @@ export function useUpdateDoc({ docId, collectionName }: UseUpdateDocProps) {
 export function useAddDoc(collectionName: string) {
   const addMutation = useMutation(async (newData: DocumentData) => {
     const collectionRef = collection(db, collectionName);
-    return await addDoc(collectionRef, newData);
+    return await addDoc(collectionRef, {
+      ...newData,
+      createdAt: serverTimestamp(),
+    });
   });
 
   const handleAdd = (newData: DocumentData) => {
