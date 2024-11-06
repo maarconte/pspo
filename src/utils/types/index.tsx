@@ -1,4 +1,4 @@
-import { FieldValue } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 export type UserAnswer = {
   question: number;
@@ -15,5 +15,6 @@ export type Question = {
   answer: number | number[] | boolean;
   isFlagged?: boolean;
   comments?: string[];
-  updatedAt?: FieldValue;
+  updatedAt?: Timestamp;
+  createdAt?: Timestamp;
 };

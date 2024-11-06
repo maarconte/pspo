@@ -3,7 +3,7 @@ import "./style-mobile.scss";
 
 import { Field, FieldArray, Formik } from "formik";
 import React, { FC, useEffect, useState } from "react";
-import { useAddDoc, useFetchFirebase } from "../../utils/hooks";
+import { useAddDoc, useFetchFirebase, useUpdateDoc } from "../../utils/hooks";
 
 import Button from "../Button";
 import { Button_Style } from "../Button/Button.types";
@@ -14,6 +14,7 @@ import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
 import SelectAnswerType from "../SelectAnswerType";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   isOpen,
@@ -22,6 +23,10 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
 }) => {
   const { refetch } = useFetchFirebase("questions");
   const { handleAdd } = useAddDoc("questions");
+  const { handleUpdate, error } = useUpdateDoc({
+    docId: question?.id || "",
+    collectionName: "questions",
+  });
   const handleAnswerChange = (
     index: number,
     answerType: string,
@@ -29,9 +34,11 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   ) => {
     let newAnswer = answer;
     if (answerType === "M") {
-      newAnswer.includes(index)
+      newAnswer?.includes(index)
         ? newAnswer.splice(newAnswer.indexOf(index), 1)
-        : newAnswer.push(index);
+        : Array.isArray(newAnswer)
+        ? newAnswer.push(index)
+        : (newAnswer = [index]);
     } else {
       newAnswer = index;
     }
@@ -53,13 +60,14 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
             answers: [],
             feedback: "",
             answerType: "TF",
-            answer: "",
+            answer: null,
           }
         }
         onSubmit={(values) => {
-          handleAdd(values);
+          question?.id ? handleUpdate(values) : handleAdd(values);
           setIsOpen(false);
           refetch();
+          //  error && toast.error(error.toString);
         }}
       >
         {({ values, handleChange, handleSubmit }) => (
