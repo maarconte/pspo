@@ -76,17 +76,30 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       cell: (info: any) => getFormatAnswwerType(info.getValue()),
     },
     {
+      header: "Reported",
+      accessorKey: "isFlagged",
+      width: 80,
+      cell: (info: any) => {
+        if (info.getValue())
+          return (
+            <div className="text-center">
+              <FontAwesomeIcon color={"#e41937"} icon={faTimesCircle} />
+            </div>
+          );
+      },
+    },
+    {
       header: "Feedback",
       accessorKey: "feedback",
       width: 80,
-      cell: (info: any) => (
-        <div className="text-center">
-          <FontAwesomeIcon
-            color={info?.getValue() ? "#9fdf6c" : "#e41937"}
-            icon={info?.getValue() ? faCheckCircle : faTimesCircle}
-          />
-        </div>
-      ),
+      cell: (info: any) => {
+        if (!info?.getValue())
+          return (
+            <div className="text-center">
+              <FontAwesomeIcon color={"#e41937"} icon={faTimesCircle} />
+            </div>
+          );
+      },
     },
     {
       header: "Last modified",
