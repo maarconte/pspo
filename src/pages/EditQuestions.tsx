@@ -22,6 +22,7 @@ export default function EditQuestions() {
             onClick={() => setIsAddModalOpen(true)}
             label="Import questions"
             icon={<FontAwesomeIcon icon={faPlus} />}
+            disabled
           />
           <Button
             style={Button_Style.OUTLINED}

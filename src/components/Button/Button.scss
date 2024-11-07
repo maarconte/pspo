@@ -21,11 +21,9 @@ button {
   &:disabled.btn-solid,
   &:disabled.btn-outlined {
     background-color: $primary_100;
-    color: $primary_200;
+    color: $primary_300;
 
     &:hover {
-      background-color: $primary_100;
-      color: $primary_200;
       cursor: not-allowed;
     }
   }

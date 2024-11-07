@@ -3,8 +3,12 @@ import "./style-mobile.scss";
 
 import React, { FC, useMemo, useState } from "react";
 import {
+  SortingFn,
+  SortingState,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -45,6 +49,7 @@ const getFormatAnswwerType = (answerType: string) => {
 };
 
 const TableQuestions: FC<TableQuestionsProps> = () => {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
   const { allQuestions } = React.useContext(QuestionsContext);
@@ -61,6 +66,8 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       accessorKey: "title",
       width: 200,
       cell: (info: any) => <div className="ellipsis">{info.getValue()}</div>,
+      enableSorting: true,
+      sorting: sortingFns.text,
     },
     {
       header: "Answer type",
@@ -132,10 +139,13 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     columns,
     state: {
       pagination,
+      sorting,
     },
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: setPagination,
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
   });
   return (
     <div className="TableQuestions">
