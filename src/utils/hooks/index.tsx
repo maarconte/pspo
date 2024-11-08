@@ -2,6 +2,7 @@ import {
   DocumentData,
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -12,7 +13,6 @@ import {
 import { useMutation, useQuery } from "react-query";
 
 import { Firebase } from "../../firebase.js";
-import { create } from "domain";
 
 const db = getFirestore(Firebase);
 
@@ -86,6 +86,18 @@ export function useAddDoc(collectionName: string) {
   };
 
   return { addMutation, handleAdd };
+}
+
+export function useDeleteDoc(collectionName: string) {
+  const deleteMutation = useMutation(async (docId: string) => {
+    return await deleteDoc(doc(db, collectionName, docId));
+  });
+
+  const handleDelete = (docId: string) => {
+    deleteMutation.mutate(docId);
+  };
+
+  return { deleteMutation, handleDelete };
 }
 
 export function formatTimestamp(timestamp: any, locales: Intl.LocalesArgument) {
