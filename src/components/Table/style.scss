@@ -17,5 +17,16 @@
       padding: 1rem;
       background-color: $primary-50;
     }
+    tr:hover {
+      .actions {
+        opacity: 1;
+      }
+    }
+    .actions {
+      opacity: 0;
+      .action:hover {
+        color: $primary-500;
+      }
+    }
   }
 }

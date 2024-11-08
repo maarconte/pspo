@@ -1,8 +1,8 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
+import { FC, useEffect } from "react";
 import { Field, FieldArray, Formik } from "formik";
-import React, { FC, useEffect, useState } from "react";
 import { useAddDoc, useFetchFirebase, useUpdateDoc } from "../../utils/hooks";
 
 import Button from "../Button";
@@ -14,7 +14,6 @@ import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
 import SelectAnswerType from "../SelectAnswerType";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
 
 const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   isOpen,

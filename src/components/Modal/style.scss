@@ -16,16 +16,12 @@
   }
 
   &--error {
-    background-color: $secondary-100;
-
     .modal__header__title {
       color: $secondary-500;
     }
   }
 
   &--success {
-    background-color: $success-100;
-
     .modal__header__title {
       color: $success-500;
     }

@@ -28,7 +28,6 @@ export default function EditQuestions() {
           />
         </div>
         <QuestionsStats />
-
         <ModalEditQuestion
           isOpen={isAddModalOpen}
           setIsOpen={setIsAddModalOpen}

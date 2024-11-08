@@ -2,13 +2,9 @@ import "./style.scss";
 import "./style-mobile.scss";
 
 import {
-  Column,
-  ColumnDef,
   ColumnFiltersState,
   FilterFn,
-  SortingFn,
   SortingState,
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -16,28 +12,23 @@ import {
   sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  RankingInfo,
-  compareItems,
-  rankItem,
-} from "@tanstack/match-sorter-utils";
+import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import React, { FC, useMemo, useState } from "react";
+import { faCircleDot, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { formatTimestamp, useDeleteDoc } from "../../utils/hooks";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import Modal from "../Modal";
 import ModalEditQuestion from "../ModalEditQuestion";
-import { Options } from "../Select/Select.types";
 import { Question } from "../../utils/types";
 import { QuestionsContext } from "../../utils/context";
-import Select from "../Select";
 import Table from "../Table/Table";
 import { TableQuestionsProps } from "./TableQuestions.types";
-import { faCircleDot } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faSquareCheck } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { faToggleOn } from "@fortawesome/free-solid-svg-icons";
-import { formatTimestamp } from "../../utils/hooks";
 
 declare module "@tanstack/react-table" {
   //add fuzzy filter to the filterFns
@@ -87,20 +78,36 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
   const { allQuestions } = React.useContext(QuestionsContext);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const { handleDelete } = useDeleteDoc("questions");
   const columns = [
     {
       header: "",
       id: "id",
       width: 50,
-      cell: ({ row }: any) => row.index + 1,
+      cell: ({ row }: any) => (
+        <span
+          className="pointer"
+          onClick={() => handleSelectQuestion(row.original)}
+        >
+          {row.index + 1}
+        </span>
+      ),
       enableColumnFilter: false,
     },
     {
       header: "Title",
       accessorKey: "title",
       width: 200,
-      cell: (info: any) => <div className="ellipsis">{info.getValue()}</div>,
+      cell: (info: any) => (
+        <div
+          className="ellipsis pointer"
+          onClick={() => handleSelectQuestion(info.row.original)}
+        >
+          {info.getValue()}
+        </div>
+      ),
       enableSorting: true,
       sorting: sortingFns.text,
       enableColumnFilter: true,
@@ -158,11 +165,20 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       id: "actions",
       width: 50,
       cell: (info: any) => (
-        <FontAwesomeIcon
-          icon={faEdit}
-          color={"#5236ab"}
-          onClick={() => handleSelectQuestion(info.row.original)}
-        />
+        <div className="d-flex gap-05 actions">
+          <FontAwesomeIcon
+            className="pointer action"
+            icon={faEdit}
+            color={"#8b78c7"}
+            onClick={() => handleSelectQuestion(info.row.original)}
+          />
+          <FontAwesomeIcon
+            className="pointer action"
+            icon={faTrash}
+            color={"#8b78c7"}
+            onClick={() => handleDeleteQuestion(info.row.original)}
+          />
+        </div>
       ),
       enableColumnFilter: false,
     },
@@ -172,6 +188,12 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const handleSelectQuestion = (question: Question) => {
     setSelectedQuestion(question);
     setIsModalOpen(true);
+  };
+
+  // select question to delete
+  const handleDeleteQuestion = (question: Question) => {
+    setSelectedQuestion(question);
+    setIsDeleteModalOpen(true);
   };
 
   // Pagination
@@ -221,6 +243,24 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
           setIsOpen={setIsModalOpen}
           question={selectedQuestion}
         />
+      )}
+      {selectedQuestion && isDeleteModalOpen && (
+        <Modal
+          isOpen={isDeleteModalOpen}
+          setIsClosed={setIsDeleteModalOpen}
+          title="Delete question"
+          onConfirm={() => {
+            handleDelete(selectedQuestion.id);
+            setIsDeleteModalOpen(false);
+          }}
+          labelOnConfirm="Delete"
+          onClose={() => setIsDeleteModalOpen(false)}
+          type="error"
+        >
+          <div>
+            <p>Are you sure you want to delete this question?</p>
+          </div>
+        </Modal>
       )}
     </div>
   );
