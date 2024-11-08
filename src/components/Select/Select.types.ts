@@ -1,13 +1,13 @@
 export type Options = {
-  value: string;
+  value: string | number;
   label: string;
 };
 
 export type SelectProps = {
   placeholder?: string;
-  value?: string;
+  value?: string | number;
   options: Options[];
   required?: boolean;
   className?: string;
-  handleChange?: (value: string) => void;
+  handleChange?: (value: string | number) => void;
 } & Record<string, any>;

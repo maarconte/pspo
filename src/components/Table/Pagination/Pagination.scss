@@ -4,15 +4,18 @@
   margin-top: 1.5rem;
   display: flex;
   justify-content: center;
-
+  .Select {
+    width: 80px;
+  }
   .pagination__container {
     display: flex;
     align-items: center;
+    justify-content: end;
     gap: 1rem;
+    flex: 1 0;
   }
 
   .pagination__page {
-    font-weight: 700;
     font-size: 0.875rem;
     border: none;
     background: transparent;
@@ -20,8 +23,9 @@
     border-bottom: 2px solid transparent;
 
     &--active {
+      font-weight: 700;
       color: $primary-500;
-      border-bottom: 2px solid $primary-900;
+      border-bottom: 2px solid $primary-500;
     }
   }
 
