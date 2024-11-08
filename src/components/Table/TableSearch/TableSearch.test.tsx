@@ -5,7 +5,7 @@ import TableSearch from "./TableSearch";
 
 describe("TableSearch", () => {
   it("should render the component correctly", () => {
-    render(<TableSearch globalFilter="" onChange={() => {}} />);
+    render(<TableSearch value="" onChange={() => {}} />);
 
     expect(screen.getByText("TableSearch")).toBeInTheDocument();
   });

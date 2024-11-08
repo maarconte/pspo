@@ -16,8 +16,8 @@ function Filter({ column }: { column: Column<any, unknown> }) {
 
   return (
     <TableSearch
-      globalFilter={(columnFilterValue ?? "") as string}
-      onChange={(value: any) => column.setFilterValue(value)}
+      value={(columnFilterValue ?? "") as string}
+      onChange={column.setFilterValue}
     />
   );
 }
@@ -26,15 +26,15 @@ const Table: FC<TableProps> = ({ data, columns }) => {
   return (
     <div className="Table">
       {data.getHeaderGroups().map((headerGroup: any) => (
-        <>
-          {headerGroup.headers.map((header: any) =>
-            header.column.getCanFilter() ? (
-              <div>
+        <div key={headerGroup.id}>
+          {headerGroup.headers
+            .filter((header: any) => header.column.getCanFilter())
+            .map((header: any) => (
+              <div key={header.id}>
                 <Filter column={header.column} />
               </div>
-            ) : null
-          )}
-        </>
+            ))}
+        </div>
       ))}
       <table>
         <thead>

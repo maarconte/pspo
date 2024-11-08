@@ -1,4 +1,4 @@
 export interface TableSearchProps {
-  globalFilter: string;
+  value: string;
   onChange: (value: string) => void;
 }
