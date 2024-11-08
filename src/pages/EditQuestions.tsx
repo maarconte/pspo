@@ -15,13 +15,13 @@ export default function EditQuestions() {
         <h1 className="text-center">Edit Questions</h1>
         <div className="d-flex gap-05 justify-content-end mb-1">
           <Button
+            style={Button_Style.OUTLINED}
             onClick={() => setIsAddModalOpen(true)}
             label="Import questions"
             icon={<FontAwesomeIcon icon={faUpload} />}
             disabled
           />
           <Button
-            style={Button_Style.OUTLINED}
             onClick={() => setIsAddModalOpen(true)}
             label="Add a question"
             icon={<FontAwesomeIcon icon={faPlus} />}
