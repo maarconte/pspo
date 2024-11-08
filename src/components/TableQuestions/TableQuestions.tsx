@@ -1,16 +1,27 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import React, { FC, useMemo, useState } from "react";
 import {
+  Column,
+  ColumnDef,
+  ColumnFiltersState,
+  FilterFn,
   SortingFn,
   SortingState,
+  flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   sortingFns,
   useReactTable,
 } from "@tanstack/react-table";
+import {
+  RankingInfo,
+  compareItems,
+  rankItem,
+} from "@tanstack/match-sorter-utils";
+import React, { FC, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
@@ -19,13 +30,30 @@ import { Question } from "../../utils/types";
 import { QuestionsContext } from "../../utils/context";
 import Table from "../Table/Table";
 import { TableQuestionsProps } from "./TableQuestions.types";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 import { faCircleDot } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { faSquareCheck } from "@fortawesome/free-solid-svg-icons";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { faToggleOn } from "@fortawesome/free-solid-svg-icons";
 import { formatTimestamp } from "../../utils/hooks";
+
+declare module "@tanstack/react-table" {
+  //add fuzzy filter to the filterFns
+  interface FilterFns {
+    fuzzy: FilterFn<unknown>;
+  }
+  interface FilterMeta {
+    itemRank: RankingInfo;
+  }
+}
+
+const fuzzyFilter = (row: any, columnId: any, value: any, addMeta: any) => {
+  const itemRank = rankItem(row.getValue(columnId), value);
+  addMeta({
+    itemRank,
+  });
+  return itemRank.passed;
+};
 
 const getFormatAnswwerType = (answerType: string) => {
   const answerTypeOptions = [
@@ -49,6 +77,10 @@ const getFormatAnswwerType = (answerType: string) => {
 };
 
 const TableQuestions: FC<TableQuestionsProps> = () => {
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [globalFilter, setGlobalFilter] = React.useState("");
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
@@ -60,6 +92,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       id: "id",
       width: 50,
       cell: ({ row }: any) => row.index + 1,
+      enableColumnFilter: false,
     },
     {
       header: "Title",
@@ -68,12 +101,14 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       cell: (info: any) => <div className="ellipsis">{info.getValue()}</div>,
       enableSorting: true,
       sorting: sortingFns.text,
+      enableColumnFilter: true,
     },
     {
       header: "Answer type",
       accessorKey: "answerType",
       width: 150,
       cell: (info: any) => getFormatAnswwerType(info.getValue()),
+      enableColumnFilter: false,
     },
     {
       header: "Reported",
@@ -87,6 +122,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
             </div>
           );
       },
+      enableColumnFilter: false,
     },
     {
       header: "Feedback",
@@ -100,6 +136,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
             </div>
           );
       },
+      enableColumnFilter: false,
     },
     {
       header: "Last modified",
@@ -112,6 +149,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
           </div>
         );
       },
+      enableColumnFilter: false,
     },
     {
       header: "",
@@ -124,6 +162,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
           onClick={() => handleSelectQuestion(info.row.original)}
         />
       ),
+      enableColumnFilter: false,
     },
   ];
 
@@ -150,14 +189,23 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const table = useReactTable({
     data: allQuestions,
     columns,
+    filterFns: {
+      fuzzy: fuzzyFilter,
+    },
     state: {
       pagination,
       sorting,
+      columnFilters,
+      globalFilter,
     },
     getCoreRowModel: getCoreRowModel(),
-    onPaginationChange: setPagination,
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    globalFilterFn: "fuzzy",
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onPaginationChange: setPagination,
     onSortingChange: setSorting,
   });
   return (

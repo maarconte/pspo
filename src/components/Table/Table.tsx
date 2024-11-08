@@ -1,17 +1,41 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
+import { Column, flexRender } from "@tanstack/react-table";
+
 import { FC } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Pagination from "./Pagination/Pagination";
 import { TableProps } from "./Table.types";
+import TableSearch from "./TableSearch";
 import { faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { faSortUp } from "@fortawesome/free-solid-svg-icons";
-import { flexRender } from "@tanstack/react-table";
+
+function Filter({ column }: { column: Column<any, unknown> }) {
+  const columnFilterValue = column.getFilterValue();
+
+  return (
+    <TableSearch
+      globalFilter={(columnFilterValue ?? "") as string}
+      onChange={(value: any) => column.setFilterValue(value)}
+    />
+  );
+}
 
 const Table: FC<TableProps> = ({ data, columns }) => {
   return (
     <div className="Table">
+      {data.getHeaderGroups().map((headerGroup: any) => (
+        <>
+          {headerGroup.headers.map((header: any) =>
+            header.column.getCanFilter() ? (
+              <div>
+                <Filter column={header.column} />
+              </div>
+            ) : null
+          )}
+        </>
+      ))}
       <table>
         <thead>
           {data.getHeaderGroups().map((headerGroup: any) => (
@@ -22,15 +46,6 @@ const Table: FC<TableProps> = ({ data, columns }) => {
                   style={{ width: header.column.columnDef.width }}
                   colSpan={header.colSpan}
                   onClick={header.column.getToggleSortingHandler()}
-                  title={
-                    header.column.getCanSort()
-                      ? header.column.getNextSortingOrder() === "asc"
-                        ? "Sort ascending"
-                        : header.column.getNextSortingOrder() === "desc"
-                        ? "Sort descending"
-                        : "Clear sort"
-                      : undefined
-                  }
                 >
                   <div className="d-flex align-items-center gap-05 justify-content-center">
                     {header.isPlaceholder
