@@ -6,11 +6,14 @@ import React, { FC, useEffect, useState } from "react";
 import Input from "../../Input";
 import { TableSearchProps } from "./TableSearch.types";
 
-const TableSearch: FC<TableSearchProps> = ({ globalFilter, onChange }) => {
-  const [value, setValue] = useState(globalFilter);
+const TableSearch: FC<TableSearchProps> = ({
+  value: initialValue,
+  onChange,
+}) => {
+  const [value, setValue] = useState(initialValue);
   useEffect(() => {
-    setValue(globalFilter);
-  }, [globalFilter]);
+    setValue(initialValue);
+  }, [initialValue]);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -22,7 +25,7 @@ const TableSearch: FC<TableSearchProps> = ({ globalFilter, onChange }) => {
     };
     handleSearch();
     return () => clearTimeout(timeout);
-  }, [value, onChange]);
+  }, [value]);
 
   return (
     <div className="TableSearch">
