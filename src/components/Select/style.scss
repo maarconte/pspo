@@ -1,3 +1,4 @@
+@import "../../assets/scss/variables";
 .Select {
   position: relative;
   width: 100%;
@@ -11,7 +12,7 @@
 
     &__trigger {
       background: #ffffff;
-      border: 1px solid $primary_500;
+      border: 1px solid $primary_50;
       border-radius: 5px;
       padding: 8px 12px;
       height: 42px;
@@ -50,20 +51,24 @@
       }
     }
 
-    &.opened {
-      &__options {
-        display: block;
-        opacity: 1;
-        width: 100%;
-        visibility: visible;
-        pointer-events: all;
-        transform: translateY(0);
-        max-height: 200px;
-        overflow-y: auto;
-      }
+    &.opened .Select__options {
+      display: block;
+      opacity: 1;
+      width: 100%;
+      visibility: visible;
+      pointer-events: all;
+      transform: translateY(0);
+      max-height: 200px;
+      overflow-y: auto;
     }
   }
-
+  &.bottom {
+    .Select__options {
+      top: auto;
+      bottom: 100%;
+      transform: translateY(-1rem);
+    }
+  }
   &__options {
     transition-delay: 0.1s;
     position: absolute;
@@ -72,16 +77,16 @@
     left: 0;
     right: 0;
     min-width: 100%;
-    background-color: $primary_50;
     border-radius: 5px;
     margin-top: 0.5rem;
     transition: all 0.2s ease-in-out;
     pointer-events: none;
     transform: translateY(-1rem);
     z-index: 2;
-    padding: 8px;
     visibility: hidden;
     opacity: 0;
+    background-color: #fff;
+    border: 1px solid $primary_50;
   }
 
   &__option {
@@ -92,7 +97,6 @@
     cursor: pointer;
     padding: 8px;
     min-width: 100%;
-    border-radius: 5px;
     transition: all 0.2s ease-in-out;
 
     &:hover {

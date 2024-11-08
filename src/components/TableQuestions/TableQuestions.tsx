@@ -26,8 +26,10 @@ import React, { FC, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import ModalEditQuestion from "../ModalEditQuestion";
+import { Options } from "../Select/Select.types";
 import { Question } from "../../utils/types";
 import { QuestionsContext } from "../../utils/context";
+import Select from "../Select";
 import Table from "../Table/Table";
 import { TableQuestionsProps } from "./TableQuestions.types";
 import { faCircleDot } from "@fortawesome/free-solid-svg-icons";
@@ -175,7 +177,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 25,
+    pageSize: 50,
   });
 
   const pagination = useMemo(
@@ -185,6 +187,8 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     }),
     [pageIndex, pageSize]
   );
+
+  // Table
 
   const table = useReactTable({
     data: allQuestions,

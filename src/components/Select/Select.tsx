@@ -17,11 +17,23 @@ const Select: FC<SelectProps> = ({
 
   const selectRef = useRef<HTMLDivElement>(null);
 
+  // display a class when the select is at the bottom of the page
+  useEffect(() => {
+    if (selectRef.current) {
+      const selectRect = selectRef.current.getBoundingClientRect();
+      if (window.innerHeight - selectRect.bottom < 200) {
+        selectRef.current.classList.add("bottom");
+      } else {
+        selectRef.current.classList.remove("bottom");
+      }
+    }
+  }, []);
+
   const handleSelectToggle = () => {
     setIsOpened(!isOpened);
   };
 
-  const handleOptionSelect = (optionValue: string) => {
+  const handleOptionSelect = (optionValue: string | number) => {
     setIsOpened(false);
     if (handleChange) {
       handleChange(optionValue);
@@ -52,7 +64,9 @@ const Select: FC<SelectProps> = ({
           className={`Select__wrapper__trigger ${className}`}
           onClick={handleSelectToggle}
         >
-          <span className={value && "isFiled"}>{value || placeholder}</span>
+          <span className={typeof value === "string" ? "isFiled" : ""}>
+            {value || placeholder}
+          </span>
         </div>
         {
           <div className="Select__options">
