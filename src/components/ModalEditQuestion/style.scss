@@ -1,3 +1,4 @@
+@import "../../assets/scss/variables.scss";
 .ModalEditQuestion {
   /* Ajoutez vos styles ici */
   .modal {
@@ -9,6 +10,13 @@
     gap: 0.5rem;
     align-items: baseline;
     margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+
+  .comment {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: $secondary-50;
     border-radius: 8px;
   }
 }

@@ -242,6 +242,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
           question={selectedQuestion}
+          setSelectQuestion={setSelectedQuestion}
         />
       )}
       {selectedQuestion && isDeleteModalOpen && (
@@ -251,6 +252,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
           title="Delete question"
           onConfirm={() => {
             handleDelete(selectedQuestion.id);
+            selectedQuestion && setSelectedQuestion(undefined);
             setIsDeleteModalOpen(false);
           }}
           labelOnConfirm="Delete"

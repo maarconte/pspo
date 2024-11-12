@@ -55,6 +55,7 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
       selectedQuestions.length = 80;
       setQuestions(selectedQuestions);
       setAllQuestions(data);
+      console.log("fetching questions");
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());
       notify();

@@ -19,8 +19,8 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   isOpen,
   question,
   setIsOpen,
+  setSelectQuestion,
 }) => {
-  const { refetch } = useFetchFirebase("questions");
   const { handleAdd } = useAddDoc("questions");
   const { handleUpdate, error } = useUpdateDoc({
     docId: question?.id || "",
@@ -44,15 +44,10 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
     return newAnswer;
   };
 
-  useEffect(() => {
-    if (question) {
-      console.log(question);
-    }
-  }, [question]);
-
   return (
     <div className="ModalEditQuestion">
       <Formik
+        enableReinitialize={true}
         initialValues={
           question || {
             title: "",
@@ -60,19 +55,24 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
             feedback: "",
             answerType: "TF",
             answer: null,
+            comments: [],
+            isFlagged: false,
           }
         }
         onSubmit={(values) => {
           question?.id ? handleUpdate(values) : handleAdd(values);
+          setSelectQuestion && setSelectQuestion({} as any);
+
           setIsOpen(false);
-          refetch();
-          //  error && toast.error(error.toString);
         }}
       >
         {({ values, handleChange, handleSubmit }) => (
           <Modal
             isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
+            onClose={() => {
+              setIsOpen(false);
+              setSelectQuestion && setSelectQuestion({} as any);
+            }}
             setIsClosed={() => {}}
             title="Edit question"
             labelOnConfirm="Save"
@@ -119,7 +119,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                   <FieldArray name="answers">
                     {({ push, remove }) => (
                       <div>
-                        {values.answers.map((answer, index) => (
+                        {values?.answers?.map((answer, index) => (
                           <div
                             key={index}
                             className={`answer ${
@@ -236,6 +236,38 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 value={values.feedback}
                 onChange={handleChange}
               />
+              <h4>Comments</h4>
+              <label htmlFor="">
+                <Field
+                  label="Reported"
+                  type="checkbox"
+                  name="isFlagged"
+                  checked={values?.isFlagged}
+                  onChange={handleChange}
+                />
+                Reported
+              </label>
+
+              <FieldArray name="comments">
+                {({ remove }) => (
+                  <div>
+                    {values?.comments?.map((comment, index) => (
+                      <div
+                        key={index}
+                        className="d-flex justify-content-between comment"
+                      >
+                        {comment}
+                        <Button
+                          style={Button_Style.OUTLINED}
+                          onClick={() => remove(index)}
+                          isIconButton
+                          icon={<FontAwesomeIcon icon={faTrash} />}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </FieldArray>
             </form>
           </Modal>
         )}
