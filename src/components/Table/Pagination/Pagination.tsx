@@ -19,7 +19,7 @@ export default function Pagination({ table }: any) {
     value: size,
     label: size.toString(),
   }));
-  console.log(table.getState().pagination.pageSize);
+
   const showPages = () => {
     let buttons = [];
 

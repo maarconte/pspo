@@ -31,7 +31,12 @@ export function useFetchFirebase(collectionName: string) {
       const querySnapshot = await getDocs(collectionDocs);
       const fetchedData: any[] = [];
       querySnapshot.forEach((doc) => {
-        fetchedData.push({ id: doc.id, ...doc.data() });
+        fetchedData.push({
+          id: doc.id,
+          ...doc.data(),
+          isFlagged: doc.data().isFlagged ?? false,
+          comments: doc.data().comments ?? [],
+        });
       });
       return fetchedData;
     },
