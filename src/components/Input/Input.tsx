@@ -9,6 +9,7 @@ type InputProps = {
   required?: boolean;
   className?: string;
   errorMessage?: string;
+  type?: string;
 } & Record<string, any>;
 
 const Input: FC<InputProps> = ({
@@ -18,17 +19,28 @@ const Input: FC<InputProps> = ({
   required,
   className,
   errorMessage,
+  type,
   ...rest
 }) => {
   return (
     <div className={`input-box ${className}`}>
-      <input
-        value={value}
-        onChange={onChange}
-        required
-        {...rest}
-        placeholder=""
-      />
+      {type === "textarea" ? (
+        <textarea
+          value={value}
+          onChange={onChange}
+          required
+          {...rest}
+          placeholder=""
+        />
+      ) : (
+        <input
+          value={value}
+          onChange={onChange}
+          required
+          {...rest}
+          placeholder=""
+        />
+      )}
       <label>{placeholder}</label>
       {errorMessage && <span className="error-message">{errorMessage}</span>}
     </div>

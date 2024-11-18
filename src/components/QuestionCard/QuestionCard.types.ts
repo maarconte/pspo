@@ -1,11 +1,6 @@
+import { Question } from "../../utils/types";
 export interface QuestionCardProps {
-  question: {
-    title: string;
-    feedback: string;
-    answers: string[];
-    answerType: string;
-    answer: number | number[] | boolean;
-  };
+  question: Question;
   currentQuestion: number;
   showAnswer: boolean;
 }

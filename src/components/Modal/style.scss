@@ -2,33 +2,26 @@
 .modal {
   border-radius: 10px;
   padding: 20px;
-  max-width: 500px;
+  max-height: 90vh;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1022;
   background-color: #fff;
+  overflow: scroll;
 
   @include breakpoint(mobile) {
     width: 93%;
   }
 
-  &--info {
-    background-color: $primary-100;
-  }
-
   &--error {
-    background-color: $secondary-100;
-
     .modal__header__title {
       color: $secondary-500;
     }
   }
 
   &--success {
-    background-color: $success-100;
-
     .modal__header__title {
       color: $success-500;
     }

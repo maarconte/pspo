@@ -92,7 +92,9 @@
     gap: #{$i}rem;
   }
 }
-
+.mb-05 {
+  margin-bottom: 0.5rem;
+}
 @for $i from 0 through 5 {
   .mb-#{$i} {
     margin-bottom: #{$i}rem;
@@ -126,6 +128,17 @@
 
 .h-100vh {
   height: 100vh;
+}
+
+// ellipsis
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bg-success {
+  background-color: $success-100;
 }
 
 //$colors: ("primary": $PRIMARY_40, "secondary": $SECONDARY_40, "success": $SUCCESS_40, "danger": $ERROR_40, "warning": $ACCENT_40, "light": $NEUTRAL_100);
