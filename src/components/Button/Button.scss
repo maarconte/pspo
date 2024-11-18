@@ -21,11 +21,9 @@ button {
   &:disabled.btn-solid,
   &:disabled.btn-outlined {
     background-color: $primary_100;
-    color: $primary_200;
+    color: $primary_300;
 
     &:hover {
-      background-color: $primary_100;
-      color: $primary_200;
       cursor: not-allowed;
     }
   }
@@ -67,6 +65,30 @@ button {
 
   // Secondary
   &-solid.btn-secondary {
+    background-color: $secondary_500;
+
+    &:hover {
+      background-color: $secondary_600;
+    }
+  }
+
+  &-outlined.btn-secondary {
+    background-color: transparent;
+    border: 1px solid $secondary_500;
+    color: $secondary_500;
+
+    &:hover {
+      background-color: $secondary_100;
+    }
+
+    &:disabled {
+      background-color: transparent;
+      border-color: $secondary_200;
+    }
+  }
+
+  // Error
+  &-solid.btn-error {
     background-color: $secondary_500;
 
     &:hover {

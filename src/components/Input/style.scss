@@ -14,7 +14,8 @@
   position: relative;
 
   &.error {
-    input {
+    input,
+    textarea {
       border-color: $secondary_500;
     }
 
@@ -24,18 +25,25 @@
     }
   }
 
-  input {
+  input,
+  textarea {
     background: #ffffff;
-    border: 1px solid $primary_500;
+    border: 1px solid $primary_50;
     border-radius: 5px;
     padding: 8px 12px;
     height: 42px;
-    color: $primary_500;
     font-size: 1rem;
+    font-family: "Source Sans Pro", sans-serif;
     width: 100%;
     appearance: none;
     transition: 0.15s ease-in-out;
-
+    &:focus,
+    &:valid,
+    &:autofill,
+    &:active,
+    &:not(:placeholder-shown) {
+      margin-top: 1rem;
+    }
     &:focus ~ label,
     &:valid ~ label,
     &:autofill ~ label,
@@ -46,6 +54,11 @@
       color: $primary_500;
       font-size: 0.875rem;
     }
+  }
+
+  textarea {
+    height: auto;
+    min-height: 100px;
   }
 
   label {

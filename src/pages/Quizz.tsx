@@ -10,7 +10,8 @@ import QuizzScore from "../components/QuizzScore";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const { questions, score, setScore } = React.useContext(QuestionsContext);
+  const { questions, allQuestions, setScore } =
+    React.useContext(QuestionsContext);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -19,16 +20,14 @@ export default function Quizz() {
     setIsFinished(true);
     setShowAnswer(true);
     setIsPaused(true);
-    console.log("finish");
   };
-
+  console.log("questions", questions, typeof questions);
+  console.log("allQuestions", allQuestions, typeof allQuestions);
   return (
     <div className="Quizz">
       <div className="container">
         {/* Header */}
-        <h1 id="questionsTitle" className="text-center">
-          Teach Agile : PSPO I
-        </h1>
+        <h1 className="text-center">Teach Agile : PSPO I</h1>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <Counter
             isPaused={isPaused}

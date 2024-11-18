@@ -1,0 +1,32 @@
+@import "../../assets/scss/variables.scss";
+.Table {
+  width: 100%;
+  table {
+    table-layout: fixed;
+    border-spacing: 0;
+    border-collapse: separate;
+    width: 100%;
+    position: relative;
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    th {
+      padding: 1rem;
+      background-color: $primary-50;
+    }
+    tr:hover {
+      .actions {
+        opacity: 1;
+      }
+    }
+    .actions {
+      opacity: 0;
+      .action:hover {
+        color: $primary-500;
+      }
+    }
+  }
+}

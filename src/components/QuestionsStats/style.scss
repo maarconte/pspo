@@ -1,0 +1,36 @@
+@import "../../assets/scss/base.scss";
+.QuestionsStats {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  &__card {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: $primary-50;
+    color: $primary_500;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    &.error,
+    &.error &__title {
+      background-color: $secondary-50;
+      color: $secondary-500;
+    }
+    &.warning,
+    &.warning &__title {
+      background-color: $warning-50;
+      color: $warning-500;
+    }
+    &__title {
+      color: $primary_500;
+    }
+    &__number {
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: right;
+      margin: 0;
+    }
+  }
+}
