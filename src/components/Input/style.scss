@@ -14,12 +14,8 @@
   position: relative;
 
   &.error {
-<<<<<<< HEAD
     input,
     textarea {
-=======
-    input {
->>>>>>> aab479d (Last components)
       border-color: $secondary_500;
     }
 
@@ -29,7 +25,6 @@
     }
   }
 
-<<<<<<< HEAD
   input,
   textarea {
     background: #ffffff;
@@ -49,20 +44,6 @@
     &:not(:placeholder-shown) {
       margin-top: 1rem;
     }
-=======
-  input {
-    background: #ffffff;
-    border: 1px solid $primary_500;
-    border-radius: 5px;
-    padding: 8px 12px;
-    height: 42px;
-    color: $primary_500;
-    font-size: 1rem;
-    width: 100%;
-    appearance: none;
-    transition: 0.15s ease-in-out;
-
->>>>>>> aab479d (Last components)
     &:focus ~ label,
     &:valid ~ label,
     &:autofill ~ label,
@@ -75,14 +56,11 @@
     }
   }
 
-<<<<<<< HEAD
   textarea {
     height: auto;
     min-height: 100px;
   }
 
-=======
->>>>>>> aab479d (Last components)
   label {
     color: $primary_300;
     position: absolute;
