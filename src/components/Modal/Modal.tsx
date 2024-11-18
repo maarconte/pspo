@@ -74,16 +74,6 @@ const Modal: FC<ModalProps> = ({
                   label={labelOnCancel ? labelOnCancel : "Cancel"}
                   style={Button_Style.OUTLINED}
                   onClick={handleClose}
-<<<<<<< HEAD
-=======
-                  type={
-                    type === "error"
-                      ? Button_Type.ERROR
-                      : type === "success"
-                      ? Button_Type.SUCCESS
-                      : Button_Type.PRIMARY
-                  }
->>>>>>> aab479d (Last components)
                 />
                 <Button
                   label={labelOnConfirm ? labelOnConfirm : "Ok"}

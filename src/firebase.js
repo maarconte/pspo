@@ -1,12 +1,6 @@
 import { GoogleAuthProvider, getAuth } from "firebase/auth";
+//import { getAnalytics } from "firebase/analytics";
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { getAnalytics } from "firebase/analytics";
-=======
->>>>>>> 75a7503 (fix git)
-=======
->>>>>>> 34f0f8a (files)
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
@@ -21,12 +15,8 @@ const firebaseConfig = {
 };
 
 export const Firebase = initializeApp(firebaseConfig);
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 // const analytics = getAnalytics(Firebase);
-=======
->>>>>>> 75a7503 (fix git)
-=======
->>>>>>> 34f0f8a (files)
+
 //export const auth = getAuth();
 export const Providers = { google: new GoogleAuthProvider() };

@@ -10,12 +10,8 @@ import QuizzScore from "../components/QuizzScore";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-<<<<<<< HEAD
   const { questions, allQuestions, setScore } =
     React.useContext(QuestionsContext);
-=======
-  const { questions, score, setScore } = React.useContext(QuestionsContext);
->>>>>>> a908404 (pages)
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -24,26 +20,14 @@ export default function Quizz() {
     setIsFinished(true);
     setShowAnswer(true);
     setIsPaused(true);
-<<<<<<< HEAD
   };
   console.log("questions", questions, typeof questions);
   console.log("allQuestions", allQuestions, typeof allQuestions);
-=======
-    console.log("finish");
-  };
-
->>>>>>> a908404 (pages)
   return (
     <div className="Quizz">
       <div className="container">
         {/* Header */}
-<<<<<<< HEAD
         <h1 className="text-center">Teach Agile : PSPO I</h1>
-=======
-        <h1 id="questionsTitle" className="text-center">
-          Teach Agile : PSPO I
-        </h1>
->>>>>>> a908404 (pages)
         <div className="d-flex justify-content-between align-items-center mb-2">
           <Counter
             isPaused={isPaused}
