@@ -17,7 +17,6 @@ import { Firebase } from "./firebase.js";
 import Home from "./pages/Home";
 import { QuestionsProvider } from "./utils/context";
 import Quizz from "./pages/Quizz";
-import { questionsJSON } from "./questions.js";
 
 const queryClient = new QueryClient();
 
@@ -25,16 +24,16 @@ function App() {
   const db = getFirestore(Firebase);
   const questionsCollection = collection(db, "questions");
 
-  const addQuestions = async () => {
-    try {
-      questionsJSON.forEach(async (question: any) => {
-        await addDoc(questionsCollection, question);
-      });
-      console.log("success");
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
+  // const addQuestions = async () => {
+  //   try {
+  //     questionsJSON.forEach(async (question: any) => {
+  //       await addDoc(questionsCollection, question);
+  //     });
+  //     console.log("success");
+  //   } catch (e) {
+  //     console.error("Error adding document: ", e);
+  //   }
+  // };
 
   useEffect(() => {
     // only add questions once
