@@ -3,7 +3,10 @@ import "./style-mobile.scss";
 
 import React, { FC, useContext, useState } from "react";
 
+<<<<<<< HEAD
 import Feedback from "../Feedback";
+=======
+>>>>>>> aab479d (Last components)
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { QuestionCardProps } from "./QuestionCard.types";
 import { QuestionsContext } from "../../utils/context";
@@ -166,7 +169,20 @@ const QuestionCard: FC<QuestionCardProps> = ({
       <div className="d-flex flex-column">
         {question?.answerType === "TF" ? trueFalseAnswers : answers}
       </div>
+<<<<<<< HEAD
       {showAnswer && <Feedback question={question} />}
+=======
+      {showAnswer && (
+        <div className="feedback">
+          <h3 className="h5">Feedback</h3>
+          <p>
+            {question.feedback
+              ? question.feedback
+              : "No feedback for this question"}
+          </p>
+        </div>
+      )}
+>>>>>>> aab479d (Last components)
     </div>
   );
 };

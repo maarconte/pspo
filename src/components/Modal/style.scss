@@ -2,26 +2,48 @@
 .modal {
   border-radius: 10px;
   padding: 20px;
+<<<<<<< HEAD
   max-height: 90vh;
+=======
+  max-width: 500px;
+>>>>>>> aab479d (Last components)
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1022;
   background-color: #fff;
+<<<<<<< HEAD
   overflow: scroll;
+=======
+>>>>>>> aab479d (Last components)
 
   @include breakpoint(mobile) {
     width: 93%;
   }
 
+<<<<<<< HEAD
   &--error {
+=======
+  &--info {
+    background-color: $primary-100;
+  }
+
+  &--error {
+    background-color: $secondary-100;
+
+>>>>>>> aab479d (Last components)
     .modal__header__title {
       color: $secondary-500;
     }
   }
 
   &--success {
+<<<<<<< HEAD
+=======
+    background-color: $success-100;
+
+>>>>>>> aab479d (Last components)
     .modal__header__title {
       color: $success-500;
     }

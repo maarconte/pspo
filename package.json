@@ -1,7 +1,23 @@
 {
   "name": "pspo",
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   "version": "2.0.0",
   "homepage": "https://maarconte.github.io/pspo/",
+<<<<<<< HEAD
+=======
+  "version": "0.1.0",
+<<<<<<< HEAD
+>>>>>>> 4ad5aca (fix)
+=======
+=======
+  "version": "2.0.0",
+>>>>>>> d142f1f (v2)
+  "homepage": "https://maarconte.github.io/pspo",
+>>>>>>> 49abb3c (deploy gh-pages)
+=======
+>>>>>>> 33547a4 (fix homepage)
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -9,8 +25,16 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+<<<<<<< HEAD
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-table": "^8.20.5",
+=======
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+>>>>>>> 75a7503 (fix git)
+=======
+>>>>>>> 4ad5aca (fix)
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -19,6 +43,8 @@
     "@types/react": "^18.2.73",
     "@types/react-dom": "^18.2.23",
     "firebase": "^10.10.0",
+<<<<<<< HEAD
+<<<<<<< HEAD
     "formik": "^2.4.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -27,6 +53,19 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.6",
     "sass": "^1.80.4",
+=======
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+>>>>>>> 75a7503 (fix git)
+=======
+    "formik": "^2.4.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.27.0",
+    "react-scripts": "5.0.1",
+    "sass": "^1.80.4",
+>>>>>>> 4ad5aca (fix)
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -34,9 +73,23 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
+=======
+    "eject": "react-scripts eject"
+>>>>>>> 75a7503 (fix git)
+=======
+    "eject": "react-scripts eject"
+>>>>>>> 4ad5aca (fix)
+=======
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+>>>>>>> 49abb3c (deploy gh-pages)
   },
   "eslintConfig": {
     "extends": [
@@ -55,8 +108,20 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
   },
   "devDependencies": {
     "gh-pages": "^6.2.0"
+=======
+>>>>>>> 75a7503 (fix git)
+=======
+>>>>>>> 4ad5aca (fix)
+=======
+  },
+  "devDependencies": {
+    "gh-pages": "^6.2.0"
+>>>>>>> 49abb3c (deploy gh-pages)
   }
 }

@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
 import "./index.css";
 
 import App from "./App";
@@ -7,6 +9,21 @@ import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
+=======
+=======
+>>>>>>> 34f0f8a (files)
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+<<<<<<< HEAD
+>>>>>>> 75a7503 (fix git)
+=======
+>>>>>>> 34f0f8a (files)
 );
 root.render(
   <React.StrictMode>
