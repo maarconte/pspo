@@ -92,13 +92,9 @@
     gap: #{$i}rem;
   }
 }
-<<<<<<< HEAD
 .mb-05 {
   margin-bottom: 0.5rem;
 }
-=======
-
->>>>>>> 8842558 (assets/scss)
 @for $i from 0 through 5 {
   .mb-#{$i} {
     margin-bottom: #{$i}rem;
@@ -134,7 +130,6 @@
   height: 100vh;
 }
 
-<<<<<<< HEAD
 // ellipsis
 .ellipsis {
   white-space: nowrap;
@@ -146,8 +141,6 @@
   background-color: $success-100;
 }
 
-=======
->>>>>>> 8842558 (assets/scss)
 //$colors: ("primary": $PRIMARY_40, "secondary": $SECONDARY_40, "success": $SUCCESS_40, "danger": $ERROR_40, "warning": $ACCENT_40, "light": $NEUTRAL_100);
 
 // loop for colors
