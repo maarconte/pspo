@@ -1,8 +1,11 @@
 @import "./base";
 @import "./headings";
 
+<<<<<<< HEAD
 @import "./atoms/atoms";
 
+=======
+>>>>>>> 8842558 (assets/scss)
 * {
   box-sizing: border-box;
 }
@@ -10,7 +13,10 @@
 body {
   font-family: "Source Sans Pro", sans-serif;
   padding: 1.5rem;
+<<<<<<< HEAD
   color: $primary-900;
+=======
+>>>>>>> 8842558 (assets/scss)
 }
 
 .card {

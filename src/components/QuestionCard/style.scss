@@ -22,6 +22,14 @@
     font-size: 1.5rem;
   }
 
+<<<<<<< HEAD
+=======
+  .feedback {
+    background-color: $primary-50;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+  }
+>>>>>>> aab479d (Last components)
   .answer {
     padding: 8px;
     margin-bottom: 1rem;
@@ -29,7 +37,11 @@
     gap: 0.5rem;
     align-items: baseline;
     &.success {
+<<<<<<< HEAD
       background-color: $success-100;
+=======
+      background-color: #d6f1db;
+>>>>>>> aab479d (Last components)
     }
   }
 }

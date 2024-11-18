@@ -21,9 +21,17 @@ button {
   &:disabled.btn-solid,
   &:disabled.btn-outlined {
     background-color: $primary_100;
+<<<<<<< HEAD
     color: $primary_300;
 
     &:hover {
+=======
+    color: $primary_200;
+
+    &:hover {
+      background-color: $primary_100;
+      color: $primary_200;
+>>>>>>> 81de0e1 (Button)
       cursor: not-allowed;
     }
   }
@@ -86,6 +94,7 @@ button {
       border-color: $secondary_200;
     }
   }
+<<<<<<< HEAD
 
   // Error
   &-solid.btn-error {
@@ -110,4 +119,6 @@ button {
       border-color: $secondary_200;
     }
   }
+=======
+>>>>>>> 81de0e1 (Button)
 }

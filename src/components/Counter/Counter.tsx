@@ -17,8 +17,16 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
   const intervalRefTimer = useRef<NodeJS.Timeout>();
   const [timer, setTimer] = useState("1:00:00");
   const [startTimer, setStartTimer] = useState(false);
+<<<<<<< HEAD
+<<<<<<< HEAD
 
   // test commit
+=======
+>>>>>>> 614a100 (Counter)
+=======
+
+  // test commit
+>>>>>>> 9dde0dd (test commit)
   const handlePauseResume = () => {
     setIsPaused(!isPaused);
   };

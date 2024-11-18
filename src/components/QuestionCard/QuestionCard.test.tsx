@@ -11,7 +11,10 @@ describe("QuestionCard", () => {
       answers: ["Answer 1", "Answer 2", "Answer 3"],
       answerType: "single",
       answer: 1,
+<<<<<<< HEAD
       id: "1",
+=======
+>>>>>>> aab479d (Last components)
     };
     render(
       <QuestionCard
@@ -30,7 +33,10 @@ describe("QuestionCard", () => {
       answers: ["Answer 1", "Answer 2", "Answer 3"],
       answerType: "single",
       answer: 1,
+<<<<<<< HEAD
       id: "1",
+=======
+>>>>>>> aab479d (Last components)
     };
     render(
       <QuestionCard
@@ -49,7 +55,10 @@ describe("QuestionCard", () => {
       answers: ["Answer 1", "Answer 2", "Answer 3"],
       answerType: "single",
       answer: 1,
+<<<<<<< HEAD
       id: "1",
+=======
+>>>>>>> aab479d (Last components)
     };
     render(
       <QuestionCard
@@ -70,7 +79,10 @@ describe("QuestionCard", () => {
       answers: ["Answer 1", "Answer 2", "Answer 3"],
       answerType: "single",
       answer: 1,
+<<<<<<< HEAD
       id: "1",
+=======
+>>>>>>> aab479d (Last components)
     };
     render(
       <QuestionCard question={question} currentQuestion={1} showAnswer={true} />
