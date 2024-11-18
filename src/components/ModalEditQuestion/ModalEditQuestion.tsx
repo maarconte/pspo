@@ -249,7 +249,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
               </label>
 
               <FieldArray name="comments">
-                {({ remove }) => (
+                {({ push, remove }) => (
                   <div>
                     {values?.comments?.map((comment, index) => (
                       <div
