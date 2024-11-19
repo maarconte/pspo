@@ -1,13 +1,6 @@
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  FC,
-  ReactNode,
-  createContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { FC, ReactNode, createContext, useMemo, useState } from "react";
 import { Question, UserAnswer } from "../types";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -55,7 +48,6 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
       selectedQuestions.length = 80;
       setQuestions(selectedQuestions);
       setAllQuestions(data);
-      console.log("fetching questions");
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());
       notify();

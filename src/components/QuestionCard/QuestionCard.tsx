@@ -1,7 +1,7 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import React, { FC, useContext, useState } from "react";
+import { FC, useContext } from "react";
 
 import Feedback from "../Feedback";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
