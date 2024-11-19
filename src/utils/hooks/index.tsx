@@ -41,6 +41,7 @@ export function useFetchFirebase(collectionName: string) {
       return fetchedData;
     },
     {
+      refetchOnWindowFocus: false,
       // Optional configuration options like refetch interval, staleTime etc.
     }
   );
