@@ -1,7 +1,7 @@
 import "./assets/scss/style.scss";
 
-import { HashRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Route, HashRouter as Router, Routes } from "react-router-dom";
 
 import AuthChecker from "./components/Auth/AuthChecker";
 import Header from "./components/Header";
@@ -16,7 +16,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <UserContextProvider>
         <QuestionsProvider>
-          <HashRouter>
+          <Router>
             <Header />
             <Routes>
               {routes.map((route) => (
@@ -35,7 +35,7 @@ function App() {
                 />
               ))}
             </Routes>
-          </HashRouter>
+          </Router>
         </QuestionsProvider>
       </UserContextProvider>
     </QueryClientProvider>
