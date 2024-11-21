@@ -1,0 +1,10 @@
+@import "../../assets/scss/base";
+
+.Header {
+  height: 60px;
+  border-bottom: 1px solid $primary-100;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
