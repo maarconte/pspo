@@ -36,6 +36,7 @@ const Input: FC<InputProps> = ({
         <input
           value={value}
           onChange={onChange}
+          type={type}
           required
           {...rest}
           placeholder=""

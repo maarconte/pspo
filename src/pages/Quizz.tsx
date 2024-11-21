@@ -20,7 +20,6 @@ export default function Quizz() {
     setShowAnswer(true);
     setIsPaused(true);
   };
-
   return (
     <div className="Quizz">
       <div className="container">
