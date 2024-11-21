@@ -4,11 +4,12 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
+import { useContext, useState } from "react";
 
 import Button from "../Button";
 import Input from "../Input";
+import { UserContext } from "../../utils/context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 interface Props {
   login: boolean;
@@ -67,26 +68,24 @@ const AuthContainer = (props: Props) => {
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        className="mb-1"
       />
       <Input
         placeholder="Password"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        className="mb-1"
       />
-      <Button onClick={props.login ? signIn : register}>
-        {props.login ? "Sign In" : "Register"}
-      </Button>
-      <hr />
+      <a href="#" className="mb-1 d-block text-right">
+        Forgot password ?
+      </a>
       <Button
-        size="large"
+        onClick={signIn}
+        label={"Sign in"}
         disabled={disabled}
-        variant="contained"
-        onClick={signInWithGoogle}
-      >
-        Sign In With Google
-      </Button>
-
+        className="mb-1"
+      />
       {errorMessage}
     </>
   );
