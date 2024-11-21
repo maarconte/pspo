@@ -9,11 +9,9 @@ import { LoginWrapperProps } from "./LoginWrapper.types";
 const LoginWrapper: FC<LoginWrapperProps> = () => {
   return (
     <div className="LoginWrapper">
-      <div className="container">
-        <h1>Login</h1>
-        <p>Hi, welcome back</p>
-        <AuthContainer login />
-      </div>
+      <h1>Login</h1>
+      <p>Hi, welcome back 👋</p>
+      <AuthContainer login />
     </div>
   );
 };

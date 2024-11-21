@@ -9,7 +9,7 @@ interface Props {
 
 const AuthChecker = ({ children }: Props) => {
   const navigate = useNavigate();
-  console.log(auth.currentUser);
+  //  console.log(auth.currentUser);
   useEffect(() => {
     if (!auth.currentUser) {
       navigate("/login");

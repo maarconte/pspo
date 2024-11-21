@@ -9,7 +9,7 @@ interface Props {
   navigateTo?: string;
 }
 
-const Logout = ({ navigateTo = "/login" }: Props) => {
+const Logout = ({ navigateTo = "/" }: Props) => {
   const [disabled, setDisabled] = useState(false);
   const navigate = useNavigate();
   const logout = () => {
