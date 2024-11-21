@@ -1,10 +1,9 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 
-import Button from "../Button";
-import Input from "../Input";
+import AuthContainer from "../Auth/AuthContainer";
 import { LoginWrapperProps } from "./LoginWrapper.types";
 
 const LoginWrapper: FC<LoginWrapperProps> = () => {
@@ -13,9 +12,7 @@ const LoginWrapper: FC<LoginWrapperProps> = () => {
       <div className="container">
         <h1>Login</h1>
         <p>Hi, welcome back</p>
-        <Input placeholder="Email" type="email" />
-        <Input placeholder="Password" type="password" />
-        <Button label="Login" />
+        <AuthContainer login />
       </div>
     </div>
   );
