@@ -1,11 +1,13 @@
 import Button from "../components/Button";
 import { Button_Type } from "../components/Button/Button.types";
+import { useNavigate } from "react-router-dom";
 export default function Home() {
+  const navigate = useNavigate();
   return (
     <div className="h-100vh p-2 m-0">
       <div className="content">
         <h1 id="questionsTitle" className="text-center">
-          Teach Agile : PSPO I V2
+          Teach Agile : PSPO
         </h1>
         <div className="card">
           <h2>Instructions </h2>
@@ -28,9 +30,8 @@ export default function Home() {
           </p>
           <Button
             label="Commencer"
-            type={Button_Type.LINK}
-            url="/quizz"
-            className="btn-primary"
+            onClick={() => navigate("/quizz")}
+            className="d-block w-100"
           />
         </div>
       </div>
