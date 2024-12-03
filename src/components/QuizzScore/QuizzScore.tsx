@@ -18,11 +18,23 @@ const QuizzScore: FC<QuizzScoreProps> = () => {
     userAnswers.forEach((userAnswer) => {
       const question = questions[userAnswer.question];
       const correctAnswer = question.answer;
-      if (correctAnswer === userAnswer.answer) {
+      console.log(correctAnswer, userAnswer.answer);
+      // check if 2 arrays are equal
+      if (Array.isArray(correctAnswer) && Array.isArray(userAnswer.answer)) {
+        if (
+          correctAnswer.length === userAnswer.answer.length &&
+          (correctAnswer as any[]).every(
+            (value, index) => value === (userAnswer.answer as any[])[index]
+          )
+        ) {
+          score++;
+        }
+      } else if (correctAnswer === userAnswer.answer) {
         score++;
       }
     });
     setScore(score);
+    console.log(score);
   }, [userAnswers, questions]);
 
   return (
