@@ -49,10 +49,8 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
       const flagged = selectedQuestions.filter(
         (question) => question.isFlagged
       );
-      console.log(flagged);
-
       selectedQuestions.length = 80;
-      setQuestions(flagged);
+      setQuestions(selectedQuestions);
       setAllQuestions(data);
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());
