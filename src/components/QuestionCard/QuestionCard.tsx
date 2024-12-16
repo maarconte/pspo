@@ -160,7 +160,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
             <Button
               label="Show comments"
               onClick={() => setShowComments(true)}
-              style={Button_Style.OUTLINED}
+              style={Button_Style.LINK}
               type={Button_Type.SECONDARY}
             />
           </div>

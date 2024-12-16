@@ -14,6 +14,8 @@ export enum Button_Type {
 export enum Button_Style {
 	SOLID = "solid",
 	OUTLINED = "outlined",
+	LINK = "link",
+
 }
 
 export type ButtonProps = {

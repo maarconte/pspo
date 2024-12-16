@@ -72,6 +72,15 @@ button {
     }
   }
 
+  &-link.btn-secondary {
+    color: $secondary_500;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $secondary_100;
+    }
+  }
+
   &-outlined.btn-secondary {
     background-color: transparent;
     border: 1px solid $secondary_500;
