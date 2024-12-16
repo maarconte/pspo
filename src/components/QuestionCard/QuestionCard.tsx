@@ -3,6 +3,7 @@ import "./style-mobile.scss";
 
 import { FC, useContext } from "react";
 
+import Alert from "../Alert";
 import Feedback from "../Feedback";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { QuestionCardProps } from "./QuestionCard.types";
@@ -10,6 +11,7 @@ import { QuestionsContext } from "../../utils/context";
 import { UserAnswer } from "../../utils/types";
 import { faBookmark as faBookBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import { faExclamation } from "@fortawesome/free-solid-svg-icons";
 
 const QuestionCard: FC<QuestionCardProps> = ({
   question,
@@ -149,6 +151,11 @@ const QuestionCard: FC<QuestionCardProps> = ({
   );
   return (
     <div className="QuestionCard">
+      {question?.isFlagged && (
+        <Alert severity="error">
+          This question has been flagged for review
+        </Alert>
+      )}
       <div className="d-flex justify-content-between gap-1">
         <h2 className="h4">
           {currentQuestion + 1}. {question.title}

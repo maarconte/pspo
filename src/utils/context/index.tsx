@@ -45,8 +45,14 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
       // select 80 random questions
       const selectedQuestions = [...data];
       selectedQuestions.sort(() => Math.random() - 0.5);
+      // get isFlagged questions
+      const flagged = selectedQuestions.filter(
+        (question) => question.isFlagged
+      );
+      console.log(flagged);
+
       selectedQuestions.length = 80;
-      setQuestions(selectedQuestions);
+      setQuestions(flagged);
       setAllQuestions(data);
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());

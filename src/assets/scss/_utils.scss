@@ -99,6 +99,7 @@
 .mb-05 {
   margin-bottom: 0.5rem;
 }
+
 @for $i from 0 through 5 {
   .mb-#{$i} {
     margin-bottom: #{$i}rem;
@@ -106,6 +107,14 @@
 
   .mt-#{$i} {
     margin-top: #{$i}rem;
+  }
+
+  .mr-#{$i} {
+    margin-right: #{$i}rem;
+  }
+
+  .ml-#{$i} {
+    margin-left: #{$i}rem;
   }
 }
 
