@@ -40,7 +40,7 @@ const AuthContainer = (props: Props) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         setDisabled(false);
-        navigate("/");
+        navigate("/admin");
       })
       .catch((error: any) => {
         setErrorMessage(error.code + ": " + error.message);
