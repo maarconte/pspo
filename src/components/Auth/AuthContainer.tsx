@@ -4,12 +4,11 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import { useContext, useState } from "react";
 
 import Button from "../Button";
 import Input from "../Input";
-import { UserContext } from "../../utils/context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface Props {
   login: boolean;
@@ -77,9 +76,9 @@ const AuthContainer = (props: Props) => {
         onChange={(e) => setPassword(e.target.value)}
         className="mb-1"
       />
-      <a href="#" className="mb-1 d-block text-right">
+      {/* <a href="#" className="mb-1 d-block text-right">
         Forgot password ?
-      </a>
+      </a> */}
       <Button
         onClick={signIn}
         label={"Sign in"}
