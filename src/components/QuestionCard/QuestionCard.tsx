@@ -1,17 +1,19 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import { FC, useContext } from "react";
+import { Button_Style, Button_Type } from "../Button/Button.types";
+import { FC, useContext, useState } from "react";
 
 import Alert from "../Alert";
+import Button from "../Button";
 import Feedback from "../Feedback";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Modal from "../Modal";
 import { QuestionCardProps } from "./QuestionCard.types";
 import { QuestionsContext } from "../../utils/context";
 import { UserAnswer } from "../../utils/types";
 import { faBookmark as faBookBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
-import { faExclamation } from "@fortawesome/free-solid-svg-icons";
 
 const QuestionCard: FC<QuestionCardProps> = ({
   question,
@@ -20,7 +22,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
 }) => {
   const { userAnswers, setUserAnswers } = useContext(QuestionsContext);
   const inputType = question.answerType === "M" ? "checkbox" : "radio";
-
+  const [showComments, setShowComments] = useState(false);
   const getAnswerClass = (index: number) => {
     if (showAnswer) {
       if (question.answerType === "TF") {
@@ -153,8 +155,30 @@ const QuestionCard: FC<QuestionCardProps> = ({
     <div className="QuestionCard">
       {question?.isFlagged && (
         <Alert severity="error">
-          This question has been flagged for review
+          <div className="d-flex align-items-center justify-content-between w-100">
+            This question has been flagged for review
+            <Button
+              label="Show comments"
+              onClick={() => setShowComments(true)}
+              style={Button_Style.OUTLINED}
+              type={Button_Type.SECONDARY}
+            />
+          </div>
         </Alert>
+      )}
+      {showComments && (
+        <Modal
+          title="Comments"
+          onClose={() => setShowComments(false)}
+          setIsClosed={setShowComments}
+          isOpen={showComments}
+        >
+          {question.comments?.map((comment, index) => (
+            <p key={index} className="comment">
+              {comment}
+            </p>
+          ))}
+        </Modal>
       )}
       <div className="d-flex justify-content-between gap-1">
         <h2 className="h4">
