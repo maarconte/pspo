@@ -31,7 +31,8 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
     if (!isPaused) {
       intervalRef.current = setInterval(() => {
         const [minutes, seconds] = countdown.split(":").map(Number);
-        setRemainingMinutes(minutes);
+        const remainingTime = minutes * 60 + seconds;
+        setRemainingMinutes(remainingTime);
         if (minutes === 0 && seconds === 0) {
           clearInterval(intervalRef?.current);
         } else {
@@ -39,7 +40,7 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
             setCountdown(`${minutes - 1}:59`);
           } else {
             setCountdown(
-              `${minutes}:${seconds < 10 ? `0${seconds - 1}` : seconds - 1}`
+              `${minutes}:${seconds < 11 ? `0${seconds - 1}` : seconds - 1}`
             );
           }
         }
@@ -53,7 +54,6 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
 
   useEffect(() => {
     if (remaingMinutes === 0 && !startTimer) {
-      console.log(remaingMinutes, startTimer);
       setOpenModal(true);
       setIsPaused(true);
     }
@@ -95,7 +95,7 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
         className="countdown"
         style={
           {
-            "--value": remaingMinutes.toString(),
+            "--value": remaingMinutes / 60,
             "--max": "60",
           } as React.CSSProperties
         }
