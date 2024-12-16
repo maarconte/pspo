@@ -20,16 +20,15 @@ const Header: FC<HeaderProps> = () => {
       <h1 className="h4">
         <a href="/">PSPO</a>
       </h1>
-      {!user ? (
+      <div className="d-flex gap-1 align-items-center">
         <Button
           label="Admin"
           style={Button_Style.OUTLINED}
           icon={<FontAwesomeIcon icon={faGear} />}
-          onClick={() => navigate("/login")}
+          onClick={() => navigate(!user ? "/login" : "/admin")}
         />
-      ) : (
-        <Logout />
-      )}
+        {user && <Logout />}
+      </div>
     </div>
   );
 };
