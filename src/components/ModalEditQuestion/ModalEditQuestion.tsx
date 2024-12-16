@@ -3,7 +3,7 @@ import "./style-mobile.scss";
 
 import { FC, useEffect } from "react";
 import { Field, FieldArray, Formik } from "formik";
-import { useAddDoc, useFetchFirebase, useUpdateDoc } from "../../utils/hooks";
+import { useAddDoc, useUpdateDoc } from "../../utils/hooks";
 
 import Button from "../Button";
 import { Button_Style } from "../Button/Button.types";
@@ -26,21 +26,14 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
     docId: question?.id || "",
     collectionName: "questions",
   });
-  const handleAnswerChange = (
-    index: number,
-    answerType: string,
-    answer: any
-  ) => {
-    let newAnswer = answer;
-    if (answerType === "M") {
-      newAnswer?.includes(index)
-        ? newAnswer.splice(newAnswer.indexOf(index), 1)
-        : Array.isArray(newAnswer)
-        ? newAnswer.push(index)
-        : (newAnswer = [index]);
-    } else {
-      newAnswer = index;
-    }
+  const handleAnswerChange = (index: number, answer: any) => {
+    let newAnswer = Array.isArray(answer) ? [...answer] : [];
+    newAnswer?.includes(index)
+      ? newAnswer.splice(newAnswer.indexOf(index), 1)
+      : Array.isArray(newAnswer)
+      ? newAnswer.push(index)
+      : (newAnswer = [index]);
+
     return newAnswer;
   };
 
@@ -49,15 +42,17 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
       <Formik
         enableReinitialize={true}
         initialValues={
-          question || {
-            title: "",
-            answers: [],
-            feedback: "",
-            answerType: "TF",
-            answer: null,
-            comments: [],
-            isFlagged: false,
-          }
+          question
+            ? question
+            : {
+                title: "",
+                answers: [],
+                feedback: "",
+                answerType: "",
+                answer: null,
+                comments: [],
+                isFlagged: false,
+              }
         }
         onSubmit={(values) => {
           question?.id ? handleUpdate(values) : handleAdd(values);
@@ -140,11 +135,13 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                                 handleChange({
                                   target: {
                                     name: "answer",
-                                    value: handleAnswerChange(
-                                      index,
-                                      values.answerType,
-                                      values.answer
-                                    ),
+                                    value:
+                                      values.answerType === "M"
+                                        ? handleAnswerChange(
+                                            index,
+                                            values.answer
+                                          )
+                                        : index,
                                   },
                                 });
                               }}
