@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 
+import { UserContext } from "../../utils/context/UserContext";
 import { auth } from "../../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
@@ -9,13 +11,12 @@ interface Props {
 
 const AuthChecker = ({ children }: Props) => {
   const navigate = useNavigate();
-  //  console.log(auth.currentUser);
-  useEffect(() => {
-    if (!auth.currentUser) {
-      navigate("/login");
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      navigate("/");
+    }
+  });
   return <>{children}</>;
 };
 
