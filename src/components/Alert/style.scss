@@ -1,0 +1,33 @@
+@import "../../assets/scss/variables.scss";
+
+.Alert {
+  padding: 8px 16px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  &.standard {
+    &.info {
+      background-color: $primary-50;
+      color: $primary-600;
+      border: 1px solid $primary-500;
+    }
+    &.success {
+      background-color: $success-100;
+      color: $success-600;
+      border: 1px solid $success-500;
+    }
+
+    &.warning {
+      background-color: $warning-50;
+      color: $warning-600;
+      border: 1px solid $warning-500;
+    }
+
+    &.error {
+      background-color: $secondary-50;
+      color: $secondary-600;
+      border: 1px solid $secondary-500;
+    }
+  }
+}
