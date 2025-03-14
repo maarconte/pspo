@@ -30,6 +30,7 @@ export function useFetchFirebase(collectionName: string) {
       const collectionDocs = collection(db, collectionName);
       const querySnapshot = await getDocs(collectionDocs);
       const fetchedData: any[] = [];
+
       querySnapshot.forEach((doc) => {
         fetchedData.push({
           id: doc.id,
@@ -60,16 +61,26 @@ interface UseUpdateDocProps {
 }
 
 export function useUpdateDoc({ docId, collectionName }: UseUpdateDocProps) {
-  const { data, isLoading, error } = useQuery(["doc", docId], async () => {
-    const docRef = doc(db, collectionName, docId);
-    const docSnap = await getDoc(docRef);
-    return docSnap.data();
-  });
+  const { data, isLoading, error, refetch } = useQuery(
+    ["doc", docId],
+    async () => {
+      const docRef = doc(db, collectionName, docId);
+      const docSnap = await getDoc(docRef);
+      return docSnap.data();
+    }
+  );
 
-  const updateMutation = useMutation((newData: any) => {
-    const docRef = doc(db, collectionName, docId);
-    return updateDoc(docRef, { ...newData, updatedAt: serverTimestamp() });
-  });
+  const updateMutation = useMutation(
+    (newData: any) => {
+      const docRef = doc(db, collectionName, docId);
+      return updateDoc(docRef, { ...newData, updatedAt: serverTimestamp() });
+    },
+    {
+      onSuccess: () => {
+        refetch();
+      },
+    }
+  );
 
   const handleUpdate = (newData: any) => {
     updateMutation.mutate(newData);
