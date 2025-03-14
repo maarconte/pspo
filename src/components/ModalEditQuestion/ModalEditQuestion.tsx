@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Input from "../Input";
 import Modal from "../Modal/Modal";
 import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
+import { QuestionsContext } from "../../utils/context";
+import React from "react";
 import SelectAnswerType from "../SelectAnswerType";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +23,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   setIsOpen,
   setSelectQuestion,
 }) => {
+  const { refetch } = React.useContext(QuestionsContext);
   const { handleAdd } = useAddDoc("questions");
   const { handleUpdate, error } = useUpdateDoc({
     docId: question?.id || "",
@@ -55,9 +58,9 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
               }
         }
         onSubmit={(values) => {
+          refetch();
           question?.id ? handleUpdate(values) : handleAdd(values);
           setSelectQuestion && setSelectQuestion({} as any);
-
           setIsOpen(false);
         }}
       >

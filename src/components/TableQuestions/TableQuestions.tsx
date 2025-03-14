@@ -77,10 +77,11 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
-  const { allQuestions } = React.useContext(QuestionsContext);
+  const { allQuestions, refetch } = React.useContext(QuestionsContext);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { handleDelete } = useDeleteDoc("questions");
+
   const columns = [
     {
       header: "",
@@ -254,6 +255,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
             handleDelete(selectedQuestion.id);
             selectedQuestion && setSelectedQuestion(undefined);
             setIsDeleteModalOpen(false);
+            refetch();
           }}
           labelOnConfirm="Delete"
           onClose={() => setIsDeleteModalOpen(false)}

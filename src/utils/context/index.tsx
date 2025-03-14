@@ -14,6 +14,8 @@ interface QuestionsContextValue {
   setScore: (score: number) => void;
   userAnswers: UserAnswer[];
   setUserAnswers: any;
+  refetch: any;
+  testRefetch: any;
 }
 
 export const QuestionsContext = createContext<QuestionsContextValue>({
@@ -25,6 +27,8 @@ export const QuestionsContext = createContext<QuestionsContextValue>({
   setUserAnswers: () => {
     return [];
   },
+  refetch: () => {},
+  testRefetch: () => {},
 });
 
 // Create a context provider for the questions
@@ -38,7 +42,8 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
   const [score, setScore] = useState<number>(0);
   const [userAnswers, setUserAnswers] = useState<any[]>([]);
   // Fetch questions from Firebase
-  const { data, isLoading, errorMessage } = useFetchFirebase("questions");
+  const { data, isLoading, errorMessage, refetch } =
+    useFetchFirebase("questions");
   // Set questions in state
   useMemo(() => {
     if (!isLoading && !errorMessage) {
@@ -51,12 +56,26 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
       );
       selectedQuestions.length = 80;
       setQuestions(selectedQuestions);
+    } else if (errorMessage) {
+      const notify = () => toast.error(errorMessage.toString());
+      notify();
+    }
+  }, [data, isLoading, errorMessage]);
+
+  useMemo(() => {
+    if (!isLoading && !errorMessage) {
+      console.log("questions");
       setAllQuestions(data);
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());
       notify();
     }
   }, [data, isLoading, errorMessage]);
+
+  const testRefetch = () => {
+    console.log("fetch");
+    refetch();
+  };
 
   return (
     <QuestionsContext.Provider
@@ -67,6 +86,8 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
         userAnswers,
         setUserAnswers,
         allQuestions,
+        refetch,
+        testRefetch,
       }}
     >
       {children}
