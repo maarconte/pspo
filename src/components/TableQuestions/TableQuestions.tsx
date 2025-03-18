@@ -114,6 +114,13 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       enableColumnFilter: true,
     },
     {
+      header: "Formation",
+      accessorKey: "type",
+      enableColumnFilter: false,
+      enableSorting: true,
+      width: 150,
+    },
+    {
       header: "Answer type",
       accessorKey: "answerType",
       width: 150,

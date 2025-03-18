@@ -17,4 +17,5 @@ export type Question = {
   comments?: string[];
   updatedAt?: Timestamp;
   createdAt?: Timestamp;
+  type?: string;
 };

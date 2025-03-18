@@ -55,6 +55,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 answer: null,
                 comments: [],
                 isFlagged: false,
+                type: "pspo1",
               }
         }
         onSubmit={(values) => {
@@ -77,6 +78,15 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
             onConfirm={() => handleSubmit()}
           >
             <form onSubmit={handleSubmit}>
+              <Input
+                type="text"
+                id="type"
+                name="type"
+                placeholder="Formation"
+                value={values.type}
+                onChange={handleChange}
+                className="mb-2"
+              />
               <div className="d-flex gap-05 mb-2">
                 <Field
                   component={SelectAnswerType}
