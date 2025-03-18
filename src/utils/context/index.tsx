@@ -5,8 +5,6 @@ import { Question, UserAnswer } from "../types";
 import { ToastContainer, toast } from "react-toastify";
 
 import { useFetchFirebase } from "../hooks";
-
-// Create a context for the questions fetched from Firebase
 interface QuestionsContextValue {
   questions: Question[];
   allQuestions: Question[];
@@ -15,7 +13,8 @@ interface QuestionsContextValue {
   userAnswers: UserAnswer[];
   setUserAnswers: any;
   refetch: any;
-  testRefetch: any;
+  formation: string;
+  setFormation: (formation: string) => void;
 }
 
 export const QuestionsContext = createContext<QuestionsContextValue>({
@@ -28,10 +27,9 @@ export const QuestionsContext = createContext<QuestionsContextValue>({
     return [];
   },
   refetch: () => {},
-  testRefetch: () => {},
+  formation: "",
+  setFormation: () => {},
 });
-
-// Create a context provider for the questions
 interface QuestionsProviderProps {
   children: ReactNode;
 }
@@ -41,6 +39,7 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [score, setScore] = useState<number>(0);
   const [userAnswers, setUserAnswers] = useState<any[]>([]);
+  const [formation, setFormation] = useState<string>("pspo-I");
   // Fetch questions from Firebase
   const { data, isLoading, errorMessage, refetch } =
     useFetchFirebase("questions");
@@ -49,33 +48,29 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
     if (!isLoading && !errorMessage) {
       // select 80 random questions
       const selectedQuestions = [...data];
-      selectedQuestions.sort(() => Math.random() - 0.5);
+      // get questions with type equals to formation
+      const selectedQuestionsByType = selectedQuestions.filter(
+        (question) => question.type === formation
+      );
+
+      if (selectedQuestionsByType.length > 0) {
+        selectedQuestionsByType.sort(() => Math.random() - 0.5);
+        selectedQuestionsByType.length = 80;
+      }
+
       // get isFlagged questions
       const flagged = selectedQuestions.filter(
         (question) => question.isFlagged
       );
-      selectedQuestions.length = 80;
-      setQuestions(selectedQuestions);
-    } else if (errorMessage) {
-      const notify = () => toast.error(errorMessage.toString());
-      notify();
-    }
-  }, [data, isLoading, errorMessage]);
 
-  useMemo(() => {
-    if (!isLoading && !errorMessage) {
-      console.log("questions");
       setAllQuestions(data);
+      setQuestions(selectedQuestionsByType);
+      console.log("formation", formation);
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());
       notify();
     }
-  }, [data, isLoading, errorMessage]);
-
-  const testRefetch = () => {
-    console.log("fetch");
-    refetch();
-  };
+  }, [data, isLoading, errorMessage, formation]);
 
   return (
     <QuestionsContext.Provider
@@ -87,7 +82,8 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
         setUserAnswers,
         allQuestions,
         refetch,
-        testRefetch,
+        formation,
+        setFormation,
       }}
     >
       {children}
