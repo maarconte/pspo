@@ -10,7 +10,7 @@ import QuizzScore from "../components/QuizzScore";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const { questions, setScore } = React.useContext(QuestionsContext);
+  const { questions, setScore, formation } = React.useContext(QuestionsContext);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -24,7 +24,7 @@ export default function Quizz() {
     <div className="Quizz">
       <div className="container">
         {/* Header */}
-        <h1 className="text-center">Teach Agile : PSPO I</h1>
+        <h1 className="text-center"> Agile.training : {formation}</h1>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <Counter
             isPaused={isPaused}
