@@ -16,9 +16,10 @@ const QuizzScore: FC<QuizzScoreProps> = () => {
   useEffect(() => {
     let score = 0;
     userAnswers.forEach((userAnswer) => {
+      if (!questions[userAnswer.question]) return;
       const question = questions[userAnswer.question];
       const correctAnswer = question.answer;
-      console.log(correctAnswer, userAnswer.answer);
+
       // check if 2 arrays are equal
       if (Array.isArray(correctAnswer) && Array.isArray(userAnswer.answer)) {
         if (
@@ -34,8 +35,7 @@ const QuizzScore: FC<QuizzScoreProps> = () => {
       }
     });
     setScore(score);
-    console.log(score);
-  }, [userAnswers, questions]);
+  }, [userAnswers]);
 
   return (
     <div className="QuizzScore">
