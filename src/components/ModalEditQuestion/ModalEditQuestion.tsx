@@ -55,7 +55,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 answer: null,
                 comments: [],
                 isFlagged: false,
-                type: "pspo1",
+                type: "pspo-I",
               }
         }
         onSubmit={(values) => {
