@@ -1,0 +1,76 @@
+@import "../variables";
+select,
+select::picker(select) {
+  appearance: base-select;
+}
+
+select.select-modal {
+  appearance: auto !important;
+}
+
+select {
+  appearance: base-select;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid $primary_50;
+  border-radius: 5px;
+  padding: 8px 12px;
+  height: 42px;
+  color: $primary_300;
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+select::picker-icon {
+  /* Pseudo élément représentant la flèche */
+  transition: 0.4s rotate;
+}
+
+select:open::picker-icon {
+  rotate: 180deg;
+}
+
+select::picker(select) {
+  /* Menu déroulant */
+  position: absolute;
+  top: anchor(top);
+  left: anchor(left);
+  z-index: 10000;
+  background: #ffffff;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+option {
+  background: #ffffff;
+  color: $primary_300;
+  font-size: 1rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+option:hover {
+  background: $primary_50;
+  color: $primary_500;
+}
+
+option:first-of-type {
+  border-radius: 8px 8px 0 0;
+}
+
+option:last-of-type {
+  border-radius: 0 0 8px 8px;
+}
+
+option:not(option:last-of-type) {
+  border-bottom: none;
+}
+
+option::checkmark {
+  /* Coche à gauche des options */
+}
