@@ -46,9 +46,11 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
     useFetchFirebase("questions");
   // Set questions in state
   useMemo(() => {
+    console.log(formation);
     if (!isLoading && !errorMessage) {
       // select 80 random questions
       const selectedQuestions = [...data];
+
       // get questions with type equals to formation
       const selectedQuestionsByType = selectedQuestions.filter(
         (question) => question.type === formation
@@ -66,6 +68,7 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
 
       setAllQuestions(data);
       setQuestions(selectedQuestionsByType);
+      console.log(selectedQuestionsByType);
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());
       notify();
