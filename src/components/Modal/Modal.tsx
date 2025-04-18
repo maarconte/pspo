@@ -1,7 +1,7 @@
 import "./style.scss";
 
 import { Button_Style, Button_Type } from "../Button/Button.types";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 
 import Button from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -51,6 +51,16 @@ const Modal: FC<ModalProps> = ({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
+
+  // prevent scrolling when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
 
   const handleClose = (event: React.MouseEvent) => {
     onClose(event);
