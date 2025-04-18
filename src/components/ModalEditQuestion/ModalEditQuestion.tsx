@@ -13,6 +13,7 @@ import Modal from "../Modal/Modal";
 import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
 import { QuestionsContext } from "../../utils/context";
 import React from "react";
+import Select from "../Select";
 import SelectAnswerType from "../SelectAnswerType";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -78,41 +79,52 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
             onConfirm={() => handleSubmit()}
           >
             <form onSubmit={handleSubmit}>
-              <Input
-                type="text"
-                id="type"
-                name="type"
-                placeholder="Formation"
-                value={values.type}
-                onChange={handleChange}
-                className="mb-2"
-              />
-              <div className="d-flex gap-05 mb-2">
-                <Field
-                  component={SelectAnswerType}
-                  name="answerType"
-                  value={"TF"}
-                  onChange={handleChange}
-                  label="True/False"
-                  id="TF"
-                />
-                <Field
-                  component={SelectAnswerType}
-                  name="answerType"
-                  value={"S"}
-                  onChange={handleChange}
-                  label="Single choice"
-                  id="S"
-                />
-                <Field
-                  component={SelectAnswerType}
-                  name="answerType"
-                  value={"M"}
-                  onChange={handleChange}
-                  label="Multiple choice"
-                  id="M"
-                />
+              <div className="row">
+                <div className="col-sm-3">
+                  <h6 className="mb-1">Formation</h6>
+                  <Field
+                    as="select"
+                    id="type"
+                    name="type"
+                    value={values.type}
+                    onChange={handleChange}
+                    className="select-modal"
+                  >
+                    <option value="pspo-I">pspo-I</option>
+                    <option value="psm-I">psm-I</option>
+                  </Field>
+                </div>
+                <div className="col-sm-9">
+                  <h6 className="mb-1">Type de réponse</h6>
+                  <div className="d-flex gap-05 mb-2">
+                    <Field
+                      component={SelectAnswerType}
+                      name="answerType"
+                      value={"TF"}
+                      onChange={handleChange}
+                      label="True/False"
+                      id="TF"
+                    />
+                    <Field
+                      component={SelectAnswerType}
+                      name="answerType"
+                      value={"S"}
+                      onChange={handleChange}
+                      label="Single choice"
+                      id="S"
+                    />
+                    <Field
+                      component={SelectAnswerType}
+                      name="answerType"
+                      value={"M"}
+                      onChange={handleChange}
+                      label="Multiple choice"
+                      id="M"
+                    />
+                  </div>
+                </div>
               </div>
+
               <Input
                 type="textarea"
                 id="title"
