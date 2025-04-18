@@ -5,6 +5,7 @@ import { Question, UserAnswer } from "../types";
 import { ToastContainer, toast } from "react-toastify";
 
 import { useFetchFirebase } from "../hooks";
+
 interface QuestionsContextValue {
   questions: Question[];
   allQuestions: Question[];
@@ -65,7 +66,6 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
 
       setAllQuestions(data);
       setQuestions(selectedQuestionsByType);
-      console.log("formation", formation);
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());
       notify();
