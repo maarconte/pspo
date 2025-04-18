@@ -13,10 +13,11 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { faCircleDot, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { formatTimestamp, useDeleteDoc } from "../../utils/hooks";
 
+import Button from "../Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import Modal from "../Modal";
@@ -169,6 +170,19 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       enableColumnFilter: false,
     },
     {
+      header: "Created at",
+      accessorKey: "createdAt",
+      width: 200,
+      cell: (info: any) => {
+        return (
+          <div className="text-center">
+            {info.getValue() && formatTimestamp(info.getValue(), "fr-FR")}
+          </div>
+        );
+      },
+      enableColumnFilter: false,
+    },
+    {
       header: "",
       id: "actions",
       width: 50,
@@ -242,8 +256,26 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
   });
+
+  const handleDeleteAll = () => {
+    const today = new Date();
+    const todayString = today.toISOString().split("T")[0];
+    //delete all questions that were created today
+    allQuestions.forEach((question: Question) => {
+      const createdAt = question.createdAt
+        ?.toDate()
+        .toISOString()
+        .split("T")[0];
+
+      if (createdAt === todayString) {
+        handleDelete(question.id);
+      }
+    });
+  };
+
   return (
     <div className="TableQuestions">
+      {/* <Button onClick={handleDeleteAll} label="Delete today's questions" /> */}
       <Table data={table} columns={columns} />
       {selectedQuestion && (
         <ModalEditQuestion
