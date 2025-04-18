@@ -24,10 +24,17 @@ export default function EditQuestions() {
         complete: (result: any) => {
           //parse data so that answers is an array. each item is separated by a /
           result.data = result.data.map((item: any) => {
-            if (item.answers) {
-              item.answers = item.answers.split("/").map((answer: string) => {
-                return answer.trim();
-              });
+            const keys = Object.keys(item);
+            const answerListKeys = keys.filter((key) =>
+              key.startsWith("answerList")
+            );
+
+            if (answerListKeys.length > 0) {
+              item.answers = answerListKeys
+                .map((key) => item[key])
+                .filter((answer: string) => answer !== "");
+              // remove the answerList keys from the item
+              answerListKeys.forEach((key) => delete item[key]);
             }
             if (item.answerType === "S") {
               if (!isNaN(Number(item.answer))) {
