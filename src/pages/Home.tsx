@@ -17,7 +17,7 @@ export default function Home() {
 
         <div className="card">
           <h2>Instructions </h2>
-          {/* <Select
+          <Select
             className="mb-2"
             value={formation}
             handleChange={(value: any) => {
@@ -26,10 +26,10 @@ export default function Home() {
             label="Formation"
             options={[
               { label: "PSPO-I", value: "pspo-I" },
-              { label: "PSPO-II", value: "pspo-II" },
-              { label: "PSM-I", value: "psm-I" },
+              // { label: "PSPO-II", value: "pspo-II" },
+              { label: "PSM-I", value: "PSM-I" },
             ]}
-          /> */}
+          />
           <p>
             Number of questions <strong>80</strong>
           </p>
