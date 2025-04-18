@@ -1,6 +1,7 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
+import { Button_Style, Button_Type } from "../Button/Button.types";
 import {
   ColumnFiltersState,
   FilterFn,
@@ -80,14 +81,49 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
   const { allQuestions, refetch } = React.useContext(QuestionsContext);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
+  const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
+  const [isSelectAll, setIsSelectAll] = useState(false);
+  const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
   const columns = [
     {
+      // column for the checkbox to multiselect
+      header: "",
+      accessorKey: "id",
+      id: "selection",
+      cell: ({ row }: any) => (
+        <div className="d-flex justify-content-center">
+          <input
+            type="checkbox"
+            onChange={() => {
+              if (selectedQuestions.includes(row.original)) {
+                setSelectedQuestions(
+                  selectedQuestions.filter(
+                    (question) => question !== row.original
+                  )
+                );
+                setIsSelectAll(false);
+                setIsSelectNone(false);
+              } else {
+                setSelectedQuestions([...selectedQuestions, row.original]);
+                setIsSelectAll(false);
+                setIsSelectNone(false);
+              }
+            }}
+            checked={selectedQuestions.includes(row.original)}
+          />
+        </div>
+      ),
+      enableSorting: false,
+      enableColumnFilter: false,
+      size: 42,
+      width: 42,
+    },
+    {
       header: "",
       id: "id",
-      width: 50,
+      width: 42,
       cell: ({ row }: any) => (
         <span
           className="pointer"
@@ -198,7 +234,10 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
             className="pointer action"
             icon={faTrash}
             color={"#8b78c7"}
-            onClick={() => handleDeleteQuestion(info.row.original)}
+            onClick={() => {
+              setSelectedQuestion(info.row.original);
+              setIsDeleteModalOpen(true);
+            }}
           />
         </div>
       ),
@@ -210,12 +249,6 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const handleSelectQuestion = (question: Question) => {
     setSelectedQuestion(question);
     setIsModalOpen(true);
-  };
-
-  // select question to delete
-  const handleDeleteQuestion = (question: Question) => {
-    setSelectedQuestion(question);
-    setIsDeleteModalOpen(true);
   };
 
   // Pagination
@@ -258,24 +291,25 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   });
 
   const handleDeleteAll = () => {
-    const today = new Date();
-    const todayString = today.toISOString().split("T")[0];
-    //delete all questions that were created today
-    allQuestions.forEach((question: Question) => {
-      const createdAt = question.createdAt
-        ?.toDate()
-        .toISOString()
-        .split("T")[0];
-
-      if (createdAt === todayString) {
-        handleDelete(question.id);
-      }
+    selectedQuestions.forEach((question: Question) => {
+      handleDelete(question.id);
     });
+    setSelectedQuestions([]);
+    setIsSelectAll(false);
+    setIsSelectNone(false);
+    refetch();
   };
 
   return (
     <div className="TableQuestions">
-      {/* <Button onClick={handleDeleteAll} label="Delete today's questions" /> */}
+      {selectedQuestions.length > 0 && (
+        <Button
+          onClick={() => setIsDeleteModalOpen(true)}
+          label="Delete"
+          type={Button_Type.ERROR}
+          className="mb-1"
+        />
+      )}
       <Table data={table} columns={columns} />
       {selectedQuestion && (
         <ModalEditQuestion
@@ -285,14 +319,21 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
           setSelectQuestion={setSelectedQuestion}
         />
       )}
-      {selectedQuestion && isDeleteModalOpen && (
+      {isDeleteModalOpen && (
         <Modal
           isOpen={isDeleteModalOpen}
           setIsClosed={setIsDeleteModalOpen}
-          title="Delete question"
+          title={`${selectedQuestion ? "Delete question" : "Delete questions"}`}
           onConfirm={() => {
-            handleDelete(selectedQuestion.id);
-            selectedQuestion && setSelectedQuestion(undefined);
+            if (selectedQuestion) {
+              handleDelete(selectedQuestion.id);
+              selectedQuestion && setSelectedQuestion(undefined);
+            } else {
+              handleDeleteAll();
+              setSelectedQuestions([]);
+              setIsSelectAll(false);
+              setIsSelectNone(false);
+            }
             setIsDeleteModalOpen(false);
             refetch();
           }}
