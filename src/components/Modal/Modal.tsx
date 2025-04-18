@@ -1,7 +1,7 @@
 import "./style.scss";
 
 import { Button_Style, Button_Type } from "../Button/Button.types";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import Button from "../Button/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,8 +35,24 @@ const Modal: FC<ModalProps> = ({
   setIsClosed,
   closeOnBackdropClick,
 }) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose(event as unknown as React.MouseEvent);
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+
+    // Cleanup the event listener when the component unmounts or `isOpen` changes
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   const handleClose = (event: React.MouseEvent) => {
-    setIsClosed(false);
     onClose(event);
   };
   const handleConfirm = async (event: React.MouseEvent) => {
@@ -56,10 +72,7 @@ const Modal: FC<ModalProps> = ({
     <>
       {isOpen ? (
         <div>
-          <div
-            className="modal--backdrop"
-            onClick={closeOnBackdropClick ? handleClose : undefined}
-          />
+          <div className="modal--backdrop" onClick={handleClose} />
           <div className={`modal modal--${type ? type : "info"} `}>
             <div className="modal__header">
               <h3 className="modal__header__title">{title}</h3>
