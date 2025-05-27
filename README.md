@@ -1,46 +1,42 @@
-# Getting Started with Create React App
+# Démarrage avec Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ce projet a été initialisé avec [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Scripts disponibles
 
-In the project directory, you can run:
+Dans le répertoire du projet, vous pouvez exécuter :
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Lance l'application en mode développement.\
+Ouvrez [http://localhost:3000](http://localhost:3000) pour la voir dans le navigateur.
+La page se rechargera si vous effectuez des modifications.\
+Vous verrez également les erreurs de lint dans la console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Lance le testeur de tests en mode interactif.\
+Voir la section sur [l'exécution des tests](https://facebook.github.io/create-react-app/docs/running-tests) pour plus d'informations.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Construit l'application pour la production dans le dossier `build`.\
+Il regroupe correctement React en mode production et optimise la build pour la meilleure performance.
+La build est minifiée et les noms de fichiers incluent les hachages.\
+Votre application est prête à être déployée !
+Voir la section sur [le déploiement](https://facebook.github.io/create-react-app/docs/deployment) pour plus d'informations.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Déploiement sur GitHub Pages
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `npm run deploy`
+
+Deploie l'application sur GitHub Pages.
 
 ### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Note : cette opération est irréversible. Une fois que vous avez `eject`, vous ne pouvez pas revenir en arrière !**
+Si vous n'êtes pas satisfait des outils de build et des choix de configuration, vous pouvez `eject` à tout moment. Cette commande supprimera la dépendance unique de build de votre projet.
+Au lieu de cela, elle copiera tous les fichiers de configuration et les dépendances transitives (webpack, Babel, ESLint, etc.) directement dans votre projet afin que vous ayez un contrôle total sur eux. Toutes les commandes sauf `eject` continueront de fonctionner, mais elles pointeront vers les scripts copiés afin que vous puissiez les modifier. À ce stade, vous êtes seul maître à bord.
+Vous n'avez pas besoin d'utiliser `eject` à tout moment. L'ensemble de fonctionnalités curaté est adapté aux déploiements petits et moyens, et vous ne devriez pas vous sentir obligé d'utiliser cette fonctionnalité. Cependant, nous comprenons que cet outil ne serait pas utile si vous ne pouviez pas le personnaliser lorsque vous êtes prêt.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Rajoute les instructions pour le deploiement gh-pages
