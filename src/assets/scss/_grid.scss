@@ -11,14 +11,6 @@ $GRID_GAP: 1rem;
   @include breakpoint(tablet) {
     max-width: 750px;
   }
-
-  @include breakpoint(laptop) {
-    max-width: 970px;
-  }
-
-  @include breakpoint(desktop) {
-    max-width: 1170px;
-  }
 }
 
 .row {
