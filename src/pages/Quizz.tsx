@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Button from "../components/Button/Button";
 import { Button_Style } from "../components/Button/Button.types";
@@ -7,6 +7,7 @@ import Input from "../components/Input";
 import QuestionCard from "../components/QuestionCard";
 import { QuestionsContext } from "../utils/context";
 import QuizzScore from "../components/QuizzScore";
+import { toast } from "react-toastify";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -14,11 +15,100 @@ export default function Quizz() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [timeSpent, setTimeSpent] = useState(0);
+
+  const notifyTime = () => {
+    if (timeSpent <= 3) return;
+    switch (true) {
+      case timeSpent < 45:
+        toast.success(
+          <div className="toast-content">
+            <p className="mb-0">{`Question ${currentQuestion + 1}`}</p>
+            <p className="mb-0 time fs-2">{formatTime(timeSpent)}</p>
+          </div>,
+          {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: false,
+            pauseOnHover: true,
+            theme: "colored",
+          }
+        );
+        break;
+      case timeSpent >= 45 && timeSpent <= 90:
+        toast.warn(
+          <div className="toast-content">
+            <p className="mb-0">{`Question ${currentQuestion + 1}`}</p>
+            <p className="mb-0 time fs-2">{formatTime(timeSpent)}</p>
+          </div>,
+          {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: false,
+            pauseOnHover: true,
+            theme: "colored",
+          }
+        );
+        break;
+      default:
+        toast.error(
+          <div className="toast-content">
+            <p className="mb-0">{`Question ${currentQuestion + 1}`}</p>
+            <p className="mb-0 time fs-2">{formatTime(timeSpent)}</p>
+          </div>,
+          {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: false,
+            pauseOnHover: true,
+            theme: "colored",
+          }
+        );
+        break;
+    }
+  };
+
+  useEffect(() => {
+    setTimeSpent(0);
+  }, [currentQuestion]);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
+    if (!isPaused) {
+      intervalId = setInterval(() => {
+        setTimeSpent((prevTime) => prevTime + 1);
+      }, 1000);
+    } else {
+      clearInterval(intervalId);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [isPaused, currentQuestion]);
 
   const finishQuizz = () => {
     setIsFinished(true);
     setShowAnswer(true);
     setIsPaused(true);
+  };
+  const formatTime = (totalSeconds: number) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+  const nextQuestion = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+      notifyTime();
+      setShowAnswer(false);
+    } else {
+      finishQuizz();
+    }
   };
   return (
     <div className="Quizz">
@@ -31,6 +121,7 @@ export default function Quizz() {
             setIsPaused={setIsPaused}
             finishQuizz={finishQuizz}
           />
+
           {showAnswer && <QuizzScore />}
           <div className="d-flex gap-1">
             {isFinished ? (
@@ -101,10 +192,7 @@ export default function Quizz() {
           <Button
             label="Next"
             disabled={currentQuestion === questions.length - 1}
-            onClick={() => {
-              setCurrentQuestion(currentQuestion + 1);
-              setShowAnswer(false);
-            }}
+            onClick={() => nextQuestion()}
           />
         </div>
       </div>
