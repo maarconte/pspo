@@ -124,6 +124,13 @@
   }
 }
 
+// font sizes
+@for $i from 0 through 5 {
+  .fs-#{$i} {
+    font-size: #{$i}rem;
+  }
+}
+
 .w-100 {
   width: 100%;
 }
@@ -153,16 +160,3 @@
 .bg-success {
   background-color: $success-100;
 }
-
-//$colors: ("primary": $PRIMARY_40, "secondary": $SECONDARY_40, "success": $SUCCESS_40, "danger": $ERROR_40, "warning": $ACCENT_40, "light": $NEUTRAL_100);
-
-// loop for colors
-// @each $name, $color in $colors {
-//     .bg-#{$name} {
-//         background-color: $color;
-//     }
-
-//     .text-#{$name} {
-//         color: $color;
-//     }
-// }
