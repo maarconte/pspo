@@ -1,10 +1,14 @@
+import "rsuite/dist/rsuite.min.css";
+
 import React, { useEffect, useState } from "react";
 
 import Button from "../components/Button/Button";
 import { Button_Style } from "../components/Button/Button.types";
 import Counter from "../components/Counter";
+import { Drawer } from "rsuite";
 import Input from "../components/Input";
 import QuestionCard from "../components/QuestionCard";
+import QuestionNavigation from "../components/QuestionNavigation/QuestionNavigation";
 import { QuestionsContext } from "../utils/context";
 import QuizzScore from "../components/QuizzScore";
 import { toast } from "react-toastify";
@@ -16,56 +20,42 @@ export default function Quizz() {
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
-
+  const [open, setOpen] = React.useState(false);
+  const notificationContent = (questionNumber: number, time: string) => (
+    <div className="toast-content">
+      <p className="mb-0">{`Question ${questionNumber + 1}`}</p>
+      <p className="mb-0 time fs-2">{time}</p>
+    </div>
+  );
+  const toastOptions: any = {
+    position: "bottom-right",
+    autoClose: 3000,
+    hideProgressBar: true,
+    closeOnClick: false,
+    pauseOnHover: true,
+    theme: "colored",
+    draggable: false,
+    closeButton: false,
+  };
   const notifyTime = () => {
     if (timeSpent <= 3) return;
     switch (true) {
       case timeSpent < 45:
         toast.success(
-          <div className="toast-content">
-            <p className="mb-0">{`Question ${currentQuestion + 1}`}</p>
-            <p className="mb-0 time fs-2">{formatTime(timeSpent)}</p>
-          </div>,
-          {
-            position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            theme: "colored",
-          }
+          notificationContent(currentQuestion, formatTime(timeSpent)),
+          toastOptions
         );
         break;
       case timeSpent >= 45 && timeSpent <= 90:
         toast.warn(
-          <div className="toast-content">
-            <p className="mb-0">{`Question ${currentQuestion + 1}`}</p>
-            <p className="mb-0 time fs-2">{formatTime(timeSpent)}</p>
-          </div>,
-          {
-            position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            theme: "colored",
-          }
+          notificationContent(currentQuestion, formatTime(timeSpent)),
+          toastOptions
         );
         break;
       default:
         toast.error(
-          <div className="toast-content">
-            <p className="mb-0">{`Question ${currentQuestion + 1}`}</p>
-            <p className="mb-0 time fs-2">{formatTime(timeSpent)}</p>
-          </div>,
-          {
-            position: "bottom-right",
-            autoClose: 3000,
-            hideProgressBar: true,
-            closeOnClick: false,
-            pauseOnHover: true,
-            theme: "colored",
-          }
+          notificationContent(currentQuestion, formatTime(timeSpent)),
+          toastOptions
         );
         break;
     }
@@ -177,7 +167,7 @@ export default function Quizz() {
               setShowAnswer(false);
             }}
           />
-          <div className="d-flex gap-1 align-items-center">
+          {/* <div className="d-flex gap-1 align-items-center">
             <Input
               value={currentQuestion + 1}
               type="number"
@@ -188,7 +178,12 @@ export default function Quizz() {
               }}
             />
             <span>of {questions.length}</span>
-          </div>
+          </div> */}
+          <Button
+            onClick={() => setOpen(true)}
+            label="Pagination"
+            style={Button_Style.OUTLINED}
+          />
           <Button
             label="Next"
             disabled={currentQuestion === questions.length - 1}
@@ -196,6 +191,17 @@ export default function Quizz() {
           />
         </div>
       </div>
+      <Drawer backdrop={false} open={open} onClose={() => setOpen(false)}>
+        <Drawer.Header>
+          <Drawer.Title>Navigation</Drawer.Title>
+        </Drawer.Header>
+        <Drawer.Body>
+          <QuestionNavigation
+            setCurrentQuestion={setCurrentQuestion}
+            currentQuestion={currentQuestion}
+          />
+        </Drawer.Body>
+      </Drawer>
     </div>
   );
 }
