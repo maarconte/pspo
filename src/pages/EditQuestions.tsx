@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { useAddDoc, useDeleteDoc } from "../utils/hooks";
-
 import Button from "../components/Button";
 import FileUploader from "../components/FileUploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,12 +7,13 @@ import QuestionsStats from "../components/QuestionsStats";
 import TableQuestions from "../components/TableQuestions";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import { useAddDoc } from "../utils/hooks";
+import { useState } from "react";
 
 export default function EditQuestions() {
   const [csvData, setCsvData] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
-  const [isAdded, setIsAdded] = useState(false);
   const handleFileUpload = (file: any) => {
     if (file) {
       Papa.parse(file, {
@@ -106,8 +104,8 @@ export default function EditQuestions() {
           isOpen={isAddModalOpen}
           setIsOpen={setIsAddModalOpen}
         />
-        <TableQuestions />
       </div>
+      <TableQuestions />
     </div>
   );
 }
