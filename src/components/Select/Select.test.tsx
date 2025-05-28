@@ -9,7 +9,7 @@ describe("Select", () => {
       { value: "1", label: "Option 1" },
       { value: "2", label: "Option 2" },
     ];
-    render(<Select options={options} />);
+    render(<Select options={options} name="test-select" />);
 
     expect(screen.getByText("Select")).toBeInTheDocument();
   });

@@ -81,6 +81,7 @@ const Feedback: FC<FeedbackProps> = ({ question }) => {
           type="textarea"
           placeholder="Please describe the issue"
           onChange={(e) => handleCommentChange(e)}
+          name={"feedback-comment"}
         />
       </Modal>
       <ToastContainer />

@@ -13,6 +13,50 @@ import TableSearch from "./TableSearch";
 import { faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { faSortUp } from "@fortawesome/free-solid-svg-icons";
 
+// Déplacer la définition du composant Filter et de son interface de props en dehors du composant Table
+interface FilterProps {
+  column: Column<any, unknown>;
+  selectedQuestions: Question[];
+  setSelectedQuestions?: React.Dispatch<React.SetStateAction<Question[]>>;
+  setSelectedQuestion?: React.Dispatch<
+    React.SetStateAction<Question | undefined>
+  >;
+  setIsSelectAll?: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSelectNone?: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedQuestion?: Question;
+}
+
+const Filter: FC<FilterProps> = ({
+  column,
+  selectedQuestions,
+  setSelectedQuestions,
+  setSelectedQuestion,
+  setIsSelectAll,
+  setIsSelectNone,
+  selectedQuestion,
+}) => {
+  const columnFilterValue = column.getFilterValue();
+
+  return (
+    <div className="d-flex gap-1 w-100 justify-content-between">
+      <TableActions
+        selectedQuestions={selectedQuestions}
+        setSelectedQuestions={setSelectedQuestions ?? (() => {})}
+        setSelectedQuestion={setSelectedQuestion ?? (() => {})}
+        setIsSelectAll={setIsSelectAll ?? (() => {})}
+        setIsSelectNone={setIsSelectNone ?? (() => {})}
+        selectedQuestion={selectedQuestion}
+      />
+      <TableSearch
+        value={(columnFilterValue ?? "") as string}
+        onChange={column.setFilterValue}
+        // Pour le problème d'accessibilité, envisagez d'ajouter un id unique ici :
+        // inputId={`search-${column.id}`}
+      />
+    </div>
+  );
+};
+
 const Table: FC<TableProps> = ({
   data,
   columns,
@@ -23,37 +67,6 @@ const Table: FC<TableProps> = ({
   setIsSelectNone,
   selectedQuestion,
 }) => {
-  const Filter: FC<{
-    column: Column<any, unknown>;
-    selectedQuestions: Question[];
-    setSelectedQuestions?: React.Dispatch<React.SetStateAction<Question[]>>;
-    setSelectedQuestion?: React.Dispatch<
-      React.SetStateAction<Question | undefined>
-    >;
-    setIsSelectAll?: React.Dispatch<React.SetStateAction<boolean>>;
-    setIsSelectNone?: React.Dispatch<React.SetStateAction<boolean>>;
-    selectedQuestion?: Question;
-  }> = ({ column, selectedQuestions }) => {
-    const columnFilterValue = column.getFilterValue();
-
-    return (
-      <div className="d-flex gap-1 w-100 justify-content-between">
-        <TableActions
-          selectedQuestions={selectedQuestions}
-          setSelectedQuestions={setSelectedQuestions ?? (() => {})}
-          setSelectedQuestion={setSelectedQuestion ?? (() => {})}
-          setIsSelectAll={setIsSelectAll ?? (() => {})}
-          setIsSelectNone={setIsSelectNone ?? (() => {})}
-          selectedQuestion={selectedQuestion}
-        />
-        <TableSearch
-          value={(columnFilterValue ?? "") as string}
-          onChange={column.setFilterValue}
-        />
-      </div>
-    );
-  };
-
   return (
     <div className="Table">
       {data.getHeaderGroups().map((headerGroup: any) => (
@@ -65,6 +78,11 @@ const Table: FC<TableProps> = ({
                 <Filter
                   column={header.column}
                   selectedQuestions={selectedQuestions ?? []}
+                  setSelectedQuestions={setSelectedQuestions}
+                  setSelectedQuestion={setSelectedQuestion}
+                  setIsSelectAll={setIsSelectAll}
+                  setIsSelectNone={setIsSelectNone}
+                  selectedQuestion={selectedQuestion}
                 />
               </div>
             ))}

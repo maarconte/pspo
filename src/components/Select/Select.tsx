@@ -11,6 +11,8 @@ const Select: FC<SelectProps> = ({
   className,
   value,
   handleChange,
+  name,
+  id,
   ...rest
 }) => {
   const [isOpened, setIsOpened] = useState(false);
@@ -58,7 +60,7 @@ const Select: FC<SelectProps> = ({
 
   return (
     <div className="Select" ref={selectRef}>
-      <select className={`${className}`} {...rest} />
+      <select className={`${className}`} {...rest} name={name} id={id} />
       <div className={`Select__wrapper ${isOpened ? "opened" : ""}`}>
         <div
           className={`Select__wrapper__trigger ${className}`}

@@ -9,5 +9,7 @@ export type SelectProps = {
   options: Options[];
   required?: boolean;
   className?: string;
+  name: string;
+  id?: string;
   handleChange?: (value: string | number) => void;
 } & Record<string, any>;

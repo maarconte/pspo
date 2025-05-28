@@ -96,6 +96,8 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
         <div className="d-flex justify-content-center">
           <input
             type="checkbox"
+            name="select-question"
+            id={`select-question-${row.index}`}
             onChange={() => {
               if (selectedQuestions.includes(row.original)) {
                 setSelectedQuestions(

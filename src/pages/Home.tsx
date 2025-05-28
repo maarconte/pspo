@@ -18,6 +18,7 @@ export default function Home() {
         <div className="card">
           <h2>Instructions </h2>
           <Select
+            name="formation"
             className="mb-2"
             value={formation}
             handleChange={(value: any) => {

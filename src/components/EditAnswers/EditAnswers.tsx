@@ -20,6 +20,7 @@ const EditAnswers: FC<EditAnswersProps> = ({ answerType, answers }) => {
               value={answer}
               label={`Answer ${index + 1}`}
               onChange={() => {}}
+              name={`answer-${index}`}
             />
           ))}
         </div>
