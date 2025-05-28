@@ -6,7 +6,6 @@ import Button from "../components/Button/Button";
 import { Button_Style } from "../components/Button/Button.types";
 import Counter from "../components/Counter";
 import { Drawer } from "rsuite";
-import Input from "../components/Input";
 import QuestionCard from "../components/QuestionCard";
 import QuestionNavigation from "../components/QuestionNavigation/QuestionNavigation";
 import { QuestionsContext } from "../utils/context";
@@ -27,6 +26,20 @@ export default function Quizz() {
       <p className="mb-0 time fs-2">{time}</p>
     </div>
   );
+
+  const toastType = (time: number) => {
+    if (time < 45) return "success";
+    if (time >= 45 && time <= 90) return "warning";
+    return "error";
+  };
+  const notifyTime = () => {
+    if (timeSpent <= 3) return;
+    toast(
+      notificationContent(currentQuestion, formatTime(timeSpent)),
+      toastOptions
+    );
+  };
+
   const toastOptions: any = {
     position: "bottom-right",
     autoClose: 3000,
@@ -36,29 +49,7 @@ export default function Quizz() {
     theme: "colored",
     draggable: false,
     closeButton: false,
-  };
-  const notifyTime = () => {
-    if (timeSpent <= 3) return;
-    switch (true) {
-      case timeSpent < 45:
-        toast.success(
-          notificationContent(currentQuestion, formatTime(timeSpent)),
-          toastOptions
-        );
-        break;
-      case timeSpent >= 45 && timeSpent <= 90:
-        toast.warn(
-          notificationContent(currentQuestion, formatTime(timeSpent)),
-          toastOptions
-        );
-        break;
-      default:
-        toast.error(
-          notificationContent(currentQuestion, formatTime(timeSpent)),
-          toastOptions
-        );
-        break;
-    }
+    type: toastType(timeSpent),
   };
 
   useEffect(() => {
@@ -167,18 +158,6 @@ export default function Quizz() {
               setShowAnswer(false);
             }}
           />
-          {/* <div className="d-flex gap-1 align-items-center">
-            <Input
-              value={currentQuestion + 1}
-              type="number"
-              className="m-0 w-25 hide-arrows"
-              onChange={(e) => {
-                setCurrentQuestion(e.target.value - 1);
-                setShowAnswer(false);
-              }}
-            />
-            <span>of {questions.length}</span>
-          </div> */}
           <Button
             onClick={() => setOpen(true)}
             label="Pagination"
