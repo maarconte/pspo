@@ -302,15 +302,16 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
 
   return (
     <div className="TableQuestions">
-      {selectedQuestions.length > 0 && (
-        <Button
-          onClick={() => setIsDeleteModalOpen(true)}
-          label="Delete"
-          type={Button_Type.ERROR}
-          className="mb-1"
-        />
-      )}
-      <Table data={table} columns={columns} />
+      <Table
+        data={table}
+        columns={columns}
+        selectedQuestion={selectedQuestion}
+        selectedQuestions={selectedQuestions}
+        setSelectedQuestion={setSelectedQuestion}
+        setSelectedQuestions={setSelectedQuestions}
+        setIsSelectAll={setIsSelectAll}
+        setIsSelectNone={setIsSelectNone}
+      />
       {selectedQuestion && (
         <ModalEditQuestion
           isOpen={isModalOpen}

@@ -6,23 +6,54 @@ import { Column, flexRender } from "@tanstack/react-table";
 import { FC } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Pagination from "./Pagination/Pagination";
+import { Question } from "../../utils/types";
+import TableActions from "./TableActions/TableActions";
 import { TableProps } from "./Table.types";
 import TableSearch from "./TableSearch";
 import { faSortDown } from "@fortawesome/free-solid-svg-icons";
 import { faSortUp } from "@fortawesome/free-solid-svg-icons";
 
-function Filter({ column }: { column: Column<any, unknown> }) {
-  const columnFilterValue = column.getFilterValue();
+const Table: FC<TableProps> = ({
+  data,
+  columns,
+  selectedQuestions,
+  setSelectedQuestions,
+  setSelectedQuestion,
+  setIsSelectAll,
+  setIsSelectNone,
+  selectedQuestion,
+}) => {
+  const Filter: FC<{
+    column: Column<any, unknown>;
+    selectedQuestions: Question[];
+    setSelectedQuestions?: React.Dispatch<React.SetStateAction<Question[]>>;
+    setSelectedQuestion?: React.Dispatch<
+      React.SetStateAction<Question | undefined>
+    >;
+    setIsSelectAll?: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsSelectNone?: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedQuestion?: Question;
+  }> = ({ column, selectedQuestions }) => {
+    const columnFilterValue = column.getFilterValue();
 
-  return (
-    <TableSearch
-      value={(columnFilterValue ?? "") as string}
-      onChange={column.setFilterValue}
-    />
-  );
-}
+    return (
+      <div className="d-flex gap-1 w-100 justify-content-between">
+        <TableActions
+          selectedQuestions={selectedQuestions}
+          setSelectedQuestions={setSelectedQuestions ?? (() => {})}
+          setSelectedQuestion={setSelectedQuestion ?? (() => {})}
+          setIsSelectAll={setIsSelectAll ?? (() => {})}
+          setIsSelectNone={setIsSelectNone ?? (() => {})}
+          selectedQuestion={selectedQuestion}
+        />
+        <TableSearch
+          value={(columnFilterValue ?? "") as string}
+          onChange={column.setFilterValue}
+        />
+      </div>
+    );
+  };
 
-const Table: FC<TableProps> = ({ data, columns }) => {
   return (
     <div className="Table">
       {data.getHeaderGroups().map((headerGroup: any) => (
@@ -31,7 +62,10 @@ const Table: FC<TableProps> = ({ data, columns }) => {
             .filter((header: any) => header.column.getCanFilter())
             .map((header: any) => (
               <div key={header.id}>
-                <Filter column={header.column} />
+                <Filter
+                  column={header.column}
+                  selectedQuestions={selectedQuestions ?? []}
+                />
               </div>
             ))}
         </div>
