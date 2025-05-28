@@ -191,7 +191,12 @@ export default function Quizz() {
           />
         </div>
       </div>
-      <Drawer backdrop={false} open={open} onClose={() => setOpen(false)}>
+      <Drawer
+        backdrop={false}
+        open={open}
+        onClose={() => setOpen(false)}
+        size={"xs"}
+      >
         <Drawer.Header>
           <Drawer.Title>Navigation</Drawer.Title>
         </Drawer.Header>
