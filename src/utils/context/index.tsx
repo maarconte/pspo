@@ -68,7 +68,6 @@ export const QuestionsProvider: FC<QuestionsProviderProps> = ({ children }) => {
 
       setAllQuestions(data);
       setQuestions(selectedQuestionsByType);
-      console.log(selectedQuestionsByType);
     } else if (errorMessage) {
       const notify = () => toast.error(errorMessage.toString());
       notify();

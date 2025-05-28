@@ -33,6 +33,8 @@ const TableSearch: FC<TableSearchProps> = ({
         placeholder="Search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        name="search"
+        id="TableSearchInput"
       />
     </div>
   );
