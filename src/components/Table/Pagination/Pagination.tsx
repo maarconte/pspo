@@ -71,6 +71,8 @@ export default function Pagination({ table }: any) {
               pageSize: parseInt(value.toString()),
             })
           }
+          name="pageSize"
+          id="pageSizeSelect"
         />
 
         <Button

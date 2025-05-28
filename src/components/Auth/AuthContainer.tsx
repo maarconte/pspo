@@ -68,6 +68,7 @@ const AuthContainer = (props: Props) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="mb-1"
+        name="email"
       />
       <Input
         placeholder="Password"
@@ -75,6 +76,7 @@ const AuthContainer = (props: Props) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className="mb-1"
+        name="password"
       />
       {/* <a href="#" className="mb-1 d-block text-right">
         Forgot password ?

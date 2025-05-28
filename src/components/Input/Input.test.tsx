@@ -5,7 +5,7 @@ import React from "react";
 
 describe("Input", () => {
   it("should render the component correctly", () => {
-    render(<Input placeholder="iput" />);
+    render(<Input placeholder="iput" name="input" />);
 
     expect(screen.getByText("Input")).toBeInTheDocument();
   });

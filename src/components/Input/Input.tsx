@@ -10,6 +10,8 @@ type InputProps = {
   className?: string;
   errorMessage?: string;
   type?: string;
+  name: string;
+  id?: string;
 } & Record<string, any>;
 
 const Input: FC<InputProps> = ({
@@ -20,6 +22,8 @@ const Input: FC<InputProps> = ({
   className,
   errorMessage,
   type,
+  name,
+  id,
   ...rest
 }) => {
   return (
@@ -37,12 +41,14 @@ const Input: FC<InputProps> = ({
           value={value}
           onChange={onChange}
           type={type}
+          id={id || name}
+          name={name}
           required
           {...rest}
           placeholder=""
         />
       )}
-      <label>{placeholder}</label>
+      <label htmlFor={id}>{placeholder}</label>
       {errorMessage && <span className="error-message">{errorMessage}</span>}
     </div>
   );
