@@ -19,7 +19,7 @@ const Header: FC<HeaderProps> = () => {
   return (
     <div className="Header">
       <h1 className="h4">
-        <Link to="/">PSPO</Link>
+        <Link to="/">Agile.training</Link>
       </h1>
       <div className="d-flex gap-1 align-items-center">
         <Button
