@@ -33,6 +33,8 @@ const Input: FC<InputProps> = ({
           value={value}
           onChange={onChange}
           required
+          name={name}
+          id={id || name}
           {...rest}
           placeholder=""
         />
