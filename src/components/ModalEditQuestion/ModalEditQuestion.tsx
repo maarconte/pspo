@@ -140,56 +140,65 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     {({ push, remove }) => (
                       <div>
                         {values?.answers?.map((answer, index) => (
-                          <div
-                            key={index}
-                            className={`answer ${
-                              values.answer === index ||
-                              (Array.isArray(values.answer) &&
-                                values.answer.includes(index))
-                                ? "bg-success"
-                                : ""
-                            }`}
-                          >
-                            <Field
-                              type={
-                                values.answerType === "M" ? "checkbox" : "radio"
-                              }
-                              name="answer"
-                              value={index}
-                              onChange={() => {
-                                handleChange({
-                                  target: {
-                                    name: "answer",
-                                    value:
-                                      values.answerType === "M"
-                                        ? handleAnswerChange(
-                                            index,
-                                            values.answer
-                                          )
-                                        : index,
-                                  },
-                                });
-                              }}
-                            />
+                          <>
+                            <h5 className="mb-1">Answer {index + 1}</h5>
+                            <div
+                              key={index}
+                              className={`answer ${
+                                values.answer === index ||
+                                (Array.isArray(values.answer) &&
+                                  values.answer.includes(index))
+                                  ? "bg-success"
+                                  : ""
+                              }`}
+                            >
+                              <Field
+                                type={
+                                  values.answerType === "M"
+                                    ? "checkbox"
+                                    : "radio"
+                                }
+                                name="answer"
+                                id={`answer-${index}`}
+                                value={index}
+                                onChange={() => {
+                                  handleChange({
+                                    target: {
+                                      name: "answer",
+                                      value:
+                                        values.answerType === "M"
+                                          ? handleAnswerChange(
+                                              index,
+                                              values.answer
+                                            )
+                                          : index,
+                                    },
+                                  });
+                                }}
+                              />
 
-                            <div style={{ flex: 1 }}>
-                              <Input
-                                type="text"
-                                id={`answers.${index}`}
-                                name={`answers.${index}`}
-                                placeholder={`Answer ${index + 1}`}
-                                value={answer}
-                                onChange={handleChange}
+                              <label htmlFor={`answer-${index}`}>
+                                <div style={{ flex: 1 }}>
+                                  <Input
+                                    type="text"
+                                    id={`answers.${index}`}
+                                    name={`answers.${index}`}
+                                    //  placeholder={`Answer ${index + 1}`}
+                                    value={answer}
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </label>
+
+                              <Button
+                                style={Button_Style.OUTLINED}
+                                onClick={() => remove(index)}
+                                isIconButton
+                                icon={<FontAwesomeIcon icon={faTrash} />}
+                                className="mb-05"
                               />
                             </div>
-                            <Button
-                              style={Button_Style.OUTLINED}
-                              onClick={() => remove(index)}
-                              isIconButton
-                              icon={<FontAwesomeIcon icon={faTrash} />}
-                              className="mb-05"
-                            />
-                          </div>
+                          </>
                         ))}
                         <Button
                           style={Button_Style.OUTLINED}
@@ -253,7 +262,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
               <Input
                 type="textarea"
                 id="feedback"
-                name="feedback"
+                name={"feedback"}
                 placeholder="Feedback"
                 value={values.feedback}
                 onChange={handleChange}

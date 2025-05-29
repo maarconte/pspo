@@ -1,0 +1,43 @@
+@import "../variables";
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="radio"] + label,
+input[type="checkbox"] + label {
+  position: relative;
+  margin-left: 20px;
+  width: 100%;
+  padding: 8px 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    border: 1px solid $primary-200;
+    width: 17px;
+    height: 17px;
+    left: -30px;
+    background-color: white;
+    border-radius: 3px;
+  }
+}
+
+input[type="radio"] + label:before,
+input:checked[type="radio"] + label:after {
+  border-radius: 17px;
+}
+
+input:checked + label:after {
+  content: "";
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background-color: $primary-500;
+  left: -26px;
+  top: 12px;
+  border-radius: 2px;
+  transition: 0.5s;
+}

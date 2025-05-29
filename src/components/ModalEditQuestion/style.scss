@@ -11,6 +11,15 @@
     align-items: baseline;
     margin-bottom: 1rem;
     border-radius: 8px;
+    input {
+      margin-top: 0 !important;
+    }
+    label:before {
+      top: 20px;
+    }
+    label:after {
+      top: 24px;
+    }
   }
 
   .comment {
