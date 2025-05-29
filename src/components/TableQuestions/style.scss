@@ -1,3 +1,13 @@
 .TableQuestions {
   padding: 0 24px 24px;
+  .checkbox-container {
+    label:before {
+      left: -20px;
+      top: 0;
+    }
+    label:after {
+      left: -16px;
+      top: 4px;
+    }
+  }
 }
