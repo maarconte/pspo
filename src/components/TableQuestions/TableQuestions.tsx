@@ -93,7 +93,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       accessorKey: "id",
       id: "selection",
       cell: ({ row }: any) => (
-        <div className="d-flex justify-content-center">
+        <div className="checkbox-container">
           <input
             type="checkbox"
             name="select-question"
@@ -115,6 +115,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
             }}
             checked={selectedQuestions.includes(row.original)}
           />
+          <label htmlFor={`select-question-${row.index}`} />
         </div>
       ),
       enableSorting: false,
