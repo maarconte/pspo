@@ -23,6 +23,23 @@ const QuestionCard: FC<QuestionCardProps> = ({
   const { userAnswers, setUserAnswers } = useContext(QuestionsContext);
   const inputType = question.answerType === "M" ? "checkbox" : "radio";
   const [showComments, setShowComments] = useState(false);
+  const selectedClass = (index: number) => {
+    const currentActualAnswer = userAnswers[currentQuestion]?.answer;
+    if (
+      currentActualAnswer === index ||
+      (question.answerType === "M" &&
+        Array.isArray(currentActualAnswer) &&
+        currentActualAnswer.includes(index)) ||
+      (question.answerType === "TF" &&
+        currentActualAnswer === true &&
+        index === 0) ||
+      (question.answerType === "TF" &&
+        currentActualAnswer === false &&
+        index === 1)
+    ) {
+      return "selected";
+    }
+  };
   const getAnswerClass = (index: number) => {
     if (showAnswer) {
       if (question.answerType === "TF") {
@@ -90,7 +107,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
   };
 
   function isCheckboxChecked(value: any, index: number): value is number[] {
-    if (value instanceof Array) {
+    if (Array.isArray(value)) {
       for (const item of value) {
         if (typeof item !== "number") {
           return false;
@@ -104,10 +121,13 @@ const QuestionCard: FC<QuestionCardProps> = ({
   }
 
   const answers = question?.answers?.map((answer, index) => (
-    <div key={index} className={`answer ${getAnswerClass(index)}`}>
+    <div
+      key={index}
+      className={`answer ${selectedClass(index)} ${getAnswerClass(index)} `}
+    >
       <input
         type={inputType}
-        id={answer}
+        id={`answer-${currentQuestion}-${index}`}
         name={`answer-${currentQuestion}-${index}`}
         checked={
           userAnswers[currentQuestion]?.answer === index
@@ -115,12 +135,13 @@ const QuestionCard: FC<QuestionCardProps> = ({
             : isCheckboxChecked(userAnswers[currentQuestion]?.answer, index)
         }
         value={index}
-        onChange={() =>
+        onChange={() => {
           inputType === "radio"
             ? handleChangeRadio(index)
-            : handleChangeMultiple()
-        }
+            : handleChangeMultiple();
+        }}
       />
+
       <label htmlFor={`answer-${currentQuestion}-${index}`}>{answer}</label>
     </div>
   ));
