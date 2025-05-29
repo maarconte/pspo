@@ -267,38 +267,46 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 value={values.feedback}
                 onChange={handleChange}
               />
-              <h4>Comments</h4>
-              <label htmlFor="">
-                <Field
-                  label="Reported"
-                  type="checkbox"
-                  name="isFlagged"
-                  checked={values?.isFlagged}
-                  onChange={handleChange}
-                />
-                Reported
-              </label>
-
-              <FieldArray name="comments">
-                {({ push, remove }) => (
-                  <div>
-                    {values?.comments?.map((comment, index) => (
-                      <div
-                        key={index}
-                        className="d-flex justify-content-between comment"
-                      >
-                        {comment}
-                        <Button
-                          style={Button_Style.OUTLINED}
-                          onClick={() => remove(index)}
-                          isIconButton
-                          icon={<FontAwesomeIcon icon={faTrash} />}
-                        />
-                      </div>
-                    ))}
+              {values.isFlagged && (
+                <>
+                  <h4>Comments</h4>
+                  <div
+                    className={`reportedCheckbox ${
+                      values.isFlagged ? "selected" : ""
+                    }`}
+                  >
+                    <Field
+                      label="Reported"
+                      type="checkbox"
+                      name="isFlagged"
+                      id="isFlagged"
+                      checked={values?.isFlagged}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor="isFlagged">Reported</label>
                   </div>
-                )}
-              </FieldArray>
+                  <FieldArray name="comments">
+                    {({ push, remove }) => (
+                      <div>
+                        {values?.comments?.map((comment, index) => (
+                          <div
+                            key={index}
+                            className="d-flex justify-content-between comment"
+                          >
+                            {comment}
+                            <Button
+                              style={Button_Style.OUTLINED}
+                              onClick={() => remove(index)}
+                              isIconButton
+                              icon={<FontAwesomeIcon icon={faTrash} />}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </FieldArray>
+                </>
+              )}
             </form>
           </Modal>
         )}
