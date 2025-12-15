@@ -3,6 +3,7 @@ import Home from "../../pages/Home";
 import Login from "../../pages/Login";
 import Quizz from "../../pages/Quizz";
 import { MagicLinkVerification } from "../../features/auth/components/MagicLinkVerification";
+import { RoleChecker } from "../../features/auth/components/RoleChecker";
 
 interface RouteType {
   path: string;
@@ -26,7 +27,11 @@ const routes: RouteType[] = [
   },
   {
     path: "/admin",
-    component: EditQuestions,
+    component: () => (
+      <RoleChecker allowedRoles={['admin', 'dev']}>
+        <EditQuestions />
+      </RoleChecker>
+    ),
     name: "EditQuestions",
     protected: true,
   },
