@@ -204,9 +204,8 @@ const QuestionCard: FC<QuestionCardProps> = ({
           {currentQuestion + 1}. {question.title}
         </h2>
         <Bookmark
-          size={16}
-          color="#8b78c7"
-          fill={userAnswers[currentQuestion]?.isBookmarked ? "#8b78c7" : "none"}
+          size={42}
+          fill={userAnswers[currentQuestion]?.isBookmarked ? "#f6b223" : "none"}
           onClick={() => handleChangeBookmark()}
           className="bookmark"
         />

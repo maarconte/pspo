@@ -22,32 +22,40 @@ const Button: FC<ButtonProps> = ({
   ...rest
 }) => {
   const getIconColor = () => {
-    if (style === "outlined" && disabled && type === "secondary") {
-      return "#8B8EB0";
-    } else if (disabled && type === "primary") {
-      return "#9FC1EF";
-    } else if (style === "outlined" && type === "error") {
-      return "#FF5326";
-    } else if (style === "outlined" && type === "success") {
-      return "#17EB79";
-    } else if (style === "outlined" && type === "primary") {
-      return "#1956A8";
-    } else if (style === "outlined" && type === "secondary") {
-      return "#171C60";
-    } else if (type === "label") {
-      return "#1956A8";
-    } else if (type === "white") {
-      return "#1956A8";
-    } else if (type === "reverse_error") {
-      return "#FF5326";
-    } else if (type === "base") {
-      return "#1956A8";
+    const key = `${style || 'default'}-${disabled ? 'disabled' : 'enabled'}-${type}`;
+
+    switch (key) {
+      case "outlined-disabled-secondary":
+        return "#8B8EB0";
+      case "default-disabled-primary":
+        return "#9FC1EF";
+      case "outlined-enabled-error":
+        return "#FF5326";
+      case "outlined-enabled-success":
+        return "#17EB79";
+      case "outlined-enabled-primary":
+        return "#5236ab";
+      case "outlined-enabled-secondary":
+        return "#171C60";
+      default:
+        break;
     }
-    return "#fff";
+
+    // Handle type-only cases
+    switch (type) {
+      case "label":
+      case "white":
+      case "base":
+        return "#5236ab";
+      case "reverse_error":
+        return "#FF5326";
+      default:
+        return "#fff";
+    }
   };
 
   const iconProps = {
-    fill: getIconColor(),
+    color: getIconColor(),
     width: size === "more" ? "8px" : "16px",
     height: iconHeight ? iconHeight : "16px",
   };
