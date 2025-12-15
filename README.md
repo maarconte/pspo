@@ -1,42 +1,203 @@
-# Démarrage avec Create React App
+# PSPO - Professional Scrum Product Owner Quiz
 
-Ce projet a été initialisé avec [Create React App](https://github.com/facebook/create-react-app).
+Application de quiz interactive pour la préparation à la certification Professional Scrum Product Owner (PSPO), construite avec React, TypeScript, et Firebase.
 
-## Scripts disponibles
+## 🚀 Démarrage rapide
 
-Dans le répertoire du projet, vous pouvez exécuter :
+### Prérequis
 
-### `npm start`
+- Node.js (version 18 ou supérieure)
+- npm ou yarn
 
-Lance l'application en mode développement.\
+### Installation
+
+```bash
+npm install
+```
+
+### Configuration Firebase
+
+1. Créez un projet Firebase sur [console.firebase.google.com](https://console.firebase.google.com)
+2. Créez un fichier `src/firebase.js` avec votre configuration :
+
+```javascript
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "VOTRE_API_KEY",
+  authDomain: "VOTRE_AUTH_DOMAIN",
+  projectId: "VOTRE_PROJECT_ID",
+  storageBucket: "VOTRE_STORAGE_BUCKET",
+  messagingSenderId: "VOTRE_MESSAGING_SENDER_ID",
+  appId: "VOTRE_APP_ID"
+};
+
+export const Firebase = initializeApp(firebaseConfig);
+```
+
+## 📜 Scripts disponibles
+
+### Développement
+
+```bash
+npm run dev
+```
+
+Lance l'application en mode développement avec Vite.
 Ouvrez [http://localhost:3000](http://localhost:3000) pour la voir dans le navigateur.
-La page se rechargera si vous effectuez des modifications.\
-Vous verrez également les erreurs de lint dans la console.
+Le serveur se recharge automatiquement lors des modifications.
 
-### `npm test`
+### Tests
 
-Lance le testeur de tests en mode interactif.\
-Voir la section sur [l'exécution des tests](https://facebook.github.io/create-react-app/docs/running-tests) pour plus d'informations.
+```bash
+npm test              # Lance les tests avec Vitest
+npm run test:ui       # Lance l'interface UI de Vitest
+npm run test:coverage # Génère un rapport de couverture
+```
 
-### `npm run build`
+Les tests sont configurés avec Vitest et Testing Library.
 
-Construit l'application pour la production dans le dossier `build`.\
-Il regroupe correctement React en mode production et optimise la build pour la meilleure performance.
-La build est minifiée et les noms de fichiers incluent les hachages.\
-Votre application est prête à être déployée !
-Voir la section sur [le déploiement](https://facebook.github.io/create-react-app/docs/deployment) pour plus d'informations.
+### Build & Déploiement
 
-## Déploiement sur GitHub Pages
+```bash
+npm run build         # Construit l'application pour la production
+npm run preview       # Prévisualise le build de production
+npm run deploy        # Déploie sur GitHub Pages
+```
 
-### `npm run deploy`
+Le build est optimisé et minifié dans le dossier `dist/`.
 
-Deploie l'application sur GitHub Pages.
+## 🏗️ Architecture du projet
 
-### `npm run eject`
+Le projet suit une **architecture Feature-Based** pour une meilleure scalabilité et maintenabilité :
 
-**Note : cette opération est irréversible. Une fois que vous avez `eject`, vous ne pouvez pas revenir en arrière !**
-Si vous n'êtes pas satisfait des outils de build et des choix de configuration, vous pouvez `eject` à tout moment. Cette commande supprimera la dépendance unique de build de votre projet.
-Au lieu de cela, elle copiera tous les fichiers de configuration et les dépendances transitives (webpack, Babel, ESLint, etc.) directement dans votre projet afin que vous ayez un contrôle total sur eux. Toutes les commandes sauf `eject` continueront de fonctionner, mais elles pointeront vers les scripts copiés afin que vous puissiez les modifier. À ce stade, vous êtes seul maître à bord.
-Vous n'avez pas besoin d'utiliser `eject` à tout moment. L'ensemble de fonctionnalités curaté est adapté aux déploiements petits et moyens, et vous ne devriez pas vous sentir obligé d'utiliser cette fonctionnalité. Cependant, nous comprenons que cet outil ne serait pas utile si vous ne pouviez pas le personnaliser lorsque vous êtes prêt.
+```
+src/
+├── features/          # Fonctionnalités métier
+│   ├── admin/        # Gestion des questions (CRUD)
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   └── stores/
+│   ├── auth/         # Authentification Firebase
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   └── stores/
+│   └── quiz/         # Logique du quiz
+│       ├── components/
+│       ├── hooks/
+│       └── stores/
+├── ui/               # Composants UI réutilisables
+│   ├── Button/
+│   ├── Input/
+│   ├── Table/
+│   └── ...
+├── pages/            # Pages de l'application
+├── utils/            # Utilitaires partagés
+│   └── hooks/        # Hooks Firebase génériques
+├── stores/           # Stores Zustand globaux
+├── assets/           # Ressources statiques
+│   └── scss/         # Styles globaux
+└── lib/              # Configurations tierces
+```
 
-Rajoute les instructions pour le deploiement gh-pages
+## 🛠️ Stack technique
+
+### Core
+- **React 19** - Bibliothèque UI
+- **TypeScript** - Typage statique
+- **Vite** - Build tool et dev server
+- **React Router** - Routing
+
+### State Management
+- **Zustand** - Gestion d'état globale
+- **React Query** - Gestion des données asynchrones
+
+### Backend & Database
+- **Firebase** - Authentication & Firestore
+- **FirebaseUI** - UI d'authentification
+
+### UI & Styling
+- **SCSS** - Préprocesseur CSS
+- **Lucide React** - Icônes modernes
+- **RSuite** - Composants UI
+- **React Toastify** - Notifications
+
+### Forms & Data
+- **Formik** - Gestion de formulaires
+- **TanStack Table** - Tables de données
+- **PapaParse** - Parsing CSV
+
+### Testing
+- **Vitest** - Framework de test
+- **Testing Library** - Tests de composants
+- **jsdom** - Environnement DOM pour les tests
+
+## 🎨 Fonctionnalités
+
+### Mode Quiz
+- Questions à choix multiples
+- Feedback immédiat
+- Système de scoring
+- Signalement de questions
+- Commentaires sur les questions
+
+### Mode Admin
+- CRUD complet des questions
+- Import/Export CSV
+- Gestion des types de réponses
+- Tableau de bord avec filtres et recherche
+- Édition en ligne
+
+### Authentification
+- Connexion Firebase
+- Gestion des sessions
+- Protection des routes admin
+
+## 🚢 Déploiement sur GitHub Pages
+
+Le projet est configuré pour être déployé sur GitHub Pages :
+
+1. Configurez le `homepage` dans `package.json` :
+   ```json
+   "homepage": "https://[USERNAME].github.io/[REPO_NAME]/"
+   ```
+
+2. Déployez avec :
+   ```bash
+   npm run deploy
+   ```
+
+Le script `predeploy` construit automatiquement l'application avant le déploiement.
+
+## 📝 Configuration Vite
+
+Le projet utilise Vite avec les configurations suivantes :
+- Port de développement : `3000`
+- Base URL : `/pspo/` (pour GitHub Pages)
+- Ouverture automatique du navigateur
+- Sourcemaps activés en production
+
+## 🧪 Configuration des tests
+
+Vitest est configuré avec :
+- Environnement jsdom
+- Globals activés
+- Support CSS
+- Coverage avec v8
+- Exclusion des fichiers de test du coverage
+
+## 📄 License
+
+Ce projet est privé et destiné à un usage personnel.
+
+## 🤝 Contribution
+
+Pour contribuer :
+1. Créez une branche feature (`git checkout -b feature/AmazingFeature`)
+2. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
+3. Pushez vers la branche (`git push origin feature/AmazingFeature`)
+4. Ouvrez une Pull Request
+
+---
+
+**Version actuelle :** 2.2.0
