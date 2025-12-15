@@ -1,14 +1,15 @@
 import "./assets/scss/style.scss";
 
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
 
-import AuthChecker from "./components/Auth/AuthChecker";
-import Header from "./components/Header";
-import { QuestionsLoader } from "./components/QuestionsLoader";
+import AuthChecker from "./features/auth/components/Auth/AuthChecker";
+import { Header } from "./ui";
+import { QuestionsLoader } from "./features/quiz";
 import routes from "./utils/routes";
+import { queryClient } from "./lib/react-query/queryClient";
 
-const queryClient = new QueryClient();
+
 
 function App() {
   return (

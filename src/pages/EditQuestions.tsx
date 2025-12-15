@@ -1,5 +1,5 @@
-import QuestionsStats from "../components/QuestionsStats";
-import TableQuestions from "../components/TableQuestions";
+import QuestionsStats from "../features/admin/components/QuestionsStats/QuestionsStats";
+import TableQuestions from "../features/admin/components/TableQuestions/TableQuestions";
 
 export default function EditQuestions() {
   return (

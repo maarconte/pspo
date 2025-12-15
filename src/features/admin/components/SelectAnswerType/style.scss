@@ -1,0 +1,17 @@
+@import "../../../../assets/scss/variables.scss";
+
+.SelectAnswerType {
+  input {
+    position: absolute;
+    display: none;
+    top: -20px;
+    &:checked + span {
+      background-color: $primary_50;
+    }
+  }
+  span {
+    border: 1px solid $primary_300;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+}

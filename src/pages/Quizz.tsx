@@ -2,15 +2,17 @@ import "rsuite/dist/rsuite.min.css";
 
 import React, { useEffect, useState } from "react";
 
-import Button from "../components/Button/Button";
-import { Button_Style } from "../components/Button/Button.types";
-import Counter from "../components/Counter";
+import { Button } from "../ui";
+import { Button_Style } from "../ui/Button/Button.types";
+import Counter from "../features/quiz/components/Counter/Counter";
+import Feedback from "../features/quiz/components/Feedback/Feedback";
+import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard";
+import QuestionNavigation from "../features/quiz/components/QuestionNavigation/QuestionNavigation";
+import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
 import { Drawer } from "rsuite";
-import QuestionCard from "../components/QuestionCard";
-import QuestionNavigation from "../components/QuestionNavigation/QuestionNavigation";
-import QuizzScore from "../components/QuizzScore";
 import { toast } from "react-toastify";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
+
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
