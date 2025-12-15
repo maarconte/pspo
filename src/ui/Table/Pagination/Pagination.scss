@@ -1,4 +1,4 @@
-@import "../../../assets/scss/variables";
+@use '../../../assets/scss/variables' as *;
 
 .Pagination {
   margin-top: 1.5rem;

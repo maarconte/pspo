@@ -1,5 +1,5 @@
-$GRID_COLUMNS: 12;
-$GRID_GAP: 1rem;
+@use './mixins' as *;
+@use './variables' as *;
 
 .container {
   width: 100%;

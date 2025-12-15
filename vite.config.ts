@@ -30,4 +30,11 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler', // Use modern Sass API instead of legacy
+      },
+    },
+  },
 });

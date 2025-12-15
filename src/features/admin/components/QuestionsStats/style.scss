@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/base.scss";
+@use '../../../../assets/scss/base' as *;
 .QuestionsStats {
   margin-bottom: 1.5rem;
   display: flex;

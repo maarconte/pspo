@@ -1,4 +1,4 @@
-@import "../../assets/scss/variables";
+@use '../../assets/scss/variables' as *;
 .Select {
   position: relative;
   width: 100%;

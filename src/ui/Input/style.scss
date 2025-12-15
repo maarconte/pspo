@@ -1,4 +1,4 @@
-@import "../../assets/scss/base";
+@use '../../assets/scss/base' as *;
 
 .hide-arrows input::-webkit-outer-spin-button,
 .hide-arrows input::-webkit-inner-spin-button {

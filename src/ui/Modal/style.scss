@@ -1,4 +1,4 @@
-@import "../../assets/scss/base";
+@use '../../assets/scss/base' as *;
 .modal {
   border-radius: 10px;
   padding: 20px;

@@ -1,7 +1,7 @@
-@import "./base";
-@import "./headings";
+@use './base' as *;
+@use './headings';
 
-@import "./atoms/atoms";
+@use './atoms/atoms';
 
 * {
   box-sizing: border-box;

@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/variables.scss";
+@use '../../../../assets/scss/variables' as *;
 .ModalEditQuestion {
   /* Ajoutez vos styles ici */
   .modal {

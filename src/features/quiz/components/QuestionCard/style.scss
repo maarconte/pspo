@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/base";
+@use '../../../../assets/scss/base' as *;
 
 .QuestionCard {
   padding: 32px 24px 24px;
