@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Input from "../Input";
 import Modal from "../Modal/Modal";
 import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
-import { QuestionsContext } from "../../utils/context";
+import { useQuestionsStore } from "../../stores/useQuestionsStore";
 import React from "react";
 import Select from "../Select";
 import SelectAnswerType from "../SelectAnswerType";
@@ -24,7 +24,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   setIsOpen,
   setSelectQuestion,
 }) => {
-  const { refetch } = React.useContext(QuestionsContext);
+  const { refetch } = useQuestionsStore();
   const { handleAdd } = useAddDoc("questions");
   const { handleUpdate, error } = useUpdateDoc({
     docId: question?.id || "",
@@ -140,56 +140,65 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     {({ push, remove }) => (
                       <div>
                         {values?.answers?.map((answer, index) => (
-                          <div
-                            key={index}
-                            className={`answer ${
-                              values.answer === index ||
-                              (Array.isArray(values.answer) &&
-                                values.answer.includes(index))
-                                ? "bg-success"
-                                : ""
-                            }`}
-                          >
-                            <Field
-                              type={
-                                values.answerType === "M" ? "checkbox" : "radio"
-                              }
-                              name="answer"
-                              value={index}
-                              onChange={() => {
-                                handleChange({
-                                  target: {
-                                    name: "answer",
-                                    value:
-                                      values.answerType === "M"
-                                        ? handleAnswerChange(
-                                            index,
-                                            values.answer
-                                          )
-                                        : index,
-                                  },
-                                });
-                              }}
-                            />
+                          <>
+                            <h5 className="mb-1">Answer {index + 1}</h5>
+                            <div
+                              key={index}
+                              className={`answer ${
+                                values.answer === index ||
+                                (Array.isArray(values.answer) &&
+                                  values.answer.includes(index))
+                                  ? "bg-success"
+                                  : ""
+                              }`}
+                            >
+                              <Field
+                                type={
+                                  values.answerType === "M"
+                                    ? "checkbox"
+                                    : "radio"
+                                }
+                                name="answer"
+                                id={`answer-${index}`}
+                                value={index}
+                                onChange={() => {
+                                  handleChange({
+                                    target: {
+                                      name: "answer",
+                                      value:
+                                        values.answerType === "M"
+                                          ? handleAnswerChange(
+                                              index,
+                                              values.answer
+                                            )
+                                          : index,
+                                    },
+                                  });
+                                }}
+                              />
 
-                            <div style={{ flex: 1 }}>
-                              <Input
-                                type="text"
-                                id={`answers.${index}`}
-                                name={`answers.${index}`}
-                                placeholder={`Answer ${index + 1}`}
-                                value={answer}
-                                onChange={handleChange}
+                              <label htmlFor={`answer-${index}`}>
+                                <div style={{ flex: 1 }}>
+                                  <Input
+                                    type="text"
+                                    id={`answers.${index}`}
+                                    name={`answers.${index}`}
+                                    //  placeholder={`Answer ${index + 1}`}
+                                    value={answer}
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              </label>
+
+                              <Button
+                                style={Button_Style.OUTLINED}
+                                onClick={() => remove(index)}
+                                isIconButton
+                                icon={<FontAwesomeIcon icon={faTrash} />}
+                                className="mb-05"
                               />
                             </div>
-                            <Button
-                              style={Button_Style.OUTLINED}
-                              onClick={() => remove(index)}
-                              isIconButton
-                              icon={<FontAwesomeIcon icon={faTrash} />}
-                              className="mb-05"
-                            />
-                          </div>
+                          </>
                         ))}
                         <Button
                           style={Button_Style.OUTLINED}
@@ -253,43 +262,51 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
               <Input
                 type="textarea"
                 id="feedback"
-                name="feedback"
+                name={"feedback"}
                 placeholder="Feedback"
                 value={values.feedback}
                 onChange={handleChange}
               />
-              <h4>Comments</h4>
-              <label htmlFor="">
-                <Field
-                  label="Reported"
-                  type="checkbox"
-                  name="isFlagged"
-                  checked={values?.isFlagged}
-                  onChange={handleChange}
-                />
-                Reported
-              </label>
-
-              <FieldArray name="comments">
-                {({ push, remove }) => (
-                  <div>
-                    {values?.comments?.map((comment, index) => (
-                      <div
-                        key={index}
-                        className="d-flex justify-content-between comment"
-                      >
-                        {comment}
-                        <Button
-                          style={Button_Style.OUTLINED}
-                          onClick={() => remove(index)}
-                          isIconButton
-                          icon={<FontAwesomeIcon icon={faTrash} />}
-                        />
-                      </div>
-                    ))}
+              {values.isFlagged && (
+                <>
+                  <h4>Comments</h4>
+                  <div
+                    className={`reportedCheckbox ${
+                      values.isFlagged ? "selected" : ""
+                    }`}
+                  >
+                    <Field
+                      label="Reported"
+                      type="checkbox"
+                      name="isFlagged"
+                      id="isFlagged"
+                      checked={values?.isFlagged}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor="isFlagged">Reported</label>
                   </div>
-                )}
-              </FieldArray>
+                  <FieldArray name="comments">
+                    {({ push, remove }) => (
+                      <div>
+                        {values?.comments?.map((comment, index) => (
+                          <div
+                            key={index}
+                            className="d-flex justify-content-between comment"
+                          >
+                            {comment}
+                            <Button
+                              style={Button_Style.OUTLINED}
+                              onClick={() => remove(index)}
+                              isIconButton
+                              icon={<FontAwesomeIcon icon={faTrash} />}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </FieldArray>
+                </>
+              )}
             </form>
           </Modal>
         )}

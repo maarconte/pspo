@@ -10,7 +10,7 @@ import Modal from "../../Modal";
 import ModalEditQuestion from "../../ModalEditQuestion";
 import Papa from "papaparse";
 import { Question } from "../../../utils/types";
-import { QuestionsContext } from "../../../utils/context";
+import { useQuestionsStore } from "../../../stores/useQuestionsStore";
 import { toast } from "react-toastify";
 
 interface TableActionsProps {
@@ -36,7 +36,7 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
   const { handleDelete } = useDeleteDoc("questions");
-  const { allQuestions, refetch } = React.useContext(QuestionsContext);
+  const { questions, refetch } = useQuestionsStore();
   const handleDeleteAll = () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;

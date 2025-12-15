@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
-import React, { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { faCircleDot, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { formatTimestamp, useDeleteDoc } from "../../utils/hooks";
 
@@ -24,7 +24,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import Modal from "../Modal";
 import ModalEditQuestion from "../ModalEditQuestion";
 import { Question } from "../../utils/types";
-import { QuestionsContext } from "../../utils/context";
+import { useQuestionsStore } from "../../stores/useQuestionsStore";
 import Table from "../Table/Table";
 import { TableQuestionsProps } from "./TableQuestions.types";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -72,14 +72,15 @@ const getFormatAnswwerType = (answerType: string) => {
 };
 
 const TableQuestions: FC<TableQuestionsProps> = () => {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   );
-  const [globalFilter, setGlobalFilter] = React.useState("");
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
-  const { allQuestions, refetch } = React.useContext(QuestionsContext);
+  const allQuestions = useQuestionsStore((state) => state.allQuestions);
+  const refetch = useQuestionsStore((state) => state.refetch);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
   const [isSelectAll, setIsSelectAll] = useState(false);
@@ -93,7 +94,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       accessorKey: "id",
       id: "selection",
       cell: ({ row }: any) => (
-        <div className="d-flex justify-content-center">
+        <div className="checkbox-container">
           <input
             type="checkbox"
             name="select-question"
@@ -115,6 +116,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
             }}
             checked={selectedQuestions.includes(row.original)}
           />
+          <label htmlFor={`select-question-${row.index}`} />
         </div>
       ),
       enableSorting: false,

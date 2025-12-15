@@ -3,12 +3,12 @@ import "./style-mobile.scss";
 
 import React, { FC, useContext, useEffect } from "react";
 
-import { QuestionsContext } from "../../utils/context";
+import { useQuestionsStore } from "../../stores/useQuestionsStore";
 import { QuizzScoreProps } from "./QuizzScore.types";
 
 const QuizzScore: FC<QuizzScoreProps> = () => {
   const { score, setScore, userAnswers, questions } =
-    useContext(QuestionsContext);
+    useQuestionsStore();
   const percent = ((score / userAnswers.length) * 100).toFixed(0);
   const percentNumber = parseFloat(percent); // Convertir en nombre
 
