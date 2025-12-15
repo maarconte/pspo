@@ -1,0 +1,1 @@
+export { MagicLinkVerification } from './MagicLinkVerification';

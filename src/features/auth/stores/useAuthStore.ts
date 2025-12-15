@@ -28,8 +28,11 @@ export const useUserStore = create<UserState>((set, get) => ({
 	},
 
 	initAuth: () => {
+		console.log('🔧 Initialisation des listeners d\'authentification');
+
 		// Subscribe to auth state changes
 		auth.onAuthStateChanged((user) => {
+			console.log('🔄 onAuthStateChanged déclenché:', user ? `User ${user.email}` : 'Aucun utilisateur');
 			set({ user });
 		});
 
@@ -37,6 +40,7 @@ export const useUserStore = create<UserState>((set, get) => ({
 		// Firebase automatically refreshes tokens every hour
 		onIdTokenChanged(auth, (user) => {
 			if (user) {
+				console.log('🔄 onIdTokenChanged déclenché:', user.email);
 				// Token has been refreshed automatically by Firebase
 				set({ user });
 			}

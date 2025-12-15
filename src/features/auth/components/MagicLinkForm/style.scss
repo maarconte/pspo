@@ -1,0 +1,38 @@
+@use "../../../../assets/scss/variables" as *;
+
+.magic-link-form {
+	max-width: 400px;
+	margin: 0 auto;
+	padding: 2rem;
+
+	h2 {
+		margin-bottom: 0.5rem;
+		text-align: center;
+	}
+
+	p {
+		text-align: center;
+		margin-bottom: 1.5rem;
+		color: $primary-600;
+	}
+}
+
+.magic-link-sent {
+	max-width: 400px;
+	margin: 0 auto;
+	padding: 2rem;
+	text-align: center;
+
+	h2 {
+		margin-bottom: 1rem;
+		color: $success-500;
+	}
+
+	p {
+		margin-bottom: 1rem;
+
+		strong {
+			color: $primary-700;
+		}
+	}
+}

@@ -2,6 +2,7 @@ import EditQuestions from "../../pages/EditQuestions";
 import Home from "../../pages/Home";
 import Login from "../../pages/Login";
 import Quizz from "../../pages/Quizz";
+import { MagicLinkVerification } from "../../features/auth/components/MagicLinkVerification";
 
 interface RouteType {
   path: string;
@@ -33,6 +34,12 @@ const routes: RouteType[] = [
     path: "/login",
     component: Login,
     name: "Login",
+    protected: false,
+  },
+  {
+    path: "/auth/verify",
+    component: MagicLinkVerification,
+    name: "MagicLinkVerification",
     protected: false,
   },
 ];

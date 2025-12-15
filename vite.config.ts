@@ -3,9 +3,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: '/pspo/',
+  // Base path only for production (GitHub Pages)
+  base: mode === 'production' ? '/pspo/' : '/',
   server: {
     port: 3000,
     open: true,
@@ -37,4 +38,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

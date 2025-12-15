@@ -1,7 +1,7 @@
 import "./assets/scss/style.scss";
 
 import { QueryClientProvider } from "react-query";
-import { Route, HashRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import AuthChecker from "./features/auth/components/Auth/AuthChecker";
 import { IdleTimeoutHandler } from "./features/auth/components/IdleTimeoutHandler";
