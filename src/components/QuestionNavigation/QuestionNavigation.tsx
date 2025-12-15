@@ -1,7 +1,6 @@
 import "./style.scss";
 
-import { QuestionsContext } from "../../utils/context";
-import React from "react";
+import { useQuestionsStore } from "../../stores/useQuestionsStore";
 
 type Props = {
   setCurrentQuestion: (index: number) => void;
@@ -12,7 +11,7 @@ export default function QuestionNavigation({
   setCurrentQuestion,
   currentQuestion,
 }: Props) {
-  const { userAnswers } = React.useContext(QuestionsContext);
+  const { userAnswers } = useQuestionsStore();
   const isQuestionAnswered = (index: number) => {
     return userAnswers.some((answer) => answer.question === index);
   };

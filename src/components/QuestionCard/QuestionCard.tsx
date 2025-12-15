@@ -10,17 +10,17 @@ import Feedback from "../Feedback";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "../Modal";
 import { QuestionCardProps } from "./QuestionCard.types";
-import { QuestionsContext } from "../../utils/context";
 import { UserAnswer } from "../../utils/types";
 import { faBookmark as faBookBookmarkRegular } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import { useQuestionsStore } from "../../stores/useQuestionsStore";
 
 const QuestionCard: FC<QuestionCardProps> = ({
   question,
   currentQuestion,
   showAnswer,
 }) => {
-  const { userAnswers, setUserAnswers } = useContext(QuestionsContext);
+  const { userAnswers, setUserAnswers } = useQuestionsStore();
   const inputType = question.answerType === "M" ? "checkbox" : "radio";
   const [showComments, setShowComments] = useState(false);
   const selectedClass = (index: number) => {

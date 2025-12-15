@@ -5,8 +5,7 @@ import { Route, HashRouter as Router, Routes } from "react-router-dom";
 
 import AuthChecker from "./components/Auth/AuthChecker";
 import Header from "./components/Header";
-import { QuestionsProvider } from "./utils/context";
-import UserContextProvider from "./utils/context/UserContext";
+import { QuestionsLoader } from "./components/QuestionsLoader";
 import routes from "./utils/routes";
 
 const queryClient = new QueryClient();
@@ -14,30 +13,28 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <UserContextProvider>
-        <QuestionsProvider>
-          <Router>
-            <Header />
-            <Routes>
-              {routes.map((route) => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={
-                    route.protected ? (
-                      <AuthChecker>
-                        <route.component />
-                      </AuthChecker>
-                    ) : (
+      <QuestionsLoader>
+        <Router>
+          <Header />
+          <Routes>
+            {routes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={
+                  route.protected ? (
+                    <AuthChecker>
                       <route.component />
-                    )
-                  }
-                />
-              ))}
-            </Routes>
-          </Router>
-        </QuestionsProvider>
-      </UserContextProvider>
+                    </AuthChecker>
+                  ) : (
+                    <route.component />
+                  )
+                }
+              />
+            ))}
+          </Routes>
+        </Router>
+      </QuestionsLoader>
     </QueryClientProvider>
   );
 }

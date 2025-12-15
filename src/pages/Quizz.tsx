@@ -8,13 +8,13 @@ import Counter from "../components/Counter";
 import { Drawer } from "rsuite";
 import QuestionCard from "../components/QuestionCard";
 import QuestionNavigation from "../components/QuestionNavigation/QuestionNavigation";
-import { QuestionsContext } from "../utils/context";
 import QuizzScore from "../components/QuizzScore";
 import { toast } from "react-toastify";
+import { useQuestionsStore } from "../stores/useQuestionsStore";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const { questions, setScore, formation } = React.useContext(QuestionsContext);
+  const { questions, setScore, formation } = useQuestionsStore();
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);

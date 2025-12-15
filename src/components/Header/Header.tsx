@@ -1,7 +1,7 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
 
 import Button from "../Button";
 import { Button_Style } from "../Button/Button.types";
@@ -9,12 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HeaderProps } from "./Header.types";
 import { Link } from "react-router-dom";
 import Logout from "../Auth/Logout";
-import { UserContext } from "../../utils/context/UserContext";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../stores/useUserStore";
 
 const Header: FC<HeaderProps> = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useUserStore();
   const navigate = useNavigate();
   return (
     <div className="Header">

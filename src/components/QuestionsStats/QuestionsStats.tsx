@@ -1,24 +1,24 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import React, { FC, useContext } from "react";
+import React, { FC } from "react";
 
-import { QuestionsContext } from "../../utils/context";
+import { useQuestionsStore } from "../../stores/useQuestionsStore";
 import { QuestionsStatsProps } from "./QuestionsStats.types";
 
 const QuestionsStats: FC<QuestionsStatsProps> = () => {
-  const { allQuestions } = useContext(QuestionsContext);
-  const flaggedQuestions = allQuestions.filter(
+  const { questions } = useQuestionsStore();
+  const flaggedQuestions = questions.filter(
     (question) => question.isFlagged
   );
-  const noFeedbackQuestions = allQuestions.filter(
+  const noFeedbackQuestions = questions.filter(
     (question) => !question.feedback
   );
   return (
     <div className="QuestionsStats">
       <div className="QuestionsStats__card">
         <h4 className="QuestionsStats__card__title">Total questions</h4>
-        <p className="QuestionsStats__card__number">{allQuestions.length}</p>
+        <p className="QuestionsStats__card__number">{questions.length}</p>
       </div>
       <div
         className={`QuestionsStats__card ${

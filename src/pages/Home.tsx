@@ -1,12 +1,11 @@
 import Button from "../components/Button";
-import { QuestionsContext } from "../utils/context";
-import React from "react";
+import { useQuestionsStore } from "../stores/useQuestionsStore";
 import Select from "../components/Select";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const { formation, setFormation, questions } =
-    React.useContext(QuestionsContext);
+    useQuestionsStore();
   const navigate = useNavigate();
   return (
     <div className="h-100vh p-2 m-0">
