@@ -2,6 +2,7 @@ import EditQuestions from "../../pages/EditQuestions";
 import Home from "../../pages/Home";
 import Login from "../../pages/Login";
 import Quizz from "../../pages/Quizz";
+import UserManagement from "../../pages/UserManagement";
 import { MagicLinkVerification } from "../../features/auth/components/MagicLinkVerification";
 import { RoleChecker } from "../../features/auth/components/RoleChecker";
 
@@ -36,6 +37,16 @@ const routes: RouteType[] = [
     protected: true,
   },
   {
+    path: "/dev/users",
+    component: () => (
+      <RoleChecker allowedRoles={['dev']}>
+        <UserManagement />
+      </RoleChecker>
+    ),
+    name: "UserManagement",
+    protected: true,
+  },
+  {
     path: "/login",
     component: Login,
     name: "Login",
@@ -50,3 +61,4 @@ const routes: RouteType[] = [
 ];
 
 export default routes;
+

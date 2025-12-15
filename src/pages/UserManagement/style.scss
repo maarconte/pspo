@@ -1,0 +1,116 @@
+@use "../../assets/scss/variables" as *;
+
+.user-management {
+	max-width: 1200px;
+	margin: 2rem auto;
+	padding: 0 1rem;
+
+	h1 {
+		margin-bottom: 0.5rem;
+	}
+
+	.subtitle {
+		color: $primary-600;
+		margin-bottom: 2rem;
+	}
+
+	.error {
+		color: $secondary-500;
+		margin-bottom: 1rem;
+	}
+
+	.users-table {
+		overflow-x: auto;
+		background: white;
+		border-radius: 8px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+
+			thead {
+				background: $primary-50;
+
+				th {
+					padding: 1rem;
+					text-align: left;
+					font-weight: 600;
+					color: $primary-700;
+					border-bottom: 2px solid $primary-200;
+				}
+			}
+
+			tbody {
+				tr {
+					border-bottom: 1px solid $primary-100;
+					transition: background-color 0.2s;
+
+					&:hover {
+						background: $primary-50;
+					}
+
+					td {
+						padding: 1rem;
+						vertical-align: middle;
+					}
+				}
+			}
+		}
+	}
+
+	.role-badge {
+		display: inline-block;
+		padding: 0.25rem 0.75rem;
+		border-radius: 12px;
+		font-size: 0.875rem;
+		font-weight: 500;
+
+		&.role-dev {
+			background: $warning-100;
+			color: $warning-700;
+		}
+
+		&.role-admin {
+			background: $primary-100;
+			color: $primary-700;
+		}
+
+		&.role-client {
+			background: $success-100;
+			color: $success-700;
+		}
+	}
+
+	.role-select {
+		padding: 0.5rem;
+		border: 1px solid $primary-300;
+		border-radius: 4px;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: border-color 0.2s;
+
+		&:hover {
+			border-color: $primary-500;
+		}
+
+		&:focus {
+			outline: none;
+			border-color: $primary-600;
+			box-shadow: 0 0 0 3px rgba($primary-600, 0.1);
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	}
+
+	.updating {
+		display: inline-block;
+		margin-left: 0.5rem;
+		font-size: 0.75rem;
+		color: $primary-600;
+		font-style: italic;
+	}
+}

@@ -2,7 +2,7 @@ import "./style.scss";
 import "./style-mobile.scss";
 
 import React, { FC } from "react";
-import { Settings, User } from "lucide-react";
+import { Settings, User, Users } from "lucide-react";
 
 import Button from "../../../ui/Button/Button";
 import { Button_Style } from "../../../ui/Button/Button.types";
@@ -15,7 +15,7 @@ import { useUserRole } from "../../../features/auth/hooks/useUserRole";
 
 const Header: FC<HeaderProps> = () => {
   const { user } = useUserStore();
-  const { isAdmin } = useUserRole();
+  const { isAdmin, isDev } = useUserRole();
   const navigate = useNavigate();
 
   return (
@@ -30,6 +30,14 @@ const Header: FC<HeaderProps> = () => {
             style={Button_Style.OUTLINED}
             icon={<User size={16} />}
             onClick={() => navigate("/login")}
+          />
+        )}
+        {isDev && (
+          <Button
+            label="Users"
+            style={Button_Style.OUTLINED}
+            icon={<Users size={16} />}
+            onClick={() => navigate("/dev/users")}
           />
         )}
         {isAdmin && (
