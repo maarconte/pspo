@@ -1,39 +1,24 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext'; // Assuming this context provides isAuthenticated
+import { ReactNode, useEffect } from "react";
 
-interface AuthCheckerProps {
-  children: React.ReactNode;
+import { useUserStore } from "../../stores/useUserStore";
+import { useNavigate } from "react-router-dom";
+
+interface Props {
+  children: ReactNode;
 }
 
-const AuthChecker: React.FC<AuthCheckerProps> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+const AuthChecker = ({ children }: Props) => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const user = useUserStore((state) => state.user);
 
   useEffect(() => {
-    const { pathname } = location;
-
-    // If user is not authenticated
-    if (!isAuthenticated) {
-      // Allow access to public routes like /login and /signup
-      if (pathname === '/login' || pathname === '/signup') {
-        return;
-      }
-      // Redirect to /login for any other route if not already there
-      if (pathname !== '/login') {
-        navigate('/login');
-      }
-    } else {
-      // If user is authenticated
-      // Redirect from /login or /signup to home page or dashboard if not already there
-      if ((pathname === '/login' || pathname === '/signup') && pathname !== '/') {
-        navigate('/');
-      }
+    if (!user) {
+      navigate("/");
     }
-  }, [isAuthenticated, location, navigate]);
+  }, [user, navigate]);
 
   return <>{children}</>;
 };
 
 export default AuthChecker;
+
