@@ -21,7 +21,7 @@ const SelectAnswerType: FC<SelectAnswerTypeProps> = ({
           type="radio"
           value={id}
           checked={id === value}
-          onChange={() => onChange}
+          onChange={(e) => onChange(e.target.value)}
           onBlur={() => onBlur}
           className={className}
           {...rest}
