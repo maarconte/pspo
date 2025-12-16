@@ -1,0 +1,249 @@
+@use "../../../../assets/scss/variables" as *;
+
+.leaderboard-display {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+
+  &__header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h2 {
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+      color: $primary-700;
+    }
+
+    p {
+      color: $primary-600;
+    }
+  }
+}
+
+.podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+
+  &__place {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    animation: slideUp 0.5s ease-out;
+
+    &.first {
+      order: 2;
+      min-height: 280px;
+      border: 3px solid #FFD700;
+      background: linear-gradient(135deg, #FFF9E6 0%, #FFFFFF 100%);
+    }
+
+    &.second {
+      order: 1;
+      min-height: 240px;
+      border: 3px solid #C0C0C0;
+      background: linear-gradient(135deg, #F5F5F5 0%, #FFFFFF 100%);
+    }
+
+    &.third {
+      order: 3;
+      min-height: 200px;
+      border: 3px solid #CD7F32;
+      background: linear-gradient(135deg, #FFF0E6 0%, #FFFFFF 100%);
+    }
+  }
+
+  &__rank {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $primary-600;
+    color: white;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: $primary-600;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &__name {
+    font-weight: 600;
+    color: $primary-700;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  &__score {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $primary-600;
+    margin-bottom: 1rem;
+  }
+
+  .rank-icon {
+    &.gold {
+      color: #FFD700;
+    }
+    &.silver {
+      color: #C0C0C0;
+    }
+    &.bronze {
+      color: #CD7F32;
+    }
+  }
+}
+
+.leaderboard-list {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+  animation: fadeIn 0.3s ease-out;
+  animation-fill-mode: both;
+
+  &:hover {
+    background: $primary-50;
+  }
+
+  &.me {
+    background: $primary-100;
+    border: 2px solid $primary-400;
+  }
+
+  &.gold {
+    background: linear-gradient(90deg, #FFF9E6 0%, transparent 100%);
+  }
+
+  &.silver {
+    background: linear-gradient(90deg, #F5F5F5 0%, transparent 100%);
+  }
+
+  &.bronze {
+    background: linear-gradient(90deg, #FFF0E6 0%, transparent 100%);
+  }
+
+  &__rank {
+    min-width: 60px;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $primary-700;
+
+    .rank-icon {
+      display: inline-block;
+    }
+  }
+
+  &__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: $primary-600;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  &__info {
+    flex: 1;
+
+    .name {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: $primary-700;
+      margin-bottom: 0.25rem;
+
+      .badge {
+        padding: 0.125rem 0.5rem;
+        background: $primary-600;
+        color: white;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+    }
+
+    .score {
+      font-size: 0.875rem;
+      color: $primary-600;
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .podium {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__place {
+      order: 0 !important;
+      min-height: auto !important;
+    }
+  }
+}

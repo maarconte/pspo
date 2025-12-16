@@ -1,0 +1,104 @@
+@use "../../../../assets/scss/variables" as *;
+
+.session-creator {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+
+  &__header {
+    margin-bottom: 2rem;
+
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: $primary-600;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: $primary-50;
+    border-radius: 8px;
+
+    &-group {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+
+  &__questions {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid $primary-200;
+  }
+}
+
+.question-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border: 2px solid $primary-200;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: $primary-400;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &.selected {
+    border-color: $primary-600;
+    background: $primary-50;
+  }
+
+  &__checkbox {
+    flex-shrink: 0;
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+  }
+
+  &__content {
+    flex: 1;
+
+    h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: $primary-600;
+
+    span {
+      &:not(:last-child) {
+        &::after {
+          content: none;
+        }
+      }
+    }
+  }
+}

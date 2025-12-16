@@ -1,0 +1,15 @@
+@use "../../assets/scss/variables" as *;
+
+.active-session {
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.creator-controls {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}

@@ -1,0 +1,179 @@
+@use "../../../../assets/scss/variables" as *;
+
+.share-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.share-modal {
+  background: white;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+
+  &__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $primary-600;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: $primary-100;
+    }
+  }
+
+  &__header {
+    padding: 2rem 2rem 1rem;
+    text-align: center;
+
+    h2 {
+      margin-bottom: 0.5rem;
+      color: $primary-700;
+    }
+
+    p {
+      color: $primary-600;
+    }
+  }
+
+  &__content {
+    padding: 1rem 2rem 2rem;
+  }
+
+  &__footer {
+    padding: 1rem 2rem 2rem;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.share-section {
+  margin-bottom: 2rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: $primary-700;
+  }
+}
+
+.share-code {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: $primary-50;
+  border: 2px solid $primary-200;
+  border-radius: 8px;
+
+  &__value {
+    flex: 1;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: $primary-700;
+    text-align: center;
+  }
+
+  &__copy {
+    background: $primary-600;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: $primary-700;
+    }
+
+    &.copied {
+      background: $success-600;
+    }
+  }
+}
+
+.share-link {
+  display: flex;
+  gap: 0.5rem;
+
+  input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid $primary-200;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    background: $primary-50;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-600;
+    }
+  }
+
+  &__copy {
+    background: $primary-600;
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background: $primary-700;
+    }
+
+    &.copied {
+      background: $success-600;
+    }
+  }
+}
+
+.share-hint {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: $primary-600;
+  font-style: italic;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
