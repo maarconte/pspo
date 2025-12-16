@@ -26,6 +26,7 @@ const ActiveSessionPage: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const [open, setOpen] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
   const [userAnswers, setUserAnswers] = useState<Array<{
     question: number;
     answer: string | string[];
@@ -37,9 +38,11 @@ const ActiveSessionPage: React.FC = () => {
 
   // Réinitialiser showAnswer et timeSpent quand la question change
   useEffect(() => {
-    setShowAnswer(false);
+    if (!isFinished) {
+      setShowAnswer(false);
+    }
     setTimeSpent(0);
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, isFinished]);
 
   // Timer
   useEffect(() => {
@@ -94,9 +97,10 @@ const ActiveSessionPage: React.FC = () => {
    * Termine le quiz pour cet utilisateur
    */
   const handleFinish = () => {
+    setIsFinished(true);
     setShowAnswer(true);
     setIsPaused(true);
-    toast.info('Quiz terminé ! Vous pouvez consulter toutes les réponses.');
+    toast.success('Quiz terminé ! Toutes les réponses sont maintenant visibles.');
   };
 
   if (!activeSession) {
@@ -145,15 +149,31 @@ const ActiveSessionPage: React.FC = () => {
           {showAnswer && <SessionScore userAnswers={userAnswers} />}
 
           <div className="d-flex gap-1">
-            <Button
-              label={!showAnswer ? "Show the answer" : "Hide the answer"}
-              onClick={() => setShowAnswer(!showAnswer)}
-            />
-            <Button
-              label="Finish"
-              style={Button_Style.OUTLINED}
-              onClick={handleFinish}
-            />
+            {isFinished ? (
+              <Button
+                label="Restart"
+                style={Button_Style.OUTLINED}
+                onClick={() => {
+                  setCurrentQuestionIndex(0);
+                  setShowAnswer(false);
+                  setIsFinished(false);
+                  setIsPaused(false);
+                  window.location.reload();
+                }}
+              />
+            ) : (
+              <>
+                <Button
+                  label={!showAnswer ? "Show the answer" : "Hide the answer"}
+                  onClick={() => setShowAnswer(!showAnswer)}
+                />
+                <Button
+                  label="Finish"
+                  style={Button_Style.OUTLINED}
+                  onClick={handleFinish}
+                />
+              </>
+            )}
           </div>
         </div>
 
