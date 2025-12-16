@@ -1,10 +1,7 @@
-/**
- * Affichage d'une question avec support pour M/S/TF answer types
- */
-
 import { useState, useEffect } from 'react';
 import { QuestionData } from '../../types/session.types';
 import { Bookmark } from 'lucide-react';
+import { useQuestionsStore } from '../../../../stores/useQuestionsStore';
 import './style.scss';
 
 interface QuestionDisplayProps {
@@ -14,6 +11,7 @@ interface QuestionDisplayProps {
   onAnswer: (answer: string) => void;
   showAnswer?: boolean;
   currentQuestionIndex: number;
+  onAnswersChange?: (answers: UserAnswer[]) => void;
 }
 
 interface UserAnswer {
@@ -29,11 +27,15 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
   onAnswer,
   showAnswer = false,
   currentQuestionIndex,
+  onAnswersChange,
 }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | string[] | null>(null);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const answerType = question.answerType;
   const inputType = answerType === 'M' ? 'checkbox' : 'radio';
+
+  // Accéder au store pour synchroniser les réponses
+  const { setUserAnswers: setGlobalUserAnswers } = useQuestionsStore();
 
   // Clé localStorage unique pour cette session
   const storageKey = `session_answers_${question.questionId.split('_')[0]}`;
@@ -45,18 +47,26 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
       try {
         const parsed = JSON.parse(savedAnswers);
         setUserAnswers(parsed);
+        // Synchroniser avec le store global
+        setGlobalUserAnswers(parsed);
       } catch (error) {
         console.error('Error loading answers from localStorage:', error);
       }
     }
-  }, [storageKey]);
+  }, [storageKey, setGlobalUserAnswers]);
 
   // Sauvegarder les réponses dans localStorage à chaque modification
   useEffect(() => {
     if (userAnswers.length > 0) {
       localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+      // Synchroniser avec le store global pour le calcul du score
+      setGlobalUserAnswers(userAnswers);
+      // Notifier le parent
+      if (onAnswersChange) {
+        onAnswersChange(userAnswers);
+      }
     }
-  }, [userAnswers, storageKey]);
+  }, [userAnswers, storageKey, setGlobalUserAnswers, onAnswersChange]);
 
   // Debug: vérifier si le feedback est présent
   useEffect(() => {

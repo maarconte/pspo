@@ -6,9 +6,9 @@ import { useRealtimeSync } from '../features/session/hooks/useRealtimeSync';
 import { SessionStatus } from '../features/session/types/session.types';
 import QuestionDisplay from '../features/session/components/QuestionDisplay/QuestionDisplay';
 import SessionResults from '../features/session/components/SessionResults/SessionResults';
+import SessionScore from '../features/session/components/SessionScore/SessionScore';
 import Counter from '../features/quiz/components/Counter/Counter';
 import QuestionNavigation from '../features/quiz/components/QuestionNavigation/QuestionNavigation';
-import QuizzScore from '../features/quiz/components/QuizzScore/QuizzScore';
 import Button from '../ui/Button/Button';
 import { Button_Style } from '../ui/Button/Button.types';
 import { Drawer } from 'rsuite';
@@ -26,6 +26,11 @@ const ActiveSessionPage: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const [open, setOpen] = useState(false);
+  const [userAnswers, setUserAnswers] = useState<Array<{
+    question: number;
+    answer: string | string[];
+    isBookmarked?: boolean;
+  }>>([]);
 
   // Synchroniser en temps réel
   useRealtimeSync(sessionId || null);
@@ -137,7 +142,7 @@ const ActiveSessionPage: React.FC = () => {
             finishQuizz={handleFinish}
           />
 
-          {showAnswer && <QuizzScore />}
+          {showAnswer && <SessionScore userAnswers={userAnswers} />}
 
           <div className="d-flex gap-1">
             <Button
@@ -160,6 +165,7 @@ const ActiveSessionPage: React.FC = () => {
           onAnswer={handleAnswer}
           showAnswer={showAnswer}
           currentQuestionIndex={currentQuestionIndex}
+          onAnswersChange={setUserAnswers}
         />
 
         {/* Navigation */}

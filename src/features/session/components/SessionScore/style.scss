@@ -1,0 +1,29 @@
+@use "../../../../assets/scss/variables" as *;
+
+.SessionScore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+
+  .displayScore-title {
+    font-size: 0.875rem;
+    color: $primary-600;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+  }
+
+  .percent {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: $primary-700;
+    margin: 0;
+    line-height: 1;
+  }
+}
