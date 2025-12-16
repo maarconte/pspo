@@ -11,6 +11,7 @@ import {
 	updateDoc,
 	query,
 	where,
+	orderBy,
 	serverTimestamp,
 	increment,
 	arrayUnion,
@@ -24,6 +25,7 @@ import {
 	ParticipantData,
 	Answer,
 	LeaderboardEntry,
+	SessionHistory,
 } from '../types/session.types';
 
 /**
@@ -414,12 +416,74 @@ const saveSessionHistory = async (
  */
 export const getCreatorSessions = async (
 	creatorId: string
-): Promise<any[]> => {
-	const sessionsRef = collection(db, `users/${creatorId}/createdSessions`);
-	const snapshot = await getDocs(sessionsRef);
+): Promise<SessionHistory[]> => {
+	try {
+		// Requête sur la collection principale avec filtre sur creatorId
+		const sessionsRef = collection(db, 'sessions');
+		const q = query(
+			sessionsRef,
+			where('creatorId', '==', creatorId)
+			// orderBy retiré pour éviter le besoin d'index composite
+		);
+		const snapshot = await getDocs(q);
 
-	return snapshot.docs.map((doc) => ({
-		...doc.data(),
-		createdAt: doc.data().createdAt?.toDate(),
-	}));
+		// Mapper les documents vers SessionHistory
+		const sessions: SessionHistory[] = await Promise.all(
+			snapshot.docs.map(async (sessionDoc) => {
+				const data = sessionDoc.data();
+
+				// Récupérer les participants pour calculer les stats
+				const participantsRef = collection(db, `sessions/${sessionDoc.id}/participants`);
+				const participantsSnapshot = await getDocs(participantsRef);
+
+				const participants = participantsSnapshot.docs.map(doc => doc.data());
+				const participantCount = participants.length;
+
+				// Calculer le score moyen
+				const totalScore = participants.reduce((sum, p) => sum + (p.score || 0), 0);
+				const averageScore = participantCount > 0 ? Math.round(totalScore / participantCount) : 0;
+
+				// Calculer le taux de complétion (participants qui ont répondu à toutes les questions)
+				const questionsCount = data.questions?.length || 0;
+				const completedParticipants = participants.filter(
+					p => (p.answers?.length || 0) >= questionsCount
+				).length;
+				const completionRate = participantCount > 0
+					? Math.round((completedParticipants / participantCount) * 100)
+					: 0;
+
+				// Créer le leaderboard final
+				const finalLeaderboard: LeaderboardEntry[] = participants
+					.map((p, index) => ({
+						participantId: p.participantId || '',
+						displayName: p.displayName || 'Anonyme',
+						score: p.score || 0,
+						rank: index + 1,
+						totalResponseTime: p.answers?.reduce((sum: number, a: any) => sum + (a.responseTime || 0), 0) || 0,
+					}))
+					.sort((a, b) => {
+						if (b.score !== a.score) return b.score - a.score;
+						return a.totalResponseTime - b.totalResponseTime;
+					})
+					.map((entry, index) => ({ ...entry, rank: index + 1 }));
+
+				return {
+					sessionId: sessionDoc.id,
+					shareCode: data.shareCode || '',
+					createdAt: data.createdAt?.toDate() || new Date(),
+					participantCount,
+					averageScore,
+					completionRate,
+					questions: data.questions || [],
+					finalLeaderboard,
+				};
+			})
+		);
+
+		// Trier les sessions par date côté client (du plus récent au plus ancien)
+		return sessions.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+	} catch (error) {
+		console.error('Error loading creator sessions:', error);
+		throw new Error('Impossible de charger l\'historique des sessions');
+	}
 };

@@ -133,12 +133,6 @@ const CreatorDashboard: React.FC = () => {
             <Target size={64} />
             <h3>Aucune session créée</h3>
             <p>Créez votre première session de quiz collaborative</p>
-            <Button
-              label="Créer une Session"
-              style={Button_Style.SOLID}
-              icon={<Plus size={20} />}
-              onClick={() => navigate('/session/create')}
-            />
           </div>
         ) : (
           <div className="sessions-list">
