@@ -8,6 +8,7 @@ import QuestionDisplay from '../features/session/components/QuestionDisplay/Ques
 import SessionResults from '../features/session/components/SessionResults/SessionResults';
 import Counter from '../features/quiz/components/Counter/Counter';
 import QuestionNavigation from '../features/quiz/components/QuestionNavigation/QuestionNavigation';
+import QuizzScore from '../features/quiz/components/QuizzScore/QuizzScore';
 import Button from '../ui/Button/Button';
 import { Button_Style } from '../ui/Button/Button.types';
 import { Drawer } from 'rsuite';
@@ -135,6 +136,8 @@ const ActiveSessionPage: React.FC = () => {
             setIsPaused={setIsPaused}
             finishQuizz={handleFinish}
           />
+
+          {showAnswer && <QuizzScore />}
 
           <div className="d-flex gap-1">
             <Button

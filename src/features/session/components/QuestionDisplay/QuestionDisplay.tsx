@@ -35,16 +35,44 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
   const answerType = question.answerType;
   const inputType = answerType === 'M' ? 'checkbox' : 'radio';
 
+  // Clé localStorage unique pour cette session
+  const storageKey = `session_answers_${question.questionId.split('_')[0]}`;
+
+  // Charger les réponses depuis localStorage au montage
+  useEffect(() => {
+    const savedAnswers = localStorage.getItem(storageKey);
+    if (savedAnswers) {
+      try {
+        const parsed = JSON.parse(savedAnswers);
+        setUserAnswers(parsed);
+      } catch (error) {
+        console.error('Error loading answers from localStorage:', error);
+      }
+    }
+  }, [storageKey]);
+
+  // Sauvegarder les réponses dans localStorage à chaque modification
+  useEffect(() => {
+    if (userAnswers.length > 0) {
+      localStorage.setItem(storageKey, JSON.stringify(userAnswers));
+    }
+  }, [userAnswers, storageKey]);
+
   // Debug: vérifier si le feedback est présent
   useEffect(() => {
     console.log('QuestionDisplay - question:', question);
     console.log('QuestionDisplay - feedback:', question.feedback);
   }, [question]);
 
-  // Réinitialiser la réponse quand la question change
+  // Restaurer la réponse de la question actuelle quand on change de question
   useEffect(() => {
-    setSelectedAnswer(answerType === 'M' ? [] : null);
-  }, [question.questionId, answerType]);
+    const savedAnswer = userAnswers[currentQuestionIndex];
+    if (savedAnswer) {
+      setSelectedAnswer(savedAnswer.answer);
+    } else {
+      setSelectedAnswer(answerType === 'M' ? [] : null);
+    }
+  }, [currentQuestionIndex, answerType, userAnswers]); // Added userAnswers to dependencies
 
   /**
    * Gère la sélection pour Single Choice et True/False
@@ -52,6 +80,15 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
   const handleSelectSingle = (option: string) => {
     setSelectedAnswer(option);
     onAnswer(option);
+
+    // Sauvegarder dans userAnswers
+    const newArray = [...userAnswers];
+    newArray[currentQuestionIndex] = {
+      ...newArray[currentQuestionIndex],
+      question: currentQuestionIndex,
+      answer: option,
+    };
+    setUserAnswers(newArray);
   };
 
   /**
@@ -69,6 +106,15 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
 
     setSelectedAnswer(newAnswers);
     onAnswer(newAnswers.join(', '));
+
+    // Sauvegarder dans userAnswers
+    const newArray = [...userAnswers];
+    newArray[currentQuestionIndex] = {
+      ...newArray[currentQuestionIndex],
+      question: currentQuestionIndex,
+      answer: newAnswers,
+    };
+    setUserAnswers(newArray);
   };
 
   /**
