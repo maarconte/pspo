@@ -171,7 +171,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
         if (info.getValue())
           return (
             <div className="text-center">
-              <XCircle size={16} color="#e41937" />
+              <XCircle size={24} color="#e41937" />
             </div>
           );
       },
@@ -185,7 +185,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
         if (!info?.getValue())
           return (
             <div className="text-center">
-              <XCircle size={16} color="#e41937" />
+              <XCircle size={24} color="#e41937" />
             </div>
           );
       },
@@ -220,17 +220,18 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     {
       header: "",
       id: "actions",
-      width: 50,
+width: 100,
       cell: (info: any) => (
         <div className="d-flex gap-05 actions">
           <Edit
-            size={16}
+            size={42}
             className="pointer action"
             color="#8b78c7"
             onClick={() => handleSelectQuestion(info.row.original)}
           />
+
           <Trash2
-            size={16}
+            size={42}
             className="pointer action"
             color="#8b78c7"
             onClick={() => {
