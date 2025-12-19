@@ -7,4 +7,3 @@ export { default as Alert } from './Alert/Alert';
 export { default as FileUploader } from './FileUploader/FileUploader';
 export { default as Table } from './Table/Table';
 export { default as Header } from './Layout/Header/Header';
-export { default as Sidebar } from './Layout/Sidebar/Sidebar';

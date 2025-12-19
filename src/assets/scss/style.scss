@@ -2,9 +2,6 @@
 @use './headings';
 @use './atoms/atoms';
 
-@import './tailwind.css';
-@import './app-layout.scss';
-
 * {
   box-sizing: border-box;
 }
@@ -33,10 +30,13 @@ a {
   color: $primary-500;
   text-decoration: none;
   &:hover {
-    text-decoration: underline;
+    text-decoration: none;
   }
 }
 
 .toast-content {
   color: $primary-900;
 }
+
+// Import Tailwind last so custom styles take precedence
+@import './tailwind.css';

@@ -11,12 +11,15 @@ import WaitingRoom from "../../features/session/components/WaitingRoom/WaitingRo
 import { MagicLinkVerification } from "../../features/auth/components/MagicLinkVerification";
 import { RoleChecker } from "../../features/auth/components/RoleChecker";
 import AuthChecker from "../../features/auth/components/Auth/AuthChecker";
+import {UsersIcon, HomeIcon, SettingsIcon, CircleQuestionMarkIcon, Edit2Icon, ListStartIcon, LogInIcon, type LucideIcon } from "lucide-react";
 
-interface RouteType {
+export interface RouteType {
   path: string;
   component: any;
   name: string;
   protected: boolean;
+  icon?: LucideIcon;
+  group?: string;
 }
 
 const routes: RouteType[] = [
@@ -25,15 +28,17 @@ const routes: RouteType[] = [
     component: Home,
     name: "Home",
     protected: false,
+    icon: HomeIcon,
   },
   {
     path: "/quizz",
     component: Quizz,
     name: "Quizz",
     protected: false,
+    icon: CircleQuestionMarkIcon,
   },
   {
-    path: "/admin",
+    path: "/admin/edit-questions",
     component: () => (
       <RoleChecker allowedRoles={['admin', 'dev']}>
         <EditQuestions />
@@ -41,9 +46,11 @@ const routes: RouteType[] = [
     ),
     name: "EditQuestions",
     protected: true,
+    icon: Edit2Icon,
+    group: "Admin"
   },
   {
-    path: "/dev/users",
+    path: "/admin/users",
     component: () => (
       <RoleChecker allowedRoles={['dev']}>
         <UserManagement />
@@ -51,9 +58,11 @@ const routes: RouteType[] = [
     ),
     name: "UserManagement",
     protected: true,
+    icon: UsersIcon,
+    group: "Admin"
   },
   {
-    path: "/dashboard/sessions",
+    path: "/sessions",
     component: () => (
       <AuthChecker>
         <CreatorDashboard />
@@ -61,9 +70,11 @@ const routes: RouteType[] = [
     ),
     name: "CreatorDashboard",
     protected: true,
+    icon: ListStartIcon,
+    group: "Sessions"
   },
   {
-    path: "/session/create",
+    path: "/sessions/create",
     component: () => (
       <AuthChecker>
         <CreateSession />
@@ -71,36 +82,46 @@ const routes: RouteType[] = [
     ),
     name: "CreateSession",
     protected: true,
+    icon: ListStartIcon,
+    group: "Sessions"
   },
   {
-    path: "/session/join",
+    path: "/sessions/join",
     component: JoinSession,
     name: "JoinSession",
     protected: false,
+    icon: ListStartIcon,
+    group: "Sessions"
   },
   {
-    path: "/session/:sessionId/waiting",
+    path: "/sessions/:sessionId/waiting",
     component: WaitingRoom,
     name: "WaitingRoom",
     protected: false,
+    icon: ListStartIcon,
+    group: "Sessions"
   },
   {
-    path: "/session/:sessionId",
+    path: "/sessions/:sessionId",
     component: ActiveSession,
     name: "ActiveSession",
     protected: false,
+    icon: ListStartIcon,
+    group: "Sessions"
   },
   {
     path: "/login",
     component: Login,
     name: "Login",
     protected: false,
+    icon: LogInIcon,
   },
   {
     path: "/auth/verify",
     component: MagicLinkVerification,
     name: "MagicLinkVerification",
     protected: false,
+    icon: LogInIcon,
   },
 ];
 
