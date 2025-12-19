@@ -224,14 +224,14 @@ width: 100,
       cell: (info: any) => (
         <div className="d-flex gap-05 actions">
           <Edit
-            size={42}
+            size={24}
             className="pointer action"
             color="#8b78c7"
             onClick={() => handleSelectQuestion(info.row.original)}
           />
 
           <Trash2
-            size={42}
+            size={24}
             className="pointer action"
             color="#8b78c7"
             onClick={() => {

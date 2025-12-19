@@ -1,7 +1,9 @@
 @use './base' as *;
 @use './headings';
-
 @use './atoms/atoms';
+
+@import './tailwind.css';
+@import './app-layout.scss';
 
 * {
   box-sizing: border-box;

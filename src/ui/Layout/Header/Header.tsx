@@ -41,12 +41,21 @@ const Header: FC<HeaderProps> = () => {
           />
         )}
         {isAdmin && (
+          <>
           <Button
             label="Admin"
             style={Button_Style.OUTLINED}
             icon={<Settings size={16} />}
             onClick={() => navigate("/admin")}
-          />
+            />
+            <Button
+            label="Commencer une session"
+            style={Button_Style.OUTLINED}
+            icon={<Settings size={16} />}
+            onClick={() => navigate("/session")}
+            />
+
+          </>
         )}
         {user && <Logout />}
       </div>
