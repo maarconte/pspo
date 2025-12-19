@@ -4,7 +4,7 @@ import "./style-mobile.scss";
 import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
 import { FC, useEffect, useState } from "react";
 import { AlertTriangle } from "lucide-react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import Button from "../../../../ui/Button/Button";
 import { FeedbackProps } from "./Feedback.types";
@@ -83,7 +83,6 @@ const Feedback: FC<FeedbackProps> = ({ question }) => {
           name={"feedback-comment"}
         />
       </Modal>
-      <ToastContainer />
     </div>
   );
 };

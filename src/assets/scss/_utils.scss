@@ -1,4 +1,5 @@
 @use './variables' as *;
+@use 'sass:string';
 
 .pointer {
   cursor: pointer;
@@ -140,7 +141,7 @@
 // loop for width
 @for $i from 0 through 100 {
   .w-#{$i} {
-    width: unquote("#{$i}%");
+    width: string.unquote("#{$i}%");
   }
 }
 

@@ -35,35 +35,20 @@ export const MagicLinkVerification = () => {
 		setIsVerifying(true);
 		setError(null);
 
-		console.log('🔍 Vérification du Magic Link...');
-		console.log('URL actuelle:', window.location.href);
-
 		// Vérifier si c'est bien un Magic Link
 		if (!authService.isMagicLink()) {
-			console.error('❌ Ce n\'est pas un Magic Link valide');
 			setError('Lien de connexion invalide');
 			setIsVerifying(false);
 			return;
 		}
 
-		console.log('✅ Magic Link détecté');
-
 		try {
 			const user = await authService.completeMagicLinkSignIn(providedEmail);
-			console.log('✅ Connexion réussie !', user);
-			console.log('User UID:', user.uid);
-			console.log('User Email:', user.email);
-
 			toast.success('Connexion réussie !');
-
-			// Attendre un peu pour que le store se mette à jour
 			setTimeout(() => {
-				navigate('/'); // Rediriger vers la page d'accueil
+				navigate('/');
 			}, 500);
 		} catch (error: any) {
-			console.error('❌ Erreur de vérification:', error);
-			console.error('Code d\'erreur:', error.code);
-			console.error('Message:', error.message);
 
 			if (error.message.includes('Email manquant')) {
 				setNeedsEmail(true);
