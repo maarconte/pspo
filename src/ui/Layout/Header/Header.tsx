@@ -2,7 +2,7 @@ import "./style.scss";
 import "./style-mobile.scss";
 
 import React, { FC } from "react";
-import { Settings, User, Users } from "lucide-react";
+import { User } from "lucide-react";
 
 import Button from "../../../ui/Button/Button";
 import { Button_Style } from "../../../ui/Button/Button.types";
@@ -11,15 +11,15 @@ import { Link } from "react-router-dom";
 import Logout from "../../../features/auth/components/Auth/Logout";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../../stores/useUserStore";
-import { useUserRole } from "../../../features/auth/hooks/useUserRole";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const Header: FC<HeaderProps> = () => {
   const { user } = useUserStore();
-  const { isAdmin, isDev } = useUserRole();
   const navigate = useNavigate();
 
   return (
-    <div className="Header">
+    <div className="Header flex h-16 shrink-0 items-center gap-2 border-b px-4">
+      {user && <SidebarTrigger className="ml-1" />}
       <h1 className="h4">
         <Link to="/">Agile.training</Link>
       </h1>
@@ -31,31 +31,6 @@ const Header: FC<HeaderProps> = () => {
             icon={<User size={16} />}
             onClick={() => navigate("/login")}
           />
-        )}
-        {isDev && (
-          <Button
-            label="Users"
-            style={Button_Style.OUTLINED}
-            icon={<Users size={16} />}
-            onClick={() => navigate("/dev/users")}
-          />
-        )}
-        {isAdmin && (
-          <>
-          <Button
-            label="Admin"
-            style={Button_Style.OUTLINED}
-            icon={<Settings size={16} />}
-            onClick={() => navigate("/admin")}
-            />
-            <Button
-            label="Commencer une session"
-            style={Button_Style.OUTLINED}
-            icon={<Settings size={16} />}
-            onClick={() => navigate("/session")}
-            />
-
-          </>
         )}
         {user && <Logout />}
       </div>
