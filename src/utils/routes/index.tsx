@@ -7,11 +7,12 @@ import ActiveSession from "../../pages/ActiveSession";
 import JoinSession from "../../pages/JoinSession";
 import CreateSession from "../../pages/CreateSession";
 import CreatorDashboard from "../../pages/CreatorDashboard";
+import Profile from "../../pages/Profile";
 import WaitingRoom from "../../features/session/components/WaitingRoom/WaitingRoom";
 import { MagicLinkVerification } from "../../features/auth/components/MagicLinkVerification";
 import { RoleChecker } from "../../features/auth/components/RoleChecker";
 import AuthChecker from "../../features/auth/components/Auth/AuthChecker";
-import {UsersIcon, HomeIcon, SettingsIcon, CircleQuestionMarkIcon, Edit2Icon, ListStartIcon, LogInIcon, type LucideIcon } from "lucide-react";
+import {UsersIcon, HomeIcon, SettingsIcon, CircleQuestionMarkIcon, Edit2Icon, ListStartIcon, LogInIcon, UserIcon, type LucideIcon } from "lucide-react";
 
 export interface RouteType {
   path: string;
@@ -36,6 +37,13 @@ const routes: RouteType[] = [
     name: "Quizz",
     protected: false,
     icon: CircleQuestionMarkIcon,
+  },
+  {
+    path: "/profile",
+    component: Profile,
+    name: "Profile",
+    protected: true,
+    icon: UserIcon,
   },
   {
     path: "/admin/edit-questions",

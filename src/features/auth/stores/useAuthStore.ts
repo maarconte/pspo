@@ -1,4 +1,4 @@
-import { User, onIdTokenChanged } from "firebase/auth";
+import { User, onIdTokenChanged, updateProfile } from "firebase/auth";
 import { create } from "zustand";
 import { auth } from "../../../lib/firebase";
 
@@ -7,6 +7,7 @@ interface UserState {
 	setUser: (user: User | null) => void;
 	initAuth: () => void;
 	refreshToken: () => Promise<void>;
+	updateDisplayName: (displayName: string) => Promise<void>;
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
@@ -24,6 +25,25 @@ export const useUserStore = create<UserState>((set, get) => ({
 			} catch (error) {
 				console.error('Failed to refresh token:', error);
 			}
+		}
+	},
+
+	updateDisplayName: async (displayName: string) => {
+		const currentUser = get().user;
+		if (currentUser) {
+			try {
+				await updateProfile(currentUser, { displayName });
+				// Force a reload to get the updated user object
+				await currentUser.reload();
+				// Update the local state with the refreshed user
+				set({ user: auth.currentUser });
+				console.log('Display name updated successfully');
+			} catch (error) {
+				console.error('Failed to update display name:', error);
+				throw error;
+			}
+		} else {
+			throw new Error('No user is currently logged in');
 		}
 	},
 
