@@ -52,7 +52,7 @@ const routes: RouteType[] = [
         <EditQuestions />
       </RoleChecker>
     ),
-    name: "EditQuestions",
+    name: "Edit questions",
     protected: true,
     icon: Edit2Icon,
     group: "Admin"
@@ -64,7 +64,7 @@ const routes: RouteType[] = [
         <UserManagement />
       </RoleChecker>
     ),
-    name: "UserManagement",
+    name: "Users",
     protected: true,
     icon: UsersIcon,
     group: "Admin"
@@ -76,7 +76,7 @@ const routes: RouteType[] = [
         <CreatorDashboard />
       </AuthChecker>
     ),
-    name: "CreatorDashboard",
+    name: "My sessions",
     protected: true,
     icon: ListStartIcon,
     group: "Sessions"
@@ -88,7 +88,7 @@ const routes: RouteType[] = [
         <CreateSession />
       </AuthChecker>
     ),
-    name: "CreateSession",
+    name: "Create session",
     protected: true,
     icon: ListStartIcon,
     group: "Sessions"
@@ -96,7 +96,7 @@ const routes: RouteType[] = [
   {
     path: "/sessions/join",
     component: JoinSession,
-    name: "JoinSession",
+    name: "Join session",
     protected: false,
     icon: ListStartIcon,
     group: "Sessions"
@@ -104,7 +104,7 @@ const routes: RouteType[] = [
   {
     path: "/sessions/:sessionId/waiting",
     component: WaitingRoom,
-    name: "WaitingRoom",
+    name: "Waiting room",
     protected: false,
     icon: ListStartIcon,
     group: "Sessions"
@@ -112,7 +112,7 @@ const routes: RouteType[] = [
   {
     path: "/sessions/:sessionId",
     component: ActiveSession,
-    name: "ActiveSession",
+    name: "Session",
     protected: false,
     icon: ListStartIcon,
     group: "Sessions"

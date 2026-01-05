@@ -22,7 +22,7 @@
       --num: 60;
       --border-size: 4px;
       --mask-image: radial-gradient(
-        100% 100%,
+        closest-side at 50% 50%,
         transparent calc(50% - var(--border-size)),
         black calc(50% - var(--border-size) + 1px)
       );

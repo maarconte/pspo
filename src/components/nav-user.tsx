@@ -26,6 +26,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { signOut } from "firebase/auth"
+import { auth } from "@/lib/firebase"
 
 export function NavUser({
   user,
@@ -35,9 +38,20 @@ export function NavUser({
     email: string
     avatar: string
   }
-}) {
+  }) {
+    const [disabled, setDisabled] = useState(false);
   const { isMobile } = useSidebar()
   const navigate = useNavigate()
+    const logout = () => {
+      setDisabled(true);
+      signOut(auth)
+        .then(() => {
+          navigate('/');
+        })
+        .catch((error) => {
+          setDisabled(false);
+        });
+    };
 
   return (
     <SidebarMenu>
@@ -72,7 +86,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={logout} disabled={disabled}>
               <LogOut />
               Log out
             </DropdownMenuItem>

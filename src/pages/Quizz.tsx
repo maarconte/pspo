@@ -1,5 +1,3 @@
-import "rsuite/dist/rsuite.min.css";
-
 import React, { useEffect, useState } from "react";
 
 import { Button } from "../ui";
@@ -9,7 +7,7 @@ import Feedback from "../features/quiz/components/Feedback/Feedback";
 import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard";
 import QuestionNavigation from "../features/quiz/components/QuestionNavigation/QuestionNavigation";
 import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
-import { Drawer } from "rsuite";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { toast } from "react-toastify";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 
@@ -172,22 +170,14 @@ export default function Quizz() {
           />
         </div>
       </div>
-      <Drawer
-        backdrop={false}
-        open={open}
-        onClose={() => setOpen(false)}
-        size={"xs"}
-      >
-        {/* <Drawer.Header>
-          <Drawer.Title>Navigation</Drawer.Title>
-        </Drawer.Header> */}
-        <Drawer.Body>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="left" className="w-80">
           <QuestionNavigation
             setCurrentQuestion={setCurrentQuestion}
             currentQuestion={currentQuestion}
           />
-        </Drawer.Body>
-      </Drawer>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

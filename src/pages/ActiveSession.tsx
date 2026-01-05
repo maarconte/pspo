@@ -11,7 +11,7 @@ import Counter from '../features/quiz/components/Counter/Counter';
 import QuestionNavigation from '../features/quiz/components/QuestionNavigation/QuestionNavigation';
 import Button from '../ui/Button/Button';
 import { Button_Style } from '../ui/Button/Button.types';
-import { Drawer } from 'rsuite';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { toast } from 'react-toastify';
 import './ActiveSession/style.scss';
 
@@ -208,20 +208,15 @@ const ActiveSessionPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Drawer de pagination */}
-      <Drawer
-        backdrop={false}
-        open={open}
-        onClose={() => setOpen(false)}
-        size="xs"
-      >
-        <Drawer.Body>
+      {/* Sheet de pagination */}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="left" className="w-80">
           <QuestionNavigation
             setCurrentQuestion={setCurrentQuestionIndex}
             currentQuestion={currentQuestionIndex}
           />
-        </Drawer.Body>
-      </Drawer>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
