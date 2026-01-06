@@ -7,6 +7,7 @@ import ActiveSession from "../../pages/ActiveSession";
 import JoinSession from "../../pages/JoinSession";
 import CreateSession from "../../pages/CreateSession";
 import CreatorDashboard from "../../pages/CreatorDashboard";
+import SessionResultsPage from "../../pages/SessionResultsPage";
 import Profile from "../../pages/Profile";
 import WaitingRoom from "../../features/session/components/WaitingRoom/WaitingRoom";
 import { MagicLinkVerification } from "../../features/auth/components/MagicLinkVerification";
@@ -105,6 +106,14 @@ const routes: RouteType[] = [
     path: "/sessions/:sessionId/waiting",
     component: WaitingRoom,
     name: "Waiting room",
+    protected: false,
+    icon: ListStartIcon,
+    group: "Sessions"
+  },
+  {
+    path: "/sessions/:sessionId/results",
+    component: SessionResultsPage,
+    name: "Session results",
     protected: false,
     icon: ListStartIcon,
     group: "Sessions"

@@ -1,44 +1,43 @@
-import { ReactNode, useEffect, useState } from "react";
-
-import { useUserStore } from "../../stores/useAuthStore";
+import { ReactNode, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../stores/useAuthStore";
 
-interface Props {
+interface AuthCheckerProps {
   children: ReactNode;
 }
 
-const AuthChecker = ({ children }: Props) => {
+/**
+ * AuthChecker - Vérifie l'authentification de l'utilisateur
+ * Optimisé pour ne vérifier qu'une seule fois au montage initial
+ * au lieu de se déclencher à chaque changement de page
+ */
+const AuthChecker = ({ children }: AuthCheckerProps) => {
   const navigate = useNavigate();
-  const user = useUserStore((state) => state.user);
-  const [isChecking, setIsChecking] = useState(true);
+  // Utilisation d'un sélecteur Zustand propre
+  const user = useUserStore((s) => s.user);
+  // Ref pour éviter les vérifications multiples
+  const hasChecked = useRef(false);
 
   useEffect(() => {
-    // Attendre un peu pour que l'auth se charge
-    const timer = setTimeout(() => {
-      setIsChecking(false);
-      if (!user) {
-        console.log('AuthChecker: No user found, redirecting to /');
-        navigate("/");
-      } else {
-        console.log('AuthChecker: User authenticated:', user.email);
-      }
-    }, 500);
+    // Ne vérifier qu'une seule fois au montage initial
+    if (hasChecked.current) return;
 
-    return () => clearTimeout(timer);
-  }, [user, navigate]);
+    hasChecked.current = true;
 
-  if (isChecking) {
-    return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <p>Vérification de l'authentification...</p>
-      </div>
-    );
-  }
+    if (!user) {
+      console.log('AuthChecker: No user found, redirecting to /');
+      navigate("/", { replace: true });
+    } else {
+      console.log('AuthChecker: User authenticated:', user.email);
+    }
+  }, []); // Dépendances vides = exécution uniquement au montage
 
+  // Si pas d'utilisateur, ne rien afficher (la redirection va se faire)
   if (!user) {
     return null;
   }
 
+  // Afficher les enfants si l'utilisateur est authentifié
   return <>{children}</>;
 };
 

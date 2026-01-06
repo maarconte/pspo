@@ -184,6 +184,51 @@ export const getSessionByShareCode = async (
 };
 
 /**
+ * Récupère une session par son ID
+ */
+export const getSessionById = async (
+	sessionId: string
+): Promise<SessionData | null> => {
+	try {
+		const sessionRef = doc(db, 'sessions', sessionId);
+		const sessionSnap = await getDoc(sessionRef);
+
+		if (!sessionSnap.exists()) {
+			return null;
+		}
+
+		const data = sessionSnap.data();
+
+		// Récupérer les participants
+		const participantsRef = collection(db, `sessions/${sessionId}/participants`);
+		const participantsSnapshot = await getDocs(participantsRef);
+		const participantCount = participantsSnapshot.size;
+
+		// Construire l'objet SessionData
+		const session: SessionData = {
+			sessionId: sessionSnap.id,
+			shareCode: data.shareCode,
+			creatorId: data.creatorId,
+			creatorEmail: data.creatorEmail,
+			status: data.status as SessionStatus,
+			createdAt: data.createdAt?.toDate() || new Date(),
+			startedAt: data.startedAt?.toDate() || null,
+			endedAt: data.endedAt?.toDate() || null,
+			totalDuration: data.totalDuration || 0,
+			questions: data.questions || [],
+			currentQuestionIndex: data.currentQuestionIndex || 0,
+			participantCount,
+		};
+
+		return session;
+	} catch (error) {
+		console.error('Error loading session by ID:', error);
+		return null;
+	}
+};
+
+
+/**
  * Permet à un participant de rejoindre une session
  */
 export const joinSession = async (

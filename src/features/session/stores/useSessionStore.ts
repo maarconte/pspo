@@ -9,6 +9,7 @@ import {
 	onSnapshot,
 	query,
 	Unsubscribe,
+	getDocs,
 } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import {
@@ -79,7 +80,9 @@ interface SessionStore {
 
 	// Actions historique
 	loadCreatorSessions: (creatorId: string) => Promise<void>;
+	loadSessionById: (sessionId: string) => Promise<void>;
 	calculateStatistics: () => void;
+
 
 	// Actions internes
 	setActiveSession: (session: SessionData | null) => void;
@@ -305,6 +308,45 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
 			set({ isLoadingHistory: false });
 		}
 	},
+
+	// Charger une session par son ID
+	loadSessionById: async (sessionId) => {
+		set({ isLoadingHistory: true });
+		try {
+			const session = await sessionService.getSessionById(sessionId);
+			if (!session) {
+				throw new Error('Session introuvable');
+			}
+
+			set({ activeSession: session });
+
+			// Charger le leaderboard final (dernière question)
+			const leaderboardRef = collection(
+				db,
+				`sessions/${sessionId}/leaderboard`
+			);
+			const leaderboardSnapshot = await getDocs(leaderboardRef);
+
+			if (!leaderboardSnapshot.empty) {
+				// Prendre le dernier leaderboard (index le plus élevé)
+				const lastLeaderboard = leaderboardSnapshot.docs
+					.sort((a, b) => {
+						const aIndex = parseInt(a.id);
+						const bIndex = parseInt(b.id);
+						return bIndex - aIndex;
+					})[0];
+
+				const leaderboardData = lastLeaderboard.data();
+				set({ currentLeaderboard: leaderboardData.rankings || [] });
+			}
+		} catch (error) {
+			console.error('Error loading session by ID:', error);
+			throw error;
+		} finally {
+			set({ isLoadingHistory: false });
+		}
+	},
+
 
 	// Calculer les statistiques globales
 	calculateStatistics: () => {

@@ -43,7 +43,7 @@ const CreatorDashboard: React.FC = () => {
    * Navigue vers les détails d'une session
    */
   const viewSessionDetails = (sessionId: string) => {
-    navigate(`/session/${sessionId}/results`);
+    navigate(`/sessions/${sessionId}/results`);
   };
 
   if (isLoadingHistory) {
