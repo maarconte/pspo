@@ -9,29 +9,21 @@ html {
   font-size: 16px;
   body {
     font-family: "Libre Franklin", sans-serif;
-    color: $primary-900;
     font-size: 1rem;
   }
 }
 
 .card {
-  background-color: rgb(236, 233, 246);
+  background-color: $violet-50;
   padding: 1rem;
   margin: 0 auto;
   display: block;
   max-width: 500px;
+  border-radius: 1rem;
 }
 
 p {
   margin-top: 0;
-}
-
-a {
-  color: $primary-500;
-  text-decoration: none;
-  &:hover {
-    text-decoration: none;
-  }
 }
 
 .toast-content {

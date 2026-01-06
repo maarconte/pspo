@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/breadcrumb"
 import routes from "../../../utils/routes";
 
+import logo from "../../../assets/img/logo.png";
+
 const Header: FC<HeaderProps> = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
@@ -64,8 +66,10 @@ const Header: FC<HeaderProps> = () => {
     <div className="Header flex h-16 shrink-0 items-center gap-2 border-b px-4">
       <div className="flex items-center gap-2">
       {user && <SidebarTrigger className="ml-1" />}
-        <h1 className="text-2xl font-bold">
-          <Link to="/">Agile training</Link>
+        <h1 className="text-2xl font-bold mb-0">
+          <Link to="/">
+            <img src={logo} alt="Logo" className="h-16 w-auto" />
+          </Link>
           </h1>
       </div>
     {user &&  <Breadcrumb>
