@@ -3,8 +3,6 @@ import { useUsers } from '../features/auth/hooks/useUsers';
 import { roleService } from '../features/auth/api/roleService';
 import { UserRole, ROLE_LABELS, ROLES } from '../features/auth/types/roles.types';
 import { toast } from 'react-toastify';
-import Button from '../ui/Button/Button';
-import { Button_Style } from '../ui/Button/Button.types';
 import './UserManagement/style.scss';
 
 const UserManagement = () => {
@@ -42,10 +40,7 @@ const UserManagement = () => {
 				<h1>Gestion des utilisateurs</h1>
 				<p className="error">Erreur : {error}</p>
 				<Button
-					label="Réessayer"
-					style={Button_Style.SOLID}
-					onClick={refetch}
-				/>
+					onClick={refetch}>Réessayer</Button>
 			</div>
 		);
 	}

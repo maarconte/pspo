@@ -1,5 +1,4 @@
-import Button from "../Button/Button";
-import { Button_Style } from "../Button/Button.types";
+import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { Upload } from "lucide-react";
 
@@ -32,11 +31,10 @@ const FileUploader = ({ handleFile }: FileUploaderProps) => {
   return (
     <>
       <Button
-        label="Import questions"
-        style={Button_Style.OUTLINED}
-        icon={<Upload size={16} />}
         onClick={handleClick}
-      />
+      >
+        Import questions
+      </Button>
 
       <input
         type="file"

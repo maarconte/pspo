@@ -1,7 +1,6 @@
 import { useState, FormEvent } from 'react';
 import { useUserStore } from '../features/auth/stores/useAuthStore';
 import { Button } from '../ui';
-import { Button_Style } from '../ui/Button/Button.types';
 import { toast } from 'react-toastify';
 import { User } from 'lucide-react';
 
@@ -76,11 +75,8 @@ const Profile: React.FC = () => {
             </div>
 
             <Button
-              label={isUpdating ? 'Mise à jour...' : 'Mettre à jour'}
-              style={Button_Style.SOLID}
               disabled={isUpdating || !displayName.trim() || displayName === user.displayName}
-              className="d-block w-100"
-            />
+              className="d-block w-100">{isUpdating ? 'Mise à jour...' : 'Mettre à jour'}</Button>
           </form>
         </div>
       </div>

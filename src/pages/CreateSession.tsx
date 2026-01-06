@@ -10,11 +10,17 @@ import { QuestionData } from '../features/session/types/session.types';
 import { useUserStore } from '../stores/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { useSessionCreator } from '../features/session/hooks/useSessionCreator';
-import { Select, Button } from '../ui';
-import { Button_Style } from '../ui/Button/Button.types';
+import { Select } from '../ui';
 import ShareSessionModal from '../features/session/components/ShareSessionModal/ShareSessionModal';
 import { toast } from 'react-toastify';
-
+import {Button} from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 const CreateSessionPage: React.FC = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
@@ -144,7 +150,7 @@ const CreateSessionPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
+      <div className="p-2">
         <p>Chargement des questions...</p>
       </div>
     );
@@ -155,9 +161,11 @@ const CreateSessionPage: React.FC = () => {
       <div className="content">
         <h1 className="text-center">Créer une Session Collaborative</h1>
 
-        <div className="card" style={{ maxWidth: '600px', margin: '2rem auto' }}>
-          <h2>Configuration de la Session</h2>
-
+        <Card className="w-full max-w-sm mx-auto">
+          <CardHeader>
+            <CardTitle>Configuration de la Session</CardTitle>
+          </CardHeader>
+          <CardContent>
           <Select
             name="formation"
             className="mb-2"
@@ -172,7 +180,7 @@ const CreateSessionPage: React.FC = () => {
             ]}
           />
 
-          <div style={{ marginBottom: '1rem' }}>
+          <div className="mb-2">
             <p>
               <strong>Nombre de questions :</strong> 80 (sélection aléatoire)
             </p>
@@ -182,36 +190,38 @@ const CreateSessionPage: React.FC = () => {
           </div>
 
           {allQuestions.length === 0 ? (
-            <div style={{ padding: '1rem', background: '#fff3cd', borderRadius: '8px', marginBottom: '1rem' }}>
-              <p style={{ margin: 0, color: '#856404' }}>
+            <div className="p-2">
+              <p className="text-yellow-500">
                 Aucune question disponible pour cette formation.
                 Veuillez d'abord créer des questions dans l'interface admin.
               </p>
             </div>
           ) : allQuestions.length < 80 ? (
-            <div style={{ padding: '1rem', background: '#fff3cd', borderRadius: '8px', marginBottom: '1rem' }}>
-              <p style={{ margin: 0, color: '#856404' }}>
+            <div className="p-2">
+              <p  className="text-yellow-500">
                 Attention : Seulement {allQuestions.length} questions disponibles (moins de 80).
               </p>
             </div>
           ) : null}
-
+          </CardContent>
+          <CardFooter className="flex justify-between">
           <Button
-            label={isCreatingSession ? 'Création...' : 'Créer la Session'}
-            style={Button_Style.SOLID}
+            variant="default"
             onClick={handleCreateSession}
             disabled={isCreatingSession || allQuestions.length === 0}
-            className="d-block w-100 mb-1"
-          />
+          >
+            {isCreatingSession ? 'Création...' : 'Créer la Session'}
+          </Button>
 
           <Button
-            label="Annuler"
-            style={Button_Style.OUTLINED}
+            variant="outline"
             onClick={() => navigate('/dashboard/sessions')}
-            className="d-block w-100"
             disabled={isCreatingSession}
-          />
-        </div>
+          >
+            Annuler
+          </Button>
+          </CardFooter>
+        </Card>
 
         {showShareModal && shareCode && shareLink && (
           <ShareSessionModal

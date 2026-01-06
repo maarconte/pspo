@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-import Button from "../../../../ui/Button/Button";
 import { auth } from "../../../../lib/firebase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ const Logout = ({ navigateTo = "/" }: Props) => {
 
   return (
     <div>
-      <Button disabled={disabled} onClick={logout} label="Logout" />
+      <Button disabled={disabled} onClick={logout}>Logout</Button>
     </div>
   );
 };

@@ -7,8 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Trophy, Users, Clock, Target } from 'lucide-react';
 import { SessionData, LeaderboardEntry } from '../../types/session.types';
 import LeaderboardDisplay from '../LeaderboardDisplay/LeaderboardDisplay';
-import Button from '../../../../ui/Button/Button';
-import { Button_Style } from '../../../../ui/Button/Button.types';
+import { Button } from '@/components/ui/button';
 import './style.scss';
 
 interface SessionResultsProps {
@@ -110,22 +109,22 @@ const SessionResults: React.FC<SessionResultsProps> = ({
         {isCreator ? (
           <>
             <Button
-              label="Voir l'Historique"
-              style={Button_Style.OUTLINED}
               onClick={() => navigate('/dashboard/sessions')}
-            />
+            >
+              Voir l'Historique
+            </Button>
             <Button
-              label="Nouvelle Session"
-              style={Button_Style.SOLID}
               onClick={() => navigate('/session/create')}
-            />
+            >
+              Nouvelle Session
+            </Button>
           </>
         ) : (
           <Button
-            label="Retour à l'Accueil"
-            style={Button_Style.SOLID}
             onClick={() => navigate('/')}
-          />
+            >
+              Retour à l'Accueil
+            </Button>
         )}
       </div>
     </div>

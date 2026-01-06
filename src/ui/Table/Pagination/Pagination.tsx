@@ -1,7 +1,6 @@
 import "./Pagination.scss";
 
-import Button from "../../Button";
-import { Button_Style } from "../../Button/Button.types";
+import { Button } from "@/components/ui/button";
 import { Options } from "../../Select/Select.types";
 import React from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
@@ -41,15 +40,15 @@ export default function Pagination({ table }: any) {
 
     for (let i = start + 1; i < end - 1; i++) {
       buttons.push(
-        <button
+        <Button
           key={i}
-          className={`pagination__page ${
-            currentPage === i ? "pagination__page--active" : ""
-          }`}
+          variant={currentPage === i ? "default" : "ghost"}
+          size="sm"
+          className="pagination__page"
           onClick={() => table.setPageIndex(i)}
         >
           {i + 1}
-        </button>
+        </Button>
       );
     }
 
@@ -74,46 +73,48 @@ export default function Pagination({ table }: any) {
         />
 
         <Button
-          style={Button_Style.OUTLINED}
+          variant="outline"
+          size="icon"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          isIconButton
-          icon={<ChevronLeft size={16} />}
-        />
-        <button
-          className={`pagination__page ${
-            currentPage === 0 ? "pagination__page--active" : ""
-          }`}
+        >
+          <ChevronLeft size={16} />
+        </Button>
+        <Button
+          variant={currentPage === 0 ? "default" : "ghost"}
+          size="sm"
+          className="pagination__page"
           onClick={() => table.setPageIndex(0)}
         >
           {1}
-        </button>
+        </Button>
         {pageCount > 1 && currentPage >= 4 && (
-          <button className="pagination__page pagination__page--dots" disabled>
+          <Button variant="ghost" size="sm" className="pagination__page" disabled>
             ...
-          </button>
+          </Button>
         )}
         {showPages()}
         {pageCount > 1 && pageCount > currentPage + 1 && (
-          <button className="pagination__page pagination__page--dots" disabled>
+          <Button variant="ghost" size="sm" className="pagination__page" disabled>
             ...
-          </button>
+          </Button>
         )}
-        <button
-          className={`pagination__page ${
-            currentPage === pageCount - 1 ? "pagination__page--active" : ""
-          }`}
+        <Button
+          variant={currentPage === pageCount - 1 ? "default" : "ghost"}
+          size="sm"
+          className="pagination__page"
           onClick={() => table.setPageIndex(pageCount - 1)}
         >
           {pageCount}
-        </button>
+        </Button>
         <Button
-          style={Button_Style.OUTLINED}
+          variant="outline"
+          size="icon"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          isIconButton
-          icon={<ChevronRight size={16} />}
-        />
+        >
+          <ChevronRight size={16} />
+        </Button>
       </div>
     </div>
   );

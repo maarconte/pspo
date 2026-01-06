@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { QuestionData } from '../../types/session.types';
 import { Bookmark } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useQuestionsStore } from '../../../../stores/useQuestionsStore';
 import './style.scss';
 
@@ -187,20 +188,22 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
    */
   const renderTrueFalse = () => (
     <>
-      <button
+      <Button
+        variant="outline"
         className={getOptionClass('True')}
         onClick={() => handleSelectSingle('True')}
       >
         <span className="option-letter"></span>
         <span className="option-text">True</span>
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="outline"
         className={getOptionClass('False')}
         onClick={() => handleSelectSingle('False')}
       >
         <span className="option-letter"></span>
         <span className="option-text">False</span>
-      </button>
+      </Button>
     </>
   );
 
@@ -210,8 +213,9 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
   const renderOptions = () => (
     <>
       {question.options.map((option, index) => (
-        <button
+        <Button
           key={index}
+          variant="outline"
           className={getOptionClass(option)}
           onClick={() => answerType === 'M' ? handleSelectMultiple(option) : handleSelectSingle(option)}
         >
@@ -229,7 +233,7 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
               style={{ marginLeft: 'auto' }}
             />
           )}
-        </button>
+        </Button>
       ))}
     </>
   );

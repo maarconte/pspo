@@ -10,8 +10,6 @@ import { useSessionStore } from '../../stores/useSessionStore';
 import { useSessionCreator } from '../../hooks/useSessionCreator';
 import { useRealtimeSync } from '../../hooks/useRealtimeSync';
 import { SessionStatus } from '../../types/session.types';
-import Button from '../../../../ui/Button/Button';
-import { Button_Style } from '../../../../ui/Button/Button.types';
 import './style.scss';
 
 const WaitingRoom: React.FC = () => {
@@ -102,17 +100,18 @@ const WaitingRoom: React.FC = () => {
       {isCreator && (
         <div className="waiting-room__footer">
           <Button
-            label="Annuler"
-            style={Button_Style.OUTLINED}
+            variant="outline"
             onClick={() => navigate('/dashboard/sessions')}
-          />
+          >
+            Annuler
+          </Button>
           <Button
-            label="Démarrer la Session"
-            style={Button_Style.SOLID}
-            icon={<Play size={20} />}
             onClick={handleStartSession}
             disabled={!canStartSession}
-          />
+          >
+            <Play size={20} className="mr-2" />
+            Démarrer la Session
+          </Button>
         </div>
       )}
 

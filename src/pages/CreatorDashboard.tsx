@@ -8,8 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Users, Trophy, TrendingUp, Target } from 'lucide-react';
 import { useSessionStore } from '../features/session/stores/useSessionStore';
 import { useUserStore } from '../stores/useUserStore';
-import Button from '../ui/Button/Button';
-import { Button_Style } from '../ui/Button/Button.types';
+import { Button } from '@/components/ui/button';
 import './CreatorDashboard/style.scss';
 
 const CreatorDashboard: React.FC = () => {
@@ -64,11 +63,11 @@ const CreatorDashboard: React.FC = () => {
           <p>Gérez et analysez vos sessions de quiz</p>
         </div>
         <Button
-          label="Nouvelle Session"
-          style={Button_Style.SOLID}
-          icon={<Plus size={20} />}
           onClick={() => navigate('/session/create')}
-        />
+        >
+          <Plus size={20} />
+          Nouvelle Session
+        </Button>
       </div>
 
       {/* Statistiques globales */}

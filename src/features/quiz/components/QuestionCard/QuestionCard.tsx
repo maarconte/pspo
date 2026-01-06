@@ -1,12 +1,11 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
 import { FC, useContext, useState } from "react";
 import { Bookmark } from "lucide-react";
 
 import Alert from "../../../../ui/Alert/Alert";
-import Button from "../../../../ui/Button/Button";
+import { Button } from "@/components/ui/button";
 import Feedback from "../Feedback";
 import Modal from "../../../../ui/Modal/Modal";
 import { QuestionCardProps } from "./QuestionCard.types";
@@ -177,11 +176,10 @@ const QuestionCard: FC<QuestionCardProps> = ({
           <div className="d-flex align-items-center justify-content-between w-100">
             This question has been flagged for review
             <Button
-              label="Show comments"
               onClick={() => setShowComments(true)}
-              style={Button_Style.LINK}
-              type={Button_Type.SECONDARY}
-            />
+            >
+              Show comments
+            </Button>
           </div>
         </Alert>
       )}

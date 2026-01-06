@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { authService } from '../../api/authService';
 import { toast } from 'react-toastify';
-import Button from '../../../../ui/Button/Button';
-import Input from '../../../../ui/Input/Input';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
 import './style.scss';
 
 export const MagicLinkForm = () => {
@@ -40,10 +40,11 @@ export const MagicLinkForm = () => {
 				</p>
 				<p>Cliquez sur le lien dans l'email pour vous connecter.</p>
 				<Button
-					type="secondary"
+					variant="outline"
 					onClick={() => setEmailSent(false)}
-					label="Renvoyer le lien"
-				/>
+				>
+					Renvoyer le lien
+				</Button>
 			</div>
 		);
 	}
@@ -65,11 +66,12 @@ export const MagicLinkForm = () => {
 			/>
 
 			<Button
-				type="primary"
+				variant="default"
 				onClick={handleSubmit}
 				disabled={isLoading}
-				label={isLoading ? 'Envoi en cours...' : 'Envoyer le lien'}
-			/>
+			>
+				{isLoading ? 'Envoi en cours...' : 'Envoyer le lien'}
+			</Button>
 		</form>
 	);
 };

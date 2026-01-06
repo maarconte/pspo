@@ -3,9 +3,7 @@ import "./style-mobile.scss";
 
 import React, { FC, useMemo } from "react";
 import { User } from "lucide-react";
-
-import Button from "../../../ui/Button/Button";
-import { Button_Style } from "../../../ui/Button/Button.types";
+import { Button } from "@/components/ui/button";
 import { HeaderProps } from "./Header.types";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -90,13 +88,15 @@ const Header: FC<HeaderProps> = () => {
       </Breadcrumb>}
 
         {!user && (
-          <Button
-            label="Login"
-            style={Button_Style.OUTLINED}
-            icon={<User size={16} />}
-            onClick={() => navigate("/login")}
-            className="ml-auto"
-          />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => navigate("/login")}
+          className="ml-auto"
+        >
+          <User size={16} />
+          Login
+        </Button>
         )}
 
 

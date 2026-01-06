@@ -5,7 +5,6 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 
-import Button from "../../../../ui/Button/Button";
 import Input from "../../../../ui/Input/Input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -81,12 +80,10 @@ const AuthContainer = (props: Props) => {
       {/* <a href="#" className="mb-1 d-block text-right">
         Forgot password ?
       </a> */}
-      <Button
-        onClick={signIn}
-        label={"Sign in"}
+      <Button onClick={signIn}
+        
         disabled={disabled}
-        className="mb-1"
-      />
+        className="mb-1">{"Sign in"}</Button>
       {errorMessage}
     </>
   );

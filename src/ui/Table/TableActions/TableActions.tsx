@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
 import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
 
-import Button from "../../Button";
-import { Button_Type } from "../../Button/Button.types";
+import {Button} from "@/components/ui/button";
 import FileUploader from "../../FileUploader";
 import Modal from "../../Modal";
 import ModalEditQuestion from "../../../features/admin/components/ModalEditQuestion/ModalEditQuestion";
@@ -118,25 +117,21 @@ const TableActions: React.FC<TableActionsProps> = ({
     <div className="d-flex gap-05 justify-content-end mb-1">
       <FileUploader handleFile={handleFileUpload} />
       {csvData.length > 0 && (
-        <Button
-          label={`Add ${csvData.length} questions`}
-          onClick={addAllQuestions}
-          icon={<Plus size={16} />}
-        />
+        <Button onClick={addAllQuestions}>
+          <Plus size={16} />
+          Add {csvData.length} questions
+        </Button>
       )}
-      <Button
-        onClick={() => setIsAddModalOpen(true)}
-        label="Add a question"
-        icon={<Plus size={16} />}
-      />
+      <Button onClick={() => setIsAddModalOpen(true)}>
+        <Plus size={16} />
+        Add a question
+      </Button>
 
       {selectedQuestions.length > 0 && (
-        <Button
-          onClick={() => setIsDeleteModalOpen(true)}
-          label="Delete"
-          type={Button_Type.ERROR}
-          icon={<Trash2 size={16} />}
-        />
+        <Button onClick={() => setIsDeleteModalOpen(true)}>
+          <Trash2 size={16} />
+          Delete
+        </Button>
       )}
 
       <ModalEditQuestion

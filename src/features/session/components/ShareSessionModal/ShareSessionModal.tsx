@@ -5,8 +5,7 @@
 
 import { useState } from 'react';
 import { Copy, Check, X } from 'lucide-react';
-import Button from '../../../../ui/Button/Button';
-import { Button_Style } from '../../../../ui/Button/Button.types';
+import { Button } from '@/components/ui/button';
 import './style.scss';
 
 interface ShareSessionModalProps {
@@ -52,9 +51,14 @@ const ShareSessionModal: React.FC<ShareSessionModalProps> = ({
   return (
     <div className="share-modal-overlay" onClick={onClose}>
       <div className="share-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="share-modal__close" onClick={onClose}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="share-modal__close"
+          onClick={onClose}
+        >
           <X size={24} />
-        </button>
+        </Button>
 
         <div className="share-modal__header">
           <h2>Session Créée !</h2>
@@ -67,12 +71,14 @@ const ShareSessionModal: React.FC<ShareSessionModalProps> = ({
             <label>Code de Session</label>
             <div className="share-code">
               <span className="share-code__value">{shareCode}</span>
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 className={`share-code__copy ${codeCopied ? 'copied' : ''}`}
                 onClick={copyCode}
               >
                 {codeCopied ? <Check size={20} /> : <Copy size={20} />}
-              </button>
+              </Button>
             </div>
             <p className="share-hint">
               Les participants peuvent rejoindre avec ce code
@@ -89,12 +95,14 @@ const ShareSessionModal: React.FC<ShareSessionModalProps> = ({
                 readOnly
                 onClick={(e) => e.currentTarget.select()}
               />
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 className={`share-link__copy ${linkCopied ? 'copied' : ''}`}
                 onClick={copyLink}
               >
                 {linkCopied ? <Check size={20} /> : <Copy size={20} />}
-              </button>
+              </Button>
             </div>
             <p className="share-hint">
               Ou partagez directement ce lien
@@ -103,11 +111,9 @@ const ShareSessionModal: React.FC<ShareSessionModalProps> = ({
         </div>
 
         <div className="share-modal__footer">
-          <Button
-            label="Aller à la Salle d'Attente"
-            style={Button_Style.SOLID}
-            onClick={onClose}
-          />
+          <Button onClick={onClose}>
+            Aller à la Salle d'Attente
+          </Button>
         </div>
       </div>
     </div>

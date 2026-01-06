@@ -9,8 +9,7 @@ import SessionResults from '../features/session/components/SessionResults/Sessio
 import SessionScore from '../features/session/components/SessionScore/SessionScore';
 import Counter from '../features/quiz/components/Counter/Counter';
 import QuestionNavigation from '../features/quiz/components/QuestionNavigation/QuestionNavigation';
-import Button from '../ui/Button/Button';
-import { Button_Style } from '../ui/Button/Button.types';
+import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { toast } from 'react-toastify';
 import './ActiveSession/style.scss';
@@ -151,27 +150,28 @@ const ActiveSessionPage: React.FC = () => {
           <div className="d-flex gap-1">
             {isFinished ? (
               <Button
-                label="Restart"
-                style={Button_Style.OUTLINED}
-                onClick={() => {
+                            onClick={() => {
                   setCurrentQuestionIndex(0);
                   setShowAnswer(false);
                   setIsFinished(false);
                   setIsPaused(false);
                   window.location.reload();
                 }}
-              />
+              >
+                Restart
+              </Button>
             ) : (
               <>
                 <Button
-                  label={!showAnswer ? "Show the answer" : "Hide the answer"}
                   onClick={() => setShowAnswer(!showAnswer)}
-                />
+                  >
+                    {!showAnswer ? "Show the answer" : "Hide the answer"}
+                </Button>
                 <Button
-                  label="Finish"
-                  style={Button_Style.OUTLINED}
                   onClick={handleFinish}
-                />
+                  >
+                    Finish
+                </Button>
               </>
             )}
           </div>
@@ -191,17 +191,17 @@ const ActiveSessionPage: React.FC = () => {
         {/* Navigation */}
         <div className="d-flex justify-content-between mt-2">
           <Button
-            label="Previous"
-            disabled={currentQuestionIndex === 0}
             onClick={handlePreviousQuestion}
-          />
+            disabled={currentQuestionIndex === 0}
+            >
+              Previous
+          </Button>
           <Button
             onClick={() => setOpen(true)}
-            label="Pagination"
-            style={Button_Style.OUTLINED}
-          />
+            >
+              Pagination
+          </Button>
           <Button
-            label="Next"
             disabled={isOnLastQuestion}
             onClick={handleNextQuestion}
           />

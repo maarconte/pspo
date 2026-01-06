@@ -1,7 +1,6 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
 import {
   ColumnFiltersState,
   FilterFn,
@@ -18,7 +17,6 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { Trash2, XCircle, CheckSquare, X, Edit, ToggleRight, Circle } from "lucide-react";
 import { formatTimestamp, useDeleteDoc } from "../../../../utils/hooks";
 
-import Button from "../../../../ui/Button/Button";
 import Modal from "../../../../ui/Modal/Modal";
 import ModalEditQuestion from "../ModalEditQuestion/ModalEditQuestion";
 import { Question } from "../../../../utils/types";

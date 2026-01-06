@@ -1,5 +1,6 @@
 import "./style.scss";
 
+import { Button } from "@/components/ui/button";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 
 type Props = {
@@ -25,18 +26,20 @@ export default function QuestionNavigation({
   return (
     <div className="QuestionNavigation">
       {Array.from({ length: 80 }, (_, i) => (
-        <button
+        <Button
           key={i}
+          variant={currentQuestion === i ? "default" : "outline"}
+          size="sm"
           onClick={() => setCurrentQuestion(i)}
           className={`QuestionNavigation__button ${
-            currentQuestion === i ? "active" : ""
-          } ${isQuestionAnswered(i) ? "answered" : ""} ${
+            isQuestionAnswered(i) ? "answered" : ""
+          } ${
             isBookmarked(i) ? "bookmarked" : ""
           }`}
           disabled={currentQuestion === i}
         >
           {i + 1}
-        </button>
+        </Button>
       ))}
     </div>
   );

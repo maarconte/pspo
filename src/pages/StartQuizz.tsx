@@ -2,7 +2,6 @@ import React from "react";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useNavigate } from "react-router-dom";
 import Select from "../ui/Select/Select";
-import Button from "../ui/Button/Button";
 
 export default function StartQuizz() {
 	const { formation, setFormation, questions } =
@@ -49,9 +48,8 @@ const navigate = useNavigate();
           <p>
             Has a pass mark of <strong>85% (12 errors maximum)</strong>
           </p>
-          <Button
-            label="Commencer"
-            onClick={() => navigate("/quizz")}
+          <Button onClick={() =>
+            Commencer navigate("/quizz")}
             className="d-block w-100"
             disabled={questions.length === 0}
           />

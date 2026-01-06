@@ -6,8 +6,7 @@ import { Trash2, Plus } from "lucide-react";
 import { Field, FieldArray, Formik } from "formik";
 import { useAddDoc, useUpdateDoc } from "../../../../utils/hooks";
 
-import Button from "../../../../ui/Button/Button";
-import { Button_Style } from "../../../../ui/Button/Button.types";
+import { Button } from "@/components/ui/button";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
 import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
@@ -189,21 +188,20 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                               </label>
 
                               <Button
-                                style={Button_Style.OUTLINED}
                                 onClick={() => remove(index)}
-                                isIconButton
-                                icon={<Trash2 size={16} />}
                                 className="mb-05"
-                              />
+                              >
+                                <Trash2 size={16} />
+                              </Button>
                             </div>
                           </>
                         ))}
                         <Button
-                          style={Button_Style.OUTLINED}
                           onClick={() => push("")}
-                          icon={<Plus size={16} />}
-                          label="Add answer"
-                        />
+                        >
+                          <Plus size={16} />
+                          Add answer
+                        </Button>
                       </div>
                     )}
                   </FieldArray>
@@ -293,11 +291,11 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                           >
                             {comment}
                             <Button
-                              style={Button_Style.OUTLINED}
                               onClick={() => remove(index)}
-                              isIconButton
-                              icon={<Trash2 size={16} />}
-                            />
+                              className="mb-05"
+                            >
+                              <Trash2 size={16} />
+                            </Button>
                           </div>
                         ))}
                       </div>

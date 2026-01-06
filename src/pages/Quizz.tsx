@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { Button } from "../ui";
-import { Button_Style } from "../ui/Button/Button.types";
 import Counter from "../features/quiz/components/Counter/Counter";
 import Feedback from "../features/quiz/components/Feedback/Feedback";
 import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard";
@@ -107,26 +106,28 @@ export default function Quizz() {
           <div className="d-flex gap-1">
             {isFinished ? (
               <Button
-                label="Restart"
-                style={Button_Style.OUTLINED}
+
                 onClick={() => {
                   setCurrentQuestion(0);
                   setScore(0);
                   setShowAnswer(false);
                   window.location.reload();
                 }}
-              />
+              >
+                Restart
+              </Button>
             ) : (
               <>
                 <Button
-                  label={!showAnswer ? "Show the answer" : "Hide the answer"}
                   onClick={() => setShowAnswer(!showAnswer)}
-                />
+                  >
+                    {!showAnswer ? "Show the answer" : "Hide the answer"}
+                  </Button>
                 <Button
-                  label="Finish"
-                  style={Button_Style.OUTLINED}
                   onClick={() => finishQuizz()}
-                />
+                  >
+                    Finish
+                  </Button>
               </>
             )}
           </div>
@@ -151,23 +152,23 @@ export default function Quizz() {
         {/* Navigation */}
         <div className="d-flex justify-content-between">
           <Button
-            label="Previous"
-            disabled={currentQuestion === 0}
             onClick={() => {
               setCurrentQuestion(currentQuestion - 1);
               setShowAnswer(false);
             }}
-          />
+          >
+            Previous
+          </Button>
           <Button
             onClick={() => setOpen(true)}
-            label="Pagination"
-            style={Button_Style.OUTLINED}
-          />
+            >
+              Pagination
+            </Button>
           <Button
-            label="Next"
-            disabled={currentQuestion === questions.length - 1}
             onClick={() => nextQuestion()}
-          />
+          >
+            Next
+          </Button>
         </div>
       </div>
       <Sheet open={open} onOpenChange={setOpen}>

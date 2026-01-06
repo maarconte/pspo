@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../api/authService';
 import { toast } from 'react-toastify';
-import Button from '../../../../ui/Button/Button';
-import Input from '../../../../ui/Input/Input';
+import { Button } from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
 import './style.scss';
 
 export const MagicLinkVerification = () => {
@@ -91,10 +91,10 @@ export const MagicLinkVerification = () => {
 						name="email"
 					/>
 					<Button
-						type="primary"
 						onClick={handleEmailSubmit}
-						label="Confirmer"
-					/>
+					>
+						Confirmer
+					</Button>
 				</form>
 			</div>
 		);
@@ -106,10 +106,10 @@ export const MagicLinkVerification = () => {
 				<h2>Erreur de connexion</h2>
 				<p>{error}</p>
 				<Button
-					type="primary"
 					onClick={() => navigate('/login')}
-					label="Retour à la connexion"
-				/>
+				>
+					Retour à la connexion
+				</Button>
 			</div>
 		);
 	}

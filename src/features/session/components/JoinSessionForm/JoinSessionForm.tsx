@@ -6,8 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSessionParticipant } from '../../hooks/useSessionParticipant';
 import { toast } from 'react-toastify';
-import Button from '../../../../ui/Button/Button';
-import { Button_Style } from '../../../../ui/Button/Button.types';
+import { Button } from '@/components/ui/button';
 import Input from '../../../../ui/Input/Input';
 import './style.scss';
 
@@ -97,17 +96,15 @@ const JoinSessionForm: React.FC = () => {
 
         <div className="form-actions">
           <Button
-            label="Annuler"
-            style={Button_Style.OUTLINED}
             onClick={() => navigate('/')}
-            type="button"
-          />
+          >
+            Annuler
+          </Button>
           <Button
-            label={isJoiningSession ? 'Connexion...' : 'Rejoindre'}
-            style={Button_Style.SOLID}
-            buttonType="submit"
             disabled={isJoiningSession || !shareCode || !displayName}
-          />
+          >
+            {isJoiningSession ? 'Connexion...' : 'Rejoindre'}
+          </Button>
         </div>
       </form>
     </div>

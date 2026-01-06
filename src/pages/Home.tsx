@@ -1,8 +1,14 @@
-import { Button, Select } from "../ui";
+import {  Select } from "../ui";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useNavigate } from "react-router-dom";
-
-
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 export default function Home() {
   const { formation, setFormation, questions } =
     useQuestionsStore();
@@ -14,8 +20,11 @@ export default function Home() {
           Agile.training : {formation}
         </h1>
 
-        <div className="card">
-          <h2>Instructions </h2>
+        <Card  className="w-full max-w-sm mx-auto">
+          <CardHeader>
+          <CardTitle>Instructions </CardTitle>
+          </CardHeader>
+          <CardContent>
           <Select
             name="formation"
             className="mb-2"
@@ -47,13 +56,17 @@ export default function Home() {
           <p>
             Has a pass mark of <strong>85% (12 errors maximum)</strong>
           </p>
+          <CardFooter className="flex-col gap-2">
           <Button
-            label="Commencer"
             onClick={() => navigate("/quizz")}
-            className="d-block w-100"
             disabled={questions.length === 0}
-          />
-        </div>
+            variant="default"
+          >
+            Commencer
+          </Button>
+          </CardFooter>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

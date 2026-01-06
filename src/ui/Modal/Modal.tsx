@@ -1,9 +1,8 @@
 import "./style.scss";
 
-import { Button_Style, Button_Type } from "../Button/Button.types";
 import { FC, useEffect } from "react";
 
-import Button from "../Button/Button";
+import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
 type ModalProps = {
@@ -85,32 +84,28 @@ const Modal: FC<ModalProps> = ({
           <div className={`modal modal--${type ? type : "info"} `}>
             <div className="modal__header">
               <h3 className="modal__header__title">{title}</h3>
-              <button onClick={handleClose}>
+              <Button variant="ghost" size="icon" onClick={handleClose}>
                 <X size={20} />
-              </button>
+              </Button>
             </div>
             <div className="modal__body">{children}</div>
             {!infoModal && (
               <div className="modal__footer">
                 <Button
-                  label={labelOnCancel ? labelOnCancel : "Cancel"}
-                  style={Button_Style.OUTLINED}
+                  variant="outline"
                   onClick={handleClose}
-                />
+                >
+                  {labelOnCancel ? labelOnCancel : "Cancel"}
+                </Button>
                 <Button
-                  label={labelOnConfirm ? labelOnConfirm : "Ok"}
+                  variant={type === "error" ? "destructive" : "default"}
                   onClick={(e) => {
                     handleConfirm(e);
                   }}
                   disabled={confirmButtonDisabled}
-                  type={
-                    type === "error"
-                      ? Button_Type.ERROR
-                      : type === "success"
-                      ? Button_Type.SUCCESS
-                      : Button_Type.PRIMARY
-                  }
-                />
+                >
+                  {labelOnConfirm ? labelOnConfirm : "Ok"}
+                </Button>
               </div>
             )}
           </div>

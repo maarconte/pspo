@@ -1,12 +1,11 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
 import { FC, useEffect, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { toast } from "react-toastify";
 
-import Button from "../../../../ui/Button/Button";
+import {Button} from "@/components/ui/button";
 import { FeedbackProps } from "./Feedback.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
@@ -50,14 +49,11 @@ const Feedback: FC<FeedbackProps> = ({ question }) => {
       <div className="d-flex justify-content-between align-items-center">
         <h3 className="h5">Feedback</h3>
         <Button
-          label="Report a problem"
-          type={Button_Type.SECONDARY}
-          style={Button_Style.OUTLINED}
-          icon={
-            <AlertTriangle size={16} color="#e41937" />
-          }
           onClick={() => setShowModal(true)}
-        />
+        >
+            <AlertTriangle size={16} color="#e41937" />§
+          Report a problem
+        </Button>
       </div>
       <p>
         {question.feedback
