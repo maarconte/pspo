@@ -73,7 +73,7 @@ export const generateUniqueShareCode = async (): Promise<string> => {
  */
 export const generateShareLink = (shareCode: string): string => {
 	const baseUrl = window.location.origin;
-	return `${baseUrl}/session/join?code=${shareCode}`;
+	return `${baseUrl}/sessions/join?code=${shareCode}`;
 };
 
 /**

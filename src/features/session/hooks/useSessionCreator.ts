@@ -38,7 +38,7 @@ export const useSessionCreator = () => {
 
 			setSessionId(result.sessionId);
 			setShareCode(result.shareCode);
-			setShareLink(`${window.location.origin}/session/join?code=${result.shareCode}`);
+			setShareLink(`${window.location.origin}/sessions/join?code=${result.shareCode}`);
 
 			return result;
 		},

@@ -10,6 +10,7 @@ import { useSessionStore } from '../../stores/useSessionStore';
 import { useSessionCreator } from '../../hooks/useSessionCreator';
 import { useRealtimeSync } from '../../hooks/useRealtimeSync';
 import { SessionStatus } from '../../types/session.types';
+import { Button } from '@/components/ui/button';
 import './style.scss';
 
 const WaitingRoom: React.FC = () => {
@@ -28,7 +29,7 @@ const WaitingRoom: React.FC = () => {
   // Rediriger vers la session active si elle démarre
   useEffect(() => {
     if (activeSession?.status === SessionStatus.ACTIVE) {
-      navigate(`/session/${sessionId}`);
+      navigate(`/sessions/${sessionId}`);
     }
   }, [activeSession?.status, sessionId, navigate]);
 

@@ -63,7 +63,7 @@ const CreatorDashboard: React.FC = () => {
           <p>Gérez et analysez vos sessions de quiz</p>
         </div>
         <Button
-          onClick={() => navigate('/session/create')}
+          onClick={() => navigate('/sessions/create')}
         >
           <Plus size={20} />
           Nouvelle Session

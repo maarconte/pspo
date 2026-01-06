@@ -42,7 +42,7 @@ const SessionScore: React.FC<SessionScoreProps> = ({ userAnswers }) => {
   const percentNumber = parseFloat(percent);
 
   return (
-    <div className="SessionScore">
+    <div className="SessionScore mb-4">
       <p className="displayScore-title">Score actuel</p>
       <p className="percent">
         {isNaN(percentNumber) ? 0 : percentNumber}%

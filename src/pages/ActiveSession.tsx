@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { toast } from 'react-toastify';
 import './ActiveSession/style.scss';
+import { BookIcon, CheckIcon, EyeIcon, EyeOffIcon } from 'lucide-react';
 
 const ActiveSessionPage: React.FC = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
@@ -138,7 +139,7 @@ const ActiveSessionPage: React.FC = () => {
       <div className="container">
         {/* Header */}
         <h1 className="text-center">Session Collaborative - {activeSession.shareCode}</h1>
-        <div className="d-flex justify-content-between align-items-center mb-2">
+        <div className="flex justify-between items-center mb-2">
           <Counter
             isPaused={isPaused}
             setIsPaused={setIsPaused}
@@ -147,7 +148,7 @@ const ActiveSessionPage: React.FC = () => {
 
           {showAnswer && <SessionScore userAnswers={userAnswers} />}
 
-          <div className="d-flex gap-1">
+          <div className="flex gap-2 ">
             {isFinished ? (
               <Button
                             onClick={() => {
@@ -157,25 +158,39 @@ const ActiveSessionPage: React.FC = () => {
                   setIsPaused(false);
                   window.location.reload();
                 }}
+                  variant="outline"
               >
                 Restart
               </Button>
             ) : (
-              <>
+              <div className="flex gap-2">
                 <Button
+                  variant="outline"
                   onClick={() => setShowAnswer(!showAnswer)}
                   >
-                    {!showAnswer ? "Show the answer" : "Hide the answer"}
+                  {showAnswer ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
+                  {showAnswer ? "Hide the answer" : "Show the answer"}
                 </Button>
-                <Button
+
+                  <Button
+                      variant="outline"
                   onClick={handleFinish}
                   >
+                    <CheckIcon size={16} />
                     Finish
+                  </Button>
+                  <Button
+                      variant="outline"
+                  onClick={() => setOpen(true)}
+                  >
+                    <BookIcon size={16} />
+                    See all questions
                 </Button>
-              </>
+              </div>
             )}
           </div>
         </div>
+
 
         {/* Question */}
         <QuestionDisplay
@@ -189,7 +204,7 @@ const ActiveSessionPage: React.FC = () => {
         />
 
         {/* Navigation */}
-        <div className="d-flex justify-content-between mt-2">
+        <div className="flex justify-between mt-2">
           <Button
             onClick={handlePreviousQuestion}
             disabled={currentQuestionIndex === 0}
@@ -197,14 +212,11 @@ const ActiveSessionPage: React.FC = () => {
               Previous
           </Button>
           <Button
-            onClick={() => setOpen(true)}
-            >
-              Pagination
-          </Button>
-          <Button
             disabled={isOnLastQuestion}
             onClick={handleNextQuestion}
-          />
+          >
+            Next
+          </Button>
         </div>
       </div>
 

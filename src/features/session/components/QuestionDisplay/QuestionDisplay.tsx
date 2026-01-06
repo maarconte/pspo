@@ -216,7 +216,7 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
         <Button
           key={index}
           variant="outline"
-          className={getOptionClass(option)}
+          className={getOptionClass(option) + ' h-auto'}
           onClick={() => answerType === 'M' ? handleSelectMultiple(option) : handleSelectSingle(option)}
         >
           <span className={'option-letter ' + (answerType === 'M' ? 'option-checkbox' : 'option-radio')}>
@@ -224,7 +224,7 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
           <span className="fw-bold">
             {String.fromCharCode(65 + index)}.
           </span>
-          <span className="option-text">{option}</span>
+          <span className="option-text text-wrap">{option}</span>
           {answerType === 'M' && (
             <input
               type="checkbox"
@@ -250,11 +250,6 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
             <div className="question-type-badge">Multiple Choice</div>
           )}
         </div>
-      </div>
-
-      {/* Question avec bookmark */}
-      <div className="d-flex justify-content-between gap-1">
-        <h2 className="h4 mb-2">{question.questionText}</h2>
         <Bookmark
           size={42}
           fill={userAnswers[currentQuestionIndex]?.isBookmarked ? "#f6b223" : "none"}
@@ -264,6 +259,8 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
         />
       </div>
 
+      {/* Question avec bookmark */}
+      <h2 className="h4 mb-2">{question.questionText}</h2>
       {/* Options de réponse */}
       <div className="question-display__options">
         {answerType === 'TF' ? renderTrueFalse() : renderOptions()}

@@ -144,7 +144,7 @@ const CreateSessionPage: React.FC = () => {
   const handleCloseModal = () => {
     setShowShareModal(false);
     if (sessionId) {
-      navigate(`/session/${sessionId}/waiting`);
+      navigate(`/sessions/${sessionId}/waiting`);
     }
   };
 
@@ -215,7 +215,7 @@ const CreateSessionPage: React.FC = () => {
 
           <Button
             variant="outline"
-            onClick={() => navigate('/dashboard/sessions')}
+            onClick={() => navigate('/sessions')}
             disabled={isCreatingSession}
           >
             Annuler

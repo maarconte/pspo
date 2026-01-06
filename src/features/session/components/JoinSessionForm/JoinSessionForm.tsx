@@ -38,8 +38,8 @@ const JoinSessionForm: React.FC = () => {
       const result = await joinSession(shareCode.toUpperCase(), displayName.trim());
       console.log('✅ Session rejointe:', result);
       toast.success('Session rejointe avec succès !');
-      console.log('🔵 Redirection vers:', `/session/${result.sessionId}/waiting`);
-      navigate(`/session/${result.sessionId}/waiting`);
+      console.log('🔵 Redirection vers:', `/sessions/${result.sessionId}/waiting`);
+      navigate(`/sessions/${result.sessionId}/waiting`);
     } catch (error: any) {
       console.error('❌ Erreur lors de la jonction:', error);
       toast.error(error.message || 'Impossible de rejoindre la session');
@@ -96,6 +96,7 @@ const JoinSessionForm: React.FC = () => {
 
         <div className="form-actions">
           <Button
+            variant="outline"
             onClick={() => navigate('/')}
           >
             Annuler

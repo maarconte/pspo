@@ -114,7 +114,7 @@ const SessionResults: React.FC<SessionResultsProps> = ({
               Voir l'Historique
             </Button>
             <Button
-              onClick={() => navigate('/session/create')}
+              onClick={() => navigate('/sessions/create')}
             >
               Nouvelle Session
             </Button>

@@ -82,7 +82,7 @@ const SessionCreator: React.FC<SessionCreatorProps> = ({ availableQuestions }) =
   const handleCloseModal = () => {
     setShowShareModal(false);
     if (sessionId) {
-      navigate(`/session/${sessionId}/waiting`);
+      navigate(`/sessions/${sessionId}/waiting`);
     }
   };
 

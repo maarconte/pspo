@@ -56,7 +56,16 @@ service cloud.firestore {
   match /sessions/{sessionId} {
     allow read: if true; // Tout le monde peut lire une session (même anonyme)
     allow create: if isAuthenticated(); // Seuls les utilisateurs authentifiés peuvent créer
-    allow update, delete: if isAuthenticated() &&
+    // Permettre à tout le monde d'incrémenter participantCount (pour rejoindre)
+    // Seul le créateur peut modifier les autres champs
+    allow update: if (
+      // Tout le monde peut incrémenter participantCount
+      (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['participantCount']))
+      ||
+      // Le créateur peut tout modifier
+      (isAuthenticated() && resource.data.creatorId == request.auth.uid)
+    );
+    allow delete: if isAuthenticated() &&
       resource.data.creatorId == request.auth.uid; // Seul le créateur peut modifier/supprimer
 
     // Participants : lecture publique, création libre (même anonyme), modification par le participant
