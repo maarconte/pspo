@@ -137,8 +137,6 @@ const ActiveSessionPage: React.FC = () => {
   return (
     <div className="active-session">
       <div className="container">
-        {/* Header */}
-        <h1 className="text-center">Session Collaborative - {activeSession.shareCode}</h1>
         <div className="flex justify-between items-center mb-2">
           <Counter
             isPaused={isPaused}
