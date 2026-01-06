@@ -1,0 +1,23 @@
+<type>(<scope>): <sujet court à l'impératif (max 50 chars)>
+
+- <Détail 1 : Quoi et Pourquoi (revenir à la ligne à 72 chars)>
+- <Détail 2 : Pas de redondance avec le titre>
+- <Détail 3 : Utiliser des tirets pour les listes>
+# --- RÈGLES DE COMMIT (Ces lignes seront ignorées par Git) ---
+#
+# 1. FORMAT DU TITRE :
+#    - Structure : type(scope): description
+#    - Types : feat, fix, docs, style, refactor, test, chore
+#    - Impératif présent (ex: "add" et non "added"), pas de point final.
+#    - Max 72 caractères (idéalement < 50).
+#
+# 2. CORPS (DESCRIPTION) :
+#    - Laisser une ligne vide entre le titre et le corps.
+#    - TEXTE BRUT uniquement (pas de Markdown **gras** ou `code`).
+#    - Utiliser des listes à puces (- ) pour tous les détails.
+#    - Expliquer le QUOI et le POURQUOI.
+#    - Couper les lignes à 72 caractères.
+#
+# 3. SOUS-MODULES :
+#    - Titre : chore(submodule): sync [nom] with [changement]
+#    - Corps : Lister les changements clés importés du sous-module.

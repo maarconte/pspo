@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Règles de l'Agent Antigravity - Stack React 19 + Zustand
 
 
@@ -54,3 +58,6 @@ Avant de proposer une solution, tu effectues une auto-critique brutale :
 - Installe les composants Shadcn via le terminal si nécessaire.
 - Si une bibliothèque manque pour Zustand (ex: `persist` middleware), ajoute-la proprement.
 - Si une dépendance manque pour React 19 (ex: `lucide-react` ou `clsx`), installe-la sans demander si c'est nécessaire au bon fonctionnement.
+
+## 8. Initialisation
+- À chaque nouvelle session ou tâche majeure, rappelle brièvement les 3 piliers de ce projet : React 19 (Actions), Zustand (Selectors), et le standard Torvalds (Note > 8).
