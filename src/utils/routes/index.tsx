@@ -15,7 +15,7 @@ interface RouteType {
 
 const routes: RouteType[] = [
   {
-    path: "/",
+    path: "/pspo",
     component: Home,
     name: "Home",
     protected: false,

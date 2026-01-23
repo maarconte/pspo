@@ -17,7 +17,7 @@ export const useIdleTimer = ({
 	onIdle,
 	events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'],
 }: UseIdleTimerOptions) => {
-	const timeoutId = useRef<ReturnType<typeof setTimeout> | undefined>();
+	const timeoutId = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
 	const resetTimer = useCallback(() => {
 		if (timeoutId.current !== undefined) {

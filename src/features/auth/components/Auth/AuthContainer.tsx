@@ -1,4 +1,4 @@
-import { Providers, auth } from "../../../../lib/firebase";
+import { GoogleAuthProviders, auth } from "../../../../lib/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -23,7 +23,7 @@ const AuthContainer = (props: Props) => {
 
   const signInWithGoogle = () => {
     setDisabled(true);
-    signInWithPopup(auth, Providers.google)
+    signInWithPopup(auth, GoogleAuthProviders.google)
       .then(() => {
         setDisabled(false);
         navigate("/");

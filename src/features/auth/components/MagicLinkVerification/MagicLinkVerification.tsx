@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { authService } from '../../api/authService';
 import { toast } from 'react-toastify';
 import Button from '../../../../ui/Button/Button';
+import { Button_Type } from '../../../../ui/Button/Button.types';
 import Input from '../../../../ui/Input/Input';
 import './style.scss';
 
@@ -106,7 +107,7 @@ export const MagicLinkVerification = () => {
 						name="email"
 					/>
 					<Button
-						type="primary"
+						type={Button_Type.PRIMARY}
 						onClick={handleEmailSubmit}
 						label="Confirmer"
 					/>
@@ -121,7 +122,7 @@ export const MagicLinkVerification = () => {
 				<h2>Erreur de connexion</h2>
 				<p>{error}</p>
 				<Button
-					type="primary"
+					type={Button_Type.PRIMARY}
 					onClick={() => navigate('/login')}
 					label="Retour à la connexion"
 				/>

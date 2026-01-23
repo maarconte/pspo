@@ -2,12 +2,12 @@ import { LucideIcon } from "lucide-react";
 
 export interface SelectAnswerTypeProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (e: any) => void;
   field: {
     name: string;
     value: string;
-    onChange: (value: string) => void;
-    onBlur: () => void;
+    onChange: (e: any) => void;
+    onBlur: (e: any) => void;
   };
   id: string;
   className?: string;
