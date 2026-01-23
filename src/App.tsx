@@ -12,12 +12,15 @@ import { queryClient } from "./lib/react-query/queryClient";
 
 
 
+import { MagicLinkRedirector } from "./features/auth/components/MagicLinkRedirector/MagicLinkRedirector";
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <IdleTimeoutHandler />
       <QuestionsLoader>
         <Router basename={import.meta.env.BASE_URL}>
+          <MagicLinkRedirector />
           <Header />
           <Routes>
             {routes.map((route) => (

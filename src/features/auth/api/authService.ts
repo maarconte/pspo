@@ -11,7 +11,7 @@ import { auth } from '../../../lib/firebase';
 const actionCodeSettings = {
 	// En production, inclure le base path /pspo/
 	url: import.meta.env.PROD
-		? 'https://maarconte.github.io/pspo/auth/verify'
+		? 'https://maarconte.github.io/pspo/'
 		: 'http://localhost:3000/auth/verify',
 	handleCodeInApp: true,
 };
