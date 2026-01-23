@@ -4,6 +4,7 @@ import "./style-mobile.scss";
 import { FC, useEffect } from "react";
 import { Trash2, Plus } from "lucide-react";
 import { Field, FieldArray, Formik } from "formik";
+import { toast } from "react-toastify";
 import { useAddDoc, useUpdateDoc } from "../../../../utils/hooks";
 
 import Button from "../../../../ui/Button/Button";
@@ -57,11 +58,16 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 type: "pspo-I",
               }
         }
-        onSubmit={(values) => {
-          refetch();
-          question?.id ? handleUpdate(values) : handleAdd(values);
-          setSelectQuestion && setSelectQuestion({} as any);
-          setIsOpen(false);
+        onSubmit={async (values) => {
+          try {
+            question?.id ? await handleUpdate(values) : await handleAdd(values);
+            toast.success("Question updated successfully");
+            setSelectQuestion && setSelectQuestion({} as any);
+            setIsOpen(false);
+          } catch (error) {
+             console.error("Failed to update question", error);
+             toast.error("Failed to update question");
+          }
         }}
       >
         {({ values, handleChange, handleSubmit }) => (

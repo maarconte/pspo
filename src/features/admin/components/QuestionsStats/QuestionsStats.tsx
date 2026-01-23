@@ -7,18 +7,18 @@ import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { QuestionsStatsProps } from "./QuestionsStats.types";
 
 const QuestionsStats: FC<QuestionsStatsProps> = () => {
-  const { questions } = useQuestionsStore();
-  const flaggedQuestions = questions.filter(
+  const { allQuestions } = useQuestionsStore();
+  const flaggedQuestions = allQuestions.filter(
     (question) => question.isFlagged
   );
-  const noFeedbackQuestions = questions.filter(
+  const noFeedbackQuestions = allQuestions.filter(
     (question) => !question.feedback
   );
   return (
     <div className="QuestionsStats">
       <div className="QuestionsStats__card">
         <h4 className="QuestionsStats__card__title">Total questions</h4>
-        <p className="QuestionsStats__card__number">{questions.length}</p>
+        <p className="QuestionsStats__card__number">{allQuestions.length}</p>
       </div>
       <div
         className={`QuestionsStats__card ${

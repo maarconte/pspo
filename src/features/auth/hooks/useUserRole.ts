@@ -44,7 +44,7 @@ export const useUserRole = (): UseUserRoleReturn => {
 		};
 
 		fetchRole();
-	}, [user]);
+	}, [user?.uid]);
 
 	const permissions = role ? ROLE_PERMISSIONS[role] : null;
 

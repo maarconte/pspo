@@ -12,7 +12,7 @@ import Logout from "../../../features/auth/components/Auth/Logout";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../../stores/useUserStore";
 import { useUserRole } from "../../../features/auth/hooks/useUserRole";
-
+import logo from "../../../assets/img/logo.png";
 const Header: FC<HeaderProps> = () => {
   const { user } = useUserStore();
   const { isAdmin, isDev } = useUserRole();
@@ -20,9 +20,9 @@ const Header: FC<HeaderProps> = () => {
 
   return (
     <div className="Header">
-      <h1 className="h4">
-        <Link to="/">Agile.training</Link>
-      </h1>
+      <Link to="/">
+        <img src={logo} alt="Logo" />
+      </Link>
       <div className="d-flex gap-1 align-items-center">
         {!user && (
           <Button

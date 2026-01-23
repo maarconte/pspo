@@ -4,6 +4,7 @@ import { auth } from "../../../lib/firebase";
 
 interface UserState {
 	user: User | null;
+	isAuthLoading: boolean;
 	setUser: (user: User | null) => void;
 	initAuth: () => void;
 	refreshToken: () => Promise<void>;
@@ -11,6 +12,7 @@ interface UserState {
 
 export const useUserStore = create<UserState>((set, get) => ({
 	user: auth.currentUser,
+	isAuthLoading: true,
 
 	setUser: (user) => set({ user }),
 
@@ -33,7 +35,7 @@ export const useUserStore = create<UserState>((set, get) => ({
 		// Subscribe to auth state changes
 		auth.onAuthStateChanged((user) => {
 			console.log('🔄 onAuthStateChanged déclenché:', user ? `User ${user.email}` : 'Aucun utilisateur');
-			set({ user });
+			set({ user, isAuthLoading: false });
 		});
 
 		// Subscribe to token changes for automatic refresh
