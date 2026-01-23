@@ -1,4 +1,4 @@
-@import "../variables";
+@use '../variables' as *;
 select,
 select::picker(select) {
   appearance: base-select;

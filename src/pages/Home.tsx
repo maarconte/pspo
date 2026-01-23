@@ -1,7 +1,7 @@
-import Button from "../components/Button";
+import { Button, Select } from "../ui";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
-import Select from "../components/Select";
 import { useNavigate } from "react-router-dom";
+
 
 export default function Home() {
   const { formation, setFormation, questions } =

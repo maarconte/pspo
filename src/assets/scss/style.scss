@@ -1,7 +1,7 @@
-@import "./base";
-@import "./headings";
+@use './base' as *;
+@use './headings';
 
-@import "./atoms/atoms";
+@use './atoms/atoms';
 
 * {
   box-sizing: border-box;
@@ -9,7 +9,7 @@
 html {
   font-size: 16px;
   body {
-    font-family: "Source Sans Pro", sans-serif;
+    font-family: "Libre Franklin", sans-serif;
     color: $primary-900;
     font-size: 1rem;
   }

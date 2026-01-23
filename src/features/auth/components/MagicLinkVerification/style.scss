@@ -1,0 +1,27 @@
+@use "../../../../assets/scss/variables" as *;
+
+.magic-link-verification {
+	max-width: 400px;
+	margin: 2rem auto;
+	padding: 2rem;
+	text-align: center;
+
+	h2 {
+		margin-bottom: 1rem;
+	}
+
+	p {
+		margin-bottom: 1.5rem;
+		color: $primary-600;
+	}
+
+	form {
+		text-align: left;
+	}
+
+	&.error {
+		h2 {
+			color: $secondary-500;
+		}
+	}
+}
