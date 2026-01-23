@@ -10,7 +10,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { isError, useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Firebase } from "../../firebase.js";
 
@@ -24,9 +24,9 @@ export function useFetchFirebase(collectionName: string) {
     error,
     data: fetchedDocs = [],
     refetch,
-  } = useQuery(
+  } = useQuery({
     queryKey,
-    async () => {
+    queryFn: async () => {
       const collectionDocs = collection(db, collectionName);
       const querySnapshot = await getDocs(collectionDocs);
       const fetchedData: any[] = [];
@@ -41,11 +41,8 @@ export function useFetchFirebase(collectionName: string) {
       });
       return fetchedData;
     },
-    {
-      refetchOnWindowFocus: false,
-      // Optional configuration options like refetch interval, staleTime etc.
-    }
-  );
+    refetchOnWindowFocus: false,
+  });
 
   return {
     isLoading,
@@ -65,30 +62,26 @@ export function useUpdateDoc({ docId, collectionName }: UseUpdateDocProps) {
   const docQueryKey = ["doc", docId];
   const collectionQueryKey = ["collection", collectionName];
 
-  const { data, isLoading, error, refetch } = useQuery(
-    docQueryKey,
-    async () => {
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: docQueryKey,
+    queryFn: async () => {
       const docRef = doc(db, collectionName, docId);
       const docSnap = await getDoc(docRef);
       return docSnap.data();
     },
-    {
-      enabled: !!docId, // Only run query if docId is available
-    }
-  );
+    enabled: !!docId,
+  });
 
-  const updateMutation = useMutation(
-    (newData: any) => {
+  const updateMutation = useMutation({
+    mutationFn: (newData: any) => {
       const docRef = doc(db, collectionName, docId);
       return updateDoc(docRef, { ...newData, updatedAt: serverTimestamp() });
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(docQueryKey);
-        queryClient.invalidateQueries(collectionQueryKey);
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: docQueryKey });
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
 
   const handleUpdate = (newData: any) => {
     updateMutation.mutate(newData);
@@ -107,22 +100,18 @@ export function useAddDoc(collectionName: string) {
   const queryClient = useQueryClient();
   const collectionQueryKey = ["collection", collectionName];
 
-  const addMutation = useMutation(
-    async (newData: DocumentData) => {
+  const addMutation = useMutation({
+    mutationFn: async (newData: DocumentData) => {
       const collectionRef = collection(db, collectionName);
       return await addDoc(collectionRef, {
         ...newData,
         createdAt: serverTimestamp(),
       });
     },
-    {
-      onSuccess: () => {
-        // Invalidate the collection query on success
-        queryClient.invalidateQueries(collectionQueryKey);
-      },
-      // Optional: Add onError for error handling
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
 
   const handleAdd = (newData: DocumentData) => {
     addMutation.mutate(newData);
@@ -131,8 +120,8 @@ export function useAddDoc(collectionName: string) {
   return {
     addMutation,
     handleAdd,
-    isLoading: addMutation.isLoading,
-    isError: isError(addMutation.error),
+    isPending: addMutation.isPending,
+    isError: !!addMutation.error,
     isSuccess: addMutation.isSuccess,
   };
 }
@@ -140,22 +129,20 @@ export function useAddDoc(collectionName: string) {
 export function useDeleteDoc(collectionName: string) {
   const queryClient = useQueryClient();
   const collectionQueryKey = ["collection", collectionName];
-  const deleteMutation = useMutation(
-    async (docId: string) => {
+  const deleteMutation = useMutation({
+    mutationFn: async (docId: string) => {
       return await deleteDoc(doc(db, collectionName, docId));
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(collectionQueryKey);
-      },
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
 
   const handleDelete = (docId: string) => {
     deleteMutation.mutate(docId);
   };
 
-  return { deleteMutation, handleDelete, isLoading: deleteMutation.isLoading };
+  return { deleteMutation, handleDelete, isPending: deleteMutation.isPending };
 }
 
 export function formatTimestamp(timestamp: any, locales: Intl.LocalesArgument) {

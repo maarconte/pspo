@@ -1,6 +1,6 @@
 import "./assets/scss/style.scss";
 
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import AuthChecker from "./features/auth/components/Auth/AuthChecker";

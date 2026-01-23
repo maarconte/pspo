@@ -10,16 +10,12 @@
     width: 30px;
     height: 30px;
     text-align: center;
-    border: 1px solid #ccc;
+    position: relative;
     padding: 4px;
     border-radius: 4px;
-    color: $primary-500;
-    &.answered {
-      background-color: $primary-100;
-      border-color: $primary-100;
-    }
+
     &.bookmarked {
-      position: relative;
+
       &:before {
         content: "";
         position: absolute;
@@ -31,10 +27,17 @@
         border-radius: 50%;
       }
     }
-    &.active {
-      background-color: $primary-500;
-      border-color: $primary-500;
-      color: $primary-50;
+    &.answered {
+  &:before {
+        content: "";
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 10px;
+        height: 10px;
+        background-color: $success-500;
+        border-radius: 50%;
+      }
     }
   }
 }

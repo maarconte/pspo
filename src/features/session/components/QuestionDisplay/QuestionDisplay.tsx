@@ -36,7 +36,7 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
   const inputType = answerType === 'M' ? 'checkbox' : 'radio';
 
   // Accéder au store pour synchroniser les réponses
-  const { setUserAnswers: setGlobalUserAnswers } = useQuestionsStore();
+  const { setUserAnswers: setGlobalUserAnswers, setBookmarkedQuestions, bookmarkedQuestions } = useQuestionsStore();
 
   // Clé localStorage unique pour cette session
   const storageKey = `session_answers_${question.questionId.split('_')[0]}`;
@@ -69,11 +69,6 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
     }
   }, [userAnswers, storageKey, setGlobalUserAnswers, onAnswersChange]);
 
-  // Debug: vérifier si le feedback est présent
-  useEffect(() => {
-    console.log('QuestionDisplay - question:', question);
-    console.log('QuestionDisplay - feedback:', question.feedback);
-  }, [question]);
 
   // Restaurer la réponse de la question actuelle quand on change de question
   useEffect(() => {
@@ -140,6 +135,8 @@ const QuestionDisplay: React.FC<QuestionDisplayProps> = ({
       isBookmarked: !newArray[currentQuestionIndex]?.isBookmarked,
     };
     setUserAnswers(newArray);
+
+    setBookmarkedQuestions(newArray.map((answer) => answer?.question));
   };
 
   /**

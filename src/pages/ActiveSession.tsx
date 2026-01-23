@@ -220,7 +220,7 @@ const ActiveSessionPage: React.FC = () => {
 
       {/* Sheet de pagination */}
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="left" className="w-80">
+        <SheetContent side="right" className="w-80">
           <QuestionNavigation
             setCurrentQuestion={setCurrentQuestionIndex}
             currentQuestion={currentQuestionIndex}

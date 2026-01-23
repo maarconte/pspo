@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc } from './index';
 
@@ -140,7 +140,7 @@ describe('useDeleteDoc', () => {
     result.current.handleDelete('test-id');
 
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isPending).toBe(false);
     });
 
     expect(deleteDoc).toHaveBeenCalled();

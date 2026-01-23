@@ -10,6 +10,7 @@ interface QuestionsState {
 	formation: string;
 	isLoading: boolean;
 	error: string | null;
+	bookmarkedQuestions: number[];
 
 	// Actions
 	setScore: (score: number) => void;
@@ -20,6 +21,7 @@ interface QuestionsState {
 	setLoading: (loading: boolean) => void;
 	setError: (error: string | null) => void;
 	loadQuestions: (data: Question[]) => void;
+	setBookmarkedQuestions: (questions: number[]) => void;
 	refetch: () => void;
 }
 
@@ -31,8 +33,10 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 	formation: "pspo-I",
 	isLoading: false,
 	error: null,
+	bookmarkedQuestions: [],
 
 	setScore: (score) => set({ score }),
+	setBookmarkedQuestions: (questions) => set({ bookmarkedQuestions: questions }),
 
 	setUserAnswers: (answers) => {
 		if (typeof answers === "function") {
