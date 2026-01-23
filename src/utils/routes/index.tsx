@@ -15,11 +15,17 @@ interface RouteType {
 
 const routes: RouteType[] = [
   {
-    path: "/pspo",
+    path: "/",
     component: Home,
     name: "Home",
     protected: false,
   },
+  // {
+  //   path: "/pspo",
+  //   component: Home,
+  //   name: "Home",
+  //   protected: false,
+  // },
   {
     path: "/quizz",
     component: Quizz,

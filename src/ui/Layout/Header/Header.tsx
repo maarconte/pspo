@@ -20,7 +20,7 @@ const Header: FC<HeaderProps> = () => {
 
   return (
     <div className="Header">
-      <Link to="/pspo">
+      <Link to="/">
         <img src={logo} alt="Logo" />
       </Link>
       <div className="d-flex gap-1 align-items-center">

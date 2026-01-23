@@ -17,7 +17,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <IdleTimeoutHandler />
       <QuestionsLoader>
-        <Router>
+        <Router basename={import.meta.env.BASE_URL}>
           <Header />
           <Routes>
             {routes.map((route) => (
