@@ -22,7 +22,6 @@ export const useUserStore = create<UserState>((set, get) => ({
 			try {
 				// Force token refresh
 				await currentUser.getIdToken(true);
-				console.log('Token refreshed successfully');
 			} catch (error) {
 				console.error('Failed to refresh token:', error);
 			}
@@ -30,11 +29,8 @@ export const useUserStore = create<UserState>((set, get) => ({
 	},
 
 	initAuth: () => {
-		console.log('🔧 Initialisation des listeners d\'authentification');
-
 		// Subscribe to auth state changes
 		auth.onAuthStateChanged((user) => {
-			console.log('🔄 onAuthStateChanged déclenché:', user ? `User ${user.email}` : 'Aucun utilisateur');
 			set({ user, isAuthLoading: false });
 		});
 
@@ -42,7 +38,6 @@ export const useUserStore = create<UserState>((set, get) => ({
 		// Firebase automatically refreshes tokens every hour
 		onIdTokenChanged(auth, (user) => {
 			if (user) {
-				console.log('🔄 onIdTokenChanged déclenché:', user.email);
 				// Token has been refreshed automatically by Firebase
 				set({ user });
 			}
@@ -52,4 +47,3 @@ export const useUserStore = create<UserState>((set, get) => ({
 
 // Initialize auth listener on store creation
 useUserStore.getState().initAuth();
-
