@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useFetchFirebase } from "../../../../utils/hooks";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { Question } from "../../../../utils/types";
 
 interface QuestionsLoaderProps {
   children: ReactNode;
@@ -16,7 +17,7 @@ interface QuestionsLoaderProps {
 const QuestionsLoader: FC<QuestionsLoaderProps> = ({ children }) => {
   const formation = useQuestionsStore((state) => state.formation);
 
-  const { data, isLoading, errorMessage, refetch } = useFetchFirebase("questions");
+  const { data, isLoading, errorMessage, refetch } = useFetchFirebase<Question>("questions");
 
   // Update loading state
   useEffect(() => {

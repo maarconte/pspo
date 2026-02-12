@@ -16,7 +16,7 @@ import { Firebase } from "../../firebase.js";
 
 const db = getFirestore(Firebase);
 
-export function useFetchFirebase(collectionName: string) {
+export function useFetchFirebase<T = any>(collectionName: string) {
   const queryKey = ["collection", collectionName];
 
   const {
@@ -29,7 +29,7 @@ export function useFetchFirebase(collectionName: string) {
     queryFn: async () => {
       const collectionDocs = collection(db, collectionName);
       const querySnapshot = await getDocs(collectionDocs);
-      const fetchedData: any[] = [];
+      const fetchedData: T[] = [];
 
       querySnapshot.forEach((doc) => {
         fetchedData.push({
@@ -37,7 +37,7 @@ export function useFetchFirebase(collectionName: string) {
           ...doc.data(),
           isFlagged: doc.data().isFlagged ?? false,
           comments: doc.data().comments ?? [],
-        });
+        } as unknown as T);
       });
       return fetchedData;
     },
