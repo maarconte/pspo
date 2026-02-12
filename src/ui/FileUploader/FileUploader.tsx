@@ -25,7 +25,6 @@ const FileUploader = ({ handleFile }: FileUploaderProps) => {
       return;
     }
 
-    console.log(event.target.files[0]);
     const fileUploaded = event.target.files[0];
     handleFile(fileUploaded);
   };
