@@ -303,7 +303,6 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     <div className="TableQuestions">
       <Table
         data={table}
-        columns={columns}
         selectedQuestion={selectedQuestion}
         selectedQuestions={selectedQuestions}
         setSelectedQuestion={setSelectedQuestion}

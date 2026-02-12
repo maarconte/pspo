@@ -1,8 +1,8 @@
+import { Table as TanStackTable } from "@tanstack/react-table";
 import { Question } from "../../utils/types";
 
 export interface TableProps {
-  data: any;
-  columns: any;
+  data: TanStackTable<Question>;
   selectedQuestions?: Question[];
   selectedQuestion?: Question;
   setSelectedQuestions?: React.Dispatch<React.SetStateAction<Question[]>>;
