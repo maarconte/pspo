@@ -50,6 +50,10 @@ export const MagicLinkVerification = () => {
 		console.log('✅ Magic Link détecté');
 
 		try {
+			if (!providedEmail) {
+				throw new Error('Email manquant. Veuillez saisir votre adresse email.');
+			}
+
 			const user = await authService.completeMagicLinkSignIn(providedEmail);
 			console.log('✅ Connexion réussie !', user);
 			console.log('User UID:', user.uid);

@@ -31,8 +31,7 @@ export const authService = {
 
 		try {
 			await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-			// Sauvegarder l'email localement pour compléter la connexion
-			window.localStorage.setItem('emailForSignIn', email);
+			// Note: On ne sauvegarde plus l'email localement pour des raisons de sécurité (PII dans localStorage)
 		} catch (error: any) {
 			console.error('Erreur lors de l\'envoi du Magic Link:', error);
 			throw new Error(error.message || 'Échec de l\'envoi du lien de connexion');
@@ -49,25 +48,17 @@ export const authService = {
 
 	/**
 	 * Complète la connexion avec le Magic Link
-	 * @param email - Email de l'utilisateur (optionnel si sauvegardé)
+	 * @param email - Email de l'utilisateur
 	 * @returns Promise<User>
 	 * @throws Error si le lien est invalide ou expiré
 	 */
-	completeMagicLinkSignIn: async (email?: string): Promise<User> => {
-		// Récupérer l'email sauvegardé si non fourni
-		let userEmail = email;
-		if (!userEmail) {
-			userEmail = window.localStorage.getItem('emailForSignIn') || undefined;
-		}
-
-		if (!userEmail) {
+	completeMagicLinkSignIn: async (email: string): Promise<User> => {
+		if (!email) {
 			throw new Error('Email manquant. Veuillez saisir votre adresse email.');
 		}
 
 		try {
-			const result = await signInWithEmailLink(auth, userEmail, window.location.href);
-			// Nettoyer l'email sauvegardé
-			window.localStorage.removeItem('emailForSignIn');
+			const result = await signInWithEmailLink(auth, email, window.location.href);
 			return result.user;
 		} catch (error: any) {
 			console.error('Erreur lors de la vérification du Magic Link:', error);
@@ -88,8 +79,6 @@ export const authService = {
 	 */
 	signOut: async (): Promise<void> => {
 		await firebaseSignOut(auth);
-		// Nettoyer l'email sauvegardé au cas où
-		window.localStorage.removeItem('emailForSignIn');
 	},
 
 	/**
@@ -98,12 +87,4 @@ export const authService = {
 	getCurrentUser: (): User | null => {
 		return auth.currentUser;
 	},
-
-	/**
-	 * Récupère l'email sauvegardé pour la connexion
-	 */
-	getSavedEmail: (): string | null => {
-		return window.localStorage.getItem('emailForSignIn');
-	},
 };
-
