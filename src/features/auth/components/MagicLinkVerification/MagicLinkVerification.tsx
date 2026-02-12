@@ -36,9 +36,6 @@ export const MagicLinkVerification = () => {
 		setIsVerifying(true);
 		setError(null);
 
-		console.log('🔍 Vérification du Magic Link...');
-		console.log('URL actuelle:', window.location.href);
-
 		// Vérifier si c'est bien un Magic Link
 		if (!authService.isMagicLink()) {
 			console.error('❌ Ce n\'est pas un Magic Link valide');
@@ -47,13 +44,8 @@ export const MagicLinkVerification = () => {
 			return;
 		}
 
-		console.log('✅ Magic Link détecté');
-
 		try {
-			const user = await authService.completeMagicLinkSignIn(providedEmail);
-			console.log('✅ Connexion réussie !', user);
-			console.log('User UID:', user.uid);
-			console.log('User Email:', user.email);
+			await authService.completeMagicLinkSignIn(providedEmail);
 
 			toast.success('Connexion réussie !');
 
@@ -62,9 +54,7 @@ export const MagicLinkVerification = () => {
 				navigate('/'); // Rediriger vers la page d'accueil
 			}, 500);
 		} catch (error: any) {
-			console.error('❌ Erreur de vérification:', error);
-			console.error('Code d\'erreur:', error.code);
-			console.error('Message:', error.message);
+			console.error('❌ Erreur de vérification:', error.message);
 
 			if (error.message.includes('Email manquant')) {
 				setNeedsEmail(true);
