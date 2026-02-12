@@ -57,7 +57,6 @@ const Filter: FC<FilterProps> = ({
 
 const Table: FC<TableProps> = ({
   data,
-  columns,
   selectedQuestions,
   setSelectedQuestions,
   setSelectedQuestion,
