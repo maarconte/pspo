@@ -88,7 +88,6 @@ const TableActions: React.FC<TableActionsProps> = ({
             return item;
           });
 
-          console.log("Parsed CSV Data:", result.data);
           setCsvData(result.data); // Store the parsed data
           // Add validation or processing logic here
         },
@@ -111,7 +110,6 @@ const TableActions: React.FC<TableActionsProps> = ({
       toast.error(
         "An error occurred while adding the questions. Please try again."
       );
-      console.log(error);
     }
   };
   return (
