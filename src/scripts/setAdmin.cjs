@@ -1,12 +1,16 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
 
+const userEmail = process.argv[2];
+
+if (!userEmail) {
+  console.error('Usage: node setAdmin.cjs <email>');
+  process.exit(1);
+}
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
-
-// Remplacer par l'email de l'utilisateur à promouvoir admin
-const userEmail = "adrien.coudron@gmail.com";
 
 admin.auth().getUserByEmail(userEmail)
   .then(user => {
