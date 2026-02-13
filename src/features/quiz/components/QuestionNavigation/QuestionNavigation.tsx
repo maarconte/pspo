@@ -13,13 +13,11 @@ export default function QuestionNavigation({
 }: Props) {
   const { userAnswers } = useQuestionsStore();
   const isQuestionAnswered = (index: number) => {
-    return userAnswers.some((answer) => answer.question === index);
+    return !!userAnswers[index];
   };
 
   const isBookmarked = (index: number) => {
-    return userAnswers.some(
-      (answer) => answer.question === index && answer.isBookmarked
-    );
+    return !!userAnswers[index]?.isBookmarked;
   };
 
   return (

@@ -66,21 +66,31 @@ const QuestionCard: FC<QuestionCardProps> = ({
     setUserAnswers(newArray);
   };
 
-  const handleChangeMultiple = () => {
-    const answers = userAnswers.filter(
-      (answer) => answer.question !== currentQuestion
-    );
-    const selectedAnswers = Array.from(
-      document.querySelectorAll('input[type="checkbox"]:checked')
-    ).map((input: any) => parseInt(input.value));
-    setUserAnswers([
-      ...answers,
-      {
-        question: currentQuestion,
-        answer: selectedAnswers,
-        isBookmarked: userAnswers[currentQuestion]?.isBookmarked,
-      },
-    ]);
+  const handleChangeMultiple = (index: number) => {
+    const currentAnswer = userAnswers[currentQuestion]?.answer;
+    let newSelectedAnswers: number[] = [];
+
+    if (Array.isArray(currentAnswer)) {
+      if (currentAnswer.includes(index)) {
+        newSelectedAnswers = currentAnswer.filter((item) => item !== index);
+      } else {
+        newSelectedAnswers = [...currentAnswer, index];
+      }
+    } else {
+      newSelectedAnswers = [index];
+    }
+    // ensure sorted for consistency
+    newSelectedAnswers.sort((a, b) => a - b);
+
+    const newValue: UserAnswer = {
+      question: currentQuestion,
+      answer: newSelectedAnswers,
+      isBookmarked: userAnswers[currentQuestion]?.isBookmarked,
+    };
+
+    const newArray = [...userAnswers];
+    newArray[currentQuestion] = newValue;
+    setUserAnswers(newArray);
   };
 
   const handleChangeRadio = (index: number) => {
@@ -136,7 +146,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
         onChange={() => {
           inputType === "radio"
             ? handleChangeRadio(index)
-            : handleChangeMultiple();
+            : handleChangeMultiple(index);
         }}
       />
 
