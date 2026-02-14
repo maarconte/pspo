@@ -1,10 +1,17 @@
-import EditQuestions from "../../pages/EditQuestions";
-import Home from "../../pages/Home";
-import Login from "../../pages/Login";
-import Quizz from "../../pages/Quizz";
-import UserManagement from "../../pages/UserManagement";
-import { MagicLinkVerification } from "../../features/auth/components/MagicLinkVerification";
+import { lazy } from "react";
 import { RoleChecker } from "../../features/auth/components/RoleChecker";
+
+const EditQuestions = lazy(() => import("../../pages/EditQuestions"));
+const Home = lazy(() => import("../../pages/Home"));
+const Login = lazy(() => import("../../pages/Login"));
+const Quizz = lazy(() => import("../../pages/Quizz"));
+const UserManagement = lazy(() => import("../../pages/UserManagement"));
+
+const MagicLinkVerification = lazy(() =>
+  import("../../features/auth/components/MagicLinkVerification").then((module) => ({
+    default: module.MagicLinkVerification,
+  }))
+);
 
 interface RouteType {
   path: string;
@@ -67,4 +74,3 @@ const routes: RouteType[] = [
 ];
 
 export default routes;
-
