@@ -1,0 +1,25 @@
+@use "../../assets/scss/variables" as *;
+
+.loader-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	min-height: 50vh;
+
+	.spinner {
+		width: 40px;
+		height: 40px;
+		border: 4px solid $primary-200;
+		border-top-color: $primary-600;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+	}
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
