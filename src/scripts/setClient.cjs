@@ -1,12 +1,16 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
 
+const userEmail = process.argv[2];
+
+if (!userEmail) {
+  console.error('Usage: node setClient.cjs <email>');
+  process.exit(1);
+}
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
-
-// Remplacer par l'email de l'utilisateur à définir comme client
-const userEmail = "user@example.com";
 
 admin.auth().getUserByEmail(userEmail)
   .then(user => {

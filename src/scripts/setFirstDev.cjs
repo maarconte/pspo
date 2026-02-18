@@ -1,9 +1,17 @@
 const admin = require('firebase-admin');
 const serviceAccount = require('./serviceAccountKey.json');
+
+const userEmail = process.argv[2];
+
+if (!userEmail) {
+  console.error('Usage: node setFirstDev.cjs <email>');
+  process.exit(1);
+}
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
-const userEmail = "mat.arconte@gmail.com";
+
 admin.auth().getUserByEmail(userEmail)
   .then(user => {
     return admin.auth().setCustomUserClaims(user.uid, { role: 'dev' });
