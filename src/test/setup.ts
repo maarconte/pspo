@@ -7,18 +7,6 @@ afterEach(() => {
 	cleanup();
 });
 
-// Mock Firebase
-vi.mock('../firebase', () => ({
-	Firebase: {},
-	auth: {
-		currentUser: null,
-		onAuthStateChanged: vi.fn(),
-	},
-	Providers: {
-		google: {},
-	},
-}));
-
 // Mock environment variables
 vi.stubEnv('VITE_FIREBASE_API_KEY', 'test-api-key');
 vi.stubEnv('VITE_FIREBASE_AUTH_DOMAIN', 'test.firebaseapp.com');

@@ -6,15 +6,12 @@ import {
   doc,
   getDoc,
   getDocs,
-  getFirestore,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { Firebase } from "../../firebase.js";
-
-const db = getFirestore(Firebase);
+import { db } from "../../lib/firebase";
 
 export function useFetchFirebase<T = any>(collectionName: string) {
   const queryKey = ["collection", collectionName];
