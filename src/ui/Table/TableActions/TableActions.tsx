@@ -34,15 +34,13 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
-  const { handleDelete } = useDeleteDoc("questions");
+  const { handleDelete, handleBulkDelete } = useDeleteDoc("questions");
   const { questions, refetch } = useQuestionsStore();
-  const handleDeleteAll = () => {
+  const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
 
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+    await handleBulkDelete(selectedQuestions.map((question) => question.id));
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);
@@ -147,7 +145,7 @@ const TableActions: React.FC<TableActionsProps> = ({
           isOpen={isDeleteModalOpen}
           setIsClosed={setIsDeleteModalOpen}
           title="Delete question(s)"
-          onConfirm={() => {
+          onConfirm={async () => {
             if (
               !setSelectedQuestions ||
               !setIsSelectAll ||
@@ -160,7 +158,7 @@ const TableActions: React.FC<TableActionsProps> = ({
               handleDelete(selectedQuestion.id);
               selectedQuestion && setSelectedQuestion(undefined);
             } else {
-              handleDeleteAll();
+              await handleDeleteAll();
               setSelectedQuestions([]);
               setIsSelectAll(false);
               setIsSelectNone(false);

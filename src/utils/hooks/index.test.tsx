@@ -15,6 +15,10 @@ vi.mock('firebase/firestore', () => ({
   deleteDoc: vi.fn(),
   doc: vi.fn(),
   serverTimestamp: vi.fn(() => ({ seconds: Date.now() / 1000 })),
+  writeBatch: vi.fn(() => ({
+    delete: vi.fn(),
+    commit: vi.fn(),
+  })),
 }));
 
 const createWrapper = () => {
@@ -144,5 +148,31 @@ describe('useDeleteDoc', () => {
     });
 
     expect(deleteDoc).toHaveBeenCalled();
+  });
+
+  it("should bulk delete documents from Firestore", async () => {
+    const { writeBatch } = await import("firebase/firestore");
+    const commitMock = vi.fn().mockResolvedValue(undefined);
+    const deleteMock = vi.fn();
+
+    vi.mocked(writeBatch).mockReturnValue({
+      delete: deleteMock,
+      commit: commitMock,
+    } as any);
+
+    const { result } = renderHook(() => useDeleteDoc("questions"), {
+      wrapper: createWrapper(),
+    });
+
+    const docIds = ["id1", "id2"];
+    await result.current.handleBulkDelete(docIds);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    expect(writeBatch).toHaveBeenCalled();
+    expect(deleteMock).toHaveBeenCalledTimes(2);
+    expect(commitMock).toHaveBeenCalled();
   });
 });
