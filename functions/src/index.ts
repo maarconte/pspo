@@ -92,3 +92,99 @@ export const onUserCreated = functions.auth.user().onCreate(async (user) => {
 		// Ne pas throw pour ne pas bloquer la création de l'utilisateur
 	}
 });
+
+/**
+ * Cloud Function to save a quiz session
+ * Accessible by any authenticated user
+ */
+export const saveQuizSession = functions.https.onCall(async (data, context) => {
+	// Verify user is authenticated
+	if (!context.auth) {
+		throw new functions.https.HttpsError(
+			'unauthenticated',
+			'You must be logged in to save a quiz session'
+		);
+	}
+
+	const { score, formation, userAnswers } = data;
+	const userId = context.auth.uid;
+
+	// Validate parameters
+	if (typeof score !== 'number') {
+		throw new functions.https.HttpsError(
+			'invalid-argument',
+			'score is required and must be a number'
+		);
+	}
+
+	if (!formation || typeof formation !== 'string') {
+		throw new functions.https.HttpsError(
+			'invalid-argument',
+			'formation is required and must be a string'
+		);
+	}
+
+	if (!Array.isArray(userAnswers)) {
+		throw new functions.https.HttpsError(
+			'invalid-argument',
+			'userAnswers is required and must be an array'
+		);
+	}
+
+	// Validate each answer structure
+	for (const answer of userAnswers) {
+		if (!answer || typeof answer !== 'object') {
+			throw new functions.https.HttpsError(
+				'invalid-argument',
+				'Each answer must be an object'
+			);
+		}
+		if (typeof answer.question !== 'number') {
+			throw new functions.https.HttpsError(
+				'invalid-argument',
+				'Each answer must have a question ID (number)'
+			);
+		}
+		// Answer can be number, array of numbers, or boolean
+		const isValidAnswer =
+			typeof answer.answer === 'number' ||
+			typeof answer.answer === 'boolean' ||
+			Array.isArray(answer.answer);
+
+		if (!isValidAnswer) {
+			throw new functions.https.HttpsError(
+				'invalid-argument',
+				'Each answer must have a valid answer value (number, boolean, or array)'
+			);
+		}
+	}
+
+	try {
+		// Create a new document in the user's quizSessions subcollection
+		const sessionData = {
+			score,
+			formation,
+			userAnswers,
+			createdAt: admin.firestore.FieldValue.serverTimestamp(),
+		};
+
+		const docRef = await admin.firestore()
+			.collection('users')
+			.doc(userId)
+			.collection('quizSessions')
+			.add(sessionData);
+
+		functions.logger.info(`Quiz session saved for user ${userId} with ID ${docRef.id}`);
+
+		return {
+			success: true,
+			sessionId: docRef.id
+		};
+	} catch (error: any) {
+		functions.logger.error('Error saving quiz session:', error);
+		throw new functions.https.HttpsError(
+			'internal',
+			'Error saving quiz session: ' + error.message
+		);
+	}
+});

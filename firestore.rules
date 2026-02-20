@@ -50,8 +50,9 @@ service cloud.firestore {
 
       // Sessions de quiz de l'utilisateur
       match /quizSessions/{sessionId} {
-        // L'utilisateur peut lire/écrire ses propres sessions
-        allow read, write: if isOwner(userId);
+        // L'utilisateur peut lire ses propres sessions
+        // L'écriture doit passer par la Cloud Function saveQuizSession
+        allow read: if isOwner(userId);
 
         // Les devs peuvent tout voir
         allow read: if isDev();
