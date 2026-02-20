@@ -9,6 +9,7 @@ import { TableSearchProps } from "./TableSearch.types";
 const TableSearch: FC<TableSearchProps> = ({
   value: initialValue,
   onChange,
+  id,
 }) => {
   const [value, setValue] = useState(initialValue);
   useEffect(() => {
@@ -34,7 +35,7 @@ const TableSearch: FC<TableSearchProps> = ({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         name="search"
-        id="TableSearchInput"
+        id={id || "TableSearchInput"}
       />
     </div>
   );

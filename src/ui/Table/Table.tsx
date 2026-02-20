@@ -12,44 +12,19 @@ import { TableProps } from "./Table.types";
 import TableSearch from "./TableSearch";
 
 // Déplacer la définition du composant Filter et de son interface de props en dehors du composant Table
-interface FilterProps {
+interface ColumnFilterProps {
   column: Column<any, unknown>;
-  selectedQuestions: Question[];
-  setSelectedQuestions?: React.Dispatch<React.SetStateAction<Question[]>>;
-  setSelectedQuestion?: React.Dispatch<
-    React.SetStateAction<Question | undefined>
-  >;
-  setIsSelectAll?: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsSelectNone?: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedQuestion?: Question;
 }
 
-const Filter: FC<FilterProps> = ({
-  column,
-  selectedQuestions,
-  setSelectedQuestions,
-  setSelectedQuestion,
-  setIsSelectAll,
-  setIsSelectNone,
-  selectedQuestion,
-}) => {
+const ColumnFilter: FC<ColumnFilterProps> = ({ column }) => {
   const columnFilterValue = column.getFilterValue();
 
   return (
-    <div className="d-flex gap-1 w-100 justify-content-between">
-      <TableActions
-        selectedQuestions={selectedQuestions}
-        setSelectedQuestions={setSelectedQuestions ?? (() => {})}
-        setSelectedQuestion={setSelectedQuestion ?? (() => {})}
-        setIsSelectAll={setIsSelectAll ?? (() => {})}
-        setIsSelectNone={setIsSelectNone ?? (() => {})}
-        selectedQuestion={selectedQuestion}
-      />
+    <div className="d-flex gap-1 justify-content-end">
       <TableSearch
         value={(columnFilterValue ?? "") as string}
         onChange={column.setFilterValue}
-        // Pour le problème d'accessibilité, envisagez d'ajouter un id unique ici :
-        // inputId={`search-${column.id}`}
+        id={`search-${column.id}`}
       />
     </div>
   );
@@ -66,25 +41,29 @@ const Table: FC<TableProps> = ({
 }) => {
   return (
     <div className="Table">
-      {data.getHeaderGroups().map((headerGroup: any) => (
-        <div key={headerGroup.id}>
-          {headerGroup.headers
-            .filter((header: any) => header.column.getCanFilter())
-            .map((header: any) => (
-              <div key={header.id}>
-                <Filter
-                  column={header.column}
-                  selectedQuestions={selectedQuestions ?? []}
-                  setSelectedQuestions={setSelectedQuestions}
-                  setSelectedQuestion={setSelectedQuestion}
-                  setIsSelectAll={setIsSelectAll}
-                  setIsSelectNone={setIsSelectNone}
-                  selectedQuestion={selectedQuestion}
-                />
-              </div>
-            ))}
+      <div className="d-flex justify-content-between align-items-start mb-3">
+        <TableActions
+          selectedQuestions={selectedQuestions ?? []}
+          setSelectedQuestions={setSelectedQuestions ?? (() => {})}
+          setSelectedQuestion={setSelectedQuestion ?? (() => {})}
+          setIsSelectAll={setIsSelectAll ?? (() => {})}
+          setIsSelectNone={setIsSelectNone ?? (() => {})}
+          selectedQuestion={selectedQuestion}
+        />
+        <div className="d-flex flex-column gap-2">
+          {data.getHeaderGroups().map((headerGroup: any) => (
+            <div key={headerGroup.id}>
+              {headerGroup.headers
+                .filter((header: any) => header.column.getCanFilter())
+                .map((header: any) => (
+                  <div key={header.id}>
+                    <ColumnFilter column={header.column} />
+                  </div>
+                ))}
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
       <table>
         <thead>
           {data.getHeaderGroups().map((headerGroup: any) => (
