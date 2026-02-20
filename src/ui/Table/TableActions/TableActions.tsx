@@ -34,19 +34,17 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
-  const { handleDelete } = useDeleteDoc("questions");
-  const { questions, refetch } = useQuestionsStore();
+  const { handleDelete, handleDeleteBatch } = useDeleteDoc("questions");
+  const { questions } = useQuestionsStore();
   const handleDeleteAll = () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
 
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+    const ids = selectedQuestions.map((question) => question.id);
+    handleDeleteBatch(ids);
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);
-    refetch();
   };
 
   const handleFileUpload = (file: any) => {
@@ -166,7 +164,6 @@ const TableActions: React.FC<TableActionsProps> = ({
               setIsSelectNone(false);
             }
             setIsDeleteModalOpen(false);
-            refetch();
           }}
           labelOnConfirm="Delete"
           onClose={() => setIsDeleteModalOpen(false)}
