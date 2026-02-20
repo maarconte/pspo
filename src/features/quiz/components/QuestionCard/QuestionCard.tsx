@@ -67,20 +67,18 @@ const QuestionCard: FC<QuestionCardProps> = ({
   };
 
   const handleChangeMultiple = () => {
-    const answers = userAnswers.filter(
-      (answer) => answer.question !== currentQuestion
-    );
     const selectedAnswers = Array.from(
       document.querySelectorAll('input[type="checkbox"]:checked')
     ).map((input: any) => parseInt(input.value));
-    setUserAnswers([
-      ...answers,
-      {
-        question: currentQuestion,
-        answer: selectedAnswers,
-        isBookmarked: userAnswers[currentQuestion]?.isBookmarked,
-      },
-    ]);
+    const newValue = {
+      question: currentQuestion,
+      answer: selectedAnswers,
+      isBookmarked: userAnswers[currentQuestion]?.isBookmarked,
+    };
+    const newArray = [...userAnswers];
+    newArray[currentQuestion] = newValue;
+
+    setUserAnswers(newArray);
   };
 
   const handleChangeRadio = (index: number) => {
