@@ -25,4 +25,26 @@ describe('FileUploader', () => {
       expect(handleFileMock).toHaveBeenCalledWith(file);
     }
   });
+
+  it('resets input value after file selection', () => {
+    const handleFileMock = vi.fn();
+    const { container } = render(<FileUploader handleFile={handleFileMock} />);
+
+    const file = new File(['dummy content'], 'test.csv', { type: 'text/csv' });
+    const input = container.querySelector('input[type="file"]') as HTMLInputElement;
+
+    expect(input).toBeInTheDocument();
+
+    if (input) {
+      // Simulate browser setting the value
+      Object.defineProperty(input, 'value', {
+        value: 'C:\\fakepath\\test.csv',
+        writable: true,
+      });
+
+      fireEvent.change(input, { target: { files: [file] } });
+      expect(handleFileMock).toHaveBeenCalledTimes(1);
+      expect(input.value).toBe('');
+    }
+  });
 });
