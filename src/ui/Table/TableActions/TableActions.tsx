@@ -98,13 +98,11 @@ const TableActions: React.FC<TableActionsProps> = ({
     }
   };
 
-  const addAllQuestions = () => {
+  const addAllQuestions = async () => {
     if (!csvData) return;
     try {
-      csvData?.forEach((question) => {
-        handleAdd(question);
-        setCsvData([]);
-      });
+      await Promise.all(csvData.map((question) => handleAdd(question)));
+      setCsvData([]);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(
