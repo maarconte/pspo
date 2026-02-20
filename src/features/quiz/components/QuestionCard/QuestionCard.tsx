@@ -106,14 +106,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
 
   function isCheckboxChecked(value: any, index: number): value is number[] {
     if (Array.isArray(value)) {
-      for (const item of value) {
-        if (typeof item !== "number") {
-          return false;
-        }
-      }
-      if (value.includes(index)) {
-        return true;
-      }
+      return value.includes(index);
     }
     return false;
   }
