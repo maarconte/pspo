@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
-import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
+import { useBatchAddDocs, useDeleteDoc } from "../../../utils/hooks";
 
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
@@ -33,7 +33,8 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [csvData, setCsvData] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { handleAdd } = useAddDoc("questions");
+  const { handleBatchAdd, isLoading: isBatchAdding } =
+    useBatchAddDocs("questions");
   const { handleDelete } = useDeleteDoc("questions");
   const { questions, refetch } = useQuestionsStore();
   const handleDeleteAll = () => {
@@ -98,15 +99,14 @@ const TableActions: React.FC<TableActionsProps> = ({
     }
   };
 
-  const addAllQuestions = () => {
+  const addAllQuestions = async () => {
     if (!csvData) return;
     try {
-      csvData?.forEach((question) => {
-        handleAdd(question);
-        setCsvData([]);
-      });
+      await handleBatchAdd(csvData);
+      setCsvData([]);
       toast.success("The questions have been added");
     } catch (error) {
+      console.error(error);
       toast.error(
         "An error occurred while adding the questions. Please try again."
       );
@@ -120,6 +120,8 @@ const TableActions: React.FC<TableActionsProps> = ({
           label={`Add ${csvData.length} questions`}
           onClick={addAllQuestions}
           icon={<Plus size={16} />}
+          disabled={isBatchAdding}
+          isLoader={isBatchAdding}
         />
       )}
       <Button

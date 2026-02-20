@@ -9,6 +9,7 @@ import {
   getFirestore,
   serverTimestamp,
   updateDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -124,6 +125,52 @@ export function useAddDoc(collectionName: string) {
     isLoading: addMutation.isPending,
     isError: addMutation.isError,
     isSuccess: addMutation.isSuccess,
+  };
+}
+
+export function useBatchAddDocs(collectionName: string) {
+  const queryClient = useQueryClient();
+  const collectionQueryKey = ["collection", collectionName];
+
+  const batchAddMutation = useMutation({
+    mutationFn: async (dataList: DocumentData[]) => {
+      const batchSize = 500;
+      const chunks = [];
+
+      for (let i = 0; i < dataList.length; i += batchSize) {
+        chunks.push(dataList.slice(i, i + batchSize));
+      }
+
+      const collectionRef = collection(db, collectionName);
+
+      const commitPromises = chunks.map(async (chunk) => {
+        const batch = writeBatch(db);
+        chunk.forEach((data) => {
+          const docRef = doc(collectionRef);
+          batch.set(docRef, {
+            ...data,
+            createdAt: serverTimestamp(),
+          });
+        });
+        await batch.commit();
+      });
+
+      await Promise.all(commitPromises);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
+
+  const handleBatchAdd = async (dataList: DocumentData[]) => {
+    return await batchAddMutation.mutateAsync(dataList);
+  };
+
+  return {
+    handleBatchAdd,
+    isLoading: batchAddMutation.isPending,
+    isError: batchAddMutation.isError,
+    isSuccess: batchAddMutation.isSuccess,
   };
 }
 
