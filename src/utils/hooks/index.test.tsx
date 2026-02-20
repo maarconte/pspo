@@ -2,9 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
-import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc } from './index';
+import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc, useDeleteDocs } from './index';
 
 // Mock Firestore
+const mockBatch = {
+  delete: vi.fn(),
+  commit: vi.fn().mockResolvedValue(undefined),
+};
+
 vi.mock('firebase/firestore', () => ({
   getFirestore: vi.fn(() => ({})),
   collection: vi.fn(),
@@ -13,6 +18,7 @@ vi.mock('firebase/firestore', () => ({
   addDoc: vi.fn(),
   updateDoc: vi.fn(),
   deleteDoc: vi.fn(),
+  writeBatch: vi.fn(() => mockBatch),
   doc: vi.fn(),
   serverTimestamp: vi.fn(() => ({ seconds: Date.now() / 1000 })),
 }));
@@ -144,5 +150,50 @@ describe('useDeleteDoc', () => {
     });
 
     expect(deleteDoc).toHaveBeenCalled();
+  });
+});
+
+describe('useDeleteDocs', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should batch delete documents from Firestore', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+
+    const { result } = renderHook(() => useDeleteDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    const docIds = ['id1', 'id2', 'id3'];
+    result.current.handleDeleteDocs(docIds);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    expect(writeBatch).toHaveBeenCalledTimes(1);
+    expect(mockBatch.delete).toHaveBeenCalledTimes(3);
+    expect(mockBatch.commit).toHaveBeenCalledTimes(1);
+  });
+
+  it('should chunk deletes if more than 500', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+
+    const { result } = renderHook(() => useDeleteDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    const docIds = Array.from({ length: 505 }, (_, i) => `id-${i}`);
+    result.current.handleDeleteDocs(docIds);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    // 505 items -> 2 batches (500 + 5)
+    expect(writeBatch).toHaveBeenCalledTimes(2);
+    expect(mockBatch.delete).toHaveBeenCalledTimes(505);
+    expect(mockBatch.commit).toHaveBeenCalledTimes(2);
   });
 });
