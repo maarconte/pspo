@@ -42,17 +42,19 @@ export const setUserRole = functions.https.onCall(async (data, context) => {
 	}
 
 	try {
-		// Définir le custom claim
-		await admin.auth().setCustomUserClaims(userId, { role });
+		await Promise.all([
+			// Définir le custom claim
+			admin.auth().setCustomUserClaims(userId, { role }),
 
-		// Mettre à jour le document utilisateur dans Firestore
-		await admin.firestore().collection('users').doc(userId).set(
-			{
-				role,
-				updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-			},
-			{ merge: true }
-		);
+			// Mettre à jour le document utilisateur dans Firestore
+			admin.firestore().collection('users').doc(userId).set(
+				{
+					role,
+					updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+				},
+				{ merge: true }
+			),
+		]);
 
 		functions.logger.info(`Rôle "${role}" attribué à l'utilisateur ${userId}`);
 
@@ -75,16 +77,18 @@ export const setUserRole = functions.https.onCall(async (data, context) => {
  */
 export const onUserCreated = functions.auth.user().onCreate(async (user) => {
 	try {
-		// Attribuer le rôle "client" par défaut
-		await admin.auth().setCustomUserClaims(user.uid, { role: 'client' });
+		await Promise.all([
+			// Attribuer le rôle "client" par défaut
+			admin.auth().setCustomUserClaims(user.uid, { role: 'client' }),
 
-		// Créer le document utilisateur dans Firestore
-		await admin.firestore().collection('users').doc(user.uid).set({
-			email: user.email,
-			role: 'client',
-			createdAt: admin.firestore.FieldValue.serverTimestamp(),
-			updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-		});
+			// Créer le document utilisateur dans Firestore
+			admin.firestore().collection('users').doc(user.uid).set({
+				email: user.email,
+				role: 'client',
+				createdAt: admin.firestore.FieldValue.serverTimestamp(),
+				updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+			}),
+		]);
 
 		functions.logger.info(`Utilisateur ${user.uid} créé avec le rôle "client"`);
 	} catch (error: any) {
