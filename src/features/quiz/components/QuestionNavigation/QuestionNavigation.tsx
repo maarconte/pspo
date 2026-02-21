@@ -1,6 +1,7 @@
 import "./style.scss";
 
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { QuestionNavigationButton } from "./QuestionNavigationButton";
 
 type Props = {
   setCurrentQuestion: (index: number) => void;
@@ -12,31 +13,17 @@ export default function QuestionNavigation({
   currentQuestion,
 }: Props) {
   const { userAnswers } = useQuestionsStore();
-  const isQuestionAnswered = (index: number) => {
-    return userAnswers.some((answer) => answer.question === index);
-  };
-
-  const isBookmarked = (index: number) => {
-    return userAnswers.some(
-      (answer) => answer.question === index && answer.isBookmarked
-    );
-  };
 
   return (
     <div className="QuestionNavigation">
       {Array.from({ length: 80 }, (_, i) => (
-        <button
+        <QuestionNavigationButton
           key={i}
-          onClick={() => setCurrentQuestion(i)}
-          className={`QuestionNavigation__button ${
-            currentQuestion === i ? "active" : ""
-          } ${isQuestionAnswered(i) ? "answered" : ""} ${
-            isBookmarked(i) ? "bookmarked" : ""
-          }`}
-          disabled={currentQuestion === i}
-        >
-          {i + 1}
-        </button>
+          index={i}
+          isActive={currentQuestion === i}
+          setCurrentQuestion={setCurrentQuestion}
+          userAnswer={userAnswers[i]}
+        />
       ))}
     </div>
   );
