@@ -1,6 +1,9 @@
 import "./style.scss";
 
+import { useMemo } from "react";
+import { UserAnswer } from "../../../../utils/types";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { QuestionNavigationButton } from "./QuestionNavigationButton";
 
 type Props = {
   setCurrentQuestion: (index: number) => void;
@@ -11,32 +14,29 @@ export default function QuestionNavigation({
   setCurrentQuestion,
   currentQuestion,
 }: Props) {
-  const { userAnswers } = useQuestionsStore();
-  const isQuestionAnswered = (index: number) => {
-    return userAnswers.some((answer) => answer.question === index);
-  };
+  const { userAnswers, questions } = useQuestionsStore();
+  const count = questions.length > 0 ? questions.length : 80;
 
-  const isBookmarked = (index: number) => {
-    return userAnswers.some(
-      (answer) => answer.question === index && answer.isBookmarked
-    );
-  };
+  const answersMap = useMemo(() => {
+    const map = new Map<number, UserAnswer>();
+    userAnswers.forEach((answer) => {
+      if (answer) {
+        map.set(answer.question, answer);
+      }
+    });
+    return map;
+  }, [userAnswers]);
 
   return (
     <div className="QuestionNavigation">
-      {Array.from({ length: 80 }, (_, i) => (
-        <button
+      {Array.from({ length: count }, (_, i) => (
+        <QuestionNavigationButton
           key={i}
-          onClick={() => setCurrentQuestion(i)}
-          className={`QuestionNavigation__button ${
-            currentQuestion === i ? "active" : ""
-          } ${isQuestionAnswered(i) ? "answered" : ""} ${
-            isBookmarked(i) ? "bookmarked" : ""
-          }`}
-          disabled={currentQuestion === i}
-        >
-          {i + 1}
-        </button>
+          index={i}
+          isActive={currentQuestion === i}
+          setCurrentQuestion={setCurrentQuestion}
+          userAnswer={answersMap.get(i)}
+        />
       ))}
     </div>
   );
