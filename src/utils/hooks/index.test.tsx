@@ -2,7 +2,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
-import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc } from './index';
+import {
+  useFetchFirebase,
+  useAddDoc,
+  useUpdateDoc,
+  useDeleteDoc,
+  useDeleteDocs,
+} from './index';
 
 // Mock Firestore
 vi.mock('firebase/firestore', () => ({
@@ -13,6 +19,10 @@ vi.mock('firebase/firestore', () => ({
   addDoc: vi.fn(),
   updateDoc: vi.fn(),
   deleteDoc: vi.fn(),
+  writeBatch: vi.fn(() => ({
+    delete: vi.fn(),
+    commit: vi.fn(),
+  })),
   doc: vi.fn(),
   serverTimestamp: vi.fn(() => ({ seconds: Date.now() / 1000 })),
 }));
@@ -144,5 +154,52 @@ describe('useDeleteDoc', () => {
     });
 
     expect(deleteDoc).toHaveBeenCalled();
+  });
+});
+
+describe('useDeleteDocs', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should delete documents in batch', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+    const mockBatch = {
+      delete: vi.fn(),
+      commit: vi.fn().mockResolvedValue(undefined),
+    };
+    vi.mocked(writeBatch).mockReturnValue(mockBatch as any);
+
+    const { result } = renderHook(() => useDeleteDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    const docIds = ['id1', 'id2'];
+    await result.current.handleDeleteDocs(docIds);
+
+    expect(writeBatch).toHaveBeenCalled();
+    expect(mockBatch.delete).toHaveBeenCalledTimes(2);
+    expect(mockBatch.commit).toHaveBeenCalled();
+  });
+
+  it('should chunk requests if more than 500 documents', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+    const mockBatch = {
+      delete: vi.fn(),
+      commit: vi.fn().mockResolvedValue(undefined),
+    };
+    vi.mocked(writeBatch).mockReturnValue(mockBatch as any);
+
+    const { result } = renderHook(() => useDeleteDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    // Create 505 IDs
+    const docIds = Array.from({ length: 505 }, (_, i) => `id${i}`);
+    await result.current.handleDeleteDocs(docIds);
+
+    expect(writeBatch).toHaveBeenCalledTimes(2); // 2 batches
+    expect(mockBatch.delete).toHaveBeenCalledTimes(505);
+    expect(mockBatch.commit).toHaveBeenCalledTimes(2);
   });
 });

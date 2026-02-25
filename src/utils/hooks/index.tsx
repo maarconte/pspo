@@ -9,6 +9,7 @@ import {
   getFirestore,
   serverTimestamp,
   updateDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -144,6 +145,44 @@ export function useDeleteDoc(collectionName: string) {
   };
 
   return { deleteMutation, handleDelete, isLoading: deleteMutation.isPending };
+}
+
+export function useDeleteDocs(collectionName: string) {
+  const queryClient = useQueryClient();
+  const collectionQueryKey = ["collection", collectionName];
+
+  const deleteMutation = useMutation({
+    mutationFn: async (docIds: string[]) => {
+      const chunks = [];
+      for (let i = 0; i < docIds.length; i += 500) {
+        chunks.push(docIds.slice(i, i + 500));
+      }
+
+      await Promise.all(
+        chunks.map(async (chunk) => {
+          const batch = writeBatch(db);
+          chunk.forEach((id) => {
+            const docRef = doc(db, collectionName, id);
+            batch.delete(docRef);
+          });
+          await batch.commit();
+        })
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
+
+  const handleDeleteDocs = async (docIds: string[]) => {
+    return await deleteMutation.mutateAsync(docIds);
+  };
+
+  return {
+    deleteMutation,
+    handleDeleteDocs,
+    isLoading: deleteMutation.isPending,
+  };
 }
 
 export function formatTimestamp(timestamp: any, locales: Intl.LocalesArgument) {

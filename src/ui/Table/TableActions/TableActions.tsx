@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
-import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
+import { useAddDoc, useDeleteDoc, useDeleteDocs } from "../../../utils/hooks";
 
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
@@ -35,18 +35,17 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
   const { handleDelete } = useDeleteDoc("questions");
+  const { handleDeleteDocs } = useDeleteDocs("questions");
   const { questions, refetch } = useQuestionsStore();
   const handleDeleteAll = () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
 
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+    const idsToDelete = selectedQuestions.map((q) => q.id);
+    handleDeleteDocs(idsToDelete);
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);
-    refetch();
   };
 
   const handleFileUpload = (file: any) => {
@@ -166,7 +165,6 @@ const TableActions: React.FC<TableActionsProps> = ({
               setIsSelectNone(false);
             }
             setIsDeleteModalOpen(false);
-            refetch();
           }}
           labelOnConfirm="Delete"
           onClose={() => setIsDeleteModalOpen(false)}
