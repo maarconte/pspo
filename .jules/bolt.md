@@ -1,0 +1,3 @@
+## 2025-05-18 - QuestionCard state corruption
+**Learning:** `handleChangeMultiple` in `QuestionCard.tsx` was filtering the `userAnswers` array and appending the new answer, which corrupted the array indices. Since `QuestionCard` relies on `userAnswers[currentQuestion]` (index-based access), this caused answers to be associated with wrong questions.
+**Action:** When updating arrays in state where index matters, always preserve the index. Use `.map()` or direct index assignment instead of `.filter()` + push, unless the array is explicitly an unordered collection ID-based map (which it wasn't here).

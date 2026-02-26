@@ -18,11 +18,14 @@ const QuestionCard: FC<QuestionCardProps> = ({
   currentQuestion,
   showAnswer,
 }) => {
-  const { userAnswers, setUserAnswers } = useQuestionsStore();
+  const userAnswer = useQuestionsStore(
+    (state) => state.userAnswers[currentQuestion]
+  );
+  const setUserAnswers = useQuestionsStore((state) => state.setUserAnswers);
   const inputType = question.answerType === "M" ? "checkbox" : "radio";
   const [showComments, setShowComments] = useState(false);
   const selectedClass = (index: number) => {
-    const currentActualAnswer = userAnswers[currentQuestion]?.answer;
+    const currentActualAnswer = userAnswer?.answer;
     if (
       currentActualAnswer === index ||
       (question.answerType === "M" &&
@@ -55,53 +58,55 @@ const QuestionCard: FC<QuestionCardProps> = ({
   };
 
   const handleChangeBoolean = (e: any) => {
-    const newValue = {
-      question: currentQuestion,
-      answer: e.target.value === "1" ? true : false,
-      isBookmarked: userAnswers[currentQuestion]?.isBookmarked,
-    };
-    const newArray = [...userAnswers];
-    newArray[currentQuestion] = newValue;
-
-    setUserAnswers(newArray);
+    setUserAnswers((prevUserAnswers) => {
+      const newValue = {
+        question: currentQuestion,
+        answer: e.target.value === "1" ? true : false,
+        isBookmarked: prevUserAnswers[currentQuestion]?.isBookmarked,
+      };
+      const newArray = [...prevUserAnswers];
+      newArray[currentQuestion] = newValue;
+      return newArray;
+    });
   };
 
   const handleChangeMultiple = () => {
-    const answers = userAnswers.filter(
-      (answer) => answer.question !== currentQuestion
-    );
     const selectedAnswers = Array.from(
       document.querySelectorAll('input[type="checkbox"]:checked')
     ).map((input: any) => parseInt(input.value));
-    setUserAnswers([
-      ...answers,
-      {
+    setUserAnswers((prevUserAnswers) => {
+      const newArray = [...prevUserAnswers];
+      newArray[currentQuestion] = {
         question: currentQuestion,
         answer: selectedAnswers,
-        isBookmarked: userAnswers[currentQuestion]?.isBookmarked,
-      },
-    ]);
+        isBookmarked: prevUserAnswers[currentQuestion]?.isBookmarked,
+      };
+      return newArray;
+    });
   };
 
   const handleChangeRadio = (index: number) => {
-    const newValue: UserAnswer = {
-      question: currentQuestion,
-      answer: index,
-      isBookmarked: userAnswers[currentQuestion]?.isBookmarked,
-    };
-    const newArray = [...userAnswers];
-    newArray[currentQuestion] = newValue;
-
-    setUserAnswers(newArray);
+    setUserAnswers((prevUserAnswers) => {
+      const newValue: UserAnswer = {
+        question: currentQuestion,
+        answer: index,
+        isBookmarked: prevUserAnswers[currentQuestion]?.isBookmarked,
+      };
+      const newArray = [...prevUserAnswers];
+      newArray[currentQuestion] = newValue;
+      return newArray;
+    });
   };
 
   const handleChangeBookmark = () => {
-    const newArray = [...userAnswers];
-    newArray[currentQuestion] = {
-      ...newArray[currentQuestion],
-      isBookmarked: !newArray[currentQuestion]?.isBookmarked,
-    };
-    setUserAnswers(newArray);
+    setUserAnswers((prevUserAnswers) => {
+      const newArray = [...prevUserAnswers];
+      newArray[currentQuestion] = {
+        ...newArray[currentQuestion],
+        isBookmarked: !newArray[currentQuestion]?.isBookmarked,
+      };
+      return newArray;
+    });
   };
 
   function isCheckboxChecked(value: any, index: number): value is number[] {
@@ -128,9 +133,9 @@ const QuestionCard: FC<QuestionCardProps> = ({
         id={`answer-${currentQuestion}-${index}`}
         name={`answer-${currentQuestion}-${index}`}
         checked={
-          userAnswers[currentQuestion]?.answer === index
+          userAnswer?.answer === index
             ? true
-            : isCheckboxChecked(userAnswers[currentQuestion]?.answer, index)
+            : isCheckboxChecked(userAnswer?.answer, index)
         }
         value={index}
         onChange={() => {
@@ -151,7 +156,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
           type="radio"
           id={`${currentQuestion.toString()}_true`}
           name="answer"
-          checked={userAnswers[currentQuestion]?.answer === true}
+          checked={userAnswer?.answer === true}
           value={1}
           onChange={(e) => handleChangeBoolean(e)}
         />
@@ -162,7 +167,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
           type="radio"
           id={`${currentQuestion.toString}_false`}
           name="answer"
-          checked={userAnswers[currentQuestion]?.answer === false}
+          checked={userAnswer?.answer === false}
           value={0}
           onChange={(e) => handleChangeBoolean(e)}
         />
@@ -205,7 +210,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
         </h2>
         <Bookmark
           size={42}
-          fill={userAnswers[currentQuestion]?.isBookmarked ? "#f6b223" : "none"}
+          fill={userAnswer?.isBookmarked ? "#f6b223" : "none"}
           onClick={() => handleChangeBookmark()}
           className="bookmark"
         />

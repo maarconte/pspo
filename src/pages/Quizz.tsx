@@ -16,7 +16,9 @@ import { useQuestionsStore } from "../stores/useQuestionsStore";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const { questions, setScore, formation } = useQuestionsStore();
+  const questions = useQuestionsStore((state) => state.questions);
+  const setScore = useQuestionsStore((state) => state.setScore);
+  const formation = useQuestionsStore((state) => state.formation);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
