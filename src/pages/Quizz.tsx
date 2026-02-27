@@ -1,6 +1,6 @@
 import "rsuite/dist/rsuite.min.css";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Button } from "../ui";
 import { Button_Style } from "../ui/Button/Button.types";
@@ -20,7 +20,7 @@ export default function Quizz() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [timeSpent, setTimeSpent] = useState(0);
+  const timeSpentRef = useRef(0);
   const [open, setOpen] = React.useState(false);
   const notificationContent = (questionNumber: number, time: string) => (
     <div className="toast-content">
@@ -35,27 +35,30 @@ export default function Quizz() {
     return "error";
   };
   const notifyTime = () => {
-    if (timeSpent <= 3) return;
+    // We access the current value of the ref
+    const currentTimeSpent = timeSpentRef.current;
+    if (currentTimeSpent <= 3) return;
+
+    const toastOptions: any = {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      theme: "colored",
+      draggable: false,
+      closeButton: false,
+      type: toastType(currentTimeSpent),
+    };
+
     toast(
-      notificationContent(currentQuestion, formatTime(timeSpent)),
+      notificationContent(currentQuestion, formatTime(currentTimeSpent)),
       toastOptions
     );
   };
 
-  const toastOptions: any = {
-    position: "bottom-right",
-    autoClose: 3000,
-    hideProgressBar: true,
-    closeOnClick: false,
-    pauseOnHover: true,
-    theme: "colored",
-    draggable: false,
-    closeButton: false,
-    type: toastType(timeSpent),
-  };
-
   useEffect(() => {
-    setTimeSpent(0);
+    timeSpentRef.current = 0;
   }, [currentQuestion]);
 
   useEffect(() => {
@@ -63,7 +66,7 @@ export default function Quizz() {
 
     if (!isPaused) {
       intervalId = setInterval(() => {
-        setTimeSpent((prevTime) => prevTime + 1);
+        timeSpentRef.current += 1;
       }, 1000);
     } else {
       clearInterval(intervalId);
