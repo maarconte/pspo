@@ -82,7 +82,14 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
-  const columns = [
+  // select question
+  const handleSelectQuestion = (question: Question) => {
+    setSelectedQuestion(question);
+    setIsModalOpen(true);
+  };
+
+  // ⚡ Bolt: Memoize columns array to prevent re-creating table columns and unnecessary re-renders of the table
+  const columns = useMemo(() => [
     {
       // column for the checkbox to multiselect
       header: "",
@@ -242,13 +249,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       ),
       enableColumnFilter: false,
     },
-  ];
-
-  // select question
-  const handleSelectQuestion = (question: Question) => {
-    setSelectedQuestion(question);
-    setIsModalOpen(true);
-  };
+  ], [selectedQuestions]);
 
   // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({

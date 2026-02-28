@@ -1,0 +1,3 @@
+## 2024-05-19 - [Memoize react-table columns array]
+**Learning:** React Table (TanStack Table) heavily relies on referential equality for the `columns` definition array. Defining `columns` directly in the component body (without `useMemo`) will cause the table instance to be re-created on every render, leading to significant performance lag especially when rendering many rows or handling typing/filtering interactions.
+**Action:** Always wrap `columns` in `useMemo` when using `@tanstack/react-table` inside a React component. Also be careful to identify all dynamic variables used inside the columns definition to include them in the dependency array. Do not commit `dist/` build artifacts along with the source code changes.
