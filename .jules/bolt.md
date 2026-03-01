@@ -1,0 +1,3 @@
+## 2024-03-01 - Avoid useState for Tick Timers in Heavy Components
+**Learning:** Using `useState` to track a "time elapsed" value that updates every second via `setInterval` triggers a full component re-render every tick. If the component (`Quizz.tsx`) is heavy and renders many child components (e.g., `QuestionCard`), this severely impacts performance and responsiveness without any visual benefit, since the time might only be used sporadically (like triggering a toast notification on page turn).
+**Action:** Use `useRef` to track elapsed time (or other high-frequency interval values) when the value doesn't need to be rendered continuously on the screen. This allows reading the current value when needed without paying the re-render tax.
