@@ -1,0 +1,3 @@
+## 2024-05-14 - Never commit build artifacts
+**Learning:** React Table column structure is computationally expensive to recalculate on each render. Memoizing them (`useMemo` and `useCallback` on handlers) provides a critical performance boost. Building artifacts locally (`dist`) and committing them creates massive bloated diffs in PRs and fails PR reviews.
+**Action:** Always wrap `@tanstack/react-table` columns and their handlers in `useMemo`/`useCallback`. Never commit the `dist` folder. Only commit source files!
