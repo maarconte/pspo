@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState, useCallback } from "react";
 import { Trash2, XCircle, CheckSquare, X, Edit, ToggleRight, Circle } from "lucide-react";
 import { formatTimestamp, useDeleteDoc } from "../../../../utils/hooks";
 
@@ -82,173 +82,187 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
-  const columns = [
-    {
-      // column for the checkbox to multiselect
-      header: "",
-      accessorKey: "id",
-      id: "selection",
-      cell: ({ row }: any) => (
-        <div className="checkbox-container">
-          <input
-            type="checkbox"
-            name="select-question"
-            id={`select-question-${row.index}`}
-            onChange={() => {
-              if (selectedQuestions.includes(row.original)) {
-                setSelectedQuestions(
-                  selectedQuestions.filter(
-                    (question) => question !== row.original
-                  )
-                );
-                setIsSelectAll(false);
-                setIsSelectNone(false);
-              } else {
-                setSelectedQuestions([...selectedQuestions, row.original]);
-                setIsSelectAll(false);
-                setIsSelectNone(false);
-              }
-            }}
-            checked={selectedQuestions.includes(row.original)}
-          />
-          <label htmlFor={`select-question-${row.index}`} />
-        </div>
-      ),
-      enableSorting: false,
-      enableColumnFilter: false,
-      size: 42,
-      width: 42,
-    },
-    {
-      header: "",
-      id: "id",
-      width: 42,
-      cell: ({ row }: any) => (
-        <span
-          className="pointer"
-          onClick={() => handleSelectQuestion(row.original)}
-        >
-          {row.index + 1}
-        </span>
-      ),
-      enableColumnFilter: false,
-    },
-    {
-      header: "Title",
-      accessorKey: "title",
-      width: 200,
-      cell: (info: any) => (
-        <div
-          className="ellipsis pointer"
-          onClick={() => handleSelectQuestion(info.row.original)}
-        >
-          {info.getValue()}
-        </div>
-      ),
-      enableSorting: true,
-      sorting: sortingFns.text,
-      enableColumnFilter: true,
-    },
-    {
-      header: "Formation",
-      accessorKey: "type",
-      enableColumnFilter: false,
-      enableSorting: true,
-      width: 150,
-    },
-    {
-      header: "Answer type",
-      accessorKey: "answerType",
-      width: 150,
-      cell: (info: any) => getFormatAnswwerType(info.getValue()),
-      enableColumnFilter: false,
-    },
-    {
-      header: "Reported",
-      accessorKey: "isFlagged",
-      width: 80,
-      cell: (info: any) => {
-        if (info.getValue())
-          return (
-            <div className="text-center">
-              <XCircle size={16} color="#e41937" />
-            </div>
-          );
-      },
-      enableColumnFilter: false,
-    },
-    {
-      header: "Feedback",
-      accessorKey: "feedback",
-      width: 80,
-      cell: (info: any) => {
-        if (!info?.getValue())
-          return (
-            <div className="text-center">
-              <XCircle size={16} color="#e41937" />
-            </div>
-          );
-      },
-      enableColumnFilter: false,
-    },
-    {
-      header: "Last modified",
-      accessorKey: "updatedAt",
-      width: 200,
-      cell: (info: any) => {
-        return (
-          <div className="text-center">
-            {info.getValue() && formatTimestamp(info.getValue(), "fr-FR")}
-          </div>
-        );
-      },
-      enableColumnFilter: false,
-    },
-    {
-      header: "Created at",
-      accessorKey: "createdAt",
-      width: 200,
-      cell: (info: any) => {
-        return (
-          <div className="text-center">
-            {info.getValue() && formatTimestamp(info.getValue(), "fr-FR")}
-          </div>
-        );
-      },
-      enableColumnFilter: false,
-    },
-    {
-      header: "",
-      id: "actions",
-      width: 50,
-      cell: (info: any) => (
-        <div className="d-flex gap-05 actions">
-          <Edit
-            size={16}
-            className="pointer action"
-            color="#8b78c7"
-            onClick={() => handleSelectQuestion(info.row.original)}
-          />
-          <Trash2
-            size={16}
-            className="pointer action"
-            color="#8b78c7"
-            onClick={() => {
-              setSelectedQuestion(info.row.original);
-              setIsDeleteModalOpen(true);
-            }}
-          />
-        </div>
-      ),
-      enableColumnFilter: false,
-    },
-  ];
-
+  // ⚡ Bolt: Memoize row select handler to maintain stable reference
   // select question
-  const handleSelectQuestion = (question: Question) => {
+  const handleSelectQuestion = useCallback((question: Question) => {
     setSelectedQuestion(question);
     setIsModalOpen(true);
-  };
+  }, [setSelectedQuestion, setIsModalOpen]);
+
+  // ⚡ Bolt: Memoize columns configuration to prevent TanStack Table from
+  // reconstructing internal pipelines on every render due to unstable reference.
+  const columns = useMemo(
+    () => [
+      {
+        // column for the checkbox to multiselect
+        header: "",
+        accessorKey: "id",
+        id: "selection",
+        cell: ({ row }: any) => (
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              name="select-question"
+              id={`select-question-${row.index}`}
+              onChange={() => {
+                if (selectedQuestions.includes(row.original)) {
+                  setSelectedQuestions(
+                    selectedQuestions.filter(
+                      (question) => question !== row.original
+                    )
+                  );
+                  setIsSelectAll(false);
+                  setIsSelectNone(false);
+                } else {
+                  setSelectedQuestions([...selectedQuestions, row.original]);
+                  setIsSelectAll(false);
+                  setIsSelectNone(false);
+                }
+              }}
+              checked={selectedQuestions.includes(row.original)}
+            />
+            <label htmlFor={`select-question-${row.index}`} />
+          </div>
+        ),
+        enableSorting: false,
+        enableColumnFilter: false,
+        size: 42,
+        width: 42,
+      },
+      {
+        header: "",
+        id: "id",
+        width: 42,
+        cell: ({ row }: any) => (
+          <span
+            className="pointer"
+            onClick={() => handleSelectQuestion(row.original)}
+          >
+            {row.index + 1}
+          </span>
+        ),
+        enableColumnFilter: false,
+      },
+      {
+        header: "Title",
+        accessorKey: "title",
+        width: 200,
+        cell: (info: any) => (
+          <div
+            className="ellipsis pointer"
+            onClick={() => handleSelectQuestion(info.row.original)}
+          >
+            {info.getValue()}
+          </div>
+        ),
+        enableSorting: true,
+        sorting: sortingFns.text,
+        enableColumnFilter: true,
+      },
+      {
+        header: "Formation",
+        accessorKey: "type",
+        enableColumnFilter: false,
+        enableSorting: true,
+        width: 150,
+      },
+      {
+        header: "Answer type",
+        accessorKey: "answerType",
+        width: 150,
+        cell: (info: any) => getFormatAnswwerType(info.getValue()),
+        enableColumnFilter: false,
+      },
+      {
+        header: "Reported",
+        accessorKey: "isFlagged",
+        width: 80,
+        cell: (info: any) => {
+          if (info.getValue())
+            return (
+              <div className="text-center">
+                <XCircle size={16} color="#e41937" />
+              </div>
+            );
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "Feedback",
+        accessorKey: "feedback",
+        width: 80,
+        cell: (info: any) => {
+          if (!info?.getValue())
+            return (
+              <div className="text-center">
+                <XCircle size={16} color="#e41937" />
+              </div>
+            );
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "Last modified",
+        accessorKey: "updatedAt",
+        width: 200,
+        cell: (info: any) => {
+          return (
+            <div className="text-center">
+              {info.getValue() && formatTimestamp(info.getValue(), "fr-FR")}
+            </div>
+          );
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "Created at",
+        accessorKey: "createdAt",
+        width: 200,
+        cell: (info: any) => {
+          return (
+            <div className="text-center">
+              {info.getValue() && formatTimestamp(info.getValue(), "fr-FR")}
+            </div>
+          );
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "",
+        id: "actions",
+        width: 50,
+        cell: (info: any) => (
+          <div className="d-flex gap-05 actions">
+            <Edit
+              size={16}
+              className="pointer action"
+              color="#8b78c7"
+              onClick={() => handleSelectQuestion(info.row.original)}
+            />
+            <Trash2
+              size={16}
+              className="pointer action"
+              color="#8b78c7"
+              onClick={() => {
+                setSelectedQuestion(info.row.original);
+                setIsDeleteModalOpen(true);
+              }}
+            />
+          </div>
+        ),
+        enableColumnFilter: false,
+      },
+    ],
+    [
+      selectedQuestions,
+      setSelectedQuestions,
+      setIsSelectAll,
+      setIsSelectNone,
+      handleSelectQuestion,
+      setSelectedQuestion,
+      setIsDeleteModalOpen,
+    ]
+  );
 
   // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -266,12 +280,18 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
 
   // Table
 
+  // ⚡ Bolt: Memoize filterFns object to prevent pipeline reconstruction on every render
+  const filterFns = useMemo(
+    () => ({
+      fuzzy: fuzzyFilter,
+    }),
+    []
+  );
+
   const table = useReactTable({
     data: allQuestions,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
+    filterFns,
     state: {
       pagination,
       sorting,

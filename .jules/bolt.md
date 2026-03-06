@@ -1,0 +1,3 @@
+## 2023-10-24 - Memoize TanStack React Table Configurations
+**Learning:** In TanStack React Table (`useReactTable`), passing inline objects or arrays for `columns`, `filterFns`, and handlers directly causes the table instance to recreate its internal pipelines on every render. This creates a significant performance bottleneck in list components like `TableQuestions`, especially since state updates trigger frequent re-renders.
+**Action:** Always wrap `columns` in `useMemo`, complex handlers like row selection in `useCallback`, and configuration objects like `filterFns` in `useMemo`. Ensure that `useMemo` dependencies strictly include any state values or handlers used within the configuration.
