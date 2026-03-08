@@ -1,0 +1,16 @@
+--- src/ui/Table/TableActions/TableActions.tsx
++++ src/ui/Table/TableActions/TableActions.tsx
+@@ -102,9 +102,11 @@
+   const addAllQuestions = async () => {
+     if (!csvData) return;
+     try {
+-      // Execute all additions concurrently
++      // OPTIMIZATION: Use Promise.all to handle bulk asynchronous additions concurrently
++      // instead of iterating with forEach, which doesn't await properly.
+       await Promise.all(csvData.map((question) => handleAdd(question)));
+-      // Clear the data only once after all items are added
++      // OPTIMIZATION: Move setCsvData outside of the loop to prevent O(N) redundant React
++      // re-renders during bulk operation.
+       setCsvData([]);
+       toast.success("The questions have been added");
+     } catch (error) {

@@ -98,13 +98,15 @@ const TableActions: React.FC<TableActionsProps> = ({
     }
   };
 
-  const addAllQuestions = () => {
+  const addAllQuestions = async () => {
     if (!csvData) return;
     try {
-      csvData?.forEach((question) => {
-        handleAdd(question);
-        setCsvData([]);
-      });
+      // OPTIMIZATION: Use Promise.all to handle bulk asynchronous additions concurrently
+      // instead of iterating with forEach, which doesn't await properly.
+      await Promise.all(csvData.map((question) => handleAdd(question)));
+      // OPTIMIZATION: Move setCsvData outside of the loop to prevent O(N) redundant React
+      // re-renders during bulk operation.
+      setCsvData([]);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(

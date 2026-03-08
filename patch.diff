@@ -1,0 +1,21 @@
+--- src/ui/Table/TableActions/TableActions.tsx
++++ src/ui/Table/TableActions/TableActions.tsx
+@@ -99,14 +99,14 @@
+     }
+   };
+
+-  const addAllQuestions = () => {
++  const addAllQuestions = async () => {
+     if (!csvData) return;
+     try {
+-      csvData?.forEach((question) => {
+-        handleAdd(question);
+-        setCsvData([]);
+-      });
++      // Execute all additions concurrently
++      await Promise.all(csvData.map((question) => handleAdd(question)));
++      // Clear the data only once after all items are added
++      setCsvData([]);
+       toast.success("The questions have been added");
+     } catch (error) {
+       toast.error(
