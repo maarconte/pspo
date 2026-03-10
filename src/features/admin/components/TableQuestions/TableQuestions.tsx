@@ -82,38 +82,50 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
-  const columns = [
+  // BOLT OPTIMIZATION: Memoize columns to prevent unnecessary Table re-renders and re-computations
+  const columns = useMemo(() => [
     {
       // column for the checkbox to multiselect
       header: "",
       accessorKey: "id",
       id: "selection",
-      cell: ({ row }: any) => (
-        <div className="checkbox-container">
-          <input
-            type="checkbox"
-            name="select-question"
-            id={`select-question-${row.index}`}
-            onChange={() => {
-              if (selectedQuestions.includes(row.original)) {
-                setSelectedQuestions(
-                  selectedQuestions.filter(
-                    (question) => question !== row.original
-                  )
-                );
-                setIsSelectAll(false);
-                setIsSelectNone(false);
-              } else {
-                setSelectedQuestions([...selectedQuestions, row.original]);
-                setIsSelectAll(false);
-                setIsSelectNone(false);
-              }
-            }}
-            checked={selectedQuestions.includes(row.original)}
-          />
-          <label htmlFor={`select-question-${row.index}`} />
-        </div>
-      ),
+      cell: ({ row, table }: any) => {
+        const {
+          selectedQuestions,
+          setSelectedQuestions,
+          setIsSelectAll,
+          setIsSelectNone,
+        } = table.options.meta || {};
+
+        return (
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              name="select-question"
+              id={`select-question-${row.index}`}
+              onChange={() => {
+                if (!selectedQuestions || !setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
+
+                if (selectedQuestions.includes(row.original)) {
+                  setSelectedQuestions(
+                    selectedQuestions.filter(
+                      (question: any) => question !== row.original
+                    )
+                  );
+                  setIsSelectAll(false);
+                  setIsSelectNone(false);
+                } else {
+                  setSelectedQuestions([...selectedQuestions, row.original]);
+                  setIsSelectAll(false);
+                  setIsSelectNone(false);
+                }
+              }}
+              checked={selectedQuestions?.includes(row.original)}
+            />
+            <label htmlFor={`select-question-${row.index}`} />
+          </div>
+        );
+      },
       enableSorting: false,
       enableColumnFilter: false,
       size: 42,
@@ -123,28 +135,34 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       header: "",
       id: "id",
       width: 42,
-      cell: ({ row }: any) => (
-        <span
-          className="pointer"
-          onClick={() => handleSelectQuestion(row.original)}
-        >
-          {row.index + 1}
-        </span>
-      ),
+      cell: ({ row, table }: any) => {
+        const { handleSelectQuestion } = table.options.meta || {};
+        return (
+          <span
+            className="pointer"
+            onClick={() => handleSelectQuestion && handleSelectQuestion(row.original)}
+          >
+            {row.index + 1}
+          </span>
+        );
+      },
       enableColumnFilter: false,
     },
     {
       header: "Title",
       accessorKey: "title",
       width: 200,
-      cell: (info: any) => (
-        <div
-          className="ellipsis pointer"
-          onClick={() => handleSelectQuestion(info.row.original)}
-        >
-          {info.getValue()}
-        </div>
-      ),
+      cell: (info: any) => {
+        const { handleSelectQuestion } = info.table.options.meta || {};
+        return (
+          <div
+            className="ellipsis pointer"
+            onClick={() => handleSelectQuestion && handleSelectQuestion(info.row.original)}
+          >
+            {info.getValue()}
+          </div>
+        );
+      },
       enableSorting: true,
       sorting: sortingFns.text,
       enableColumnFilter: true,
@@ -221,28 +239,33 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       header: "",
       id: "actions",
       width: 50,
-      cell: (info: any) => (
-        <div className="d-flex gap-05 actions">
-          <Edit
-            size={16}
-            className="pointer action"
-            color="#8b78c7"
-            onClick={() => handleSelectQuestion(info.row.original)}
-          />
-          <Trash2
-            size={16}
-            className="pointer action"
-            color="#8b78c7"
-            onClick={() => {
-              setSelectedQuestion(info.row.original);
-              setIsDeleteModalOpen(true);
-            }}
-          />
-        </div>
-      ),
+      cell: (info: any) => {
+        const { setSelectedQuestion, setIsDeleteModalOpen, handleSelectQuestion } = info.table.options.meta || {};
+
+        return (
+          <div className="d-flex gap-05 actions">
+            <Edit
+              size={16}
+              className="pointer action"
+              color="#8b78c7"
+              onClick={() => handleSelectQuestion && handleSelectQuestion(info.row.original)}
+            />
+            <Trash2
+              size={16}
+              className="pointer action"
+              color="#8b78c7"
+              onClick={() => {
+                if (!setSelectedQuestion || !setIsDeleteModalOpen) return;
+                setSelectedQuestion(info.row.original);
+                setIsDeleteModalOpen(true);
+              }}
+            />
+          </div>
+        );
+      },
       enableColumnFilter: false,
     },
-  ];
+  ], []);
 
   // select question
   const handleSelectQuestion = (question: Question) => {
@@ -271,6 +294,15 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     columns,
     filterFns: {
       fuzzy: fuzzyFilter,
+    },
+    meta: {
+      selectedQuestions,
+      setSelectedQuestions,
+      setIsSelectAll,
+      setIsSelectNone,
+      setSelectedQuestion,
+      setIsDeleteModalOpen,
+      handleSelectQuestion
     },
     state: {
       pagination,
