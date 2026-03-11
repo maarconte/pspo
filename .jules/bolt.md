@@ -1,0 +1,3 @@
+## 2024-05-19 - Optimization of `@tanstack/react-table` (v8+) implementations
+**Learning:** In `@tanstack/react-table` (v8+), passing unmemoized config objects like `columns` and `filterFns` causes the table instance to rebuild its internal state on every render, leading to significant performance degradation in tables.
+**Action:** When implementing `@tanstack/react-table` tables (e.g. `TableQuestions`), you must ALWAYS memoize the `columns` definition using `useMemo` with all dependencies included (including memoized handlers with `useCallback`). And also extract static configuration objects like `filterFns` outside the component scope, or memoize them to avoid recreation on every render.
