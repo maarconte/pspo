@@ -82,7 +82,13 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
-  const columns = [
+  // select question
+  const handleSelectQuestion = React.useCallback((question: Question) => {
+    setSelectedQuestion(question);
+    setIsModalOpen(true);
+  }, []);
+
+  const columns = useMemo(() => [
     {
       // column for the checkbox to multiselect
       header: "",
@@ -242,13 +248,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       ),
       enableColumnFilter: false,
     },
-  ];
-
-  // select question
-  const handleSelectQuestion = (question: Question) => {
-    setSelectedQuestion(question);
-    setIsModalOpen(true);
-  };
+  ], [handleSelectQuestion, selectedQuestions]);
 
   // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -266,12 +266,14 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
 
   // Table
 
+  const filterFns = useMemo(() => ({
+    fuzzy: fuzzyFilter,
+  }), []);
+
   const table = useReactTable({
     data: allQuestions,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
+    filterFns,
     state: {
       pagination,
       sorting,
@@ -289,14 +291,16 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     onSortingChange: setSorting,
   });
 
-  const handleDeleteAll = () => {
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
-    setSelectedQuestions([]);
-    setIsSelectAll(false);
-    setIsSelectNone(false);
-    refetch();
+  const handleDeleteAll = async () => {
+    try {
+      await Promise.all(selectedQuestions.map((question: Question) => handleDelete(question.id)));
+      setSelectedQuestions([]);
+      setIsSelectAll(false);
+      setIsSelectNone(false);
+      refetch();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

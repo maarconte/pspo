@@ -36,17 +36,21 @@ const TableActions: React.FC<TableActionsProps> = ({
   const { handleAdd } = useAddDoc("questions");
   const { handleDelete } = useDeleteDoc("questions");
   const { questions, refetch } = useQuestionsStore();
-  const handleDeleteAll = () => {
+  const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
 
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
-    setSelectedQuestions([]);
-    setIsSelectAll(false);
-    setIsSelectNone(false);
-    refetch();
+    try {
+      await Promise.all(selectedQuestions.map((question: Question) => handleDelete(question.id)));
+      setSelectedQuestions([]);
+      setIsSelectAll(false);
+      setIsSelectNone(false);
+      refetch();
+    } catch (error) {
+      toast.error(
+        "An error occurred while deleting the questions. Please try again."
+      );
+    }
   };
 
   const handleFileUpload = (file: any) => {
@@ -98,13 +102,11 @@ const TableActions: React.FC<TableActionsProps> = ({
     }
   };
 
-  const addAllQuestions = () => {
+  const addAllQuestions = async () => {
     if (!csvData) return;
     try {
-      csvData?.forEach((question) => {
-        handleAdd(question);
-        setCsvData([]);
-      });
+      await Promise.all(csvData.map((question) => handleAdd(question)));
+      setCsvData([]);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(

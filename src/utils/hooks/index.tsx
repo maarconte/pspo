@@ -10,6 +10,7 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
+import React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Firebase } from "../../firebase.js";
@@ -83,9 +84,10 @@ export function useUpdateDoc({ docId, collectionName }: UseUpdateDocProps) {
     },
   });
 
-  const handleUpdate = async (newData: any) => {
-    return await updateMutation.mutateAsync(newData);
-  };
+  const { mutateAsync } = updateMutation;
+  const handleUpdate = React.useCallback(async (newData: any) => {
+    return await mutateAsync(newData);
+  }, [mutateAsync]);
 
   return {
     data,
@@ -114,9 +116,10 @@ export function useAddDoc(collectionName: string) {
     },
   });
 
-  const handleAdd = async (newData: DocumentData) => {
-    return await addMutation.mutateAsync(newData);
-  };
+  const { mutateAsync } = addMutation;
+  const handleAdd = React.useCallback(async (newData: DocumentData) => {
+    return await mutateAsync(newData);
+  }, [mutateAsync]);
 
   return {
     addMutation,
@@ -139,9 +142,10 @@ export function useDeleteDoc(collectionName: string) {
     },
   });
 
-  const handleDelete = (docId: string) => {
-    deleteMutation.mutate(docId);
-  };
+  const { mutateAsync } = deleteMutation;
+  const handleDelete = React.useCallback(async (docId: string) => {
+    return await mutateAsync(docId);
+  }, [mutateAsync]);
 
   return { deleteMutation, handleDelete, isLoading: deleteMutation.isPending };
 }
