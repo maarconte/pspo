@@ -1,0 +1,4 @@
+
+## 2024-03-14 - Optimize @tanstack/react-table implementations
+**Learning:** Optimization of `@tanstack/react-table` (v8+) implementations requires memoizing column definitions (`useMemo`), handlers (`useCallback`), and complex configuration objects (like `filterFns`) to avoid recreating the table instance and reconstructing internal pipelines on every render. Dependencies must include all accessed state (e.g., `selectedQuestions`). Memory allocation inside components, like defining static arrays inside helper functions within a component, should be avoided to prevent redundant allocations during every list/table rendering.
+**Action:** When implementing `@tanstack/react-table`, always memoize `columns` and explicitly manage state dependencies inside `useMemo`. Move static objects/arrays outside the component definition.
