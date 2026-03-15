@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Trash2, XCircle, CheckSquare, X, Edit, ToggleRight, Circle } from "lucide-react";
 import { formatTimestamp, useDeleteDoc } from "../../../../utils/hooks";
 
@@ -82,7 +82,14 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
-  const columns = [
+  // select question (memoized)
+  const handleSelectQuestion = useCallback((question: Question) => {
+    setSelectedQuestion(question);
+    setIsModalOpen(true);
+  }, []);
+
+  // memoize columns to prevent @tanstack/react-table recalculations
+  const columns = useMemo(() => [
     {
       // column for the checkbox to multiselect
       header: "",
@@ -242,13 +249,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       ),
       enableColumnFilter: false,
     },
-  ];
-
-  // select question
-  const handleSelectQuestion = (question: Question) => {
-    setSelectedQuestion(question);
-    setIsModalOpen(true);
-  };
+  ], [handleSelectQuestion, selectedQuestions]);
 
   // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -264,14 +265,17 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     [pageIndex, pageSize]
   );
 
+  // memoize filterFns
+  const filterFns = useMemo(() => ({
+    fuzzy: fuzzyFilter,
+  }), []);
+
   // Table
 
   const table = useReactTable({
     data: allQuestions,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
+    filterFns,
     state: {
       pagination,
       sorting,
