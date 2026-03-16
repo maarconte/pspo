@@ -1,0 +1,3 @@
+## 2024-03-16 - Memoize @tanstack/react-table Columns
+**Learning:** In `@tanstack/react-table` (v8+), defining the `columns` configuration inline or without memoization causes the entire table instance to reconstruct its internal pipelines on every render, triggering performance degradation due to unnecessary re-renders of table components.
+**Action:** Always wrap column definitions (`columns`) in a `useMemo` hook, ensuring that all state variables accessed inside cell renderers (e.g., `selectedQuestions`, toggle functions) are correctly listed in the dependency array to preserve reference stability.

@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
-import { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { Trash2, XCircle, CheckSquare, X, Edit, ToggleRight, Circle } from "lucide-react";
 import { formatTimestamp, useDeleteDoc } from "../../../../utils/hooks";
 
@@ -82,7 +82,15 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
-  const columns = [
+  // select question
+  // ⚡ Bolt: Memoized handler to prevent recreation on every render, preserving stable reference for Table columns.
+  const handleSelectQuestion = React.useCallback((question: Question) => {
+    setSelectedQuestion(question);
+    setIsModalOpen(true);
+  }, [setSelectedQuestion, setIsModalOpen]);
+
+  // ⚡ Bolt: Memoized columns array. Without this, @tanstack/react-table recreates its internal pipelines on every render, causing performance degradation due to unnecessary table cell re-renders.
+  const columns = useMemo(() => [
     {
       // column for the checkbox to multiselect
       header: "",
@@ -242,13 +250,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       ),
       enableColumnFilter: false,
     },
-  ];
-
-  // select question
-  const handleSelectQuestion = (question: Question) => {
-    setSelectedQuestion(question);
-    setIsModalOpen(true);
-  };
+  ], [selectedQuestions, setSelectedQuestions, setIsSelectAll, setIsSelectNone, handleSelectQuestion, setSelectedQuestion, setIsDeleteModalOpen]);
 
   // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({
