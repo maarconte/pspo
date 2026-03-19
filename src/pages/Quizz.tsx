@@ -20,7 +20,7 @@ export default function Quizz() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [timeSpent, setTimeSpent] = useState(0);
+  const timeSpent = React.useRef(0);
   const [open, setOpen] = React.useState(false);
   const notificationContent = (questionNumber: number, time: string) => (
     <div className="toast-content">
@@ -35,27 +35,29 @@ export default function Quizz() {
     return "error";
   };
   const notifyTime = () => {
-    if (timeSpent <= 3) return;
+    const currentSpent = timeSpent.current;
+    if (currentSpent <= 3) return;
+
+    const toastOptions: any = {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: true,
+      theme: "colored",
+      draggable: false,
+      closeButton: false,
+      type: toastType(currentSpent),
+    };
+
     toast(
-      notificationContent(currentQuestion, formatTime(timeSpent)),
+      notificationContent(currentQuestion, formatTime(currentSpent)),
       toastOptions
     );
   };
 
-  const toastOptions: any = {
-    position: "bottom-right",
-    autoClose: 3000,
-    hideProgressBar: true,
-    closeOnClick: false,
-    pauseOnHover: true,
-    theme: "colored",
-    draggable: false,
-    closeButton: false,
-    type: toastType(timeSpent),
-  };
-
   useEffect(() => {
-    setTimeSpent(0);
+    timeSpent.current = 0;
   }, [currentQuestion]);
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export default function Quizz() {
 
     if (!isPaused) {
       intervalId = setInterval(() => {
-        setTimeSpent((prevTime) => prevTime + 1);
+        timeSpent.current += 1;
       }, 1000);
     } else {
       clearInterval(intervalId);
