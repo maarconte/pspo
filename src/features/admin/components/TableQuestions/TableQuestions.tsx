@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useCallback, useMemo, useState } from "react";
 import { Trash2, XCircle, CheckSquare, X, Edit, ToggleRight, Circle } from "lucide-react";
 import { formatTimestamp, useDeleteDoc } from "../../../../utils/hooks";
 
@@ -82,7 +82,15 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
-  const columns = [
+  // select question
+  // ⚡ Bolt: Wrapped in useCallback to provide a stable reference for the columns useMemo dependency array.
+  const handleSelectQuestion = useCallback((question: Question) => {
+    setSelectedQuestion(question);
+    setIsModalOpen(true);
+  }, []);
+
+  // ⚡ Bolt: Memoized columns array to prevent @tanstack/react-table from reconstructing internal pipelines on every render.
+  const columns = useMemo(() => [
     {
       // column for the checkbox to multiselect
       header: "",
@@ -242,13 +250,9 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       ),
       enableColumnFilter: false,
     },
-  ];
+  ], [selectedQuestions, handleSelectQuestion]);
 
-  // select question
-  const handleSelectQuestion = (question: Question) => {
-    setSelectedQuestion(question);
-    setIsModalOpen(true);
-  };
+
 
   // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -266,12 +270,15 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
 
   // Table
 
+  // ⚡ Bolt: Memoized filterFns object to ensure stable reference for table configuration.
+  const filterFns = useMemo(() => ({
+    fuzzy: fuzzyFilter,
+  }), []);
+
   const table = useReactTable({
     data: allQuestions,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
+    filterFns,
     state: {
       pagination,
       sorting,
