@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState, useCallback } from "react";
 import { Trash2, XCircle, CheckSquare, X, Edit, ToggleRight, Circle } from "lucide-react";
 import { formatTimestamp, useDeleteDoc } from "../../../../utils/hooks";
 
@@ -44,12 +44,13 @@ const fuzzyFilter = (row: any, columnId: any, value: any, addMeta: any) => {
   return itemRank.passed;
 };
 
+const answerTypeOptions = [
+  { value: "TF", label: "True/False", Icon: ToggleRight },
+  { value: "S", label: "Single choice", Icon: Circle },
+  { value: "M", label: "Multiple choice", Icon: CheckSquare },
+];
+
 const getFormatAnswwerType = (answerType: string) => {
-  const answerTypeOptions = [
-    { value: "TF", label: "True/False", Icon: ToggleRight },
-    { value: "S", label: "Single choice", Icon: Circle },
-    { value: "M", label: "Multiple choice", Icon: CheckSquare },
-  ];
   const selectedOption = answerTypeOptions.find(
     (option) => option.value === answerType
   );
@@ -82,7 +83,16 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
 
-  const columns = [
+  // select question
+  // ⚡ Bolt: Memoize the row selection handler to prevent unnecessary re-renders in cell definitions
+  const handleSelectQuestion = useCallback((question: Question) => {
+    setSelectedQuestion(question);
+    setIsModalOpen(true);
+  }, []);
+
+  // ⚡ Bolt: Memoize columns array to prevent TanStack Table from reconstructing internal pipelines on every render.
+  // Dependencies are only state variables that directly affect column definitions.
+  const columns = useMemo(() => [
     {
       // column for the checkbox to multiselect
       header: "",
@@ -242,13 +252,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
       ),
       enableColumnFilter: false,
     },
-  ];
-
-  // select question
-  const handleSelectQuestion = (question: Question) => {
-    setSelectedQuestion(question);
-    setIsModalOpen(true);
-  };
+  ], [selectedQuestions, handleSelectQuestion]);
 
   // Pagination
   const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -266,12 +270,15 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
 
   // Table
 
+  // ⚡ Bolt: Memoize filter functions object to keep reference stable for useReactTable
+  const filterFns = useMemo(() => ({
+    fuzzy: fuzzyFilter,
+  }), []);
+
   const table = useReactTable({
     data: allQuestions,
     columns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
+    filterFns,
     state: {
       pagination,
       sorting,
