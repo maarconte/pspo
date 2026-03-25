@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
-import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
+import { useAddDocs, useDeleteDocs } from "../../../utils/hooks";
 
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
@@ -33,16 +33,16 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [csvData, setCsvData] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { handleAdd } = useAddDoc("questions");
-  const { handleDelete } = useDeleteDoc("questions");
+  const { handleAddDocs } = useAddDocs("questions");
+  const { handleDeleteDocs } = useDeleteDocs("questions");
   const { questions, refetch } = useQuestionsStore();
-  const handleDeleteAll = () => {
+  const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
 
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+    const idsToDelete = selectedQuestions.map((q) => q.id);
+    await handleDeleteDocs(idsToDelete);
+
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);
@@ -98,13 +98,11 @@ const TableActions: React.FC<TableActionsProps> = ({
     }
   };
 
-  const addAllQuestions = () => {
-    if (!csvData) return;
+  const addAllQuestions = async () => {
+    if (!csvData || csvData.length === 0) return;
     try {
-      csvData?.forEach((question) => {
-        handleAdd(question);
-        setCsvData([]);
-      });
+      await handleAddDocs(csvData);
+      setCsvData([]);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(
@@ -157,7 +155,7 @@ const TableActions: React.FC<TableActionsProps> = ({
               return;
 
             if (selectedQuestion) {
-              handleDelete(selectedQuestion.id);
+              handleDeleteDocs([selectedQuestion.id]);
               selectedQuestion && setSelectedQuestion(undefined);
             } else {
               handleDeleteAll();

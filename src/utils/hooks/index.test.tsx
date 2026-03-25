@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
-import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc } from './index';
+import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc, useAddDocs, useDeleteDocs } from './index';
 
 // Mock Firestore
 vi.mock('firebase/firestore', () => ({
@@ -15,6 +15,11 @@ vi.mock('firebase/firestore', () => ({
   deleteDoc: vi.fn(),
   doc: vi.fn(),
   serverTimestamp: vi.fn(() => ({ seconds: Date.now() / 1000 })),
+  writeBatch: vi.fn(() => ({
+    set: vi.fn(),
+    delete: vi.fn(),
+    commit: vi.fn(),
+  })),
 }));
 
 const createWrapper = () => {
@@ -144,5 +149,74 @@ describe('useDeleteDoc', () => {
     });
 
     expect(deleteDoc).toHaveBeenCalled();
+  });
+});
+
+describe('useAddDocs', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should add multiple documents to Firestore using writeBatch and chunking', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+    const commitMock = vi.fn().mockResolvedValue(undefined);
+    const setMock = vi.fn();
+    vi.mocked(writeBatch).mockReturnValue({
+      set: setMock,
+      commit: commitMock,
+      delete: vi.fn(),
+    } as any);
+
+    const { result } = renderHook(() => useAddDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    const newQuestions = Array.from({ length: 501 }, (_, i) => ({ title: `Question ${i}`, answer: 0 }));
+
+    // Use act() for async mutation triggers if using latest React testing tools,
+    // but the original code just calls the function directly.
+    result.current.handleAddDocs(newQuestions);
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    // Expect 2 chunks (500 and 1)
+    expect(writeBatch).toHaveBeenCalledTimes(2);
+    expect(setMock).toHaveBeenCalledTimes(501);
+    expect(commitMock).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('useDeleteDocs', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should delete multiple documents from Firestore using writeBatch and chunking', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+    const commitMock = vi.fn().mockResolvedValue(undefined);
+    const deleteMock = vi.fn();
+    vi.mocked(writeBatch).mockReturnValue({
+      set: vi.fn(),
+      commit: commitMock,
+      delete: deleteMock,
+    } as any);
+
+    const { result } = renderHook(() => useDeleteDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    const idsToDelete = Array.from({ length: 505 }, (_, i) => `id-${i}`);
+
+    result.current.handleDeleteDocs(idsToDelete);
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(writeBatch).toHaveBeenCalledTimes(2);
+    expect(deleteMock).toHaveBeenCalledTimes(505);
+    expect(commitMock).toHaveBeenCalledTimes(2);
   });
 });
