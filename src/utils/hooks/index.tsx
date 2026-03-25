@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   DocumentData,
   addDoc,
@@ -9,6 +10,7 @@ import {
   getFirestore,
   serverTimestamp,
   updateDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -150,4 +152,97 @@ export function formatTimestamp(timestamp: any, locales: Intl.LocalesArgument) {
   if (!timestamp?.seconds) return "";
   const date = new Date(timestamp?.seconds * 1000).toLocaleDateString(locales);
   return date.toLocaleString();
+}
+
+export function useAddDocs(collectionName: string) {
+  const queryClient = useQueryClient();
+  const collectionQueryKey = ["collection", collectionName];
+
+  const addMutation = useMutation({
+    mutationFn: async (newDataList: DocumentData[]) => {
+      const chunks = [];
+      for (let i = 0; i < newDataList.length; i += 500) {
+        chunks.push(newDataList.slice(i, i + 500));
+      }
+
+      await Promise.all(
+        chunks.map(async (chunk) => {
+          const batch = writeBatch(db);
+          chunk.forEach((data) => {
+            const docRef = doc(collection(db, collectionName));
+            batch.set(docRef, {
+              ...data,
+              createdAt: serverTimestamp(),
+            });
+          });
+          return batch.commit();
+        })
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
+
+  const { mutateAsync } = addMutation;
+
+  const handleAddDocs = React.useCallback(
+    async (newDataList: DocumentData[]) => {
+      return await mutateAsync(newDataList);
+    },
+    [mutateAsync]
+  );
+
+  return {
+    addMutation,
+    handleAddDocs,
+    isLoading: addMutation.isPending,
+    isError: addMutation.isError,
+    isSuccess: addMutation.isSuccess,
+  };
+}
+
+export function useDeleteDocs(collectionName: string) {
+  const queryClient = useQueryClient();
+  const collectionQueryKey = ["collection", collectionName];
+
+  const deleteMutation = useMutation({
+    mutationFn: async (docIds: string[]) => {
+      const chunks = [];
+      for (let i = 0; i < docIds.length; i += 500) {
+        chunks.push(docIds.slice(i, i + 500));
+      }
+
+      await Promise.all(
+        chunks.map(async (chunk) => {
+          const batch = writeBatch(db);
+          chunk.forEach((id) => {
+            const docRef = doc(db, collectionName, id);
+            batch.delete(docRef);
+          });
+          return batch.commit();
+        })
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
+
+  const { mutateAsync } = deleteMutation;
+
+  const handleDeleteDocs = React.useCallback(
+    async (docIds: string[]) => {
+      return await mutateAsync(docIds);
+    },
+    [mutateAsync]
+  );
+
+  return {
+    deleteMutation,
+    handleDeleteDocs,
+    isLoading: deleteMutation.isPending,
+    isError: deleteMutation.isError,
+    isSuccess: deleteMutation.isSuccess,
+  };
 }
