@@ -1,0 +1,3 @@
+## 2024-11-20 - TanStack React Table Optimization
+**Learning:** In `@tanstack/react-table` (v8+), complex configuration objects (like `filterFns` or `globalFilterFn`) and column definitions (`columns` array) must be memoized using `useMemo` (or hoisted outside the component if they do not depend on component state). Passing new objects inline causes `useReactTable` to recreate the entire table instance and reconstruct internal data pipelines on every single re-render, destroying performance. Handlers used in columns should also be memoized with `useCallback`.
+**Action:** Always memoize `columns`, `data`, and configuration objects like `filterFns` in `useReactTable` implementations. For static configurations, hoist them outside of the React component entirely.
