@@ -9,6 +9,7 @@ import {
   getFirestore,
   serverTimestamp,
   updateDoc,
+  writeBatch,
 } from "firebase/firestore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -144,6 +145,66 @@ export function useDeleteDoc(collectionName: string) {
   };
 
   return { deleteMutation, handleDelete, isLoading: deleteMutation.isPending };
+}
+
+
+export function useAddDocs(collectionName: string) {
+  const queryClient = useQueryClient();
+  const collectionQueryKey = ["collection", collectionName];
+
+  const addDocsMutation = useMutation({
+    mutationFn: async (newDataArray: DocumentData[]) => {
+      // Chunk array into 500 max per batch
+      const chunkSize = 500;
+      for (let i = 0; i < newDataArray.length; i += chunkSize) {
+        const chunk = newDataArray.slice(i, i + chunkSize);
+        const batch = writeBatch(db);
+        chunk.forEach((newData) => {
+          const docRef = doc(collection(db, collectionName));
+          batch.set(docRef, { ...newData, createdAt: serverTimestamp() });
+        });
+        await batch.commit();
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
+
+  const handleAddDocs = async (newDataArray: DocumentData[]) => {
+    return await addDocsMutation.mutateAsync(newDataArray);
+  };
+
+  return { addDocsMutation, handleAddDocs, isLoading: addDocsMutation.isPending };
+}
+
+export function useDeleteDocs(collectionName: string) {
+  const queryClient = useQueryClient();
+  const collectionQueryKey = ["collection", collectionName];
+
+  const deleteDocsMutation = useMutation({
+    mutationFn: async (docIds: string[]) => {
+      // Chunk array into 500 max per batch
+      const chunkSize = 500;
+      for (let i = 0; i < docIds.length; i += chunkSize) {
+        const chunk = docIds.slice(i, i + chunkSize);
+        const batch = writeBatch(db);
+        chunk.forEach((docId) => {
+          batch.delete(doc(db, collectionName, docId));
+        });
+        await batch.commit();
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
+
+  const handleDeleteDocs = async (docIds: string[]) => {
+    return await deleteDocsMutation.mutateAsync(docIds);
+  };
+
+  return { deleteDocsMutation, handleDeleteDocs, isLoading: deleteDocsMutation.isPending };
 }
 
 export function formatTimestamp(timestamp: any, locales: Intl.LocalesArgument) {

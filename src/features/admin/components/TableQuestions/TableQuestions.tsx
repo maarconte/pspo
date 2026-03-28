@@ -16,7 +16,7 @@ import {
 import { RankingInfo, rankItem } from "@tanstack/match-sorter-utils";
 import { FC, useEffect, useMemo, useState } from "react";
 import { Trash2, XCircle, CheckSquare, X, Edit, ToggleRight, Circle } from "lucide-react";
-import { formatTimestamp, useDeleteDoc } from "../../../../utils/hooks";
+import { formatTimestamp, useDeleteDoc, useDeleteDocs } from "../../../../utils/hooks";
 
 import Button from "../../../../ui/Button/Button";
 import Modal from "../../../../ui/Modal/Modal";
@@ -81,6 +81,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [isSelectNone, setIsSelectNone] = useState(false);
   const { handleDelete } = useDeleteDoc("questions");
+  const { handleDeleteDocs } = useDeleteDocs("questions");
 
   const columns = [
     {
@@ -289,10 +290,9 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     onSortingChange: setSorting,
   });
 
-  const handleDeleteAll = () => {
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+  const handleDeleteAll = async () => {
+    const docIds = selectedQuestions.map((q) => q.id);
+    await handleDeleteDocs(docIds);
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);

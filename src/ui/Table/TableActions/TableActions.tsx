@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
-import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
+import { useAddDoc, useDeleteDoc, useAddDocs, useDeleteDocs } from "../../../utils/hooks";
 
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
@@ -34,19 +34,21 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
+  const { handleAddDocs } = useAddDocs("questions");
   const { handleDelete } = useDeleteDoc("questions");
+  const { handleDeleteDocs } = useDeleteDocs("questions");
   const { questions, refetch } = useQuestionsStore();
-  const handleDeleteAll = () => {
+  const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
 
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+    const docIds = selectedQuestions.map((q) => q.id);
+    await handleDeleteDocs(docIds);
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);
-    refetch();
+    // useDeleteDocs invalidates the query automatically, but we can refetch() just to be safe as per previous behavior
+    // but the store handles invalidation and we might not strictly need it. However we keep the same behavior as before.
   };
 
   const handleFileUpload = (file: any) => {
@@ -98,13 +100,11 @@ const TableActions: React.FC<TableActionsProps> = ({
     }
   };
 
-  const addAllQuestions = () => {
-    if (!csvData) return;
+  const addAllQuestions = async () => {
+    if (!csvData || csvData.length === 0) return;
     try {
-      csvData?.forEach((question) => {
-        handleAdd(question);
-        setCsvData([]);
-      });
+      await handleAddDocs(csvData);
+      setCsvData([]);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(

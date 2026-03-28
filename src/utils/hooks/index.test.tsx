@@ -2,20 +2,29 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
-import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc } from './index';
+import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc, useAddDocs, useDeleteDocs } from './index';
 
 // Mock Firestore
-vi.mock('firebase/firestore', () => ({
-  getFirestore: vi.fn(() => ({})),
-  collection: vi.fn(),
-  getDocs: vi.fn(),
-  getDoc: vi.fn(),
-  addDoc: vi.fn(),
-  updateDoc: vi.fn(),
-  deleteDoc: vi.fn(),
-  doc: vi.fn(),
-  serverTimestamp: vi.fn(() => ({ seconds: Date.now() / 1000 })),
-}));
+vi.mock('firebase/firestore', () => {
+  const mockBatch = {
+    set: vi.fn(),
+    delete: vi.fn(),
+    commit: vi.fn().mockResolvedValue(undefined),
+  };
+
+  return {
+    getFirestore: vi.fn(() => ({})),
+    collection: vi.fn(),
+    getDocs: vi.fn(),
+    getDoc: vi.fn(),
+    addDoc: vi.fn(),
+    updateDoc: vi.fn(),
+    deleteDoc: vi.fn(),
+    doc: vi.fn(),
+    serverTimestamp: vi.fn(() => ({ seconds: Date.now() / 1000 })),
+    writeBatch: vi.fn(() => mockBatch),
+  };
+});
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -144,5 +153,59 @@ describe('useDeleteDoc', () => {
     });
 
     expect(deleteDoc).toHaveBeenCalled();
+  });
+});
+
+describe('useAddDocs', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should add multiple documents using batches', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+
+    const { result } = renderHook(() => useAddDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    const newQuestions = Array.from({ length: 505 }, (_, i) => ({
+      title: `Question ${i}`,
+    }));
+
+    await result.current.handleAddDocs(newQuestions);
+
+    // Get the mock batch object that was returned by writeBatch() inside handleAddDocs
+    const mockBatch = (writeBatch as any).mock.results[0].value;
+
+    // Should create 2 batches (500 + 5)
+    expect(writeBatch).toHaveBeenCalledTimes(2);
+    expect(mockBatch.commit).toHaveBeenCalledTimes(2);
+    expect(mockBatch.set).toHaveBeenCalledTimes(505);
+  });
+});
+
+describe('useDeleteDocs', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should delete multiple documents using batches', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+
+    const { result } = renderHook(() => useDeleteDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    const docIds = Array.from({ length: 505 }, (_, i) => `doc-id-${i}`);
+
+    await result.current.handleDeleteDocs(docIds);
+
+    // Get the mock batch object that was returned by writeBatch() inside handleDeleteDocs
+    const mockBatch = (writeBatch as any).mock.results[0].value;
+
+    // Should create 2 batches (500 + 5)
+    expect(writeBatch).toHaveBeenCalledTimes(2);
+    expect(mockBatch.commit).toHaveBeenCalledTimes(2);
+    expect(mockBatch.delete).toHaveBeenCalledTimes(505);
   });
 });
