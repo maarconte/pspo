@@ -1,0 +1,4 @@
+
+## 2024-05-19 - [@tanstack/react-table render cycle optimization]
+**Learning:** By default, if the `columns` configuration array for a `@tanstack/react-table` instance is declared directly inside the component body, it gets recreated on every render. Because the library's hooks (like `useReactTable`) use object identity checks for configuration, this causes the entire table pipeline (filters, sorting functions, cell formatters) to be unnecessarily re-computed and re-rendered on every state update. This is especially severe if complex rendering like multi-select inputs exists inside the cells.
+**Action:** Always wrap the `columns` array definition in `useMemo` in `@tanstack/react-table` implementations. Ensure that any functions passed into cell renderers (like click handlers) are stable references by wrapping them in `useCallback`. Also, hoist static configuration objects (like `answerTypeOptions`) outside of the component entirely to prevent allocation overhead.
