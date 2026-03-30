@@ -1,0 +1,3 @@
+## 2024-03-30 - N+1 Network Request Pattern with React Query in loops
+**Learning:** Performing network requests and query invalidations (like `.forEach(handleDelete)`) causes a severe N+1 issue, launching independent network requests and multiple UI state refetches which slow down the app entirely during bulk operations (like importing CSVs or bulk deleting table rows).
+**Action:** Always write and utilize batched Firestore hooks (`useAddDocs`, `useDeleteDocs`) powered by `writeBatch` when applying mutations to collections. Remember to chunk items into groups of 500 to respect Firestore limitations.
