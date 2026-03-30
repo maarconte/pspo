@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
-import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc } from './index';
+import { useFetchFirebase, useAddDoc, useUpdateDoc, useDeleteDoc, useAddDocs, useDeleteDocs } from './index';
 
 // Mock Firestore
 vi.mock('firebase/firestore', () => ({
@@ -14,6 +14,11 @@ vi.mock('firebase/firestore', () => ({
   updateDoc: vi.fn(),
   deleteDoc: vi.fn(),
   doc: vi.fn(),
+  writeBatch: vi.fn(() => ({
+    set: vi.fn(),
+    delete: vi.fn(),
+    commit: vi.fn().mockResolvedValue(undefined),
+  })),
   serverTimestamp: vi.fn(() => ({ seconds: Date.now() / 1000 })),
 }));
 
@@ -81,6 +86,29 @@ describe('useFetchFirebase', () => {
   });
 });
 
+describe('useAddDocs', () => {
+  it('should add multiple documents to Firestore using writeBatch', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+
+    const { result } = renderHook(() => useAddDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    const newQuestions = [
+      { title: 'New Question 1', answer: 0 },
+      { title: 'New Question 2', answer: 1 },
+    ];
+
+    result.current.handleAddDocs(newQuestions);
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(writeBatch).toHaveBeenCalled();
+  });
+});
+
 describe('useAddDoc', () => {
   it('should add a document to Firestore', async () => {
     const { addDoc } = await import('firebase/firestore');
@@ -125,6 +153,24 @@ describe('useUpdateDoc', () => {
     });
 
     expect(updateDoc).toHaveBeenCalled();
+  });
+});
+
+describe('useDeleteDocs', () => {
+  it('should delete multiple documents from Firestore using writeBatch', async () => {
+    const { writeBatch } = await import('firebase/firestore');
+
+    const { result } = renderHook(() => useDeleteDocs('questions'), {
+      wrapper: createWrapper(),
+    });
+
+    result.current.handleDeleteDocs(['test-id-1', 'test-id-2']);
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    expect(writeBatch).toHaveBeenCalled();
   });
 });
 

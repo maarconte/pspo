@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
-import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
+import { useAddDoc, useAddDocs, useDeleteDoc, useDeleteDocs } from "../../../utils/hooks";
 
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
@@ -34,15 +34,16 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
+  const { handleAddDocs } = useAddDocs("questions");
   const { handleDelete } = useDeleteDoc("questions");
+  const { handleDeleteDocs } = useDeleteDocs("questions");
   const { questions, refetch } = useQuestionsStore();
   const handleDeleteAll = () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
 
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+    const ids = selectedQuestions.map((question: Question) => question.id);
+    handleDeleteDocs(ids);
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);
@@ -101,10 +102,8 @@ const TableActions: React.FC<TableActionsProps> = ({
   const addAllQuestions = () => {
     if (!csvData) return;
     try {
-      csvData?.forEach((question) => {
-        handleAdd(question);
-        setCsvData([]);
-      });
+      handleAddDocs(csvData);
+      setCsvData([]);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(

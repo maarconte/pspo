@@ -1,4 +1,5 @@
 import {
+  writeBatch,
   DocumentData,
   addDoc,
   collection,
@@ -144,6 +145,79 @@ export function useDeleteDoc(collectionName: string) {
   };
 
   return { deleteMutation, handleDelete, isLoading: deleteMutation.isPending };
+}
+
+
+export function useAddDocs(collectionName: string) {
+  const queryClient = useQueryClient();
+  const collectionQueryKey = ["collection", collectionName];
+
+  const addMutation = useMutation({
+    mutationFn: async (newDataList: DocumentData[]) => {
+      // Chunk items into groups of 500 to respect Firestore limits
+      const chunkSize = 500;
+      for (let i = 0; i < newDataList.length; i += chunkSize) {
+        const chunk = newDataList.slice(i, i + chunkSize);
+        const batch = writeBatch(db);
+
+        chunk.forEach(newData => {
+          const docRef = doc(collection(db, collectionName));
+          batch.set(docRef, {
+            ...newData,
+            createdAt: serverTimestamp(),
+          });
+        });
+
+        await batch.commit();
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
+
+  const handleAddDocs = async (newDataList: DocumentData[]) => {
+    return await addMutation.mutateAsync(newDataList);
+  };
+
+  return {
+    addMutation,
+    handleAddDocs,
+    isLoading: addMutation.isPending,
+    isError: addMutation.isError,
+    isSuccess: addMutation.isSuccess,
+  };
+}
+
+export function useDeleteDocs(collectionName: string) {
+  const queryClient = useQueryClient();
+  const collectionQueryKey = ["collection", collectionName];
+
+  const deleteMutation = useMutation({
+    mutationFn: async (docIds: string[]) => {
+      // Chunk items into groups of 500 to respect Firestore limits
+      const chunkSize = 500;
+      for (let i = 0; i < docIds.length; i += chunkSize) {
+        const chunk = docIds.slice(i, i + chunkSize);
+        const batch = writeBatch(db);
+
+        chunk.forEach(docId => {
+          batch.delete(doc(db, collectionName, docId));
+        });
+
+        await batch.commit();
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKey });
+    },
+  });
+
+  const handleDeleteDocs = async (docIds: string[]) => {
+    return await deleteMutation.mutateAsync(docIds);
+  };
+
+  return { deleteMutation, handleDeleteDocs, isLoading: deleteMutation.isPending };
 }
 
 export function formatTimestamp(timestamp: any, locales: Intl.LocalesArgument) {
