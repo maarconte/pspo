@@ -21,6 +21,8 @@ interface QuestionsState {
 	setError: (error: string | null) => void;
 	loadQuestions: (data: Question[]) => void;
 	refetch: () => void;
+	setAnswer: (index: number, answer: UserAnswer['answer']) => void;
+	toggleBookmark: (index: number) => void;
 }
 
 export const useQuestionsStore = create<QuestionsState>((set, get) => ({
@@ -80,5 +82,29 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 	refetch: () => {
 		// This will be called from components that use useFetchFirebase
 		// The actual refetch logic is handled by the hook
+	},
+
+	setAnswer: (index, answer) => {
+		set((state) => {
+			const newUserAnswers = [...state.userAnswers];
+			newUserAnswers[index] = {
+				...newUserAnswers[index],
+				question: index,
+				answer,
+			};
+			return { userAnswers: newUserAnswers };
+		});
+	},
+
+	toggleBookmark: (index) => {
+		set((state) => {
+			const newUserAnswers = [...state.userAnswers];
+			newUserAnswers[index] = {
+				...newUserAnswers[index],
+				question: index,
+				isBookmarked: !newUserAnswers[index]?.isBookmarked,
+			};
+			return { userAnswers: newUserAnswers };
+		});
 	},
 }));
