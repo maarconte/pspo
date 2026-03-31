@@ -47,15 +47,15 @@ const QuestionCard: FC<QuestionCardProps> = ({
   const getStatusClass = (index: number) => {
     const classes = [];
     if (isSelected(index)) classes.push("selected");
-    
+
     if (showAnswer) {
-      const isCorrect = 
-        question.answerType === "TF" 
+      const isCorrect =
+        question.answerType === "TF"
           ? (index === 0 ? true : false) === question.answer
           : Array.isArray(question.answer)
             ? question.answer.includes(index)
             : question.answer === index;
-            
+
       if (isCorrect) classes.push("success");
     }
     return classes.join(" ");
@@ -151,7 +151,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
       )}
 
       <div className="d-flex justify-content-between gap-1">
-        <h2 className="h4">
+        <h2 className="h4 question-title">
           {currentQuestion + 1}. {question.title}
         </h2>
         <Bookmark
