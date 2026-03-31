@@ -183,7 +183,10 @@ export default function Quizz() {
         </Drawer.Header> */}
         <Drawer.Body>
           <QuestionNavigation
-            setCurrentQuestion={setCurrentQuestion}
+            setCurrentQuestion={(index) => {
+              setCurrentQuestion(index);
+              setShowAnswer(false);
+            }}
             currentQuestion={currentQuestion}
           />
         </Drawer.Body>
