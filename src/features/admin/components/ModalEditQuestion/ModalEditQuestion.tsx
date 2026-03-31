@@ -12,7 +12,6 @@ import { Button_Style } from "../../../../ui/Button/Button.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
 import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
-import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import React from "react";
 import Select from "../../../../ui/Select/Select";
 import SelectAnswerType from "../SelectAnswerType/SelectAnswerType";
@@ -23,7 +22,6 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   setIsOpen,
   setSelectQuestion,
 }) => {
-  const { refetch } = useQuestionsStore();
   const { handleAdd } = useAddDoc("questions");
   const { handleUpdate, error } = useUpdateDoc({
     docId: question?.id || "",

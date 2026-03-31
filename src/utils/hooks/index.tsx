@@ -139,8 +139,8 @@ export function useDeleteDoc(collectionName: string) {
     },
   });
 
-  const handleDelete = (docId: string) => {
-    deleteMutation.mutate(docId);
+  const handleDelete = async (docId: string) => {
+    return await deleteMutation.mutateAsync(docId);
   };
 
   return { deleteMutation, handleDelete, isLoading: deleteMutation.isPending };

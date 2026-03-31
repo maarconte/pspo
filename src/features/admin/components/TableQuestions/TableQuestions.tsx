@@ -75,7 +75,6 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
   const allQuestions = useQuestionsStore((state) => state.allQuestions);
-  const refetch = useQuestionsStore((state) => state.refetch);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
   const [isSelectAll, setIsSelectAll] = useState(false);
@@ -289,14 +288,13 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     onSortingChange: setSorting,
   });
 
-  const handleDeleteAll = () => {
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+  const handleDeleteAll = async () => {
+    for (const question of selectedQuestions) {
+      await handleDelete(question.id);
+    }
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);
-    refetch();
   };
 
   return (
@@ -323,18 +321,17 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
           isOpen={isDeleteModalOpen}
           setIsClosed={setIsDeleteModalOpen}
           title={`${selectedQuestion ? "Delete question" : "Delete questions"}`}
-          onConfirm={() => {
+          onConfirm={async () => {
             if (selectedQuestion) {
-              handleDelete(selectedQuestion.id);
+              await handleDelete(selectedQuestion.id);
               selectedQuestion && setSelectedQuestion(undefined);
             } else {
-              handleDeleteAll();
+              await handleDeleteAll();
               setSelectedQuestions([]);
               setIsSelectAll(false);
               setIsSelectNone(false);
             }
             setIsDeleteModalOpen(false);
-            refetch();
           }}
           labelOnConfirm="Delete"
           onClose={() => setIsDeleteModalOpen(false)}
