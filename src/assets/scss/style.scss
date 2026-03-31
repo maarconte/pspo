@@ -6,8 +6,10 @@
 * {
   box-sizing: border-box;
 }
+
 html {
   font-size: 16px;
+
   body {
     font-family: "Libre Franklin", sans-serif;
     color: $primary-900;
@@ -30,6 +32,7 @@ p {
 a {
   color: $primary-500;
   text-decoration: none;
+
   &:hover {
     text-decoration: underline;
   }
