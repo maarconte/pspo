@@ -104,7 +104,7 @@ describe("QuizzScore", () => {
     } as any);
 
     render(<QuizzScore />);
-    
+
     // Should be correct (1) despite order difference
     expect(setScoreMock).toHaveBeenCalledWith(1);
   });
@@ -130,7 +130,7 @@ describe("QuizzScore", () => {
     } as any);
 
     const { getByText } = render(<QuizzScore />);
-    
+
     // Percent should be 100% because only 1 question is answered and it is correct
     // (score 1 / answeredCount 1) * 100 = 100
     expect(getByText("100%")).toBeDefined();
