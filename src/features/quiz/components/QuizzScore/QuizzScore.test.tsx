@@ -84,4 +84,28 @@ describe("QuizzScore", () => {
     render(<QuizzScore />);
     expect(setScoreMock).toHaveBeenCalledWith(2);
   });
+
+  it("should handle multiple choice answers in different order", () => {
+    const setScoreMock = vi.fn();
+
+    const mockQuestions = [
+      { id: "1", answer: [1, 2, 3], type: "pspo-I" }, // Multiple choice
+    ];
+
+    const mockUserAnswers = [
+      { question: 0, answer: [3, 1, 2] }, // Correct but in different order
+    ];
+
+    vi.mocked(useQuestionsStore).mockReturnValue({
+      score: 0,
+      setScore: setScoreMock,
+      userAnswers: mockUserAnswers,
+      questions: mockQuestions,
+    } as any);
+
+    render(<QuizzScore />);
+    
+    // Should be correct (1) despite order difference
+    expect(setScoreMock).toHaveBeenCalledWith(1);
+  });
 });
