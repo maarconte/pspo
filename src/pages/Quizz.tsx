@@ -84,11 +84,15 @@ export default function Quizz() {
       .toString()
       .padStart(2, "0")}`;
   };
+  const handleQuestionChange = (newIndex: number, shouldNotify = true) => {
+    if (shouldNotify) notifyTime();
+    setCurrentQuestion(newIndex);
+    setShowAnswer(false);
+  };
+
   const nextQuestion = () => {
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      notifyTime();
-      setShowAnswer(false);
+      handleQuestionChange(currentQuestion + 1);
     } else {
       finishQuizz();
     }
@@ -155,10 +159,7 @@ export default function Quizz() {
           <Button
             label="Previous"
             disabled={currentQuestion === 0}
-            onClick={() => {
-              setCurrentQuestion(currentQuestion - 1);
-              setShowAnswer(false);
-            }}
+            onClick={() => handleQuestionChange(currentQuestion - 1, false)}
           />
           <Button
             onClick={() => setOpen(true)}
@@ -183,10 +184,7 @@ export default function Quizz() {
         </Drawer.Header>
         <Drawer.Body>
           <QuestionNavigation
-            setCurrentQuestion={(index) => {
-              setCurrentQuestion(index);
-              setShowAnswer(false);
-            }}
+            setCurrentQuestion={handleQuestionChange}
             currentQuestion={currentQuestion}
           />
         </Drawer.Body>
