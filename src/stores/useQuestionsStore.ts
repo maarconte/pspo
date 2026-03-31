@@ -45,7 +45,7 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 	},
 
 	setFormation: (formation) => {
-		set({ formation });
+		set({ formation, questions: [] });
 		// Reload questions when formation changes
 		const { allQuestions } = get();
 		if (allQuestions.length > 0) {
