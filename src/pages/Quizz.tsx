@@ -178,9 +178,9 @@ export default function Quizz() {
         onClose={() => setOpen(false)}
         size={"xs"}
       >
-        {/* <Drawer.Header>
+        <Drawer.Header>
           <Drawer.Title>Navigation</Drawer.Title>
-        </Drawer.Header> */}
+        </Drawer.Header>
         <Drawer.Body>
           <QuestionNavigation
             setCurrentQuestion={(index) => {
