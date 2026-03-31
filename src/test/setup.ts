@@ -9,7 +9,9 @@ afterEach(() => {
 
 // Mock Firebase
 vi.mock('../firebase', () => ({
-	Firebase: {},
+	Firebase: {
+		options: {},
+	},
 	auth: {
 		currentUser: null,
 		onAuthStateChanged: vi.fn(),
@@ -17,6 +19,22 @@ vi.mock('../firebase', () => ({
 	Providers: {
 		google: {},
 	},
+}));
+
+// Mock Firebase Firestore
+vi.mock('firebase/firestore', () => ({
+	getFirestore: vi.fn(() => ({})),
+	collection: vi.fn(),
+	doc: vi.fn(),
+	getDoc: vi.fn(),
+	getDocs: vi.fn(),
+	addDoc: vi.fn(),
+	updateDoc: vi.fn(),
+	deleteDoc: vi.fn(),
+	serverTimestamp: vi.fn(),
+	query: vi.fn(),
+	where: vi.fn(),
+	orderBy: vi.fn(),
 }));
 
 // Mock environment variables

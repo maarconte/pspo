@@ -20,15 +20,14 @@ const QuizzScore: FC<QuizzScoreProps> = () => {
       const question = questions[userAnswer.question];
       const correctAnswer = question.answer;
 
-      // check if 2 arrays are equal
+      // check if 2 arrays are equal (order-independent)
       if (Array.isArray(correctAnswer) && Array.isArray(userAnswer.answer)) {
-        if (
-          correctAnswer.length === userAnswer.answer.length &&
-          (correctAnswer as any[]).every(
-            (value, index) => value === (userAnswer.answer as any[])[index]
-          )
-        ) {
-          score++;
+        if (correctAnswer.length === userAnswer.answer.length) {
+          const sortedCorrect = [...correctAnswer].sort();
+          const sortedUser = [...userAnswer.answer].sort();
+          if (sortedCorrect.every((val, idx) => val === sortedUser[idx])) {
+            score++;
+          }
         }
       } else if (correctAnswer === userAnswer.answer) {
         score++;
