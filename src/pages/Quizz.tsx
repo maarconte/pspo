@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../ui";
 import { Button_Style } from "../ui/Button/Button.types";
 import Counter from "../features/quiz/components/Counter/Counter";
-import Feedback from "../features/quiz/components/Feedback/Feedback";
 import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard";
 import QuestionNavigation from "../features/quiz/components/QuestionNavigation/QuestionNavigation";
 import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
@@ -22,10 +21,9 @@ export default function Quizz() {
   const [isPaused, setIsPaused] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const [open, setOpen] = React.useState(false);
-  const notificationContent = (questionNumber: number, time: string) => (
+  const notificationContent = (time: string) => (
     <div className="toast-content">
-      <p className="mb-0">{`Question ${questionNumber + 1}`}</p>
-      <p className="mb-0 time fs-2">{time}</p>
+      <p className={`mb-0 time fs-4 fw-bold color-${toastType(timeSpent)}`}>{time}</p>
     </div>
   );
 
@@ -37,7 +35,7 @@ export default function Quizz() {
   const notifyTime = () => {
     if (timeSpent <= 3) return;
     toast(
-      notificationContent(currentQuestion, formatTime(timeSpent)),
+      notificationContent( formatTime(timeSpent)),
       toastOptions
     );
   };
@@ -48,10 +46,9 @@ export default function Quizz() {
     hideProgressBar: true,
     closeOnClick: false,
     pauseOnHover: true,
-    theme: "colored",
     draggable: false,
     closeButton: false,
-    type: toastType(timeSpent),
+    style: { width: "200px", boxShadow: "none", marginLeft: "auto" },
   };
 
   useEffect(() => {

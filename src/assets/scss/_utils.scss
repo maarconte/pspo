@@ -99,6 +99,7 @@
     gap: #{$i}rem;
   }
 }
+
 .mb-05 {
   margin-bottom: 0.5rem;
 }
@@ -162,4 +163,20 @@
 
 .bg-success {
   background-color: $success-100;
+}
+
+.color-success {
+  color: $success-500;
+}
+
+.color-error {
+  color: $secondary-500;
+}
+
+.color-warning {
+  color: $warning-500;
+}
+
+.fw-bold {
+  font-weight: bold;
 }
