@@ -9,7 +9,9 @@ import { QuizzScoreProps } from "./QuizzScore.types";
 const QuizzScore: FC<QuizzScoreProps> = () => {
   const { score, setScore, userAnswers, questions } =
     useQuestionsStore();
-  const percent = ((score / userAnswers.length) * 100).toFixed(0);
+    
+  const answeredCount = userAnswers.filter(a => a?.answer !== undefined).length;
+  const percent = answeredCount > 0 ? ((score / answeredCount) * 100).toFixed(0) : "0";
   const percentNumber = parseFloat(percent); // Convertir en nombre
 
   // get the quizz score by comparing the user answers with the correct answers

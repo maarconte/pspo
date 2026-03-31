@@ -11,33 +11,39 @@ export default function QuestionNavigation({
   setCurrentQuestion,
   currentQuestion,
 }: Props) {
-  const { userAnswers } = useQuestionsStore();
+  const userAnswers = useQuestionsStore((s) => s.userAnswers);
+
   const isQuestionAnswered = (index: number) => {
-    return userAnswers.some((answer) => answer.question === index);
+    const userAnswer = userAnswers[index];
+    return userAnswer?.answer !== undefined;
   };
 
   const isBookmarked = (index: number) => {
-    return userAnswers.some(
-      (answer) => answer.question === index && answer.isBookmarked
-    );
+    return !!userAnswers[index]?.isBookmarked;
   };
 
   return (
     <div className="QuestionNavigation">
-      {Array.from({ length: 80 }, (_, i) => (
-        <button
-          key={i}
-          onClick={() => setCurrentQuestion(i)}
-          className={`QuestionNavigation__button ${
-            currentQuestion === i ? "active" : ""
-          } ${isQuestionAnswered(i) ? "answered" : ""} ${
-            isBookmarked(i) ? "bookmarked" : ""
-          }`}
-          disabled={currentQuestion === i}
-        >
-          {i + 1}
-        </button>
-      ))}
+      {Array.from({ length: 80 }, (_, i) => {
+        const isCurrent = currentQuestion === i;
+        const answered = isQuestionAnswered(i);
+        const bookmarked = isBookmarked(i);
+
+        return (
+          <button
+            key={i}
+            onClick={() => setCurrentQuestion(i)}
+            className={`QuestionNavigation__button ${
+              isCurrent ? "active" : ""
+            } ${answered ? "answered" : ""} ${
+              bookmarked ? "bookmarked" : ""
+            }`}
+            disabled={isCurrent}
+          >
+            {i + 1}
+          </button>
+        );
+      })}
     </div>
   );
 }
