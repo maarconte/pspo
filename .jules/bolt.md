@@ -1,0 +1,3 @@
+## 2024-11-20 - TanStack React Table Memoization Pattern
+**Learning:** When using `@tanstack/react-table`, defining `columns` and `filterFns` without memoization (e.g., inline definitions or recreating arrays directly on each render) causes the entire internal table pipeline to be reconstructed every time the component renders.
+**Action:** Always extract static configurations (like `filterFns` or constants) outside the component. Use `useMemo` for configurations that depend on state (like `columns` accessing `selectedQuestions`) and `useCallback` for dynamic handlers passed to those configurations to preserve referential stability and optimize table performance.
