@@ -62,21 +62,29 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 	setError: (error) => set({ error }),
 
 	loadQuestions: (data) => {
-		const { formation } = get();
+		const { formation, questions } = get();
 
 		// Filter questions by formation type
 		const selectedQuestionsByType = data.filter(
 			(question) => question.type === formation
 		);
 
-		if (selectedQuestionsByType.length > 0) {
-			// Shuffle and select 80 random questions
-			const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
-			const selected = shuffled.slice(0, 80);
-			set({ questions: selected, allQuestions: data });
+		let newQuestions = questions;
+		if (questions.length === 0) {
+			if (selectedQuestionsByType.length > 0) {
+				// Shuffle and select 80 random questions initially
+				const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
+				newQuestions = shuffled.slice(0, 80);
+			}
 		} else {
-			set({ questions: [], allQuestions: data });
+			// Update existing quiz questions with new values from data to avoid shuffling during background sync
+			newQuestions = questions.map((q) => {
+				const updatedQ = data.find((newQ) => newQ.id === q.id);
+				return updatedQ || q;
+			});
 		}
+
+		set({ questions: newQuestions, allQuestions: data });
 	},
 
 	refetch: () => {

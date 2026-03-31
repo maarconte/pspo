@@ -9,7 +9,6 @@ import Modal from "../../Modal";
 import ModalEditQuestion from "../../../features/admin/components/ModalEditQuestion/ModalEditQuestion";
 import Papa from "papaparse";
 import { Question } from "../../../utils/types";
-import { useQuestionsStore } from "../../../stores/useQuestionsStore";
 import { toast } from "react-toastify";
 
 interface TableActionsProps {
@@ -35,18 +34,16 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
   const { handleDelete } = useDeleteDoc("questions");
-  const { questions, refetch } = useQuestionsStore();
-  const handleDeleteAll = () => {
+  const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
 
-    selectedQuestions.forEach((question: Question) => {
-      handleDelete(question.id);
-    });
+    for (const question of selectedQuestions) {
+      await handleDelete(question.id);
+    }
     setSelectedQuestions([]);
     setIsSelectAll(false);
     setIsSelectNone(false);
-    refetch();
   };
 
   const handleFileUpload = (file: any) => {
@@ -98,13 +95,13 @@ const TableActions: React.FC<TableActionsProps> = ({
     }
   };
 
-  const addAllQuestions = () => {
+  const addAllQuestions = async () => {
     if (!csvData) return;
     try {
-      csvData?.forEach((question) => {
-        handleAdd(question);
-        setCsvData([]);
-      });
+      for (const question of csvData) {
+        await handleAdd(question);
+      }
+      setCsvData([]);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(
@@ -147,7 +144,7 @@ const TableActions: React.FC<TableActionsProps> = ({
           isOpen={isDeleteModalOpen}
           setIsClosed={setIsDeleteModalOpen}
           title="Delete question(s)"
-          onConfirm={() => {
+          onConfirm={async () => {
             if (
               !setSelectedQuestions ||
               !setIsSelectAll ||
@@ -157,16 +154,15 @@ const TableActions: React.FC<TableActionsProps> = ({
               return;
 
             if (selectedQuestion) {
-              handleDelete(selectedQuestion.id);
+              await handleDelete(selectedQuestion.id);
               selectedQuestion && setSelectedQuestion(undefined);
             } else {
-              handleDeleteAll();
+              await handleDeleteAll();
               setSelectedQuestions([]);
               setIsSelectAll(false);
               setIsSelectNone(false);
             }
             setIsDeleteModalOpen(false);
-            refetch();
           }}
           labelOnConfirm="Delete"
           onClose={() => setIsDeleteModalOpen(false)}

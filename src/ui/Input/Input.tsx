@@ -50,7 +50,7 @@ const Input: FC<InputProps> = ({
           placeholder=""
         />
       )}
-      <label htmlFor={id}>{placeholder}</label>
+      <label htmlFor={id || name}>{placeholder}</label>
       {errorMessage && <span className="error-message">{errorMessage}</span>}
     </div>
   );
