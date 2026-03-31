@@ -49,7 +49,7 @@ const QuestionsLoader: FC<QuestionsLoaderProps> = ({ children }) => {
   return (
 	<>
 	  {children}
-	  <ToastContainer autoClose={false} />
+	  <ToastContainer autoClose={3000} />
 	</>
   );
 };
