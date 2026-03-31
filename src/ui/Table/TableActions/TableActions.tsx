@@ -153,16 +153,23 @@ const TableActions: React.FC<TableActionsProps> = ({
             )
               return;
 
-            if (selectedQuestion) {
-              await handleDelete(selectedQuestion.id);
-              selectedQuestion && setSelectedQuestion(undefined);
-            } else {
-              await handleDeleteAll();
-              setSelectedQuestions([]);
-              setIsSelectAll(false);
-              setIsSelectNone(false);
+            try {
+              if (selectedQuestion) {
+                await handleDelete(selectedQuestion.id);
+                selectedQuestion && setSelectedQuestion(undefined);
+                toast.success("Question deleted successfully");
+              } else {
+                await handleDeleteAll();
+                setSelectedQuestions([]);
+                setIsSelectAll(false);
+                setIsSelectNone(false);
+                toast.success("Questions deleted successfully");
+              }
+            } catch (error) {
+              toast.error("Failed to delete question(s)");
+            } finally {
+              setIsDeleteModalOpen(false);
             }
-            setIsDeleteModalOpen(false);
           }}
           labelOnConfirm="Delete"
           onClose={() => setIsDeleteModalOpen(false)}

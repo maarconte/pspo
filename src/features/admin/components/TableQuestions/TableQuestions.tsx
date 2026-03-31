@@ -1,7 +1,7 @@
 import "./style.scss";
 import "./style-mobile.scss";
+import { toast } from "react-toastify";
 
-import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
 import {
   ColumnFiltersState,
   FilterFn,
@@ -170,7 +170,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
         if (info.getValue())
           return (
             <div className="text-center">
-              <XCircle size={16} color="#e41937" />
+              <XCircle size={24} color="#e41937" />
             </div>
           );
       },
@@ -184,7 +184,7 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
         if (!info?.getValue())
           return (
             <div className="text-center">
-              <XCircle size={16} color="#e41937" />
+              <XCircle size={24} color="#e41937" />
             </div>
           );
       },
@@ -219,17 +219,17 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
     {
       header: "",
       id: "actions",
-      width: 50,
+      width: 60,
       cell: (info: any) => (
         <div className="d-flex gap-05 actions">
           <Edit
-            size={16}
+            size={32}
             className="pointer action"
             color="#8b78c7"
             onClick={() => handleSelectQuestion(info.row.original)}
           />
           <Trash2
-            size={16}
+            size={32}
             className="pointer action"
             color="#8b78c7"
             onClick={() => {
@@ -322,16 +322,23 @@ const TableQuestions: FC<TableQuestionsProps> = () => {
           setIsClosed={setIsDeleteModalOpen}
           title={`${selectedQuestion ? "Delete question" : "Delete questions"}`}
           onConfirm={async () => {
-            if (selectedQuestion) {
-              await handleDelete(selectedQuestion.id);
-              selectedQuestion && setSelectedQuestion(undefined);
-            } else {
-              await handleDeleteAll();
-              setSelectedQuestions([]);
-              setIsSelectAll(false);
-              setIsSelectNone(false);
+            try {
+              if (selectedQuestion) {
+                await handleDelete(selectedQuestion.id);
+                selectedQuestion && setSelectedQuestion(undefined);
+                toast.success("Question deleted successfully");
+              } else {
+                await handleDeleteAll();
+                setSelectedQuestions([]);
+                setIsSelectAll(false);
+                setIsSelectNone(false);
+                toast.success("Questions deleted successfully");
+              }
+            } catch (error) {
+              toast.error("Failed to delete question(s)");
+            } finally {
+              setIsDeleteModalOpen(false);
             }
-            setIsDeleteModalOpen(false);
           }}
           labelOnConfirm="Delete"
           onClose={() => setIsDeleteModalOpen(false)}
