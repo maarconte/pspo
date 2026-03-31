@@ -55,7 +55,6 @@ const QuestionCard: FC<QuestionCardProps> = ({
           : Array.isArray(question.answer)
             ? question.answer.includes(index)
             : question.answer === index;
-
       if (isCorrect) classes.push("success");
     }
     return classes.join(" ");
