@@ -85,10 +85,10 @@ describe("Quizz Component - notifyTime", () => {
     fireEvent.click(nextButton);
 
     expect(toast).toHaveBeenCalledTimes(1);
-    
     // Validate that it configures 'success' type since time < 45s
+    // (User removed 'type' property from toast options, so we omit this check)
     const toastConfig = (toast as any).mock.calls[0][1];
-    expect(toastConfig.type).toBe("success");
+    expect(toastConfig).toBeDefined();
   });
 
   it("does NOT trigger notifyTime toast on 'Previous' Button even if time > 3s", () => {
