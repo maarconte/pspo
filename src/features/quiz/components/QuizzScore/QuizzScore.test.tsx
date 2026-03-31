@@ -108,4 +108,31 @@ describe("QuizzScore", () => {
     // Should be correct (1) despite order difference
     expect(setScoreMock).toHaveBeenCalledWith(1);
   });
+
+  it("should ignore bookmarked-only questions in percentage calculation", () => {
+    const setScoreMock = vi.fn();
+
+    const mockQuestions = [
+      { id: "1", answer: 1, type: "pspo-I" },
+      { id: "2", answer: 2, type: "pspo-I" },
+    ];
+
+    const mockUserAnswers = [
+      { question: 0, answer: 1 }, // Correct answer
+      { question: 1, isBookmarked: true }, // Bookmarked but NOT answered
+    ];
+
+    vi.mocked(useQuestionsStore).mockReturnValue({
+      score: 1, // 1 correct answer
+      setScore: setScoreMock,
+      userAnswers: mockUserAnswers,
+      questions: mockQuestions,
+    } as any);
+
+    const { getByText } = render(<QuizzScore />);
+    
+    // Percent should be 100% because only 1 question is answered and it is correct
+    // (score 1 / answeredCount 1) * 100 = 100
+    expect(getByText("100%")).toBeDefined();
+  });
 });
