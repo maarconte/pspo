@@ -1,2 +1,0 @@
-import{j as r}from"./index-CMGqFzM4.js";const p=({value:t,onChange:i,placeholder:d,required:c,className:u,errorMessage:l,type:x,name:e,id:s,...a})=>r.jsxs("div",{className:`input-box ${u}`,children:[x==="textarea"?r.jsx("textarea",{value:t,onChange:i,required:!0,name:e,id:s||e,...a,placeholder:""}):r.jsx("input",{value:t,onChange:i,type:x,id:s||e,name:e,required:!0,...a,placeholder:""}),r.jsx("label",{htmlFor:s,children:d}),l&&r.jsx("span",{className:"error-message",children:l})]});export{p as I};
-//# sourceMappingURL=Input-RoEJxWvx.js.map
