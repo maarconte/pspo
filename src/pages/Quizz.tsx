@@ -51,7 +51,7 @@ export default function Quizz() {
   const notifyTime = () => {
     if (timeSpent <= 3) return;
     toast(
-      notificationContent( formatTime(timeSpent)),
+      notificationContent(formatTime(timeSpent)),
       toastOptions
     );
   };
