@@ -138,7 +138,7 @@ export default function Quizz() {
     <div className="Quizz">
       <div className="container">
         {/* Header */}
-        <h1 className="text-center"> Agile.training : {formation}</h1>
+        <h1 className="text-center">{formation}</h1>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <Counter
             isPaused={isPaused}
