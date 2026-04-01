@@ -24,6 +24,7 @@ interface QuestionsState {
 	setAnswer: (index: number, answer: UserAnswer['answer']) => void;
 	toggleBookmark: (index: number) => void;
 	calculateScore: () => number;
+	startNewExam: () => void;
 }
 
 export const useQuestionsStore = create<QuestionsState>((set, get) => ({
@@ -138,5 +139,22 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 			}
 		});
 		return currentScore;
+	},
+
+	startNewExam: () => {
+		const { allQuestions, formation } = get();
+		const selectedQuestionsByType = allQuestions.filter(q => q.type === formation);
+		
+		let newQuestions = [];
+		if (selectedQuestionsByType.length > 0) {
+			const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
+			newQuestions = shuffled.slice(0, 80);
+		}
+
+		set({
+			questions: newQuestions,
+			userAnswers: [],
+			score: 0,
+		});
 	},
 }));

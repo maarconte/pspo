@@ -7,8 +7,13 @@ import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const { formation, setFormation, questions } = useQuestionsStore();
+  const { formation, setFormation, questions, startNewExam } = useQuestionsStore();
   const navigate = useNavigate();
+
+  const handleStartExam = () => {
+    startNewExam();
+    navigate("/quizz");
+  };
 
   return (
     <div className="home-container">
@@ -93,7 +98,7 @@ export default function Home() {
           <Button
             label="Commencer l'examen"
             icon={<Play size={18} fill="currentColor" />}
-            onClick={() => navigate("/quizz")}
+            onClick={handleStartExam}
             disabled={questions.length === 0}
             className="px-4 py-3"
           />
