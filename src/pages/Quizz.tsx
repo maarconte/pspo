@@ -148,13 +148,15 @@ export default function Quizz() {
         {/* Header */}
         <h1 className="text-center">{formation || "Study Group Quiz"}</h1>
         <div className="d-flex justify-content-between align-items-center mb-2">
-          <Counter
-            isPaused={isPaused}
-            setIsPaused={setIsPaused}
-            finishQuizz={finishQuizz}
-          />
+          {!isFinished && (
+            <Counter
+              isPaused={isPaused}
+              setIsPaused={setIsPaused}
+              finishQuizz={finishQuizz}
+            />
+          )}
 
-          {showAnswer && <QuizzScore />}
+          {isFinished && <QuizzScore />}
           <div className="d-flex gap-1">
             {isFinished ? (
               <Button
