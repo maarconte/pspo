@@ -42,10 +42,9 @@ export default function Profile() {
       <hr />
 
       <div className="mt-4">
-        <h2 className="h4 mb-4">Évolution Temporelle</h2>
-        
+
         {isLoading && <Loader />}
-        
+
         {error && (
           <div className="alert alert-danger">
             Une erreur est survenue lors de la récupération de vos statistiques.
