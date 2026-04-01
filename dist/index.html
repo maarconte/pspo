@@ -16,6 +16,13 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1S1TB0PT50"></script>
     <script>
+      if (
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+      ) {
+        window["ga-disable-G-1S1TB0PT50"] = true;
+      }
+      
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
