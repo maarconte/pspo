@@ -1,9 +1,14 @@
 @use '../../../../assets/scss/variables' as *;
+
 .ModalEditQuestion {
+
   /* Ajoutez vos styles ici */
   .modal {
     width: 70vw;
+    max-height: 90vh;
+    overflow-y: auto;
   }
+
   .answer {
     padding: 0.5rem;
     display: flex;
@@ -11,12 +16,15 @@
     align-items: baseline;
     margin-bottom: 1rem;
     border-radius: 8px;
+
     input {
       margin-top: 0 !important;
     }
+
     label:before {
       top: 20px;
     }
+
     label:after {
       top: 24px;
     }
@@ -39,10 +47,12 @@
   position: relative;
   display: flex;
   align-items: center;
+
   &.selected {
     border: 1px solid $secondary-50;
     background-color: $secondary-50;
   }
+
   label {
     margin-left: 25px;
   }
