@@ -2,14 +2,13 @@
 .modal {
   border-radius: 10px;
   padding: 20px;
-  max-height: 90vh;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1022;
   background-color: #fff;
-  overflow: scroll;
+  overflow: hidden;
 
   @include breakpoint(mobile) {
     width: 93%;
