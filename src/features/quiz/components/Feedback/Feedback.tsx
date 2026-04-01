@@ -47,23 +47,23 @@ const Feedback: FC<FeedbackProps> = ({ question }) => {
 
   return (
     <div className="Feedback">
-      <div className="d-flex justify-content-between align-items-center">
-        <h3 className="h5">Feedback</h3>
-        <Button
-          label="Report a problem"
-          type={Button_Type.SECONDARY}
-          style={Button_Style.OUTLINED}
-          icon={
-            <AlertTriangle size={16} color="#e41937" />
-          }
-          onClick={() => setShowModal(true)}
-        />
-      </div>
+            <h3 className="h5">Feedback</h3>
       <p>
         {question.feedback
           ? question.feedback
           : "No feedback for this question"}
       </p>
+            <div className="d-flex justify-content-end align-items-center mt-2">
+        <Button
+          label="Report a problem"
+          type={Button_Type.SECONDARY}
+          style={Button_Style.OUTLINED}
+          icon={
+            <AlertTriangle size={16} color="#e41937"/>
+          }
+          onClick={() => setShowModal(true)}
+        />
+      </div>
       <Modal
         isOpen={showModal}
         setIsClosed={setShowModal}
