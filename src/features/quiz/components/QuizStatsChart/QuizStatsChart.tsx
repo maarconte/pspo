@@ -24,12 +24,15 @@ export default function QuizStatsChart({ data }: QuizStatsChartProps) {
   const chartData = useMemo(() => {
     return [...data]
       .sort((a, b) => a.timestamp - b.timestamp)
-      .map((session, index) => ({
-        name: `Sess. ${index + 1}`,
-        score: session.score,
-        avgTime: parseFloat((session.averageTimeMs / 1000).toFixed(1)), // convert ms to seconds
-        date: new Date(session.timestamp).toLocaleDateString(),
-      }));
+      .map((session, index) => {
+        const percent = session.totalQuestions > 0 ? (session.score / session.totalQuestions) * 100 : 0;
+        return {
+          name: `Sess. ${index + 1}`,
+          successRate: parseFloat(percent.toFixed(1)),
+          avgTime: parseFloat((session.averageTimeMs / 1000).toFixed(1)), // convert ms to seconds
+          date: new Date(session.timestamp).toLocaleDateString(),
+        };
+      });
   }, [data]);
 
   if (!chartData || chartData.length === 0) {
@@ -58,8 +61,8 @@ export default function QuizStatsChart({ data }: QuizStatsChartProps) {
         >
           <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
           <XAxis dataKey="name" />
-          {/* Left Axis for score */}
-          <YAxis yAxisId="left" domain={[0, 'dataMax']} />
+          {/* Left Axis for percentage (0-100) */}
+          <YAxis yAxisId="left" domain={[0, 100]} />
           {/* Right Axis for average time (seconds) */}
           <YAxis yAxisId="right" orientation="right" domain={[0, 'dataMax']} />
           
@@ -76,8 +79,8 @@ export default function QuizStatsChart({ data }: QuizStatsChartProps) {
           <Line
             yAxisId="left"
             type="monotone"
-            dataKey="score"
-            name="Score Brut"
+            dataKey="successRate"
+            name="Bonnes réponses (%)"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
             strokeWidth={3}

@@ -2,6 +2,7 @@ import React from "react";
 import { useUserStore } from "../stores/useUserStore";
 import { useQuizHistory } from "../hooks/useQuizHistory";
 import QuizStatsChart from "../features/quiz/components/QuizStatsChart/QuizStatsChart";
+import QuizErrorsChart from "../features/quiz/components/QuizStatsChart/QuizErrorsChart";
 import { Loader } from "../ui";
 
 export default function Profile() {
@@ -51,9 +52,26 @@ export default function Profile() {
           </div>
         )}
 
-        {!isLoading && !error && history && (
-          <div className="bg-white p-4 rounded shadow-sm">
-            <QuizStatsChart data={history} />
+        {!isLoading && !error && history && history.length > 0 && (
+          <div className="row g-4 mb-5">
+            <div className="col-12">
+              <div className="bg-white p-4 rounded shadow-sm">
+                <h3 className="h5 text-center mb-4">Taux de Réussite & Temps</h3>
+                <QuizStatsChart data={history} />
+              </div>
+            </div>
+            <div className="col-12">
+              <div className="bg-white p-4 rounded shadow-sm">
+                <h3 className="h5 text-center mb-4">Mauvaises Réponses</h3>
+                <QuizErrorsChart data={history} />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!isLoading && !error && history && history.length === 0 && (
+          <div className="d-flex justify-content-center align-items-center bg-light p-5 rounded">
+            <p className="text-muted fw-bold">Aucune donnée disponible pour le moment. Fais un quiz !</p>
           </div>
         )}
       </div>
