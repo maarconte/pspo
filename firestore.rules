@@ -73,9 +73,8 @@ service cloud.firestore {
       allow read: if true;
 
       // Modification : admin et dev peuvent tout faire
-      // Les utilisateurs authentifiés peuvent seulement signaler une erreur (flagging)
+      // Les utilisateurs (identifiés ou non) peuvent seulement signaler une erreur (flagging)
       allow update: if isAdmin() || (
-        isAuthenticated() && 
         request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly(['comments', 'isFlagged', 'updatedAt'])
       );
