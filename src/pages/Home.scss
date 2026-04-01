@@ -4,9 +4,10 @@
 .home-container {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   min-height: calc(100vh - 110px);
+  min-height: calc(100dvh - 110px);
   /* Hauteur de la zone principale (sans navbar) */
   padding: 0 1rem 1rem;
   gap: 2rem;
@@ -22,8 +23,8 @@
   flex-direction: column;
   justify-content: flex-end;
   width: 100%;
-  height: -webkit-fill-available;
   flex: 1;
+  min-height: 0;
   border-radius: 24px;
   background-image: url(../assets/img/home_hero.webp);
   background-size: cover;
@@ -60,7 +61,8 @@
 }
 
 .glass-card {
-  height: -webkit-fill-available;
+  flex: 1;
+  min-height: 0;
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -69,7 +71,6 @@
   /* Ombre douce dérivée de primary-900 */
   border-radius: 24px;
   padding: 2rem;
-  flex: 1;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
