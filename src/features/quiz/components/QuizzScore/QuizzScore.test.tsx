@@ -47,13 +47,16 @@ describe("QuizzScore", () => {
       },
     ];
 
-    // Setup the mock return value
-    vi.mocked(useQuestionsStore).mockReturnValue({
-      score: 0,
-      setScore: setScoreMock,
-      userAnswers: mockUserAnswers,
-      questions: mockQuestions,
-    } as any);
+    // Setup the mock implementation to support selectors
+    vi.mocked(useQuestionsStore).mockImplementation((selector: any) => {
+      const state = {
+        score: 0,
+        setScore: setScoreMock,
+        userAnswers: mockUserAnswers,
+        questions: mockQuestions,
+      };
+      return selector ? selector(state) : state;
+    });
 
     render(<QuizzScore />);
 
@@ -74,12 +77,15 @@ describe("QuizzScore", () => {
       { question: 1, answer: true },   // Correct
     ];
 
-     vi.mocked(useQuestionsStore).mockReturnValue({
-      score: 0,
-      setScore: setScoreMock,
-      userAnswers: mockUserAnswers,
-      questions: mockQuestions,
-    } as any);
+     vi.mocked(useQuestionsStore).mockImplementation((selector: any) => {
+      const state = {
+        score: 0,
+        setScore: setScoreMock,
+        userAnswers: mockUserAnswers,
+        questions: mockQuestions,
+      };
+      return selector ? selector(state) : state;
+    });
 
     render(<QuizzScore />);
     expect(setScoreMock).toHaveBeenCalledWith(2);
@@ -96,12 +102,15 @@ describe("QuizzScore", () => {
       { question: 0, answer: [3, 1, 2] }, // Correct but in different order
     ];
 
-    vi.mocked(useQuestionsStore).mockReturnValue({
-      score: 0,
-      setScore: setScoreMock,
-      userAnswers: mockUserAnswers,
-      questions: mockQuestions,
-    } as any);
+    vi.mocked(useQuestionsStore).mockImplementation((selector: any) => {
+      const state = {
+        score: 0,
+        setScore: setScoreMock,
+        userAnswers: mockUserAnswers,
+        questions: mockQuestions,
+      };
+      return selector ? selector(state) : state;
+    });
 
     render(<QuizzScore />);
 
@@ -122,12 +131,15 @@ describe("QuizzScore", () => {
       { question: 1, isBookmarked: true }, // Bookmarked but NOT answered
     ];
 
-    vi.mocked(useQuestionsStore).mockReturnValue({
-      score: 1, // 1 correct answer
-      setScore: setScoreMock,
-      userAnswers: mockUserAnswers,
-      questions: mockQuestions,
-    } as any);
+    vi.mocked(useQuestionsStore).mockImplementation((selector: any) => {
+      const state = {
+        score: 1, // 1 correct answer
+        setScore: setScoreMock,
+        userAnswers: mockUserAnswers,
+        questions: mockQuestions,
+      };
+      return selector ? selector(state) : state;
+    });
 
     const { getByText } = render(<QuizzScore />);
     // Percent should be 100% because only 1 question is answered and it is correct
