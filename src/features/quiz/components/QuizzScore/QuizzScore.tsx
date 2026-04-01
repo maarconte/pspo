@@ -7,36 +7,38 @@ import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { QuizzScoreProps } from "./QuizzScore.types";
 
 const QuizzScore: FC<QuizzScoreProps> = () => {
-  const { score, setScore, userAnswers, questions } =
-    useQuestionsStore();
+  const score = useQuestionsStore((s) => s.score);
+  const setScore = useQuestionsStore((s) => s.setScore);
+  const userAnswers = useQuestionsStore((s) => s.userAnswers);
+  const questions = useQuestionsStore((s) => s.questions);
 
-  const answeredCount = userAnswers?.filter(a => a?.answer !== undefined).length;
+  const answeredCount = userAnswers?.filter((a) => a?.answer !== undefined).length || 0;
   const percent = answeredCount > 0 ? ((score / answeredCount) * 100).toFixed(0) : "0";
-  const percentNumber = parseFloat(percent); // Convertir en nombre
+  const percentNumber = parseFloat(percent);
 
-  // get the quizz score by comparing the user answers with the correct answers
   useEffect(() => {
-    let score = 0;
-    userAnswers.forEach((userAnswer) => {
-      if (!questions[userAnswer?.question]) return;
-      const question = questions[userAnswer?.question];
-      const correctAnswer = question?.answer;
+    let currentScore = 0;
+    userAnswers?.forEach((userAnswer) => {
+      if (!userAnswer || !questions[userAnswer.question]) return;
 
-      // check if 2 arrays are equal (order-independent)
-      if (Array.isArray(correctAnswer) && Array.isArray(userAnswer?.answer)) {
-        if (correctAnswer.length === userAnswer?.answer.length) {
+      const question = questions[userAnswer.question];
+      const correctAnswer = question?.answer;
+      const userAnswerValue = userAnswer?.answer;
+
+      if (Array.isArray(correctAnswer) && Array.isArray(userAnswerValue)) {
+        if (correctAnswer.length === userAnswerValue.length) {
           const sortedCorrect = [...correctAnswer].sort();
-          const sortedUser = [...userAnswer?.answer].sort();
+          const sortedUser = [...userAnswerValue].sort();
           if (sortedCorrect.every((val, idx) => val === sortedUser[idx])) {
-            score++;
+            currentScore++;
           }
         }
-      } else if (correctAnswer === userAnswer?.answer) {
-        score++;
+      } else if (correctAnswer === userAnswerValue) {
+        currentScore++;
       }
     });
-    setScore(score);
-  }, [userAnswers]);
+    setScore(currentScore);
+  }, [userAnswers, questions, setScore]);
 
   return (
     <div className="QuizzScore">

@@ -12,19 +12,20 @@ export default function QuestionNavigation({
   currentQuestion,
 }: Props) {
   const userAnswers = useQuestionsStore((s) => s.userAnswers);
+  const questions = useQuestionsStore((s) => s.questions);
 
   const isQuestionAnswered = (index: number) => {
-    const userAnswer = userAnswers[index];
+    const userAnswer = userAnswers?.[index];
     return userAnswer?.answer !== undefined;
   };
 
   const isBookmarked = (index: number) => {
-    return !!userAnswers[index]?.isBookmarked;
+    return !!userAnswers?.[index]?.isBookmarked;
   };
 
   return (
     <div className="QuestionNavigation">
-      {Array.from({ length: 80 }, (_, i) => {
+      {Array.from({ length: questions?.length || 0 }, (_, i) => {
         const isCurrent = currentQuestion === i;
         const answered = isQuestionAnswered(i);
         const bookmarked = isBookmarked(i);
