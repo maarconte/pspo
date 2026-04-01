@@ -29,7 +29,6 @@ const Feedback: FC<FeedbackProps> = ({ question }) => {
 
     try {
       await handleUpdate({
-        ...currentData,
         comments: [...comments, comment],
         isFlagged: true,
       });
