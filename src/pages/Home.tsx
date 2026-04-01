@@ -24,7 +24,7 @@ export default function Home() {
       <div className="home-content">
         <div className="hero-content">
           <h1 className="hero-title">
-            Agile Training
+          Study Group
           </h1>
           <p className="hero-subtitle">Test your knowledge and prepare for your certification</p>
         </div>
