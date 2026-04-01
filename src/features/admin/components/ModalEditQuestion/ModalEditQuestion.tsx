@@ -60,7 +60,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
           try {
             question?.id ? await handleUpdate(values) : await handleAdd(values);
             toast.success("Question updated successfully");
-            setSelectQuestion && setSelectQuestion({} as any);
+            setSelectQuestion && setSelectQuestion(undefined);
             setIsOpen(false);
           } catch (error) {
              console.error("Failed to update question", error);
@@ -73,7 +73,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
             isOpen={isOpen}
             onClose={() => {
               setIsOpen(false);
-              setSelectQuestion && setSelectQuestion({} as any);
+              setSelectQuestion && setSelectQuestion(undefined);
             }}
             setIsClosed={() => {}}
             title="Edit question"
