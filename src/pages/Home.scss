@@ -87,17 +87,12 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
   h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: $primary-800;
-    margin-bottom: 1rem;
-  }
-
-  /* Override custom select width purely for visuals */
-  .Select {
-    width: 100%;
-    max-width: 320px;
-    margin-bottom: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $primary-400;
+    margin-bottom: 1.25rem;
   }
 }
 
