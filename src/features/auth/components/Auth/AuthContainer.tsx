@@ -9,6 +9,7 @@ import Button from "../../../../ui/Button/Button";
 import Input from "../../../../ui/Input/Input";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { getAuthErrorMessage } from "../../utils/authErrors";
 
 interface Props {
   login: boolean;
@@ -29,7 +30,7 @@ const AuthContainer = (props: Props) => {
         navigate("/");
       })
       .catch((error) => {
-        setErrorMessage(error.code + ": " + error.message);
+        setErrorMessage(getAuthErrorMessage(error.code));
         setDisabled(false);
       });
   };
@@ -42,7 +43,7 @@ const AuthContainer = (props: Props) => {
         navigate("/admin");
       })
       .catch((error: any) => {
-        setErrorMessage(error.code + ": " + error.message);
+        setErrorMessage(getAuthErrorMessage(error.code));
         setDisabled(false);
       });
   };
@@ -55,7 +56,7 @@ const AuthContainer = (props: Props) => {
         navigate("/");
       })
       .catch((error: any) => {
-        setErrorMessage(error.code + ": " + error.message);
+        setErrorMessage(getAuthErrorMessage(error.code));
         setDisabled(false);
       });
   };
