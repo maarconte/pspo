@@ -22,6 +22,9 @@ const Button: FC<ButtonProps> = ({
   ...rest
 }) => {
   const getIconColor = () => {
+    if (React.isValidElement(icon) && icon.props.color) {
+      return icon.props.color;
+    }
     const key = `${style || 'default'}-${disabled ? 'disabled' : 'enabled'}-${type}`;
 
     switch (key) {
