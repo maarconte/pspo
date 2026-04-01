@@ -2,12 +2,16 @@ import "./Home.scss";
 
 import { AlertCircle, Clock, Layers, Play, Target, Undo2 } from "lucide-react";
 
-import { Button, Select } from "../ui";
+import { Button, SegmentedControl } from "../ui";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const { formation, setFormation, questions, startNewExam } = useQuestionsStore();
+  const formation = useQuestionsStore((s) => s.formation);
+  const setFormation = useQuestionsStore((s) => s.setFormation);
+  const questions = useQuestionsStore((s) => s.questions);
+  const startNewExam = useQuestionsStore((s) => s.startNewExam);
+
   const navigate = useNavigate();
 
   const handleStartExam = () => {
@@ -24,15 +28,14 @@ export default function Home() {
           </h1>
           <p className="hero-subtitle">Mettez à l'épreuve vos connaissances et préparez votre certification</p>
         </div>
-</div>
+      </div>
       <div className="glass-card">
         <div className="selector-section">
           <h2>Module de préparation</h2>
-          <Select
+          <SegmentedControl
             name="formation"
-            className="Select"
             value={formation}
-            handleChange={(value: any) => {
+            onChange={(value) => {
               setFormation(value);
             }}
             options={[
