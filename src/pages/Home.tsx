@@ -1,57 +1,101 @@
+import "./Home.scss";
+
+import { AlertCircle, Clock, Layers, Play, Target, Undo2 } from "lucide-react";
+
 import { Button, Select } from "../ui";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useNavigate } from "react-router-dom";
 
-
 export default function Home() {
-  const { formation, setFormation, questions } =
-    useQuestionsStore();
+  const { formation, setFormation, questions } = useQuestionsStore();
   const navigate = useNavigate();
-  return (
-    <div className="h-100vh p-2 m-0">
-      <div className="content">
-        <h1 id="questionsTitle" className="text-center">
-          Agile.training : {formation}
-        </h1>
 
-        <div className="card">
-          <h2>Instructions </h2>
+  return (
+    <div className="home-container">
+      <div className="home-content">
+        <div className="hero-content">
+          <h1 className="hero-title">
+            Agile.training : {formation}
+          </h1>
+          <p className="hero-subtitle">Mettez à l'épreuve vos connaissances et préparez votre certification</p>
+        </div>
+</div>
+      <div className="glass-card">
+        <div className="selector-section">
+          <h2>Module de préparation</h2>
           <Select
             name="formation"
-            className="mb-2"
+            className="Select"
             value={formation}
             handleChange={(value: any) => {
               setFormation(value);
             }}
-            label="Formation"
             options={[
               { label: "PSPO-I", value: "pspo-I" },
-              // { label: "PSPO-II", value: "pspo-II" },
               { label: "PSM-I", value: "PSM-I" },
             ]}
           />
-          <p>
-            Number of questions <strong>80</strong>
-          </p>
-          <p>
-            Has a time limit of <strong>60:00</strong>
-          </p>
-          <p>
-            Must be finished in one sitting. You cannot save and finish later.
-          </p>
-          <p>
-            Questions displayed per page <strong>1</strong>
-          </p>
-          <p>Will allow you to go back and change your answers.</p>
-          <p>Will not let you finish with any questions unattempted.</p>
-          <p>
-            Has a pass mark of <strong>85% (12 errors maximum)</strong>
-          </p>
+        </div>
+
+        <div className="bento-grid">
+          <div className="bento-item">
+            <div className="icon-container">
+              <Layers size={24} strokeWidth={2.5} />
+            </div>
+            <div className="bento-content">
+              <strong>80 Questions</strong>
+              <span>Tirées aléatoirement pour une simulation réaliste de l'examen.</span>
+            </div>
+          </div>
+
+          <div className="bento-item">
+            <div className="icon-container">
+              <Clock size={24} strokeWidth={2.5} />
+            </div>
+            <div className="bento-content">
+              <strong>60 Minutes</strong>
+              <span>Le chronomètre s'activera dès le démarrage du quiz.</span>
+            </div>
+          </div>
+
+          <div className="bento-item">
+            <div className="icon-container">
+              <Target size={24} strokeWidth={2.5} />
+            </div>
+            <div className="bento-content">
+              <strong>85% Requis</strong>
+              <span>Objectif de passe : vous avez droit à un maximum de 12 erreurs.</span>
+            </div>
+          </div>
+
+          <div className="bento-item">
+            <div className="icon-container">
+              <AlertCircle size={24} strokeWidth={2.5} />
+            </div>
+            <div className="bento-content">
+              <strong>Session Unique</strong>
+              <span>L'examen doit être terminé d'une traite sans sauvegarde possible.</span>
+            </div>
+          </div>
+
+          <div className="bento-item">
+            <div className="icon-container">
+              <Undo2 size={24} strokeWidth={2.5} />
+            </div>
+            <div className="bento-content">
+              <strong>Flexible</strong>
+              <span>Vous pouvez revenir en arrière et modifier vos réponses à tout moment.</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="start-action">
           <Button
-            label="Commencer"
+            label="Commencer l'examen"
+            icon={<Play size={18} fill="currentColor" />}
             onClick={() => navigate("/quizz")}
-            className="d-block w-100"
             disabled={questions.length === 0}
+            className="px-4 py-3"
           />
         </div>
       </div>
