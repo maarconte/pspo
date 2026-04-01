@@ -19,3 +19,5 @@ export type Question = {
   createdAt?: Timestamp;
   type?: string;
 };
+
+export * from "./stats";
