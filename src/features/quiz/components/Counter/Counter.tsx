@@ -47,6 +47,11 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
     setIsPaused(!isPaused);
   };
 
+  const handleFinish = () => {
+    setOpenModal(false);
+    finishQuizz();
+  };
+
   const continueQuizz = () => {
     setOpenModal(false);
     setIsPaused(false);
@@ -154,7 +159,7 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
         setIsClosed={() => setOpenModal(false)}
         type="warning"
         title="Time's up!"
-        onClose={finishQuizz}
+        onClose={handleFinish}
         onConfirm={continueQuizz}
         labelOnConfirm="Continue"
         labelOnCancel="Finish"
