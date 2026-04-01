@@ -17,7 +17,7 @@ import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const { questions, setScore, formation, score } = useQuestionsStore();
+  const { questions, setScore, formation, calculateScore } = useQuestionsStore();
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -72,26 +72,7 @@ export default function Quizz() {
     }
   }, [currentQuestion, isFinished, startQuestion]);
 
-  // Saving final stats securely when score is fully processed by QuizzScore component
-  useEffect(() => {
-    if (isFinished && score !== undefined && user?.uid) {
-      const summary = getSummary();
-      // Use flag or length check to prevent multiple saves per session
-      if (summary.totalQuestions > 0) {
-        saveQuizSession({
-          userId: user.uid,
-          formation: formation,
-          score: score,
-          totalQuestions: summary.totalQuestions,
-          averageTimeMs: summary.averageTimeMs,
-          totalTimeMs: summary.totalTimeMs,
-          timestamp: Date.now(),
-          details: summary.details,
-        });
-        resetStats(); // prevent double save
-      }
-    }
-  }, [isFinished, score, user?.uid, saveQuizSession, getSummary, resetStats, formation]);
+  // Saving final stats is now handled synchronously in finishQuizz
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
@@ -112,6 +93,24 @@ export default function Quizz() {
     setIsFinished(true);
     setShowAnswer(true);
     setIsPaused(true);
+
+    if (user?.uid) {
+      const summary = getSummary();
+      const finalScore = calculateScore();
+      if (summary.totalQuestions > 0) {
+        saveQuizSession({
+          userId: user.uid,
+          formation: formation,
+          score: finalScore,
+          totalQuestions: summary.totalQuestions,
+          averageTimeMs: summary.averageTimeMs,
+          totalTimeMs: summary.totalTimeMs,
+          timestamp: Date.now(),
+          details: summary.details,
+        });
+        resetStats();
+      }
+    }
   };
 
   const formatTime = (totalSeconds: number) => {
