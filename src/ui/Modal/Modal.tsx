@@ -19,6 +19,7 @@ type ModalProps = {
   confirmButtonDisabled?: boolean;
   infoModal?: boolean;
   closeOnBackdropClick?: boolean;
+  hideButtons?: boolean;
 };
 const Modal: FC<ModalProps> = ({
   isOpen,
@@ -33,6 +34,7 @@ const Modal: FC<ModalProps> = ({
   infoModal = false,
   setIsClosed,
   closeOnBackdropClick,
+  hideButtons,
 }) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -90,7 +92,7 @@ const Modal: FC<ModalProps> = ({
               </button>
             </div>
             <div className="modal__body">{children}</div>
-            {!infoModal && (
+            {!infoModal && !hideButtons && (
               <div className="modal__footer">
                 <Button
                   label={labelOnCancel ? labelOnCancel : "Cancel"}

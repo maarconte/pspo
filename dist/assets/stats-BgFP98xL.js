@@ -1,0 +1,2 @@
+import{w as r,x as n,M as a,N as c,O as u,Q as d,S as q,y as S}from"./index-3ELrAaAE.js";const f=async s=>{const{userId:e}=s;if(!e)throw new Error("User ID is required to save quiz session");const i=r(n,"users",e,"quizSessions"),o=a(i),t={...s,id:o.id};return await c(o,t),o.id},y=async s=>{if(!s)throw new Error("User ID is required to fetch quiz sessions");const e=r(n,"users",s,"quizSessions"),i=u(e,q("timestamp","desc"),d(50));return(await S(i)).docs.map(t=>t.data())};export{y as g,f as s};
+//# sourceMappingURL=stats-BgFP98xL.js.map

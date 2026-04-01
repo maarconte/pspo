@@ -145,7 +145,7 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 		const { allQuestions, formation } = get();
 		const selectedQuestionsByType = allQuestions.filter(q => q.type === formation);
 		
-		let newQuestions = [];
+		let newQuestions: Question[] = [];
 		if (selectedQuestionsByType.length > 0) {
 			const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
 			newQuestions = shuffled.slice(0, 80);
