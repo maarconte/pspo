@@ -157,4 +157,74 @@ describe('useQuestionsStore', () => {
 
 		expect(result.current.error).toBe(errorMessage);
 	});
+
+	describe('calculateScore', () => {
+		it('should accurately calculate score for single choice questions', () => {
+			const { result } = renderHook(() => useQuestionsStore());
+			
+			const mockQuestions: Question[] = [
+				{ id: '1', title: 'Q1', type: 'pspo-I', answer: 0, answerType: 'S', answers: [] } as Question,
+				{ id: '2', title: 'Q2', type: 'pspo-I', answer: 1, answerType: 'S', answers: [] } as Question,
+				{ id: '3', title: 'Q3', type: 'pspo-I', answer: 2, answerType: 'S', answers: [] } as Question,
+			];
+
+			act(() => {
+				result.current.setQuestions(mockQuestions);
+				// Q1: correct, Q2: incorrect, Q3: correct
+				result.current.setUserAnswers([
+					{ question: 0, answer: 0 },
+					{ question: 1, answer: 0 }, // wrong, correct is 1
+					{ question: 2, answer: 2 },
+				]);
+			});
+
+			const score = result.current.calculateScore();
+			expect(score).toBe(2);
+		});
+
+		it('should accurately calculate score for multiple choice questions (arrays)', () => {
+			const { result } = renderHook(() => useQuestionsStore());
+			
+			const mockQuestions: Question[] = [
+				{ id: '1', title: 'Q1', type: 'pspo-I', answer: [0, 2], answerType: 'M', answers: [] } as Question,
+				{ id: '2', title: 'Q2', type: 'pspo-I', answer: [1, 3], answerType: 'M', answers: [] } as Question,
+			];
+
+			act(() => {
+				result.current.setQuestions(mockQuestions);
+				result.current.setUserAnswers([
+					// Q1: correct (different order)
+					{ question: 0, answer: [2, 0] },
+					// Q2: partially correct (missing 3, added 2) -> should yield 0 for this question
+					{ question: 1, answer: [1, 2] }, 
+				]);
+			});
+
+			const score = result.current.calculateScore();
+			expect(score).toBe(1);
+		});
+
+		it('should return 0 when answers are empty or all incorrect', () => {
+			const { result } = renderHook(() => useQuestionsStore());
+			
+			const mockQuestions: Question[] = [
+				{ id: '1', title: 'Q1', type: 'pspo-I', answer: 0, answerType: 'S', answers: [] } as Question,
+			];
+
+			act(() => {
+				result.current.setQuestions(mockQuestions);
+				result.current.setUserAnswers([
+					{ question: 0, answer: 1 }, // wrong
+				]);
+			});
+
+			expect(result.current.calculateScore()).toBe(0);
+
+			act(() => {
+				result.current.setUserAnswers([]); // empty
+			});
+
+			expect(result.current.calculateScore()).toBe(0);
+		});
+	});
 });

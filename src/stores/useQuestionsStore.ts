@@ -23,6 +23,7 @@ interface QuestionsState {
 	refetch: () => void;
 	setAnswer: (index: number, answer: UserAnswer['answer']) => void;
 	toggleBookmark: (index: number) => void;
+	calculateScore: () => number;
 }
 
 export const useQuestionsStore = create<QuestionsState>((set, get) => ({
@@ -114,5 +115,28 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 			};
 			return { userAnswers: newUserAnswers };
 		});
+	},
+
+	calculateScore: () => {
+		const { userAnswers, questions } = get();
+		let currentScore = 0;
+		userAnswers.forEach((userAnswer) => {
+			if (!questions[userAnswer.question]) return;
+			const question = questions[userAnswer.question];
+			const correctAnswer = question.answer;
+
+			if (Array.isArray(correctAnswer) && Array.isArray(userAnswer.answer)) {
+				if (correctAnswer.length === userAnswer.answer.length) {
+					const sortedCorrect = [...correctAnswer].sort();
+					const sortedUser = [...userAnswer.answer].sort();
+					if (sortedCorrect.every((val, idx) => val === sortedUser[idx])) {
+						currentScore++;
+					}
+				}
+			} else if (correctAnswer === userAnswer.answer) {
+				currentScore++;
+			}
+		});
+		return currentScore;
 	},
 }));
