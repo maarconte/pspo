@@ -32,6 +32,14 @@ const Header: FC<HeaderProps> = () => {
             onClick={() => navigate("/login")}
           />
         )}
+        {user && (
+          <Button
+            label="Profil"
+            style={Button_Style.OUTLINED}
+            icon={<User size={16} />}
+            onClick={() => navigate("/profile")}
+          />
+        )}
         {isDev && (
           <Button
             label="Users"

@@ -11,16 +11,23 @@ import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
 import { Drawer } from "rsuite";
 import { toast } from "react-toastify";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
-
+import { useQuizStatsStore } from "../stores/useQuizStatsStore";
+import { useUserStore } from "../stores/useUserStore";
+import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const { questions, setScore, formation } = useQuestionsStore();
+  const { questions, setScore, formation, score } = useQuestionsStore();
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const [open, setOpen] = React.useState(false);
+
+  const { startTracking, startQuestion, endQuestion, getSummary, resetStats } = useQuizStatsStore();
+  const { user } = useUserStore();
+  const { mutate: saveQuizSession } = useSaveQuizSession();
+
   const notificationContent = (time: string) => (
     <div className="toast-content">
       <p className={`mb-0 time fs-4 fw-bold color-${toastType(timeSpent)}`}>{time}</p>
@@ -32,6 +39,7 @@ export default function Quizz() {
     if (time >= 45 && time <= 90) return "warning";
     return "error";
   };
+
   const notifyTime = () => {
     if (timeSpent <= 3) return;
     toast(
@@ -51,14 +59,44 @@ export default function Quizz() {
     style: { width: "200px", boxShadow: "none", marginLeft: "auto" },
   };
 
+  // Tracking setup
+  useEffect(() => {
+    startTracking();
+    return () => resetStats();
+  }, [startTracking, resetStats]);
+
   useEffect(() => {
     setTimeSpent(0);
-  }, [currentQuestion]);
+    if (!isFinished) {
+      startQuestion(currentQuestion);
+    }
+  }, [currentQuestion, isFinished, startQuestion]);
+
+  // Saving final stats securely when score is fully processed by QuizzScore component
+  useEffect(() => {
+    if (isFinished && score !== undefined && user?.uid) {
+      const summary = getSummary();
+      // Use flag or length check to prevent multiple saves per session
+      if (summary.totalQuestions > 0) {
+        saveQuizSession({
+          userId: user.uid,
+          formation: formation,
+          score: score,
+          totalQuestions: summary.totalQuestions,
+          averageTimeMs: summary.averageTimeMs,
+          totalTimeMs: summary.totalTimeMs,
+          timestamp: Date.now(),
+          details: summary.details,
+        });
+        resetStats(); // prevent double save
+      }
+    }
+  }, [isFinished, score, user?.uid, saveQuizSession, getSummary, resetStats, formation]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | undefined;
 
-    if (!isPaused) {
+    if (!isPaused && !isFinished) {
       intervalId = setInterval(() => {
         setTimeSpent((prevTime) => prevTime + 1);
       }, 1000);
@@ -67,13 +105,15 @@ export default function Quizz() {
     }
 
     return () => clearInterval(intervalId);
-  }, [isPaused, currentQuestion]);
+  }, [isPaused, currentQuestion, isFinished]);
 
   const finishQuizz = () => {
+    endQuestion(); // Finalize last question time
     setIsFinished(true);
     setShowAnswer(true);
     setIsPaused(true);
   };
+
   const formatTime = (totalSeconds: number) => {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
@@ -81,6 +121,7 @@ export default function Quizz() {
       .toString()
       .padStart(2, "0")}`;
   };
+
   const handleQuestionChange = (newIndex: number, shouldNotify = true) => {
     if (shouldNotify) notifyTime();
     setCurrentQuestion(newIndex);
