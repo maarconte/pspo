@@ -72,8 +72,16 @@ service cloud.firestore {
       // Lecture : tout le monde peut lire (pour le quiz)
       allow read: if true;
 
-      // Création, modification, suppression : admin et dev uniquement
-      allow create, update, delete: if isAdmin();
+      // Modification : admin et dev peuvent tout faire
+      // Les utilisateurs authentifiés peuvent seulement signaler une erreur (flagging)
+      allow update: if isAdmin() || (
+        isAuthenticated() && 
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['comments', 'isFlagged', 'updatedAt'])
+      );
+
+      // Création, suppression : admin et dev uniquement
+      allow create, delete: if isAdmin();
     }
 
     // Collection categories (si vous en avez)
