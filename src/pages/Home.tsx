@@ -24,14 +24,14 @@ export default function Home() {
       <div className="home-content">
         <div className="hero-content">
           <h1 className="hero-title">
-            Agile.training : {formation}
+            Agile Training
           </h1>
-          <p className="hero-subtitle">Mettez à l'épreuve vos connaissances et préparez votre certification</p>
+          <p className="hero-subtitle">Test your knowledge and prepare for your certification</p>
         </div>
       </div>
       <div className="glass-card">
         <div className="selector-section">
-          <h2>Module de préparation</h2>
+          <h2>Module</h2>
           <SegmentedControl
             name="formation"
             value={formation}
@@ -52,7 +52,7 @@ export default function Home() {
             </div>
             <div className="bento-content">
               <strong>80 Questions</strong>
-              <span>Tirées aléatoirement pour une simulation réaliste de l'examen.</span>
+              <span>Randomly selected for a realistic exam simulation.</span>
             </div>
           </div>
 
@@ -62,7 +62,7 @@ export default function Home() {
             </div>
             <div className="bento-content">
               <strong>60 Minutes</strong>
-              <span>Le chronomètre s'activera dès le démarrage du quiz.</span>
+              <span>The timer will start as soon as the quiz begins.</span>
             </div>
           </div>
 
@@ -71,8 +71,8 @@ export default function Home() {
               <Target size={24} strokeWidth={2.5} />
             </div>
             <div className="bento-content">
-              <strong>85% Requis</strong>
-              <span>Objectif de passe : vous avez droit à un maximum de 12 erreurs.</span>
+              <strong>85% Required</strong>
+              <span>Passing goal: you are allowed a maximum of 12 errors.</span>
             </div>
           </div>
 
@@ -81,8 +81,8 @@ export default function Home() {
               <AlertCircle size={24} strokeWidth={2.5} />
             </div>
             <div className="bento-content">
-              <strong>Session Unique</strong>
-              <span>L'examen doit être terminé d'une traite sans sauvegarde possible.</span>
+              <strong>Single Session</strong>
+              <span>The exam must be completed in one go with no saving possible.</span>
             </div>
           </div>
 
@@ -92,14 +92,14 @@ export default function Home() {
             </div>
             <div className="bento-content">
               <strong>Flexible</strong>
-              <span>Vous pouvez revenir en arrière et modifier vos réponses à tout moment.</span>
+              <span>You can go back and modify your answers at any time.</span>
             </div>
           </div>
         </div>
 
         <div className="start-action">
           <Button
-            label="Commencer l'examen"
+            label="Start Exam"
             icon={<Play size={18} fill="currentColor" />}
             onClick={handleStartExam}
             disabled={questions.length === 0}
