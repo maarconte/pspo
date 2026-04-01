@@ -134,10 +134,12 @@ const TableActions: React.FC<TableActionsProps> = ({
         />
       )}
 
-      <ModalEditQuestion
-        isOpen={isAddModalOpen}
-        setIsOpen={setIsAddModalOpen}
-      />
+      {isAddModalOpen && (
+        <ModalEditQuestion
+          isOpen={isAddModalOpen}
+          setIsOpen={setIsAddModalOpen}
+        />
+      )}
 
       {isDeleteModalOpen && (
         <Modal
