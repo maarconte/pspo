@@ -16,6 +16,13 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_ID%"></script>
     <script>
+      if (
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+      ) {
+        window["ga-disable-%VITE_GA_ID%"] = true;
+      }
+      
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
