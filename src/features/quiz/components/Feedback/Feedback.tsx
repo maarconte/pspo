@@ -15,23 +15,30 @@ import { useUpdateDoc } from "../../../../utils/hooks/";
 const Feedback: FC<FeedbackProps> = ({ question }) => {
   const [showModal, setShowModal] = useState(false);
   const [comment, setComment] = useState<string>("");
-  const { data, error, handleUpdate } = useUpdateDoc({
+  const { data, handleUpdate, isUpdating, error } = useUpdateDoc({
     collectionName: "questions",
     docId: question.id,
   });
 
-  const handleSubmitComment = () => {
+  const handleSubmitComment = async () => {
     if (!comment) return;
-    console.log(data);
-    const comments = data?.comments ? [...data.comments] : [];
-    handleUpdate({
-      ...data,
-      comments: [...comments, comment],
-      isFlagged: true,
-    });
-    setShowModal(false);
-    if (!error) {
+
+    // Use data from query if available, fallback to question prop to ensure we have initial details
+    const currentData = data || question;
+    const comments = currentData?.comments ? [...currentData.comments] : [];
+
+    try {
+      await handleUpdate({
+        ...currentData,
+        comments: [...comments, comment],
+        isFlagged: true,
+      });
+      setShowModal(false);
+      setComment("");
       toast.success("The problem has been reported");
+    } catch (err) {
+      console.error("Error reporting question:", err);
+      toast.error("An error occurred while reporting the problem");
     }
   };
 
@@ -71,6 +78,8 @@ const Feedback: FC<FeedbackProps> = ({ question }) => {
         title="Report a problem"
         labelOnConfirm="Submit"
         onConfirm={() => handleSubmitComment()}
+        isConfirmLoading={isUpdating}
+        confirmButtonDisabled={!comment}
       >
         <p>
           If you believe this answer is inappropriate or should be reviewed,

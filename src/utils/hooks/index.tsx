@@ -90,8 +90,10 @@ export function useUpdateDoc({ docId, collectionName }: UseUpdateDocProps) {
   return {
     data,
     isLoading,
-    error,
+    error: error || updateMutation.error,
     handleUpdate,
+    isUpdating: updateMutation.isPending,
+    isUpdateError: updateMutation.isError,
     mutationStatus: updateMutation.status,
   };
 }

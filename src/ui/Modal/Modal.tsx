@@ -20,6 +20,8 @@ type ModalProps = {
   infoModal?: boolean;
   closeOnBackdropClick?: boolean;
   hideButtons?: boolean;
+  isConfirmLoading?: boolean;
+  isCancelLoading?: boolean;
 };
 const Modal: FC<ModalProps> = ({
   isOpen,
@@ -35,6 +37,8 @@ const Modal: FC<ModalProps> = ({
   setIsClosed,
   closeOnBackdropClick,
   hideButtons,
+  isConfirmLoading,
+  isCancelLoading,
 }) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -98,6 +102,7 @@ const Modal: FC<ModalProps> = ({
                   label={labelOnCancel ? labelOnCancel : "Cancel"}
                   style={Button_Style.OUTLINED}
                   onClick={handleClose}
+                  isLoader={isCancelLoading}
                 />
                 <Button
                   label={labelOnConfirm ? labelOnConfirm : "Ok"}
@@ -105,6 +110,7 @@ const Modal: FC<ModalProps> = ({
                     handleConfirm(e);
                   }}
                   disabled={confirmButtonDisabled}
+                  isLoader={isConfirmLoading}
                   type={
                     type === "error"
                       ? Button_Type.ERROR
