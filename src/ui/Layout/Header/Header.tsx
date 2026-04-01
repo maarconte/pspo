@@ -12,7 +12,7 @@ import Logout from "../../../features/auth/components/Auth/Logout";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../../stores/useUserStore";
 import { useUserRole } from "../../../features/auth/hooks/useUserRole";
-import logo from "../../../assets/img/AgileTraining.webp";
+import logo from "../../../assets/img/StudyGroup.webp";
 const Header: FC<HeaderProps> = () => {
   const { user } = useUserStore();
   const { isAdmin, isDev } = useUserRole();
