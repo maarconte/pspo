@@ -17,15 +17,23 @@ import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const { questions, setScore, formation, calculateScore } = useQuestionsStore();
+  const questions = useQuestionsStore((s) => s.questions);
+  const setScore = useQuestionsStore((s) => s.setScore);
+  const formation = useQuestionsStore((s) => s.formation);
+  const calculateScore = useQuestionsStore((s) => s.calculateScore);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const [open, setOpen] = React.useState(false);
 
-  const { startTracking, startQuestion, endQuestion, getSummary, resetStats } = useQuizStatsStore();
-  const { user } = useUserStore();
+  const startTracking = useQuizStatsStore((s) => s.startTracking);
+  const startQuestion = useQuizStatsStore((s) => s.startQuestion);
+  const endQuestion = useQuizStatsStore((s) => s.endQuestion);
+  const getSummary = useQuizStatsStore((s) => s.getSummary);
+  const resetStats = useQuizStatsStore((s) => s.resetStats);
+
+  const user = useUserStore((s) => s.user);
   const { mutate: saveQuizSession } = useSaveQuizSession();
 
   const notificationContent = (time: string) => (
@@ -95,20 +103,20 @@ export default function Quizz() {
     setIsPaused(true);
 
     if (user?.uid) {
-      const summary = getSummary();
-      const finalScore = calculateScore();
-      if (summary.totalQuestions > 0) {
+      const summary = getSummary?.();
+      const finalScore = calculateScore?.();
+      if (summary && summary.totalQuestions > 0) {
         saveQuizSession({
           userId: user.uid,
-          formation: formation,
-          score: finalScore,
+          formation: formation || "unknown",
+          score: finalScore || 0,
           totalQuestions: summary.totalQuestions,
           averageTimeMs: summary.averageTimeMs,
           totalTimeMs: summary.totalTimeMs,
           timestamp: Date.now(),
           details: summary.details,
         });
-        resetStats();
+        resetStats?.();
       }
     }
   };
@@ -128,7 +136,7 @@ export default function Quizz() {
   };
 
   const nextQuestion = () => {
-    if (currentQuestion < questions.length - 1) {
+    if (currentQuestion < (questions?.length || 0) - 1) {
       handleQuestionChange(currentQuestion + 1);
     } else {
       finishQuizz();
@@ -138,7 +146,7 @@ export default function Quizz() {
     <div className="Quizz">
       <div className="container">
         {/* Header */}
-        <h1 className="text-center">{formation}</h1>
+        <h1 className="text-center">{formation || "Study Group Quiz"}</h1>
         <div className="d-flex justify-content-between align-items-center mb-2">
           <Counter
             isPaused={isPaused}
@@ -205,7 +213,7 @@ export default function Quizz() {
           />
           <Button
             label="Next"
-            disabled={currentQuestion === questions.length - 1}
+            disabled={currentQuestion === (questions?.length || 0) - 1}
             onClick={() => nextQuestion()}
           />
         </div>
