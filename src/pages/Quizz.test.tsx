@@ -2,6 +2,9 @@ import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import Quizz from "./Quizz";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
+import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
+import { useUserStore } from "../stores/useUserStore";
+import { useQuizStatsStore } from "../stores/useQuizStatsStore";
 import { toast } from "react-toastify";
 import { MemoryRouter } from "react-router-dom";
 
@@ -12,6 +15,18 @@ vi.mock("../stores/useQuestionsStore", () => ({
 
 vi.mock("react-toastify", () => ({
   toast: vi.fn(),
+}));
+
+vi.mock("../hooks/useSaveQuizSession", () => ({
+  useSaveQuizSession: vi.fn(),
+}));
+
+vi.mock("../stores/useUserStore", () => ({
+  useUserStore: vi.fn(),
+}));
+
+vi.mock("../stores/useQuizStatsStore", () => ({
+  useQuizStatsStore: vi.fn(),
 }));
 
 // Provide a mock for matchMedia (often required by UI libraries like rsuite in JSDOM)
@@ -45,6 +60,28 @@ describe("Quizz Component - notifyTime", () => {
       questions: mockQuestions,
       setScore: mockSetScore,
       formation: "pspo-I",
+      calculateScore: vi.fn(() => 0),
+    });
+
+    (useSaveQuizSession as any).mockReturnValue({
+      mutate: vi.fn(),
+    });
+
+    (useUserStore as any).mockReturnValue({
+      user: { uid: "test-uid" },
+    });
+
+    (useQuizStatsStore as any).mockReturnValue({
+      startTracking: vi.fn(),
+      startQuestion: vi.fn(),
+      endQuestion: vi.fn(),
+      getSummary: vi.fn(() => ({
+        totalQuestions: 0,
+        averageTimeMs: 0,
+        totalTimeMs: 0,
+        details: [],
+      })),
+      resetStats: vi.fn(),
     });
   });
 
