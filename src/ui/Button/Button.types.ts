@@ -3,6 +3,7 @@ export enum Button_Type {
 	SUCCESS = "success",
 	PRIMARY = "primary",
 	SECONDARY = "secondary",
+	WARNING = "warning",
 	LABEL = "label",
 	LINK = "link",
 	WHITE = "white",

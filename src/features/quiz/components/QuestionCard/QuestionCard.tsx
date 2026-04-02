@@ -121,25 +121,27 @@ const QuestionCard: FC<QuestionCardProps> = ({
   return (
     <div className="QuestionCard">
       {question?.isFlagged && (
-        <Alert severity="error">
+        <Alert severity="warning">
           <div className="d-flex align-items-center justify-content-between w-100">
             This question has been flagged for review
             <Button
               label="Show comments"
               onClick={() => setShowComments(true)}
               style={Button_Style.LINK}
-              type={Button_Type.SECONDARY}
+              type={Button_Type.WARNING}
             />
           </div>
         </Alert>
-      )}
+       )}
 
       {showComments && (
         <Modal
           title="Comments"
           onClose={() => setShowComments(false)}
+          onConfirm={() => setShowComments(false)}
           setIsClosed={setShowComments}
           isOpen={showComments}
+          hideCancelButton
         >
           {question.comments?.map((comment, index) => (
             <p key={index} className="comment">
