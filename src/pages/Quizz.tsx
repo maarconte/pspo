@@ -9,6 +9,7 @@ import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard"
 import QuestionNavigation from "../features/quiz/components/QuestionNavigation/QuestionNavigation";
 import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
 import { Drawer } from "rsuite";
+import Modal from "../ui/Modal/Modal";
 import { toast } from "react-toastify";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useQuizStatsStore } from "../stores/useQuizStatsStore";
@@ -26,6 +27,7 @@ export default function Quizz() {
   const [isPaused, setIsPaused] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const [open, setOpen] = React.useState(false);
+  const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
 
   const startTracking = useQuizStatsStore((s) => s.startTracking);
   const startQuestion = useQuizStatsStore((s) => s.startQuestion);
@@ -182,7 +184,10 @@ export default function Quizz() {
                 <Button
                   label="Finish"
                   style={Button_Style.OUTLINED}
-                  onClick={() => finishQuizz()}
+                  onClick={() => {
+                    setIsFinishModalOpen(true);
+                    setIsPaused(true);
+                  }}
                 />
               </>
             )}
@@ -240,6 +245,24 @@ export default function Quizz() {
           />
         </Drawer.Body>
       </Drawer>
+      <Modal
+        isOpen={isFinishModalOpen}
+        onClose={() => {
+          setIsFinishModalOpen(false);
+          setIsPaused(false);
+        }}
+        setIsClosed={setIsFinishModalOpen}
+        title="Finish"
+        labelOnConfirm="Finish"
+        labelOnCancel="Cancel"
+        onConfirm={() => {
+          setIsFinishModalOpen(false);
+          finishQuizz();
+        }}
+        type="warning"
+      >
+        <p>Voulez-vous vraiment terminer votre session ?</p>
+      </Modal>
     </div>
   );
 }
