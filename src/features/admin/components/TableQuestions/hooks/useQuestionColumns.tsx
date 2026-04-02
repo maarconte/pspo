@@ -52,7 +52,6 @@ export const useQuestionColumns = ({
       header: "",
       accessorKey: "id",
       size: 42,
-      width: 42,
       enableSorting: false,
       enableColumnFilter: false,
       cell: ({ row }) => (
@@ -71,7 +70,6 @@ export const useQuestionColumns = ({
     {
       id: "index",
       header: "",
-      width: 42,
       enableColumnFilter: false,
       cell: ({ row }) => (
         <span className="pointer" onClick={() => onSelect(row.original)}>
@@ -82,7 +80,7 @@ export const useQuestionColumns = ({
     {
       header: "Title",
       accessorKey: "title",
-      width: 200,
+      size: 200,
       enableSorting: true,
       sortingFn: sortingFns.text,
       enableColumnFilter: true,
@@ -95,21 +93,21 @@ export const useQuestionColumns = ({
     {
       header: "Formation",
       accessorKey: "type",
-      width: 150,
+      size: 150,
       enableSorting: true,
       enableColumnFilter: false,
     },
     {
       header: "Answer type",
       accessorKey: "answerType",
-      width: 150,
+      size: 150,
       enableColumnFilter: false,
       cell: ({ getValue }) => renderAnswerType(getValue<string>()),
     },
     {
       header: "Reported",
       accessorKey: "isFlagged",
-      width: 80,
+      size: 80,
       enableColumnFilter: false,
       cell: ({ getValue }) =>
         getValue() && (
@@ -121,7 +119,7 @@ export const useQuestionColumns = ({
     {
       header: "Feedback",
       accessorKey: "feedback",
-      width: 80,
+      size: 80,
       enableColumnFilter: false,
       cell: ({ getValue }) =>
         !getValue() && (
@@ -133,29 +131,29 @@ export const useQuestionColumns = ({
     {
       header: "Last modified",
       accessorKey: "updatedAt",
-      width: 200,
+      size: 200,
       enableColumnFilter: false,
       cell: ({ getValue }) => (
         <div className="text-center">
-          {getValue() && formatTimestamp(getValue(), "fr-FR")}
+          {(getValue() as any) && formatTimestamp(getValue(), "fr-FR")}
         </div>
       ),
     },
     {
       header: "Created at",
       accessorKey: "createdAt",
-      width: 200,
+      size: 200,
       enableColumnFilter: false,
       cell: ({ getValue }) => (
         <div className="text-center">
-          {getValue() && formatTimestamp(getValue(), "fr-FR")}
+          {(getValue() as any) && formatTimestamp(getValue(), "fr-FR")}
         </div>
       ),
     },
     {
       id: "actions",
       header: "",
-      width: 60,
+      size: 60,
       enableColumnFilter: false,
       cell: ({ row }) => (
         <div className="d-flex gap-05 actions">
