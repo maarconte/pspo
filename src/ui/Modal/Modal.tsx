@@ -22,6 +22,7 @@ type ModalProps = {
   hideButtons?: boolean;
   isConfirmLoading?: boolean;
   isCancelLoading?: boolean;
+  hideCancelButton?: boolean;
 };
 const Modal: FC<ModalProps> = ({
   isOpen,
@@ -37,6 +38,7 @@ const Modal: FC<ModalProps> = ({
   setIsClosed,
   closeOnBackdropClick,
   hideButtons,
+  hideCancelButton,
   isConfirmLoading,
   isCancelLoading,
 }) => {
@@ -98,12 +100,12 @@ const Modal: FC<ModalProps> = ({
             <div className="modal__body">{children}</div>
             {!infoModal && !hideButtons && (
               <div className="modal__footer">
-                <Button
+              {!hideCancelButton &&  <Button
                   label={labelOnCancel ? labelOnCancel : "Cancel"}
                   style={Button_Style.OUTLINED}
                   onClick={handleClose}
                   isLoader={isCancelLoading}
-                />
+                />}
                 <Button
                   label={labelOnConfirm ? labelOnConfirm : "Ok"}
                   onClick={(e) => {
