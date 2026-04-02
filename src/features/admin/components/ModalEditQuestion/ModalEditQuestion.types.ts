@@ -4,5 +4,5 @@ export interface ModalEditQuestionProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   question?: Question;
-  setSelectQuestion?: (question: Question) => void;
+  setSelectQuestion?: (question: Question | undefined) => void;
 }
