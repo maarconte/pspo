@@ -32,6 +32,7 @@ export default function Quizz() {
   const endQuestion = useQuizStatsStore((s) => s.endQuestion);
   const getSummary = useQuizStatsStore((s) => s.getSummary);
   const resetStats = useQuizStatsStore((s) => s.resetStats);
+  const startNewExam = useQuestionsStore((s) => s.startNewExam);
 
   const user = useUserStore((s) => s.user);
   const { mutate: saveQuizSession } = useSaveQuizSession();
@@ -163,10 +164,13 @@ export default function Quizz() {
                 label="Restart"
                 style={Button_Style.OUTLINED}
                 onClick={() => {
+                  startNewExam();
                   setCurrentQuestion(0);
                   setScore(0);
                   setShowAnswer(false);
-                  window.location.reload();
+                  setIsFinished(false);
+                  setIsPaused(false);
+                  setTimeSpent(0);
                 }}
               />
             ) : (
