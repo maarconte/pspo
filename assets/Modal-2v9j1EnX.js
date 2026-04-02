@@ -1,7 +1,7 @@
-import{c as E,r as m,j as e,B as x,a as w,f as c}from"./index-Dp919tav.js";/**
+import{c as E,r as m,j as e,B as x,a as w,f as c}from"./index-ZvSIEpSJ.js";/**
  * @license lucide-react v0.561.0 - ISC
  *
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */const b=[["path",{d:"M18 6 6 18",key:"1bl5f8"}],["path",{d:"m6 6 12 12",key:"d8bk6v"}]],N=E("x",b),B=({isOpen:o,onClose:r,title:f,type:a="info",children:h,onConfirm:l,labelOnConfirm:n,labelOnCancel:i,confirmButtonDisabled:u,infoModal:j=!1,setIsClosed:C,closeOnBackdropClick:L,hideButtons:k,isConfirmLoading:y,isCancelLoading:_})=>{m.useEffect(()=>{const s=d=>{d.key==="Escape"&&r(d)};return o&&window.addEventListener("keydown",s),()=>{window.removeEventListener("keydown",s)}},[o,r]),m.useEffect(()=>(o&&(document.body.style.overflow="hidden"),()=>{document.body.style.overflow="auto"}),[o]);const t=s=>{r(s)},v=async s=>{if(l)try{await l(s)}catch(d){console.error("Error during confirmation:",d)}};return e.jsx(e.Fragment,{children:o?e.jsxs("div",{children:[e.jsx("div",{className:"modal--backdrop",onClick:t}),e.jsxs("div",{className:`modal modal--${a||"info"} `,children:[e.jsxs("div",{className:"modal__header",children:[e.jsx("h3",{className:"modal__header__title",children:f}),e.jsx("button",{onClick:t,children:e.jsx(N,{size:20})})]}),e.jsx("div",{className:"modal__body",children:h}),!j&&!k&&e.jsxs("div",{className:"modal__footer",children:[e.jsx(x,{label:i||"Cancel",style:w.OUTLINED,onClick:t,isLoader:_}),e.jsx(x,{label:n||"Ok",onClick:s=>{v(s)},disabled:u,isLoader:y,type:a==="error"?c.ERROR:a==="success"?c.SUCCESS:c.PRIMARY})]})]})]}):e.jsx(e.Fragment,{})})};export{B as M,N as X};
-//# sourceMappingURL=Modal-B-Z1jSK6.js.map
+//# sourceMappingURL=Modal-2v9j1EnX.js.map
