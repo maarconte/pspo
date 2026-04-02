@@ -211,23 +211,25 @@ export default function Quizz() {
               />
             ))}
         {/* Navigation */}
-        <div className="d-flex justify-content-between">
-          <Button
-            label="Previous"
-            disabled={currentQuestion === 0}
-            onClick={() => handleQuestionChange(currentQuestion - 1, false)}
-          />
-          <Button
-            onClick={() => setOpen(true)}
-            label="Pagination"
-            style={Button_Style.OUTLINED}
-          />
-          <Button
-            label="Next"
-            disabled={currentQuestion === (questions?.length || 0) - 1}
-            onClick={() => nextQuestion()}
-          />
-        </div>
+        {!isFinished && (
+          <div className="d-flex justify-content-between">
+            <Button
+              label="Previous"
+              disabled={currentQuestion === 0}
+              onClick={() => handleQuestionChange(currentQuestion - 1, false)}
+            />
+            <Button
+              onClick={() => setOpen(true)}
+              label="Pagination"
+              style={Button_Style.OUTLINED}
+            />
+            <Button
+              label="Next"
+              disabled={currentQuestion === (questions?.length || 0) - 1}
+              onClick={() => nextQuestion()}
+            />
+          </div>
+        )}
       </div>
       <Drawer
         backdrop={false}
