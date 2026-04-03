@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useUsers } from '../features/auth/hooks/useUsers';
-import { roleService } from '../features/auth/api/roleService';
-import { UserRole, ROLE_LABELS, ROLES } from '../features/auth/types/roles.types';
+import { useUsers } from '../../features/auth/hooks/useUsers';
+import { roleService } from '../../features/auth/api/roleService';
+import { UserRole, ROLE_LABELS, ROLES } from '../../features/auth/types/roles.types';
 import { toast } from 'react-toastify';
-import Button from '../ui/Button/Button';
-import { Button_Style } from '../ui/Button/Button.types';
-import './UserManagement/style.scss';
+import Button from '../../ui/Button/Button';
+import { Button_Style } from '../../ui/Button/Button.types';
+import './style.scss';
 
 const UserManagement = () => {
 	const { users, loading, error, refetch } = useUsers();
