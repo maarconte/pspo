@@ -38,6 +38,7 @@ export default function Quizz() {
 
   const user = useUserStore((s) => s.user);
   const { mutate: saveQuizSession } = useSaveQuizSession();
+  const setTotalTimeSpent = useQuestionsStore((s) => s.setTotalTimeSpent);
 
   const notificationContent = (time: string) => (
     <div className="toast-content">
@@ -108,6 +109,11 @@ export default function Quizz() {
     if (user?.uid) {
       const summary = getSummary?.();
       const finalScore = calculateScore?.();
+      
+      if (summary) {
+        setTotalTimeSpent(summary.totalTimeMs);
+      }
+      
       if (summary && summary.totalQuestions > 0) {
         saveQuizSession({
           userId: user.uid,
