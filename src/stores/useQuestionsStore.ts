@@ -10,8 +10,10 @@ interface QuestionsState {
 	formation: string;
 	isLoading: boolean;
 	error: string | null;
+	totalTimeSpent: number;
 
 	// Actions
+	setTotalTimeSpent: (time: number) => void;
 	setScore: (score: number) => void;
 	setUserAnswers: (answers: UserAnswer[] | ((prev: UserAnswer[]) => UserAnswer[])) => void;
 	setFormation: (formation: string) => void;
@@ -35,7 +37,9 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 	formation: "pspo-I",
 	isLoading: false,
 	error: null,
+	totalTimeSpent: 0,
 
+	setTotalTimeSpent: (time) => set({ totalTimeSpent: time }),
 	setScore: (score) => set({ score }),
 
 	setUserAnswers: (answers) => {
@@ -156,6 +160,7 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 			questions: newQuestions,
 			userAnswers: [],
 			score: 0,
+			totalTimeSpent: 0,
 		});
 	},
 }));
