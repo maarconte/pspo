@@ -12,20 +12,22 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
     if (!data || data.length === 0) return null;
 
     const totalSessions = data.length;
+    const recentData = data.slice(0, 3);
+    const recentCount = recentData.length;
     
-    // Average success rate across ALL sessions
-    const sumSuccessRate = data.reduce((acc, sess) => {
+    // Average success rate across LAST 3 sessions
+    const sumSuccessRate = recentData.reduce((acc, sess) => {
       const rate = sess.totalQuestions > 0 ? (sess.score / sess.totalQuestions) * 100 : 0;
       return acc + rate;
     }, 0);
     
-    // Average time per question across ALL sessions
-    const sumAvgTimeMs = data.reduce((acc, sess) => acc + sess.averageTimeMs, 0);
+    // Average time per question across LAST 3 sessions
+    const sumAvgTimeMs = recentData.reduce((acc, sess) => acc + sess.averageTimeMs, 0);
 
     return {
       totalSessions,
-      avgSuccessRate: (sumSuccessRate / totalSessions).toFixed(1),
-      avgResponseTime: (sumAvgTimeMs / totalSessions / 1000).toFixed(1), // seconds
+      avgSuccessRate: (sumSuccessRate / recentCount).toFixed(1),
+      avgResponseTime: (sumAvgTimeMs / recentCount / 1000).toFixed(1), // seconds
     };
   }, [data]);
 
@@ -40,7 +42,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
         </div>
         <div className="stat-content">
           <strong>{stats.avgSuccessRate}%</strong>
-          <span>Réussite moyenne</span>
+          <span>Réussite moy. (3 derniers)</span>
         </div>
       </div>
 
@@ -51,7 +53,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
         </div>
         <div className="stat-content">
           <strong>{stats.avgResponseTime}s</strong>
-          <span>Temps moy./question</span>
+          <span>Temps moy. (3 derniers)</span>
         </div>
       </div>
 
