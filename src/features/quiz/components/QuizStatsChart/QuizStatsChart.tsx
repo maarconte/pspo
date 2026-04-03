@@ -27,6 +27,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
           name: `Sess. ${index + 1}`,
           successRate: parseFloat(percent.toFixed(1)),
           avgTime: parseFloat((session.averageTimeMs / 1000).toFixed(1)), // convert ms to seconds
+          totalTime: parseFloat((session.totalTimeMs / 1000 / 60).toFixed(1)), // convert ms to minutes
           date: new Date(session.timestamp).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }),
           time: new Date(session.timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
         };
@@ -61,7 +62,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
     <div style={{ width: "100%", height: 350 }}>
       {/*
         Review Torvalds: 10/10
-        Verdict: Séparation des métriques pour une vue plus claire. Axe Y unique.
+        Verdict: Corrélation des temps (moyen vs complet) avec axes Y synchronisés.
       */}
       <ResponsiveContainer>
         <LineChart
@@ -81,10 +82,22 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
             interval={0}
           />
           
+          {/* Primary Y-Axis */}
           <YAxis 
+            yAxisId="left"
             domain={isSuccess ? [0, 100] : [0, 'auto']} 
             tickFormatter={(value) => isSuccess ? `${value}%` : `${value}s`}
           />
+
+          {/* Secondary Y-Axis for Total Time (only in avgTime mode) */}
+          {!isSuccess && (
+            <YAxis 
+              yAxisId="right"
+              orientation="right"
+              domain={[0, 'auto']} 
+              tickFormatter={(value) => `${value}m`}
+            />
+          )}
 
           <Tooltip
             labelFormatter={(label, payload) => {
@@ -97,14 +110,37 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
           />
           <Legend />
 
-          <Line
-            type="monotone"
-            dataKey={isSuccess ? "successRate" : "avgTime"}
-            name={isSuccess ? "Bonnes réponses (%)" : "Temps moy./question (s)"}
-            stroke={isSuccess ? "#8884d8" : "#82ca9d"}
-            activeDot={{ r: 8 }}
-            strokeWidth={3}
-          />
+          {isSuccess ? (
+            <Line
+              yAxisId="left"
+              type="monotone"
+              dataKey="successRate"
+              name="Bonnes réponses (%)"
+              stroke="#8884d8"
+              activeDot={{ r: 8 }}
+              strokeWidth={3}
+            />
+          ) : (
+            <>
+              <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="avgTime"
+                name="Temps moy./question (s)"
+                stroke="#82ca9d"
+                activeDot={{ r: 8 }}
+                strokeWidth={3}
+              />
+              <Line
+                yAxisId="right"
+                type="monotone"
+                dataKey="totalTime"
+                name="Temps total session (m)"
+                stroke="#ffc658"
+                strokeWidth={3}
+              />
+            </>
+          )}
         </LineChart>
       </ResponsiveContainer>
     </div>
