@@ -22,6 +22,7 @@ export default function Quizz() {
   const setScore = useQuestionsStore((s) => s.setScore);
   const formation = useQuestionsStore((s) => s.formation);
   const calculateScore = useQuestionsStore((s) => s.calculateScore);
+  const userAnswers = useQuestionsStore((s) => s.userAnswers);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -100,8 +101,35 @@ export default function Quizz() {
     return () => clearInterval(intervalId);
   }, [isPaused, currentQuestion, isFinished]);
 
+  const handleEndQuestion = (index: number) => {
+    const question = questions[index];
+    const userAnswer = userAnswers[index];
+    if (!question) return;
+
+    const correctAnswer = question.answer;
+    const userAnswerValue = userAnswer?.answer;
+    let isCorrect = false;
+
+    if (Array.isArray(correctAnswer) && Array.isArray(userAnswerValue)) {
+      if (correctAnswer.length === userAnswerValue.length) {
+        const sortedCorrect = [...correctAnswer].sort();
+        const sortedUser = [...userAnswerValue].sort();
+        isCorrect = sortedCorrect.every((val, idx) => val === sortedUser[idx]);
+      }
+    } else {
+      isCorrect = correctAnswer === userAnswerValue;
+    }
+
+    endQuestion({
+      questionId: question.id,
+      isCorrect,
+      userAnswer: userAnswerValue ?? null,
+      isBookmarked: !!userAnswer?.isBookmarked,
+    });
+  };
+
   const finishQuizz = () => {
-    endQuestion(); // Finalize last question time
+    handleEndQuestion(currentQuestion); // Finalize current question time
     setIsFinished(true);
     setShowAnswer(true);
     setIsPaused(true);
@@ -139,6 +167,7 @@ export default function Quizz() {
   };
 
   const handleQuestionChange = (newIndex: number, shouldNotify = true) => {
+    handleEndQuestion(currentQuestion);
     if (shouldNotify) notifyTime();
     setCurrentQuestion(newIndex);
     setShowAnswer(false);

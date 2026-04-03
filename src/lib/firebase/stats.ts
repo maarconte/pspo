@@ -5,7 +5,8 @@ import {
   getDocs, 
   query, 
   orderBy, 
-  limit 
+  limit,
+  updateDoc
 } from "firebase/firestore";
 import { db } from "./firestore";
 import { QuizSessionStat } from "../../utils/types";
@@ -39,4 +40,11 @@ export const getQuizSessions = async (userId: string): Promise<QuizSessionStat[]
   const querySnapshot = await getDocs(q);
   
   return querySnapshot.docs.map(doc => doc.data() as QuizSessionStat);
+};
+
+export const updateQuizSession = async (userId: string, sessionId: string, data: Partial<QuizSessionStat>) => {
+  if (!userId || !sessionId) throw new Error("User ID and Session ID are required to update quiz session");
+
+  const sessionRef = doc(db, "users", userId, "quizSessions", sessionId);
+  await updateDoc(sessionRef, data);
 };

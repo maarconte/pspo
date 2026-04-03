@@ -41,3 +41,7 @@ a {
 .toast-content {
   color: $primary-900;
 }
+
+.rs-nav-subtle .rs-nav-item.rs-nav-item-active:before {
+  background-color: $primary-500 !important;
+}
