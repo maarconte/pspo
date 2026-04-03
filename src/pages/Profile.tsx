@@ -60,21 +60,29 @@ export default function Profile() {
           <>
             <StatsOverview data={history} />
             <div className="row g-4 mb-5">
+              <div className="col-12 col-md-6">
+                <div className="bg-white p-4 rounded shadow-sm h-100">
+                  <h3 className="h5 text-center mb-4">Taux de Réussite (%)</h3>
+                  <QuizStatsChart data={history} metric="successRate" />
+                </div>
+              </div>
+              <div className="col-12 col-md-6">
+                <div className="bg-white p-4 rounded shadow-sm h-100">
+                  <h3 className="h5 text-center mb-4">Temps Moyen (s)</h3>
+                  <QuizStatsChart data={history} metric="avgTime" />
+                </div>
+              </div>
+            </div>
+            <div className="row g-4 mb-5">
               <div className="col-12">
-              <div className="bg-white p-4 rounded shadow-sm">
-                <h3 className="h5 text-center mb-4">Taux de Réussite & Temps</h3>
-                <QuizStatsChart data={history} />
+                <div className="bg-white p-4 rounded shadow-sm">
+                  <h3 className="h5 text-center mb-4">Mauvaises Réponses</h3>
+                  <QuizErrorsChart data={history} />
+                </div>
               </div>
             </div>
-            <div className="col-12">
-              <div className="bg-white p-4 rounded shadow-sm">
-                <h3 className="h5 text-center mb-4">Mauvaises Réponses</h3>
-                <QuizErrorsChart data={history} />
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
 
         {!isLoading && !error && history && history.length === 0 && (
           <div className="d-flex justify-content-center align-items-center bg-light p-5 rounded">

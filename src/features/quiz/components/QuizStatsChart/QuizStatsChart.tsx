@@ -13,9 +13,10 @@ import { QuizSessionStat } from "../../../../utils/types";
 
 interface QuizStatsChartProps {
   data: QuizSessionStat[];
+  metric: 'successRate' | 'avgTime';
 }
 
-export default function QuizStatsChart({ data }: QuizStatsChartProps) {
+export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
 
   const chartData = useMemo(() => {
     return [...data]
@@ -54,11 +55,13 @@ export default function QuizStatsChart({ data }: QuizStatsChartProps) {
     );
   };
 
+  const isSuccess = metric === 'successRate';
+
   return (
     <div style={{ width: "100%", height: 350 }}>
       {/*
         Review Torvalds: 10/10
-        Verdict: Espacement augmenté entre le graphique et l'axe X pour plus de lisibilité.
+        Verdict: Séparation des métriques pour une vue plus claire. Axe Y unique.
       */}
       <ResponsiveContainer>
         <LineChart
@@ -77,10 +80,11 @@ export default function QuizStatsChart({ data }: QuizStatsChartProps) {
             tick={<CustomAxisTick />}
             interval={0}
           />
-          {/* Left Axis for percentage (0-100) */}
-          <YAxis yAxisId="left" domain={[0, 100]} />
-          {/* Right Axis for average time (seconds) */}
-          <YAxis yAxisId="right" orientation="right" domain={[0, 'dataMax']} />
+          
+          <YAxis 
+            domain={isSuccess ? [0, 100] : [0, 'auto']} 
+            tickFormatter={(value) => isSuccess ? `${value}%` : `${value}s`}
+          />
 
           <Tooltip
             labelFormatter={(label, payload) => {
@@ -94,20 +98,11 @@ export default function QuizStatsChart({ data }: QuizStatsChartProps) {
           <Legend />
 
           <Line
-            yAxisId="left"
             type="monotone"
-            dataKey="successRate"
-            name="Bonnes réponses (%)"
-            stroke="#8884d8"
+            dataKey={isSuccess ? "successRate" : "avgTime"}
+            name={isSuccess ? "Bonnes réponses (%)" : "Temps moy./question (s)"}
+            stroke={isSuccess ? "#8884d8" : "#82ca9d"}
             activeDot={{ r: 8 }}
-            strokeWidth={3}
-          />
-          <Line
-            yAxisId="right"
-            type="monotone"
-            dataKey="avgTime"
-            name="Temps moy./question (s)"
-            stroke="#82ca9d"
             strokeWidth={3}
           />
         </LineChart>
