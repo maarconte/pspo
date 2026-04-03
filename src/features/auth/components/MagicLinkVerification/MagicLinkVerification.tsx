@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../api/authService';
-import { toast } from 'react-toastify';
 import Button from '../../../../ui/Button/Button';
 import { Button_Type } from '../../../../ui/Button/Button.types';
 import Input from '../../../../ui/Input/Input';
@@ -46,8 +45,6 @@ export const MagicLinkVerification = () => {
 
 		try {
 			await authService.completeMagicLinkSignIn(providedEmail);
-
-			toast.success('Connexion réussie !');
 
 			// Attendre un peu pour que le store se mette à jour
 			setTimeout(() => {
