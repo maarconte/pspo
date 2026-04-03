@@ -4,11 +4,12 @@ import { useQuizHistory } from "../hooks/useQuizHistory";
 import QuizStatsChart from "../features/quiz/components/QuizStatsChart/QuizStatsChart";
 import QuizErrorsChart from "../features/quiz/components/QuizStatsChart/QuizErrorsChart";
 import StatsOverview from "../features/quiz/components/QuizStatsChart/StatsOverview";
+import ProfileBookmarks from "../features/quiz/components/ProfileBookmarks/ProfileBookmarks";
 import { Loader } from "../ui";
 
 export default function Profile() {
   const user = useUserStore((state) => state.user);
-  const { data: history, isLoading, error } = useQuizHistory();
+  const { data: history, isLoading, error, refetch } = useQuizHistory();
 
   if (!user) {
     return (
@@ -67,6 +68,9 @@ export default function Profile() {
                 </div>
               </div>
               <div className="col-12 col-md-6">
+                <ProfileBookmarks history={history} onUpdate={refetch} />
+              </div>
+              <div className="col-12 col-md-6">
                 <div className="bg-white p-4 rounded shadow-sm h-100">
                   <h3 className="h5 text-center mb-4">Temps Moyen (s)</h3>
                   <QuizStatsChart data={history} metric="avgTime" />
@@ -81,6 +85,8 @@ export default function Profile() {
                 </div>
               </div>
             </div>
+
+
           </>
         )}
 

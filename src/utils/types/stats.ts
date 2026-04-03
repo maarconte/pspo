@@ -1,7 +1,9 @@
 export interface QuestionStat {
-  questionId: number; // Index in the quiz array or actual ID
+  questionId: string; // The Firestore document ID of the question
   timeSpentMs: number;
   isCorrect: boolean;
+  userAnswer: any;
+  isBookmarked: boolean;
 }
 
 export interface QuizSessionStat {

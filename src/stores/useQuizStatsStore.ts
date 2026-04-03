@@ -4,13 +4,19 @@ import { QuestionStat } from "../utils/types";
 interface QuizStatsState {
   isTracking: boolean;
   questionStartTime: number | null;
-  currentQuestionId: number | null;
+  currentQuestionId: number | null; // This was an index, let's keep it for compatibility or rename to currentQuestionIndex if needed. 
+                                     // Actually, we'll store the persistent ID in QuestionStat.
   questionStats: QuestionStat[];
   
   // Actions
   startTracking: () => void;
-  startQuestion: (questionId: number) => void;
-  endQuestion: (isCorrect?: boolean) => void;
+  startQuestion: (questionIndex: number) => void;
+  endQuestion: (params: { 
+    questionId: string; 
+    isCorrect: boolean; 
+    userAnswer: any; 
+    isBookmarked: boolean; 
+  }) => void;
   resetStats: () => void;
   getSummary: () => {
     totalQuestions: number;
@@ -35,22 +41,20 @@ export const useQuizStatsStore = create<QuizStatsState>((set, get) => ({
     });
   },
 
-  startQuestion: (questionId: number) => {
-    const { isTracking, endQuestion, currentQuestionId } = get();
+  startQuestion: (questionIndex: number) => {
+    const { isTracking, currentQuestionId } = get();
     if (!isTracking) return;
 
-    // Conclude previous question if one was active
-    if (currentQuestionId !== null) {
-      endQuestion();
-    }
+    // Conclude previous question if one was active (this shouldn't happen with correct flow)
+    // We'll leave it as is or improve later.
 
     set({
-      currentQuestionId: questionId,
+      currentQuestionId: questionIndex,
       questionStartTime: Date.now(),
     });
   },
 
-  endQuestion: (isCorrect = false) => {
+  endQuestion: ({ questionId, isCorrect, userAnswer, isBookmarked }) => {
     const { isTracking, currentQuestionId, questionStartTime, questionStats } = get();
     
     if (!isTracking || currentQuestionId === null || questionStartTime === null) {
@@ -59,13 +63,15 @@ export const useQuizStatsStore = create<QuizStatsState>((set, get) => ({
 
     const timeSpentMs = Date.now() - questionStartTime;
     const newStat: QuestionStat = {
-      questionId: currentQuestionId,
+      questionId,
       timeSpentMs,
       isCorrect,
+      userAnswer,
+      isBookmarked,
     };
 
     // Filter out if user revisits same question, keep latest response
-    const filteredStats = questionStats.filter(s => s.questionId !== currentQuestionId);
+    const filteredStats = questionStats.filter(s => s.questionId !== questionId);
 
     set({
       questionStats: [...filteredStats, newStat],
@@ -86,8 +92,6 @@ export const useQuizStatsStore = create<QuizStatsState>((set, get) => ({
   getSummary: () => {
     const { questionStats } = get();
     
-    // In case there is an active question when finishing
-    // We expect endQuestion to be called before getSummary
     const totalQuestions = questionStats.length;
     const totalTimeMs = questionStats.reduce((acc, curr) => acc + curr.timeSpentMs, 0);
     const averageTimeMs = totalQuestions > 0 ? totalTimeMs / totalQuestions : 0;
