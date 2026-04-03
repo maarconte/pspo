@@ -11,7 +11,7 @@
 
   .rs-nav-subtle.rs-nav-horizontal {
     border-bottom: 2px solid $primary-50;
-    margin-bottom: 2rem;
+    padding-bottom: .80rem;
 
     .rs-nav-item {
       padding: 12px 24px;
@@ -22,6 +22,7 @@
       &:hover {
         background: $primary-50;
         color: $primary-700;
+        text-decoration: none;
       }
 
       &.rs-nav-item-active {
@@ -56,7 +57,7 @@
         gap: 1rem;
 
         .bookmark-icon {
-          color: #f6b223;
+          color: $warning-500;
           flex-shrink: 0;
           transition: transform 0.2s ease;
 
@@ -91,7 +92,7 @@
       .accordion-content {
         padding: 0 1.5rem 1.5rem 1.5rem;
         border-top: 1px solid $primary-50;
-        background: $primary-50;
+
 
         .question-text {
           margin-top: 1rem;
@@ -113,7 +114,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-size: 0.95rem;
+
 
             &.selected {
               border-color: $primary-400;
@@ -121,16 +122,16 @@
             }
 
             &.correct {
-              border-color: #82ca9d;
+              border-color: $success-500;
               background: #f0fdf4;
-              color: #166534;
+              color: $success-800;
               font-weight: 600;
             }
 
             &.incorrect-selection {
-              border-color: #eb5757;
+              border-color: $secondary-500;
               background: #fef2f2;
-              color: #991b1b;
+              color: $secondary-800;
             }
 
             .status-indicator {
@@ -144,12 +145,11 @@
         .feedback-box {
           margin-top: 1.5rem;
           padding: 1rem;
-          background: #fff;
-          border-left: 4px solid #f6b223;
+          background: $warning-50;
+          border-left: 4px solid $warning-500;
           border-radius: 0 8px 8px 0;
-          font-style: italic;
           color: $primary-700;
-          font-size: 0.9rem;
+
         }
       }
     }
