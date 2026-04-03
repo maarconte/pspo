@@ -4,7 +4,7 @@ import { authService } from '../../api/authService';
 import { useUserStore } from '../../stores/useAuthStore';
 import { toast } from 'react-toastify';
 
-const IDLE_TIMEOUT = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
 const WARNING_TIME = 2 * 60 * 1000; // 2 minutes before logout
 
 /**
