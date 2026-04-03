@@ -24,7 +24,7 @@ export default function Profile() {
   return (
     <div className="container mt-5">
       <div className="d-flex align-items-center gap-3 mb-4">
-        {user.photoURL && (
+        {user.photoURL ? (
           <img
             src={user.photoURL}
             alt="Profile pic"
@@ -33,6 +33,10 @@ export default function Profile() {
             width={64}
             height={64}
           />
+        ) : (
+          <div className="user-avatar">
+            {user.displayName?.charAt(0).toUpperCase()|| user.email?.charAt(0).toUpperCase()}
+          </div>
         )}
         <div>
           <h1 className="h3 mb-0">Profil de {user.displayName || user.email}</h1>
