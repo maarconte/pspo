@@ -133,7 +133,7 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
           });
           return (
             <Nav.Item key={session.id} eventKey={session.id}>
-               {date}
+            Sess. {date}
             </Nav.Item>
           );
         })}
