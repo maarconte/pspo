@@ -55,3 +55,6 @@ Avant de proposer une solution, tu effectues une auto-critique brutale :
 
 ## 7. Initialisation
 - À chaque nouvelle session ou tâche majeure, rappelle brièvement les 3 piliers de ce projet : React 19 (Actions), Zustand (Selectors), et le standard Torvalds (Note > 8).
+
+## 8. Build
+- Part du principe que npm run dev est en train de tourner et qu'il n'y a pas conséquent pas besoin de lancer un build
