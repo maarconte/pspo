@@ -13,6 +13,13 @@
   }
 }
 
+.Quizz .container {
+  @include breakpoint(tablet) {
+    max-width: 750px;
+  }
+
+}
+
 .row {
   display: grid;
   grid-template-columns: repeat($GRID_COLUMNS, 1fr);
