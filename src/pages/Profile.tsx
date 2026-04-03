@@ -5,6 +5,7 @@ import QuizStatsChart from "../features/quiz/components/QuizStatsChart/QuizStats
 import QuizErrorsChart from "../features/quiz/components/QuizStatsChart/QuizErrorsChart";
 import StatsOverview from "../features/quiz/components/QuizStatsChart/StatsOverview";
 import ProfileBookmarks from "../features/quiz/components/ProfileBookmarks/ProfileBookmarks";
+import ProfileErrors from "../features/quiz/components/ProfileErrors/ProfileErrors";
 import { Loader } from "../ui";
 
 export default function Profile() {
@@ -69,6 +70,7 @@ export default function Profile() {
               </div>
               <div className="col-12 col-md-6">
                 <ProfileBookmarks history={history} onUpdate={refetch} />
+                <ProfileErrors history={history} />
               </div>
               <div className="col-12 col-md-6">
                 <div className="bg-white p-4 rounded shadow-sm h-100">
