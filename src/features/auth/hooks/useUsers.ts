@@ -42,7 +42,7 @@ export const useUsers = () => {
 			setUsers(usersData);
 		} catch (err: any) {
 			console.error('Erreur lors de la récupération des utilisateurs:', err);
-			setError(err.message || 'Échec de la récupération des utilisateurs');
+			setError('Échec de la récupération des utilisateurs');
 		} finally {
 			setLoading(false);
 		}
