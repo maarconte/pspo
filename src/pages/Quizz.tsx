@@ -1,5 +1,3 @@
-import "rsuite/dist/rsuite.min.css";
-
 import React, { useEffect, useState } from "react";
 
 import { Button } from "../ui";
