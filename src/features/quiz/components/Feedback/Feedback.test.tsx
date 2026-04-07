@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import Feedback from "./Feedback";
 import { useUpdateDoc } from "../../../../utils/hooks/";
@@ -51,7 +51,9 @@ describe("Feedback Component", () => {
     render(<Feedback question={mockQuestion} />);
 
     const reportButton = screen.getByText("Report a problem");
-    fireEvent.click(reportButton);
+    act(() => {
+      fireEvent.click(reportButton);
+    });
 
     expect(screen.getByText("If you believe this answer is inappropriate or should be reviewed, please let us know.")).toBeDefined();
     expect(screen.getByLabelText("Please describe the issue")).toBeDefined();
@@ -69,7 +71,9 @@ describe("Feedback Component", () => {
 
     // Submit
     const submitButton = screen.getByText("Submit");
-    fireEvent.click(submitButton);
+    await act(async () => {
+      fireEvent.click(submitButton);
+    });
 
     expect(mockHandleUpdate).toHaveBeenCalledWith({
       comments: ["Wrong explanation"],
@@ -97,7 +101,9 @@ describe("Feedback Component", () => {
     fireEvent.change(screen.getByLabelText("Please describe the issue"), { 
       target: { value: "Second issue" } 
     });
-    fireEvent.click(screen.getByText("Submit"));
+    act(() => {
+      fireEvent.click(screen.getByText("Submit"));
+    });
 
     expect(mockHandleUpdate).toHaveBeenCalledWith({
       comments: ["First issue", "Second issue"],
@@ -117,7 +123,9 @@ describe("Feedback Component", () => {
     });
 
     // Re-render to trigger useEffect
-    rerender(<Feedback question={mockQuestion} />);
+    act(() => {
+      rerender(<Feedback question={mockQuestion} />);
+    });
 
     expect(toast.error).toHaveBeenCalledWith("An error occurred while updating the question");
   });

@@ -101,7 +101,9 @@ describe("Quizz Component - notifyTime", () => {
     });
 
     const nextButton = screen.getByText("Next");
-    fireEvent.click(nextButton);
+    act(() => {
+      fireEvent.click(nextButton);
+    });
 
     expect(vi.mocked(toast)).not.toHaveBeenCalled();
   });
@@ -114,14 +116,18 @@ describe("Quizz Component - notifyTime", () => {
     );
 
     const nextButton = screen.getByText("Next");
-    fireEvent.click(nextButton); // Move to Q2
+    act(() => {
+      fireEvent.click(nextButton); // Move to Q2
+    });
 
     act(() => {
       vi.advanceTimersByTime(4000); // 4 seconds spent on Q2
     });
 
     const prevButton = screen.getByText("Previous");
-    fireEvent.click(prevButton);
+    act(() => {
+      fireEvent.click(prevButton);
+    });
 
     expect(vi.mocked(toast)).not.toHaveBeenCalled();
   });

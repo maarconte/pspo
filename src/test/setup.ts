@@ -35,6 +35,14 @@ vi.mock('firebase/firestore', () => ({
 	query: vi.fn(),
 	where: vi.fn(),
 	orderBy: vi.fn(),
+	Timestamp: {
+		fromDate: vi.fn((date: Date) => ({
+			toDate: () => date,
+			seconds: Math.floor(date.getTime() / 1000),
+			nanoseconds: (date.getTime() % 1000) * 1000000
+		})),
+		now: vi.fn(() => ({ seconds: Date.now() / 1000, nanoseconds: 0 }))
+	}
 }));
 
 // Mock environment variables
