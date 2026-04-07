@@ -15,6 +15,7 @@ import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useQuizStatsStore } from "../stores/useQuizStatsStore";
 import { useUserStore } from "../stores/useUserStore";
 import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
+import { useCoopStore } from "../stores/useCoopStore";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -40,6 +41,9 @@ export default function Quizz() {
   const user = useUserStore((s) => s.user);
   const { mutate: saveQuizSession } = useSaveQuizSession();
   const setTotalTimeSpent = useQuestionsStore((s) => s.setTotalTimeSpent);
+
+  const { participants, currentIndex, nextTurn, resetTurn } = useCoopStore();
+  const currentParticipant = participants[currentIndex];
 
   const notificationContent = (time: string) => (
     <div className="toast-content">
@@ -137,11 +141,11 @@ export default function Quizz() {
     if (user?.uid) {
       const summary = getSummary?.();
       const finalScore = calculateScore?.();
-      
+
       if (summary) {
         setTotalTimeSpent(summary.totalTimeMs);
       }
-      
+
       if (summary && summary.totalQuestions > 0) {
         saveQuizSession({
           userId: user.uid,
@@ -176,6 +180,9 @@ export default function Quizz() {
   const nextQuestion = () => {
     if (currentQuestion < (questions?.length || 0) - 1) {
       handleQuestionChange(currentQuestion + 1);
+      if (participants.length > 0) {
+        nextTurn();
+      }
     } else {
       finishQuizz();
     }
@@ -185,6 +192,22 @@ export default function Quizz() {
       <div className="container">
         {/* Header */}
         <h1 className="text-center">{formation || "Study Group Quiz"}</h1>
+        {isFinished && (
+          <Button
+            label="Restart"
+            style={Button_Style.OUTLINED}
+            onClick={() => {
+              startNewExam();
+              setCurrentQuestion(0);
+              setScore(0);
+              setShowAnswer(false);
+              setIsFinished(false);
+              setIsPaused(false);
+              setTimeSpent(0);
+              resetTurn();
+            }}
+          />
+        )}
         <div className="d-flex justify-content-between align-items-center mb-2">
           {!isFinished && (
             <Counter
@@ -195,23 +218,8 @@ export default function Quizz() {
           )}
 
           {isFinished && <QuizzScore />}
-          <div className="d-flex gap-1">
-            {isFinished ? (
-              <Button
-                label="Restart"
-                style={Button_Style.OUTLINED}
-                onClick={() => {
-                  startNewExam();
-                  setCurrentQuestion(0);
-                  setScore(0);
-                  setShowAnswer(false);
-                  setIsFinished(false);
-                  setIsPaused(false);
-                  setTimeSpent(0);
-                }}
-              />
-            ) : (
-              <>
+            {!isFinished && (
+              <div className="d-flex gap-1">
                 <Button
                   label={!showAnswer ? "Show the answer" : "Hide the answer"}
                   onClick={() => setShowAnswer(!showAnswer)}
@@ -224,9 +232,9 @@ export default function Quizz() {
                     setIsPaused(true);
                   }}
                 />
-              </>
+              </div>
             )}
-          </div>
+
         </div>
         {/* Question */}
         {!isFinished
@@ -300,6 +308,13 @@ export default function Quizz() {
       >
         <p>Voulez-vous vraiment terminer votre session ?</p>
       </Modal>
+
+      {/* Coop Participant Display */}
+      {!isFinished && currentParticipant && (
+        <div className={`coop-current-participant ${open ? "drawer-open" : ""}`}>
+          <p className="coop-current-participant__name">{currentParticipant}</p>
+        </div>
+      )}
     </div>
   );
 }
