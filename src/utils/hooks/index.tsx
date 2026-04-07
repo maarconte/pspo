@@ -13,6 +13,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Firebase } from "../../firebase.js";
+import { DEFAULT_QUESTION_DATE } from "../constants";
 
 const db = getFirestore(Firebase);
 
@@ -32,11 +33,16 @@ export function useFetchFirebase<T = any>(collectionName: string) {
       const fetchedData: T[] = [];
 
       querySnapshot.forEach((doc) => {
+        const docData = doc.data();
+        const isQuestion = collectionName === "questions";
+
         fetchedData.push({
           id: doc.id,
-          ...doc.data(),
-          isFlagged: doc.data().isFlagged ?? false,
-          comments: doc.data().comments ?? [],
+          ...docData,
+          isFlagged: docData.isFlagged ?? false,
+          comments: docData.comments ?? [],
+          createdAt: isQuestion ? (docData.createdAt ?? DEFAULT_QUESTION_DATE) : docData.createdAt,
+          updatedAt: isQuestion ? (docData.updatedAt ?? DEFAULT_QUESTION_DATE) : docData.updatedAt,
         } as unknown as T);
       });
       return fetchedData;
@@ -108,6 +114,7 @@ export function useAddDoc(collectionName: string) {
       return await addDoc(collectionRef, {
         ...newData,
         createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
     },
     onSuccess: () => {
