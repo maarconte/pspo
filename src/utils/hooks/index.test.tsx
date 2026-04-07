@@ -15,6 +15,14 @@ vi.mock('firebase/firestore', () => ({
   deleteDoc: vi.fn(),
   doc: vi.fn(),
   serverTimestamp: vi.fn(() => ({ seconds: Date.now() / 1000 })),
+  Timestamp: {
+    fromDate: vi.fn((date: Date) => ({
+      toDate: () => date,
+      seconds: Math.floor(date.getTime() / 1000),
+      nanoseconds: (date.getTime() % 1000) * 1000000
+    })),
+    now: vi.fn(() => ({ seconds: Date.now() / 1000, nanoseconds: 0 }))
+  }
 }));
 
 const createWrapper = () => {
