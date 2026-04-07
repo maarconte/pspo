@@ -5,7 +5,6 @@ import { Suspense } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import AuthChecker from "./features/auth/components/Auth/AuthChecker";
-import { IdleTimeoutHandler } from "./features/auth/components/IdleTimeoutHandler";
 import { Header, Loader } from "./ui";
 import { QuestionsLoader } from "./features/quiz";
 import routes from "./utils/routes";
@@ -18,7 +17,6 @@ import { MagicLinkRedirector } from "./features/auth/components/MagicLinkRedirec
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <IdleTimeoutHandler />
       <QuestionsLoader>
         <Router basename={import.meta.env.BASE_URL}>
           <MagicLinkRedirector />
