@@ -1,4 +1,5 @@
 @use '../../../../assets/scss/variables' as *;
+
 .QuestionNavigation {
   display: grid;
   grid-template-columns: repeat(5, 30px);
@@ -14,12 +15,15 @@
     padding: 4px;
     border-radius: 4px;
     color: $primary-500;
+
     &.answered {
       background-color: $primary-100;
       border-color: $primary-100;
     }
+
     &.bookmarked {
       position: relative;
+
       &:before {
         content: "";
         position: absolute;
@@ -31,6 +35,7 @@
         border-radius: 50%;
       }
     }
+
     &.active {
       background-color: $primary-500;
       border-color: $primary-500;

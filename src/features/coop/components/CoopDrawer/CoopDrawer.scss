@@ -114,14 +114,14 @@
     border-top: 1px solid rgba($primary-100, 0.5);
     padding-top: $SPACE_4;
   }
-  
+
   &__list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: $SPACE_3;
     padding: 0 $SPACE_2;
-    
+
     h3 {
       font-size: 0.9rem;
       text-transform: uppercase;
@@ -139,7 +139,7 @@
     opacity: 0.8;
     transition: opacity 0.2s ease;
     padding: 0 !important;
-    
+
     &:hover {
       opacity: 1;
       text-decoration: none !important;
@@ -191,7 +191,7 @@
   pointer-events: none; // Don't block interactions
 
   &.drawer-open {
-    right: calc(var(--rs-drawer-width, 320px) + #{$SPACE_6});
+    right: calc(var(--rs-drawer-width, 400px) + #{$SPACE_6});
   }
 
   &__name {
