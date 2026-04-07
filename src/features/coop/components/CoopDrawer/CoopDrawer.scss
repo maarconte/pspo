@@ -1,0 +1,173 @@
+@import "../../../../assets/scss/_variables.scss";
+@import "../../../../assets/scss/_mixins.scss";
+
+.coop-tab {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) translateX(calc(100% - 40px));
+  background: rgba($primary-500, 0.85);
+  backdrop-filter: blur(10px);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: $SPACE_2;
+  padding: $SPACE_2 $SPACE_3;
+  border-radius: 12px 0 0 12px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s ease;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-50%) translateX(calc(100% - 70px));
+    background: $primary-600;
+  }
+
+  &.open {
+    transform: translateY(-50%) translateX(100%);
+  }
+
+  &__label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: $SPACE_2 0;
+  }
+
+  &__badge {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    background: $secondary-500;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 2px solid white;
+  }
+}
+
+.coop-drawer {
+  .rs-drawer-content {
+    background: #fff;
+    backdrop-filter: blur(10px);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $SPACE_4;
+    padding: $SPACE_2;
+  }
+
+  &__description {
+    font-size: 0.9rem;
+    color: $primary-700;
+    opacity: 0.8;
+    line-height: 1.4;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $SPACE_2;
+  }
+
+  &__input-group {
+    display: flex;
+    gap: $SPACE_2;
+
+    &.has-error {
+      .rs-input {
+        border-color: $secondary-500;
+        box-shadow: 0 0 0 2px rgba($secondary-500, 0.1);
+      }
+    }
+  }
+
+  &__add-btn {
+    display: flex;
+    align-items: center;
+    gap: $SPACE_2;
+  }
+
+  &__error {
+    color: $secondary-500;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  &__list-container {
+    margin-top: $SPACE_2;
+    border-top: 1px solid rgba($primary-100, 0.5);
+    padding-top: $SPACE_4;
+  }
+
+  &__list {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  &__item {
+    border-radius: 8px;
+    transition: background 0.2s ease;
+    border: none !important;
+    padding: 1rem;
+
+    &:hover {
+      background: rgba($primary-50, 0.5) !important;
+    }
+  }
+
+  &__name {
+    font-weight: 500;
+    color: $primary-800;
+    font-size: 1rem;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: $SPACE_8 0;
+    color: $primary-300;
+    font-size: 0.9rem;
+    font-style: italic;
+  }
+}
+
+.coop-current-participant {
+  position: fixed;
+  top: 6.5rem;
+  right: $SPACE_6;
+  z-index: 1050; // Above header
+  padding: $SPACE_2 $SPACE_4;
+  background: rgba(white, 0.8);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none; // Don't block interactions
+
+  &.drawer-open {
+    right: calc(var(--rs-drawer-width, 320px) + #{$SPACE_6});
+  }
+
+  &__name {
+    margin: 0;
+    font-size: 1.5rem; // fs-4 equivalent
+    font-weight: 700; // fw-bold
+    color: $primary-500;
+    text-transform: capitalize;
+  }
+}
