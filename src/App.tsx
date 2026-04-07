@@ -1,4 +1,5 @@
 import "./assets/scss/style.scss";
+import "rsuite/dist/rsuite.min.css";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Suspense } from "react";
