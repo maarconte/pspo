@@ -7,6 +7,7 @@ import { useUserStore } from "../stores/useUserStore";
 import { useQuizStatsStore } from "../stores/useQuizStatsStore";
 import { toast } from "react-toastify";
 import { MemoryRouter } from "react-router-dom";
+import { useCoopStore } from "../stores/useCoopStore";
 
 // Mocking external dependencies
 vi.mock("../stores/useQuestionsStore", () => ({
@@ -58,6 +59,21 @@ vi.mock("../stores/useQuizStatsStore", () => ({
           details: [],
         })),
       resetStats: vi.fn(),
+    };
+    return selector ? selector(state) : state;
+  }),
+}));
+
+vi.mock("../stores/useCoopStore", () => ({
+  useCoopStore: vi.fn((selector) => {
+    const state = {
+      participants: [],
+      currentIndex: 0,
+      nextTurn: vi.fn(),
+      resetTurn: vi.fn(),
+      isOpen: false,
+      toggleDrawer: vi.fn(),
+      setOpen: vi.fn(),
     };
     return selector ? selector(state) : state;
   }),
@@ -130,5 +146,83 @@ describe("Quizz Component - notifyTime", () => {
     });
 
     expect(vi.mocked(toast)).not.toHaveBeenCalled();
+  });
+});
+
+describe("Quizz Component - Coop Mode", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("displays the current participant name when coop mode is active", () => {
+    vi.mocked(useCoopStore).mockImplementation((selector: any) => {
+      const state = {
+        participants: ["Alice", "Bob"],
+        currentIndex: 0,
+        nextTurn: vi.fn(),
+        resetTurn: vi.fn(),
+      };
+      return selector ? selector(state) : state;
+    });
+
+    render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("Alice")).toBeDefined();
+  });
+
+  it("calls nextTurn() when clicking 'Next' if participants are present", () => {
+    const nextTurnMock = vi.fn();
+    vi.mocked(useCoopStore).mockImplementation((selector: any) => {
+      const state = {
+        participants: ["Alice", "Bob"],
+        currentIndex: 0,
+        nextTurn: nextTurnMock,
+        resetTurn: vi.fn(),
+      };
+      return selector ? selector(state) : state;
+    });
+
+    render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+
+    const nextButton = screen.getByText("Next");
+    fireEvent.click(nextButton);
+
+    expect(nextTurnMock).toHaveBeenCalled();
+  });
+
+  it("does NOT display participant name if no participants", () => {
+    vi.mocked(useCoopStore).mockImplementation((selector: any) => {
+      const state = {
+        participants: [],
+        currentIndex: 0,
+        nextTurn: vi.fn(),
+        resetTurn: vi.fn(),
+      };
+      return selector ? selector(state) : state;
+    });
+
+    render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+
+    // Current participant display is wrapped in !isFinished && currentParticipant
+    const container = screen.queryByClassName?.("coop-current-participant");
+    // Since queryByClassName isn't a standard RTL query on screen, let's just check text
+    // The component renders <p className="coop-current-participant__name">{currentParticipant}</p>
+    // If currentParticipant is undefined, nothing should be there.
+    
+    // Check for any p with that class or just confirm no participant name is there
+    expect(screen.queryByText("Alice")).toBeNull();
+    expect(screen.queryByText("Bob")).toBeNull();
   });
 });
