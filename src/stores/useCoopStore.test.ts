@@ -170,6 +170,20 @@ describe('useCoopStore', () => {
 
             expect(result.current.currentIndex).toBe(0);
         });
+
+        it('should clear all participants and reset index with clearParticipants', () => {
+            const { result } = renderHook(() => useCoopStore());
+
+            act(() => {
+                result.current.addParticipant('Alice');
+                result.current.addParticipant('Bob');
+                result.current.nextTurn();
+                result.current.clearParticipants();
+            });
+
+            expect(result.current.participants).toEqual([]);
+            expect(result.current.currentIndex).toBe(0);
+        });
     });
 
     describe('UI state', () => {

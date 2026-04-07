@@ -1,8 +1,10 @@
 @use '../../assets/scss/base' as *;
+
 button {
   border: none;
   background-color: transparent;
 }
+
 .btn {
   display: flex;
   flex-direction: row;
@@ -17,6 +19,7 @@ button {
   text-decoration: none;
   cursor: pointer;
   text-align: center;
+
   &:disabled,
   &:disabled.btn-solid,
   &:disabled.btn-outlined {
@@ -27,6 +30,7 @@ button {
       cursor: not-allowed;
     }
   }
+
   &-solid {
     color: #fff;
   }
@@ -118,5 +122,10 @@ button {
       background-color: transparent;
       border-color: $secondary_200;
     }
+  }
+
+  &-S {
+    padding: 5px 10px;
+    font-size: 12px;
   }
 }
