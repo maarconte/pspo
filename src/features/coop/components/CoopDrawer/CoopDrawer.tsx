@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Drawer, Input, List } from "rsuite";
 import { Button } from "../../../../ui";
-import { Button_Type } from "../../../../ui/Button/Button.types";
+import { Button_Type, Button_Style } from "../../../../ui/Button/Button.types";
 import { Users, Plus, Trash2, X } from "lucide-react";
 import { useCoopStore } from "../../../../stores/useCoopStore";
 import "./CoopDrawer.scss";
@@ -14,6 +14,7 @@ export const CoopDrawer: React.FC = () => {
     removeParticipant,
     toggleDrawer,
     setOpen,
+    clearParticipants,
   } = useCoopStore();
 
   const [newName, setNewName] = useState("");
@@ -97,7 +98,20 @@ export const CoopDrawer: React.FC = () => {
 
             <div className="coop-drawer__list-container">
               {participants.length > 0 ? (
-                <List hover className="coop-drawer__list">
+                <>
+                  <div className="coop-drawer__list-header">
+                    <h3>Participants</h3>
+                    <Button
+                      onClick={clearParticipants}
+                      type={Button_Type.SECONDARY}
+                      style={Button_Style.OUTLINED}
+                      size="S"
+                      label="Vider tout"
+                      //className="coop-drawer__clear-btn"
+                      icon={<X size={14} color="red" />}
+                    />
+                  </div>
+                  <List hover className="coop-drawer__list">
                   {participants.map((name, index) => (
                     <List.Item key={`${name}-${index}`} className="coop-drawer__item">
                       <div className="d-flex justify-content-between align-items-center w-100">
@@ -113,7 +127,8 @@ export const CoopDrawer: React.FC = () => {
                       </div>
                     </List.Item>
                   ))}
-                </List>
+                  </List>
+                </>
               ) : (
                 <div className="coop-drawer__empty">
                   Aucun participant pour le moment

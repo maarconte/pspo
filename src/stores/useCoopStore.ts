@@ -13,6 +13,7 @@ interface CoopState {
   resetTurn: () => void;
   setOpen: (open: boolean) => void;
   toggleDrawer: () => void;
+  clearParticipants: () => void;
 }
 
 export const useCoopStore = create<CoopState>()(
@@ -68,6 +69,8 @@ export const useCoopStore = create<CoopState>()(
       setOpen: (open) => set({ isOpen: open }),
 
       toggleDrawer: () => set((state) => ({ isOpen: !state.isOpen })),
+
+      clearParticipants: () => set({ participants: [], currentIndex: 0 }),
     }),
     {
       name: "coop-storage",

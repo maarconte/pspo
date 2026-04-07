@@ -18,9 +18,9 @@ import { CoopDrawer } from "./features/coop/components/CoopDrawer/CoopDrawer";
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <CoopDrawer />
-      <QuestionsLoader>
-        <Router basename={import.meta.env.BASE_URL}>
+      <Router basename={import.meta.env.BASE_URL}>
+        <CoopDrawer />
+        <QuestionsLoader>
           <MagicLinkRedirector />
           <Header />
           <Suspense fallback={<Loader />}>
@@ -42,8 +42,8 @@ function App() {
               ))}
             </Routes>
           </Suspense>
-        </Router>
-      </QuestionsLoader>
+        </QuestionsLoader>
+      </Router>
     </QueryClientProvider>
   );
 }
