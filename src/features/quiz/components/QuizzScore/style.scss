@@ -3,12 +3,11 @@
 
 .quizz-score-dashboard {
   width: 100%;
-  
+
   .stats-overview-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
-    margin-bottom: 1.5rem;
     margin-top: 0;
   }
 }
@@ -38,10 +37,21 @@
     }
   }
 
-  &.success .icon-container { color: #82ca9d; }
-  &.warning .icon-container { color: #8b78c7; }
-  &.info .icon-container { color: #8884d8; }
-  &.danger .icon-container { color: #eb5757; }
+  &.success .icon-container {
+    color: #82ca9d;
+  }
+
+  &.warning .icon-container {
+    color: #8b78c7;
+  }
+
+  &.info .icon-container {
+    color: #8884d8;
+  }
+
+  &.danger .icon-container {
+    color: #eb5757;
+  }
 
   .icon-container {
     display: flex;

@@ -3,7 +3,7 @@ import "rsuite/dist/rsuite.min.css";
 import React, { useEffect, useState } from "react";
 
 import { Button } from "../ui";
-import { Button_Style } from "../ui/Button/Button.types";
+import { Button_Style, Button_Type } from "../ui/Button/Button.types";
 import Counter from "../features/quiz/components/Counter/Counter";
 import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard";
 import QuestionNavigation from "../features/quiz/components/QuestionNavigation/QuestionNavigation";
@@ -177,6 +177,18 @@ export default function Quizz() {
     setShowAnswer(false);
   };
 
+  const handleRestart = () => {
+    startNewExam();
+    setCurrentQuestion(0);
+    setScore(0);
+    setShowAnswer(false);
+    setIsFinished(false);
+    setIsPaused(false);
+    setTimeSpent(0);
+    resetTurn();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const nextQuestion = () => {
     if (currentQuestion < (questions?.length || 0) - 1) {
       handleQuestionChange(currentQuestion + 1);
@@ -191,23 +203,8 @@ export default function Quizz() {
     <div className="Quizz">
       <div className="container">
         {/* Header */}
-        <h1 className="text-center">{formation || "Study Group Quiz"}</h1>
-        {isFinished && (
-          <Button
-            label="Restart"
-            style={Button_Style.OUTLINED}
-            onClick={() => {
-              startNewExam();
-              setCurrentQuestion(0);
-              setScore(0);
-              setShowAnswer(false);
-              setIsFinished(false);
-              setIsPaused(false);
-              setTimeSpent(0);
-              resetTurn();
-            }}
-          />
-        )}
+        <h1 className="text-center mb-2">{formation || "Study Group Quiz"}</h1>
+
         <div className="d-flex justify-content-between align-items-center mb-2">
           {!isFinished && (
             <Counter
@@ -217,23 +214,34 @@ export default function Quizz() {
             />
           )}
 
-          {isFinished && <QuizzScore />}
-            {!isFinished && (
-              <div className="d-flex gap-1">
+          {isFinished && (
+            <div className="w-100 d-flex flex-column gap-2 mb-2">
+              <QuizzScore />
+              <div className="d-flex justify-content-center">
                 <Button
-                  label={!showAnswer ? "Show the answer" : "Hide the answer"}
-                  onClick={() => setShowAnswer(!showAnswer)}
-                />
-                <Button
-                  label="Finish"
-                  style={Button_Style.OUTLINED}
-                  onClick={() => {
-                    setIsFinishModalOpen(true);
-                    setIsPaused(true);
-                  }}
+                  label="Recommencer un Quiz"
+                  type={Button_Type.PRIMARY}
+                  onClick={handleRestart}
                 />
               </div>
-            )}
+            </div>
+          )}
+          {!isFinished && (
+            <div className="d-flex gap-1">
+              <Button
+                label={!showAnswer ? "Show the answer" : "Hide the answer"}
+                onClick={() => setShowAnswer(!showAnswer)}
+              />
+              <Button
+                label="Finish"
+                style={Button_Style.OUTLINED}
+                onClick={() => {
+                  setIsFinishModalOpen(true);
+                  setIsPaused(true);
+                }}
+              />
+            </div>
+          )}
 
         </div>
         {/* Question */}
@@ -253,8 +261,16 @@ export default function Quizz() {
                 showAnswer={showAnswer}
               />
             ))}
-        {/* Navigation */}
-        {!isFinished && (
+        {/* Navigation / Bottom Restart */}
+        {isFinished ? (
+          <div className="d-flex justify-content-center mt-5 mb-5">
+            <Button
+              label="Recommencer un Quiz"
+              type={Button_Type.PRIMARY}
+              onClick={handleRestart}
+            />
+          </div>
+        ) : (
           <div className="d-flex justify-content-between">
             <Button
               label="Previous"
