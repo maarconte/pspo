@@ -12,7 +12,7 @@ import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
 import { useUpdateDoc } from "../../../../utils/hooks/";
 
-const Feedback: FC<FeedbackProps> = ({ question }) => {
+const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
   const [showModal, setShowModal] = useState(false);
   const [comment, setComment] = useState<string>("");
   const { data, handleUpdate, isUpdating, error } = useUpdateDoc({
@@ -53,23 +53,26 @@ const Feedback: FC<FeedbackProps> = ({ question }) => {
 
   return (
     <div className="Feedback">
-            <h3 className="h5">Feedback</h3>
-      <p>
+      <div className="feedback-box">
+        <strong>Feedback</strong>
         {question.feedback
           ? question.feedback
           : "No feedback for this question"}
-      </p>
-            <div className="d-flex justify-content-end align-items-center mt-2">
-        <Button
-          label="Report a problem"
-          type={Button_Type.SECONDARY}
-          style={Button_Style.OUTLINED}
-          icon={
+      </div>
+      {showReportButton && (
+        <div className="d-flex justify-content-end align-items-center mt-1">
+          <Button
+            label="Report a problem"
+            type={Button_Type.SECONDARY}
+            style={Button_Style.OUTLINED}
+            icon={
             <AlertTriangle size={16} color="#e41937"/>
           }
           onClick={() => setShowModal(true)}
         />
       </div>
+      )}
+
       <Modal
         isOpen={showModal}
         setIsClosed={setShowModal}

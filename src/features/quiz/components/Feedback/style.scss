@@ -1,7 +1,12 @@
 @use '../../../../assets/scss/base' as *;
 
 .Feedback {
-  background-color: $primary-50;
-  padding: 1rem;
-  margin-top: 1rem;
+  .feedback-box {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: $warning-50;
+    border-left: 4px solid $warning-500;
+    border-radius: 0 8px 8px 0;
+    color: $primary-700;
+  }
 }
