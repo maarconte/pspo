@@ -15,15 +15,19 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
     const totalSessions = data.length;
     const recentData = data.slice(0, 3);
     const recentCount = recentData.length;
-    
+
     // Average success rate across LAST 3 sessions
     const sumSuccessRate = recentData.reduce((acc, sess) => {
-      const rate = sess.totalQuestions > 0 ? (sess.score / sess.totalQuestions) * 100 : 0;
+      const rate =
+        sess.totalQuestions > 0 ? (sess.score / sess.totalQuestions) * 100 : 0;
       return acc + rate;
     }, 0);
-    
+
     // Average time per question across LAST 3 sessions
-    const sumAvgTimeMs = recentData.reduce((acc, sess) => acc + sess.averageTimeMs, 0);
+    const sumAvgTimeMs = recentData.reduce(
+      (acc, sess) => acc + sess.averageTimeMs,
+      0,
+    );
 
     return {
       totalSessions,

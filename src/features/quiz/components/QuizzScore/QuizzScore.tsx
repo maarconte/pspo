@@ -11,13 +11,15 @@ const QuizzScore: FC = () => {
   const questions = useQuestionsStore((s) => s.questions);
   const totalTimeSpent = useQuestionsStore((s) => s.totalTimeSpent);
 
-  const answeredCount = useMemo(() =>
-    userAnswers?.filter((a) => a?.answer !== undefined).length || 0
-  , [userAnswers]);
+  const answeredCount = useMemo(
+    () => userAnswers?.filter((a) => a?.answer !== undefined).length || 0,
+    [userAnswers],
+  );
 
-  const percent = useMemo(() =>
-    answeredCount > 0 ? Math.round((score / answeredCount) * 100) : 0
-  , [score, answeredCount]);
+  const percent = useMemo(
+    () => (answeredCount > 0 ? Math.round((score / answeredCount) * 100) : 0),
+    [score, answeredCount],
+  );
 
   useEffect(() => {
     let currentScore = 0;
@@ -58,7 +60,13 @@ const QuizzScore: FC = () => {
         {/* Score Card */}
         <StatCard
           variant={isPassed ? "success" : "danger"}
-          icon={isPassed ? <Trophy size={24} strokeWidth={2.5} /> : <AlertTriangle size={24} strokeWidth={2.5} />}
+          icon={
+            isPassed ? (
+              <Trophy size={24} strokeWidth={2.5} />
+            ) : (
+              <AlertTriangle size={24} strokeWidth={2.5} />
+            )
+          }
           value={`${percent}%`}
           label="Score Final"
         />
