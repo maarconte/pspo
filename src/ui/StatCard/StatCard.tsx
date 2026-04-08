@@ -1,7 +1,12 @@
 import React, { ReactNode } from "react";
 import "./StatCard.scss";
 
-export type StatCardVariant = "success" | "warning" | "info" | "danger" | "default";
+export type StatCardVariant =
+  | "success"
+  | "warning"
+  | "info"
+  | "danger"
+  | "default";
 
 export interface StatCardProps {
   /** The main value to display (e.g. "85%", "12s") */
@@ -24,7 +29,9 @@ const StatCard: React.FC<StatCardProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`stat-card ${variant !== "default" ? variant : ""} ${className}`.trim()}>
+    <div
+      className={`stat-card ${variant !== "default" ? variant : ""} ${className}`.trim()}
+    >
       <div className="icon-container">{icon}</div>
       <div className="stat-content">
         <strong>{value}</strong>

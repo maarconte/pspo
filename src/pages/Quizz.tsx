@@ -47,7 +47,9 @@ export default function Quizz() {
 
   const notificationContent = (time: string) => (
     <div className="toast-content">
-      <p className={`mb-0 time fs-4 fw-bold color-${toastType(timeSpent)}`}>{time}</p>
+      <p className={`mb-0 time fs-4 fw-bold color-${toastType(timeSpent)}`}>
+        {time}
+      </p>
     </div>
   );
 
@@ -59,10 +61,7 @@ export default function Quizz() {
 
   const notifyTime = () => {
     if (timeSpent <= 3) return;
-    toast(
-      notificationContent(formatTime(timeSpent)),
-      toastOptions
-    );
+    toast(notificationContent(formatTime(timeSpent)), toastOptions);
   };
 
   const toastOptions: any = {
@@ -226,37 +225,52 @@ export default function Quizz() {
               </div>
             </div>
           )}
-          {!isFinished && (() => {
-            const answeredCount = userAnswers.filter(a => a?.answer !== undefined).length;
-            const correctCount = calculateScore();
-            const successPercent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
-            const isPassed = successPercent >= 85;
-            return (
-              <div className="d-flex gap-1 align-items-center flex-wrap">
-                {showAnswer && (
-                  <StatCard
-                    variant={isPassed ? "success" : "danger"}
-                    icon={isPassed ? <Trophy size={24} strokeWidth={2.5} /> : <AlertTriangle size={24} strokeWidth={2.5} />}
-                    value={answeredCount === 0 ? '—' : `${successPercent}% (${correctCount}/${answeredCount})`}
-                    label="Score actuel"
+          {!isFinished &&
+            (() => {
+              const answeredCount = userAnswers.filter(
+                (a) => a?.answer !== undefined,
+              ).length;
+              const correctCount = calculateScore();
+              const successPercent =
+                answeredCount > 0
+                  ? Math.round((correctCount / answeredCount) * 100)
+                  : 0;
+              const isPassed = successPercent >= 85;
+              return (
+                <div className="d-flex gap-1 align-items-center flex-wrap">
+                  {showAnswer && (
+                    <StatCard
+                      variant={isPassed ? "success" : "danger"}
+                      icon={
+                        isPassed ? (
+                          <Trophy size={24} strokeWidth={2.5} />
+                        ) : (
+                          <AlertTriangle size={24} strokeWidth={2.5} />
+                        )
+                      }
+                      value={
+                        answeredCount === 0
+                          ? "—"
+                          : `${successPercent}% (${correctCount}/${answeredCount})`
+                      }
+                      label="Score actuel"
+                    />
+                  )}
+                  <Button
+                    label={!showAnswer ? "Show the answer" : "Hide the answer"}
+                    onClick={() => setShowAnswer(!showAnswer)}
                   />
-                )}
-                <Button
-                  label={!showAnswer ? "Show the answer" : "Hide the answer"}
-                  onClick={() => setShowAnswer(!showAnswer)}
-                />
-                <Button
-                  label="Finish"
-                  style={Button_Style.OUTLINED}
-                  onClick={() => {
-                    setIsFinishModalOpen(true);
-                    setIsPaused(true);
-                  }}
-                />
-              </div>
-            );
-          })()}
-
+                  <Button
+                    label="Finish"
+                    style={Button_Style.OUTLINED}
+                    onClick={() => {
+                      setIsFinishModalOpen(true);
+                      setIsPaused(true);
+                    }}
+                  />
+                </div>
+              );
+            })()}
         </div>
         {/* Question */}
         {!isFinished
@@ -341,7 +355,9 @@ export default function Quizz() {
 
       {/* Coop Participant Display */}
       {!isFinished && currentParticipant && (
-        <div className={`coop-current-participant ${open ? "drawer-open" : ""}`}>
+        <div
+          className={`coop-current-participant ${open ? "drawer-open" : ""}`}
+        >
           <p className="coop-current-participant__name">{currentParticipant}</p>
         </div>
       )}
