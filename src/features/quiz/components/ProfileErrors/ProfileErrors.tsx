@@ -4,6 +4,7 @@ import { Nav } from "rsuite";
 import { ChevronDown, Check, X, XCircle } from "lucide-react";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { QuizSessionStat } from "../../../../utils/types";
+import Feedback from "../Feedback";
 
 interface ProfileErrorsProps {
   history: QuizSessionStat[];
@@ -11,10 +12,10 @@ interface ProfileErrorsProps {
 
 const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
   const allQuestions = useQuestionsStore((s) => s.allQuestions);
-  
+
   // Only consider sessions with errors (where user actually replied) in their details
   const sessionsWithErrors = useMemo(() => {
-    return history.filter(session => 
+    return history.filter(session =>
       session.details?.some(d => d.isCorrect === false && d.userAnswer !== null)
     );
   }, [history]);
@@ -22,14 +23,14 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
   const [activeSessionId, setActiveSessionId] = useState<string | undefined>(
     sessionsWithErrors[0]?.id
   );
-  
+
   const [expandedQuestionId, setExpandedQuestionId] = useState<string | null>(null);
 
-  const activeSession = useMemo(() => 
+  const activeSession = useMemo(() =>
     sessionsWithErrors.find(s => s.id === activeSessionId)
   , [sessionsWithErrors, activeSessionId]);
 
-  const errorDetails = useMemo(() => 
+  const errorDetails = useMemo(() =>
     activeSession?.details?.filter(d => d.isCorrect === false && d.userAnswer !== null) || []
   , [activeSession]);
 
@@ -40,15 +41,15 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
   const renderCorrectness = (question: any, userAnswer: any, index: number) => {
     const isTF = question.answerType === "TF";
     const label = isTF ? (index === 0 ? "True" : "False") : question.answers[index];
-    
-    const isUserChoice = isTF 
+
+    const isUserChoice = isTF
       ? (userAnswer === true && index === 0) || (userAnswer === false && index === 1)
       : Array.isArray(userAnswer) ? userAnswer.includes(index) : userAnswer === index;
 
     const isCorrect = isTF
       ? (question.answer === true && index === 0) || (question.answer === false && index === 1)
       : Array.isArray(question.answer) ? question.answer.includes(index) : question.answer === index;
-    
+
     let className = "answer-row";
     if (isCorrect) className += " correct";
     else if (isUserChoice) className += " incorrect-selection";
@@ -79,10 +80,10 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
   return (
     <div className="profile-errors-section">
       <h2 className="errors-title h4">Mes erreurs</h2>
-      
-      <Nav 
-        appearance="subtle" 
-        activeKey={activeSessionId} 
+
+      <Nav
+        appearance="subtle"
+        activeKey={activeSessionId}
         onSelect={(key) => {
           setActiveSessionId(key);
           setExpandedQuestionId(null);
@@ -106,14 +107,14 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
         {errorDetails.map((detail) => {
           const question = getQuestionData(detail.questionId);
           if (!question) return null;
-          
+
           const isOpen = expandedQuestionId === detail.questionId;
           const answersCount = question.answerType === "TF" ? 2 : (question.answers?.length || 0);
 
           return (
             <div key={detail.questionId} className={`accordion-item ${isOpen ? 'open' : ''}`}>
-              <div 
-                className="accordion-header" 
+              <div
+                className="accordion-header"
                 onClick={() => setExpandedQuestionId(isOpen ? null : detail.questionId)}
               >
                 <h3 className="question-title">{question.title}</h3>
@@ -127,9 +128,7 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
                     {Array.from({ length: answersCount }).map((_, idx) => renderCorrectness(question, detail.userAnswer, idx))}
                   </div>
                   {question.feedback && (
-                    <div className="feedback-box">
-                      <strong>Feedback :</strong> {question.feedback}
-                    </div>
+                    <Feedback question={question} showReportButton={false} />
                   )}
                 </div>
               )}
