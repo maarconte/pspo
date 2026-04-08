@@ -9,6 +9,8 @@ import Alert from "../../../../ui/Alert/Alert";
 import Button from "../../../../ui/Button/Button";
 import Feedback from "../Feedback";
 import Modal from "../../../../ui/Modal/Modal";
+import { QuestionAnswerProps, AnswerStatus } from "./QuestionAnswer.types";
+import QuestionAnswer from "./QuestionAnswer";
 import { QuestionCardProps } from "./QuestionCard.types";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 
@@ -20,6 +22,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
   question,
   currentQuestion,
   showAnswer,
+  isReadOnly = false,
 }) => {
   // --- SELECTORS (Atomic for performance) ---
   const userAnswer = useQuestionsStore((s) => s.userAnswers[currentQuestion]);
@@ -44,20 +47,19 @@ const QuestionCard: FC<QuestionCardProps> = ({
     return ans === index;
   };
 
-  const getStatusClass = (index: number) => {
-    const classes = [];
-    if (isSelected(index)) classes.push("selected");
+  const getAnswerStatus = (index: number): AnswerStatus => {
+    if (!showAnswer) return "default";
 
-    if (showAnswer) {
-      const isCorrect =
-        question.answerType === "TF"
-          ? (index === 0 ? true : false) === question.answer
-          : Array.isArray(question.answer)
-            ? question.answer.includes(index)
-            : question.answer === index;
-      if (isCorrect) classes.push("success");
-    }
-    return classes.join(" ");
+    const isCorrect =
+      question.answerType === "TF"
+        ? (index === 0) === question.answer
+        : Array.isArray(question.answer)
+          ? (question.answer as number[]).includes(index)
+          : question.answer === index;
+
+    if (isCorrect) return "success";
+    if (isSelected(index)) return "error";
+    return "default";
   };
 
   // --- HANDLERS ---
@@ -83,38 +85,36 @@ const QuestionCard: FC<QuestionCardProps> = ({
 
   // --- RENDER HELPERS ---
   const renderAnswers = () => {
+    const readOnly = isReadOnly || showAnswer;
+
     if (question.answerType === "TF") {
-      return (
-        <>
-          {[true, false].map((val, idx) => (
-            <div key={idx} className={`answer ${getStatusClass(idx)}`}>
-              <input
-                type="radio"
-                id={`${currentQuestion}_${val}`}
-                name={`answer-${currentQuestion}`}
-                checked={userAnswer?.answer === val}
-                onChange={() => handleToggleBoolean(val)}
-              />
-              <label htmlFor={`${currentQuestion}_${val}`}>{val ? "True" : "False"}</label>
-            </div>
-          ))}
-        </>
-      );
+      return [true, false].map((val, idx) => (
+        <QuestionAnswer
+          key={idx}
+          name={`answer-${currentQuestion}`}
+          type="radio"
+          label={val ? "True" : "False"}
+          checked={userAnswer?.answer === val}
+          onChange={() => handleToggleBoolean(val)}
+          isReadOnly={readOnly}
+          status={getAnswerStatus(idx)}
+        />
+      ));
     }
 
     return question.answers?.map((answer, index) => (
-      <div key={index} className={`answer ${getStatusClass(index)}`}>
-        <input
-          type={inputType}
-          id={`answer-${currentQuestion}-${index}`}
-          name={`answer-${currentQuestion}`}
-          checked={isSelected(index)}
-          onChange={() => {
-            inputType === "radio" ? handleToggleRadio(index) : handleToggleMultiple(index);
-          }}
-        />
-        <label htmlFor={`answer-${currentQuestion}-${index}`}>{answer}</label>
-      </div>
+      <QuestionAnswer
+        key={index}
+        name={`answer-${currentQuestion}`}
+        type={inputType}
+        label={answer}
+        checked={isSelected(index)}
+        onChange={() => {
+          inputType === "radio" ? handleToggleRadio(index) : handleToggleMultiple(index);
+        }}
+        isReadOnly={readOnly}
+        status={getAnswerStatus(index)}
+      />
     ));
   };
 
