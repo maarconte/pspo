@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { CheckCircle, Clock, Activity } from "lucide-react";
 import { QuizSessionStat } from "../../../../utils/types";
+import { StatCard } from "../../../../ui";
 import "./StatsOverview.scss";
 
 interface StatsOverviewProps {
@@ -36,37 +37,28 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
   return (
     <div className="stats-overview-grid">
       {/* Success Rate Card */}
-      <div className="stat-card success">
-        <div className="icon-container">
-          <CheckCircle size={24} strokeWidth={2.5} />
-        </div>
-        <div className="stat-content">
-          <strong>{stats.avgSuccessRate}%</strong>
-          <span>Réussite moy. (3 derniers)</span>
-        </div>
-      </div>
+      <StatCard
+        variant="success"
+        icon={<CheckCircle size={24} strokeWidth={2.5} />}
+        value={`${stats.avgSuccessRate}%`}
+        label="Réussite moy. (3 derniers)"
+      />
 
       {/* Response Time Card */}
-      <div className="stat-card warning">
-        <div className="icon-container">
-          <Clock size={24} strokeWidth={2.5} />
-        </div>
-        <div className="stat-content">
-          <strong>{stats.avgResponseTime}s</strong>
-          <span>Temps moy. (3 derniers)</span>
-        </div>
-      </div>
+      <StatCard
+        variant="warning"
+        icon={<Clock size={24} strokeWidth={2.5} />}
+        value={`${stats.avgResponseTime}s`}
+        label="Temps moy. (3 derniers)"
+      />
 
       {/* Sessions Card */}
-      <div className="stat-card info">
-        <div className="icon-container">
-          <Activity size={24} strokeWidth={2.5} />
-        </div>
-        <div className="stat-content">
-          <strong>{stats.totalSessions}</strong>
-          <span>Sessions totales</span>
-        </div>
-      </div>
+      <StatCard
+        variant="info"
+        icon={<Activity size={24} strokeWidth={2.5} />}
+        value={stats.totalSessions}
+        label="Sessions totales"
+      />
     </div>
   );
 }

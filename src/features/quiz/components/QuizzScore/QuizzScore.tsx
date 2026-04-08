@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo } from "react";
 import "./style.scss";
 import { Trophy, ClipboardCheck, Timer, AlertTriangle } from "lucide-react";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { StatCard } from "../../../../ui";
 
 const QuizzScore: FC = () => {
   const score = useQuestionsStore((s) => s.score);
@@ -55,37 +56,28 @@ const QuizzScore: FC = () => {
     <div className="quizz-score-dashboard">
       <div className="stats-overview-grid">
         {/* Score Card */}
-        <div className={`stat-card ${isPassed ? "success" : "danger"}`}>
-          <div className="icon-container">
-            {isPassed ? <Trophy size={24} strokeWidth={2.5} /> : <AlertTriangle size={24} strokeWidth={2.5} />}
-          </div>
-          <div className="stat-content">
-            <strong>{percent}%</strong>
-            <span>Score Final</span>
-          </div>
-        </div>
+        <StatCard
+          variant={isPassed ? "success" : "danger"}
+          icon={isPassed ? <Trophy size={24} strokeWidth={2.5} /> : <AlertTriangle size={24} strokeWidth={2.5} />}
+          value={`${percent}%`}
+          label="Score Final"
+        />
 
         {/* Progression Card */}
-        <div className="stat-card info">
-          <div className="icon-container">
-            <ClipboardCheck size={24} strokeWidth={2.5} />
-          </div>
-          <div className="stat-content">
-            <strong>{answeredCount} / {questions.length}</strong>
-            <span>Questions</span>
-          </div>
-        </div>
+        <StatCard
+          variant="info"
+          icon={<ClipboardCheck size={24} strokeWidth={2.5} />}
+          value={`${answeredCount} / ${questions.length}`}
+          label="Questions"
+        />
 
         {/* Time Card */}
-        <div className="stat-card warning">
-          <div className="icon-container">
-            <Timer size={24} strokeWidth={2.5} />
-          </div>
-          <div className="stat-content">
-            <strong>{formatDuration(totalTimeSpent)}</strong>
-            <span>Temps total</span>
-          </div>
-        </div>
+        <StatCard
+          variant="warning"
+          icon={<Timer size={24} strokeWidth={2.5} />}
+          value={formatDuration(totalTimeSpent)}
+          label="Temps total"
+        />
       </div>
     </div>
   );

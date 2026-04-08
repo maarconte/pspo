@@ -9,3 +9,4 @@ export { default as Table } from './Table/Table';
 export { default as Header } from './Layout/Header/Header';
 export { default as Loader } from './Loader/Loader';
 export { default as SegmentedControl } from './SegmentedControl/SegmentedControl';
+export { default as StatCard } from './StatCard/StatCard';

@@ -15,6 +15,7 @@ import { useUserStore } from "../stores/useUserStore";
 import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
 import { useCoopStore } from "../stores/useCoopStore";
 import { AlertTriangle, Trophy } from "lucide-react";
+import StatCard from "../ui/StatCard/StatCard";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -233,15 +234,12 @@ export default function Quizz() {
             return (
               <div className="d-flex gap-1 align-items-center flex-wrap">
                 {showAnswer && (
-                        <div className={`stat-card ${isPassed ? "success" : "danger"}`}>
-          <div className="icon-container">
-            {isPassed ? <Trophy size={24} strokeWidth={2.5} /> : <AlertTriangle size={24} strokeWidth={2.5} />}
-          </div>
-          <div className="stat-content">
-            <strong>{answeredCount === 0 ? '—' : `${successPercent}% (${correctCount}/${answeredCount})`}</strong>
-            <span>Score actuel</span>
-          </div>
-        </div>
+                  <StatCard
+                    variant={isPassed ? "success" : "danger"}
+                    icon={isPassed ? <Trophy size={24} strokeWidth={2.5} /> : <AlertTriangle size={24} strokeWidth={2.5} />}
+                    value={answeredCount === 0 ? '—' : `${successPercent}% (${correctCount}/${answeredCount})`}
+                    label="Score actuel"
+                  />
                 )}
                 <Button
                   label={!showAnswer ? "Show the answer" : "Hide the answer"}
