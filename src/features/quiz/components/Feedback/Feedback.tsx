@@ -54,7 +54,7 @@ const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
   return (
     <div className="Feedback">
       <div className="feedback-box">
-        <strong>Feedback</strong>
+        <strong>Feedback: </strong>
         {question.feedback
           ? question.feedback
           : "No feedback for this question"}

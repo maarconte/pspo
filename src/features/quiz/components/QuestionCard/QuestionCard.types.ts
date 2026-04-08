@@ -3,4 +3,5 @@ export interface QuestionCardProps {
   question: Question;
   currentQuestion: number;
   showAnswer: boolean;
+  isReadOnly?: boolean;
 }
