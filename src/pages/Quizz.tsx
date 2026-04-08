@@ -14,6 +14,7 @@ import { useQuizStatsStore } from "../stores/useQuizStatsStore";
 import { useUserStore } from "../stores/useUserStore";
 import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
 import { useCoopStore } from "../stores/useCoopStore";
+import { AlertTriangle, Trophy } from "lucide-react";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -228,25 +229,24 @@ export default function Quizz() {
             const answeredCount = userAnswers.filter(a => a?.answer !== undefined).length;
             const correctCount = calculateScore();
             const successPercent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+            const isPassed = successPercent >= 85;
             return (
               <div className="d-flex gap-1 align-items-center flex-wrap">
+                {showAnswer && (
+                        <div className={`stat-card ${isPassed ? "success" : "danger"}`}>
+          <div className="icon-container">
+            {isPassed ? <Trophy size={24} strokeWidth={2.5} /> : <AlertTriangle size={24} strokeWidth={2.5} />}
+          </div>
+          <div className="stat-content">
+            <strong>{answeredCount === 0 ? '—' : `${successPercent}% (${correctCount}/${answeredCount})`}</strong>
+            <span>Score actuel</span>
+          </div>
+        </div>
+                )}
                 <Button
                   label={!showAnswer ? "Show the answer" : "Hide the answer"}
                   onClick={() => setShowAnswer(!showAnswer)}
                 />
-                {showAnswer && (
-                  <span
-                    className="badge fs-6"
-                    style={{
-                      background: successPercent >= 85 ? '#198754' : successPercent >= 50 ? '#ffc107' : '#dc3545',
-                      color: successPercent >= 50 && successPercent < 85 ? '#000' : '#fff',
-                      padding: '0.4em 0.7em',
-                      borderRadius: '0.5em',
-                    }}
-                  >
-                    {answeredCount === 0 ? '—' : `${successPercent}% (${correctCount}/${answeredCount})`}
-                  </span>
-                )}
                 <Button
                   label="Finish"
                   style={Button_Style.OUTLINED}
