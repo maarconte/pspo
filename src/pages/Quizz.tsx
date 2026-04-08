@@ -225,11 +225,21 @@ export default function Quizz() {
             </div>
           )}
           {!isFinished && (
-            <div className="d-flex gap-1">
+            <div className="d-flex gap-1 align-items-center flex-wrap">
               <Button
                 label={!showAnswer ? "Show the answer" : "Hide the answer"}
                 onClick={() => setShowAnswer(!showAnswer)}
               />
+              {showAnswer && (() => {
+                const answeredCount = userAnswers.filter(a => a?.answer !== undefined).length;
+                const correctCount = calculateScore();
+                const successPercent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+                return answeredCount > 0 ? (
+                  <span className={`badge fs-6 ${successPercent >= 85 ? 'bg-success' : successPercent >= 50 ? 'bg-warning text-dark' : 'bg-danger'}`}>
+                    {successPercent}% ({correctCount}/{answeredCount})
+                  </span>
+                ) : null;
+              })()}
               <Button
                 label="Finish"
                 style={Button_Style.OUTLINED}
