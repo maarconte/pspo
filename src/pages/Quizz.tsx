@@ -224,22 +224,40 @@ export default function Quizz() {
               </div>
             </div>
           )}
-          {!isFinished && (
-            <div className="d-flex gap-1">
-              <Button
-                label={!showAnswer ? "Show the answer" : "Hide the answer"}
-                onClick={() => setShowAnswer(!showAnswer)}
-              />
-              <Button
-                label="Finish"
-                style={Button_Style.OUTLINED}
-                onClick={() => {
-                  setIsFinishModalOpen(true);
-                  setIsPaused(true);
-                }}
-              />
-            </div>
-          )}
+          {!isFinished && (() => {
+            const answeredCount = userAnswers.filter(a => a?.answer !== undefined).length;
+            const correctCount = calculateScore();
+            const successPercent = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : 0;
+            return (
+              <div className="d-flex gap-1 align-items-center flex-wrap">
+                <Button
+                  label={!showAnswer ? "Show the answer" : "Hide the answer"}
+                  onClick={() => setShowAnswer(!showAnswer)}
+                />
+                {showAnswer && (
+                  <span
+                    className="badge fs-6"
+                    style={{
+                      background: successPercent >= 85 ? '#198754' : successPercent >= 50 ? '#ffc107' : '#dc3545',
+                      color: successPercent >= 50 && successPercent < 85 ? '#000' : '#fff',
+                      padding: '0.4em 0.7em',
+                      borderRadius: '0.5em',
+                    }}
+                  >
+                    {answeredCount === 0 ? '—' : `${successPercent}% (${correctCount}/${answeredCount})`}
+                  </span>
+                )}
+                <Button
+                  label="Finish"
+                  style={Button_Style.OUTLINED}
+                  onClick={() => {
+                    setIsFinishModalOpen(true);
+                    setIsPaused(true);
+                  }}
+                />
+              </div>
+            );
+          })()}
 
         </div>
         {/* Question */}
