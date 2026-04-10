@@ -98,6 +98,7 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
 
               {isOpen && (
                 <div className="accordion-content">
+                <h5 className="question-title mb-2 mt-1">{question.title}</h5>
                   <div className="answers-list">
                     {Array.from({ length: answersCount }).map((_, idx) => (
                       <QuestionAnswer
