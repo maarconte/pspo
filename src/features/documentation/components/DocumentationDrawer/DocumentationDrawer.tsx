@@ -11,7 +11,7 @@ export const DocumentationDrawer: React.FC = () => {
 
   return (
     <>
-      {/* Tab (Languette) */}
+      {/* Tab */}
       <div
         className={`doc-tab ${isOpen ? "open" : ""}`}
         onClick={toggleDrawer}
