@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { CheckCircle, Clock, Activity } from "lucide-react";
+import { CheckCircle, Clock, Activity, Trophy, AlertTriangle } from "lucide-react";
 import { QuizSessionStat } from "../../../../utils/types";
 import { StatCard } from "../../../../ui";
 import "./StatsOverview.scss";
@@ -15,6 +15,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
     const totalSessions = data.length;
     const recentData = data.slice(0, 3);
     const recentCount = recentData.length;
+
 
     // Average success rate across LAST 3 sessions
     const sumSuccessRate = recentData.reduce((acc, sess) => {
@@ -37,6 +38,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
   }, [data]);
 
   if (!stats) return null;
+  const isPassed = Number(stats?.avgSuccessRate) >= 85;
 
   return (
     <div className="stats-overview-grid">
@@ -49,9 +51,15 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
       />
       {/* Success Rate Card */}
       <StatCard
-        variant="success"
+        variant={isPassed ? "success" : "danger"}
         isFeatured={true}
-        icon={<CheckCircle size={24} strokeWidth={2.5} />}
+        icon={
+          isPassed ? (
+            <Trophy size={24} strokeWidth={2.5} />
+          ) : (
+            <AlertTriangle size={24} strokeWidth={2.5} />
+          )
+        }
         value={`${stats.avgSuccessRate}%`}
         label="Avg. Success (last 3)"
       />
