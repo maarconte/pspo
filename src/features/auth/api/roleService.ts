@@ -1,5 +1,6 @@
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { UserRole } from '../types/roles.types';
+import { getAuthErrorMessage } from '../utils/authErrors';
 
 const functions = getFunctions();
 
@@ -32,7 +33,7 @@ export const roleService = {
 			return result.data;
 		} catch (error: any) {
 			console.error('Erreur lors de l\'attribution du rôle:', error);
-			throw new Error(error.message || 'Échec de l\'attribution du rôle');
+			throw new Error(getAuthErrorMessage(error.code) || 'Échec de l\'attribution du rôle');
 		}
 	},
 };

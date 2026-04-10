@@ -6,6 +6,7 @@ import {
 	User
 } from 'firebase/auth';
 import { auth } from '../../../lib/firebase';
+import { getAuthErrorMessage } from '../utils/authErrors';
 
 // Configuration pour le Magic Link
 const actionCodeSettings = {
@@ -35,7 +36,7 @@ export const authService = {
 			window.localStorage.setItem('emailForSignIn', email);
 		} catch (error: any) {
 			console.error('Erreur lors de l\'envoi du Magic Link:', error);
-			throw new Error(error.message || 'Échec de l\'envoi du lien de connexion');
+			throw new Error(getAuthErrorMessage(error.code) || 'Échec de l\'envoi du lien de connexion');
 		}
 	},
 
@@ -79,7 +80,7 @@ export const authService = {
 				throw new Error('Le lien de connexion a expiré. Veuillez demander un nouveau lien.');
 			}
 
-			throw new Error(error.message || 'Échec de la connexion');
+			throw new Error(getAuthErrorMessage(error.code) || 'Échec de la connexion');
 		}
 	},
 
