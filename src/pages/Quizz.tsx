@@ -144,6 +144,7 @@ export default function Quizz() {
           details: summary.details,
         });
         resetStats?.();
+        setOpen(true); // Open pagination drawer automatically when finished
       }
     }
   };
@@ -161,6 +162,15 @@ export default function Quizz() {
     if (shouldNotify) notifyTime();
     setCurrentQuestion(newIndex);
     setShowAnswer(false);
+
+    if (isFinished) {
+      setTimeout(() => {
+        const element = document.getElementById(`question-${newIndex}`);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
   };
 
   const handleRestart = () => {
@@ -205,11 +215,16 @@ export default function Quizz() {
           {isFinished && (
             <div className="w-100 d-flex flex-column gap-2 mb-2">
               <QuizzScore />
-              <div className="d-flex justify-content-center">
+              <div className="d-flex justify-content-center gap-1">
                 <Button
                   label="Restart Quiz"
                   type={Button_Type.PRIMARY}
                   onClick={handleRestart}
+                />
+                <Button
+                  label="Navigation"
+                  style={Button_Style.OUTLINED}
+                  onClick={() => setOpen(true)}
                 />
               </div>
             </div>
@@ -297,7 +312,7 @@ export default function Quizz() {
             />
             <Button
               onClick={() => setOpen(true)}
-              label="Pagination"
+              label="Navigation"
               style={Button_Style.OUTLINED}
             />
             <Button
@@ -321,6 +336,7 @@ export default function Quizz() {
           <QuestionNavigation
             setCurrentQuestion={handleQuestionChange}
             currentQuestion={currentQuestion}
+            isFinished={isFinished}
           />
         </Drawer.Body>
       </Drawer>

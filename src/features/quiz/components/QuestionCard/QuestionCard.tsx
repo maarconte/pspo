@@ -128,7 +128,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
     question.answers?.some((_, index) => getAnswerStatus(index) === "missed");
 
   return (
-    <div className="QuestionCard">
+    <div className="QuestionCard" id={`question-${currentQuestion}`}>
       {question?.isFlagged && (
         <Alert severity="warning">
           <div className="d-flex align-items-center justify-content-between w-100">
