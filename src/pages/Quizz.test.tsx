@@ -113,7 +113,7 @@ describe("Quizz Component - notifyTime", () => {
     );
 
     act(() => {
-      vi.advanceTimersByTime(3000); // exactly 3 seconds
+      vi.advanceTimersByTime(3000);
     });
 
     const nextButton = screen.getByText("Next");
@@ -193,7 +193,9 @@ describe("Quizz Component - Coop Mode", () => {
     );
 
     const nextButton = screen.getByText("Next");
-    fireEvent.click(nextButton);
+    act(() => {
+      fireEvent.click(nextButton);
+    });
 
     expect(nextTurnMock).toHaveBeenCalled();
   });
