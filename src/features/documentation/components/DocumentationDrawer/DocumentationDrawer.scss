@@ -1,0 +1,59 @@
+@use "../../../../assets/scss/_variables.scss" as *;
+@use "../../../../assets/scss/_mixins.scss" as *;
+
+.doc-tab {
+  position: fixed;
+  right: 0;
+  top: calc(50% + 80px);
+  transform: translateX(calc(100% - 40px));
+  background: rgba($primary-400, 0.85);
+  backdrop-filter: blur(10px);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: $SPACE_2;
+  padding: $SPACE_2 $SPACE_3;
+  border-radius: 12px 0 0 12px;
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s ease;
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateX(calc(100% - 70px));
+    background: $primary-500;
+  }
+
+  &.open {
+    transform: translateX(100%);
+  }
+
+  &__label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: $SPACE_2 0;
+  }
+}
+
+.doc-drawer {
+  .rs-drawer-content {
+    background: #fff;
+  }
+
+  &__body {
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  &__iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+}
