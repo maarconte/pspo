@@ -57,8 +57,12 @@ const QuestionCard: FC<QuestionCardProps> = ({
           ? (question.answer as number[]).includes(index)
           : question.answer === index;
 
-    if (isCorrect) return "success";
-    if (isSelected(index)) return "error";
+    const selected = isSelected(index);
+
+    if (isCorrect) {
+      return selected ? "success" : "missed";
+    }
+    if (selected) return "error";
     return "default";
   };
 
@@ -118,6 +122,11 @@ const QuestionCard: FC<QuestionCardProps> = ({
     ));
   };
 
+  const hasMissedMultipleChoice = 
+    showAnswer && 
+    question.answerType === "M" && 
+    question.answers?.some((_, index) => getAnswerStatus(index) === "missed");
+
   return (
     <div className="QuestionCard">
       {question?.isFlagged && (
@@ -166,6 +175,14 @@ const QuestionCard: FC<QuestionCardProps> = ({
       <div className="d-flex flex-column">
         {renderAnswers()}
       </div>
+
+      {hasMissedMultipleChoice && (
+        <div className="mt-2 mb-3">
+          <Alert severity="info">
+            You did not select all available correct options.
+          </Alert>
+        </div>
+      )}
 
       {showAnswer && <Feedback question={question} />}
     </div>

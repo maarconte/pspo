@@ -1,4 +1,4 @@
-export type AnswerStatus = "default" | "selected" | "success" | "error";
+export type AnswerStatus = "default" | "selected" | "success" | "error" | "missed";
 
 export interface QuestionAnswerProps {
   id: string;
