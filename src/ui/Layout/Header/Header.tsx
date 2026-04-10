@@ -45,7 +45,7 @@ const Header: FC<HeaderProps> = () => {
               >
                 {isDev && (
                   <Dropdown.Item onClick={() => navigate("/dev/users")} icon={<Users size={16} />}>
-                    Users
+                    Manage users
                   </Dropdown.Item>
                 )}
                 {isAdmin && (
@@ -73,10 +73,10 @@ const Header: FC<HeaderProps> = () => {
             placement="bottomEnd"
             className="user-dropdown"
           >
-            <Dropdown.Item onClick={() => navigate("/profile")} icon={<User size={16} />}>
+            {/* <Dropdown.Item onClick={() => navigate("/profile")} icon={<User size={16} />}>
               Mon Compte
             </Dropdown.Item>
-            <Dropdown.Separator />
+            <Dropdown.Separator /> */}
             <Dropdown.Item onClick={logout} icon={<LogOut size={16} />} className="text-danger">
               Logout
             </Dropdown.Item>
