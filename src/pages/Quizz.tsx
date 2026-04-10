@@ -230,6 +230,7 @@ export default function Quizz() {
                   {showAnswer && (
                     <StatCard
                       variant={isPassed ? "success" : "danger"}
+                      isFeatured={true}
                       icon={
                         isPassed ? (
                           <Trophy size={24} strokeWidth={2.5} />
@@ -240,7 +241,7 @@ export default function Quizz() {
                       value={
                         answeredCount === 0
                           ? "—"
-                          : `${successPercent}% (${correctCount}/${answeredCount})`
+                          : `${successPercent}%`
                       }
                       label="Current Score"
                     />

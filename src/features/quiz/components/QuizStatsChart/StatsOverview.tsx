@@ -40,14 +40,6 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
 
   return (
     <div className="stats-overview-grid">
-      {/* Success Rate Card */}
-      <StatCard
-        variant="success"
-        icon={<CheckCircle size={24} strokeWidth={2.5} />}
-        value={`${stats.avgSuccessRate}%`}
-        label="Avg. Success (last 3)"
-      />
-
       {/* Response Time Card */}
       <StatCard
         variant="warning"
@@ -55,7 +47,14 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
         value={`${stats.avgResponseTime}m`}
         label="Avg. Duration (last 3)"
       />
-
+      {/* Success Rate Card */}
+      <StatCard
+        variant="success"
+        isFeatured={true}
+        icon={<CheckCircle size={24} strokeWidth={2.5} />}
+        value={`${stats.avgSuccessRate}%`}
+        label="Avg. Success (last 3)"
+      />
       {/* Sessions Card */}
       <StatCard
         variant="info"

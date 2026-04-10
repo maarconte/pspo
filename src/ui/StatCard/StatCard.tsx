@@ -19,6 +19,8 @@ export interface StatCardProps {
   variant?: StatCardVariant;
   /** Optional additional CSS class */
   className?: string;
+  /** Whether the card should be visually featured/prominent */
+  isFeatured?: boolean;
 }
 
 const StatCard: React.FC<StatCardProps> = ({
@@ -27,10 +29,11 @@ const StatCard: React.FC<StatCardProps> = ({
   icon,
   variant = "default",
   className = "",
+  isFeatured = false,
 }) => {
   return (
     <div
-      className={`stat-card ${variant !== "default" ? variant : ""} ${className}`.trim()}
+      className={`stat-card ${variant !== "default" ? variant : ""} ${isFeatured ? "is-featured" : ""} ${className}`.trim()}
     >
       <div className="icon-container">{icon}</div>
       <div className="stat-content">
