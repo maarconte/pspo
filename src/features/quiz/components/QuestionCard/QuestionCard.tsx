@@ -9,8 +9,8 @@ import Alert from "../../../../ui/Alert/Alert";
 import Button from "../../../../ui/Button/Button";
 import Feedback from "../Feedback";
 import Modal from "../../../../ui/Modal/Modal";
-import { QuestionAnswerProps, AnswerStatus } from "./QuestionAnswer.types";
-import QuestionAnswer from "./QuestionAnswer";
+import { AnswerStatus } from "../QuestionAnswer/QuestionAnswer.types";
+import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
 import { QuestionCardProps } from "./QuestionCard.types";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 
@@ -102,6 +102,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
           onChange={() => handleToggleBoolean(val)}
           isReadOnly={readOnly}
           status={getAnswerStatus(idx)}
+          id={""}
         />
       ));
     }

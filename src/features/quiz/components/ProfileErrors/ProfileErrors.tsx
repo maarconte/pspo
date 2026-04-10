@@ -1,10 +1,12 @@
-import React, { FC, useState, useMemo } from "react";
+import { FC, useState, useMemo } from "react";
 import "./ProfileErrors.scss";
 import { Nav } from "rsuite";
-import { ChevronDown, Check, X, XCircle } from "lucide-react";
+import { ChevronDown, Check } from "lucide-react";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { QuizSessionStat } from "../../../../utils/types";
 import Feedback from "../Feedback";
+import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
+import { getInputType, isUserChoice, getAnswerStatus, getAnswerLabel } from "../../utils/answerUtils";
 
 interface ProfileErrorsProps {
   history: QuizSessionStat[];
@@ -36,33 +38,6 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
 
   const getQuestionData = (id: string) => {
     return allQuestions.find(q => q.id === id);
-  };
-
-  const renderCorrectness = (question: any, userAnswer: any, index: number) => {
-    const isTF = question.answerType === "TF";
-    const label = isTF ? (index === 0 ? "True" : "False") : question.answers[index];
-
-    const isUserChoice = isTF
-      ? (userAnswer === true && index === 0) || (userAnswer === false && index === 1)
-      : Array.isArray(userAnswer) ? userAnswer.includes(index) : userAnswer === index;
-
-    const isCorrect = isTF
-      ? (question.answer === true && index === 0) || (question.answer === false && index === 1)
-      : Array.isArray(question.answer) ? question.answer.includes(index) : question.answer === index;
-
-    let className = "answer-row";
-    if (isCorrect) className += " correct";
-    else if (isUserChoice) className += " incorrect-selection";
-
-    return (
-      <div key={index} className={className}>
-        <div className="status-indicator">
-          {isCorrect && <Check size={18} className="text-success" />}
-          {isUserChoice && !isCorrect && <X size={18} className="text-danger" />}
-        </div>
-        <span>{label}</span>
-      </div>
-    );
   };
 
   if (sessionsWithErrors.length === 0) {
@@ -123,9 +98,20 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
 
               {isOpen && (
                 <div className="accordion-content">
-                  <p className="question-text">{question.title}</p>
                   <div className="answers-list">
-                    {Array.from({ length: answersCount }).map((_, idx) => renderCorrectness(question, detail.userAnswer, idx))}
+                    {Array.from({ length: answersCount }).map((_, idx) => (
+                      <QuestionAnswer
+                        key={idx}
+                        id={`${detail.questionId}-${idx}`}
+                        name={detail.questionId}
+                        type={getInputType(question.answerType)}
+                        label={getAnswerLabel(question, idx)}
+                        checked={isUserChoice(question, detail.userAnswer, idx)}
+                        onChange={() => {}}
+                        isReadOnly
+                        status={getAnswerStatus(question, detail.userAnswer, idx)}
+                      />
+                    ))}
                   </div>
                   {question.feedback && (
                     <Feedback question={question} showReportButton={false} />
