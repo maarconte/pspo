@@ -21,8 +21,8 @@ export const useInfoPopupStore = create<InfoPopupState>()(
       isExpired: () => Date.now() > EXPIRY_DATE,
 
       open: () => {
-        const { /* isDismissed, */ isExpired } = get();
-        if (/* !isDismissed && */ !isExpired()) {
+        const { isDismissed, isExpired } = get();
+        if (!isDismissed && !isExpired()) {
           set({ isOpen: true });
         }
       },
