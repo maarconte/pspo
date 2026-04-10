@@ -17,7 +17,7 @@ export const IdleTimeoutHandler = () => {
 
 	const handleIdle = async () => {
 		if (user) {
-			toast.warning('Vous avez été déconnecté pour cause d\'inactivité');
+			toast.warning('You have been logged out due to inactivity');
 			await authService.signOut();
 		}
 	};
@@ -25,7 +25,7 @@ export const IdleTimeoutHandler = () => {
 	const handleWarning = () => {
 		if (user && !showWarning) {
 			setShowWarning(true);
-			toast.warning('Vous serez déconnecté dans 2 minutes pour cause d\'inactivité', {
+			toast.warning('You will be logged out in 2 minutes due to inactivity', {
 				autoClose: false,
 				onClose: () => setShowWarning(false),
 			});

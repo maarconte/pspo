@@ -83,7 +83,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
             <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-sm-3">
-                  <h6 className="mb-1">Formation</h6>
+                  <h6 className="mb-1">Training</h6>
                   <Field
                     as="select"
                     id="type"
@@ -97,7 +97,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                   </Field>
                 </div>
                 <div className="col-sm-9">
-                  <h6 className="mb-1">Type de réponse</h6>
+                  <h6 className="mb-1">Answer Type</h6>
                   <div className="d-flex gap-05 mb-2">
                     <Field
                       component={SelectAnswerType}

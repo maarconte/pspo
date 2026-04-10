@@ -32,7 +32,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, UserPermissions> = {
 };
 
 export const ROLE_LABELS: Record<UserRole, string> = {
-	dev: 'Développeur',
-	admin: 'Administrateur',
+	dev: 'Developer',
+	admin: 'Administrator',
 	client: 'Client',
 };

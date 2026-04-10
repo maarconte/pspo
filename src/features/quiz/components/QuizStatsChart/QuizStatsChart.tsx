@@ -28,8 +28,8 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
           successRate: parseFloat(percent.toFixed(1)),
           avgTime: parseFloat((session.averageTimeMs / 1000).toFixed(1)), // convert ms to seconds
           totalTime: parseFloat((session.totalTimeMs / 1000 / 60).toFixed(1)), // convert ms to minutes
-          date: new Date(session.timestamp).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' }),
-          time: new Date(session.timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+          date: new Date(session.timestamp).toLocaleDateString('en-US', { day: '2-digit', month: 'short' }),
+          time: new Date(session.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         };
       });
   }, [data]);
@@ -37,7 +37,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
   if (!chartData || chartData.length === 0) {
     return (
       <div className="d-flex justify-content-center align-items-center bg-light p-5 rounded">
-        <p className="text-muted fw-bold">Aucune donnée disponible pour le moment. Fais un quiz !</p>
+        <p className="text-muted fw-bold">No data available yet. Take a quiz!</p>
       </div>
     );
   }
@@ -62,7 +62,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
     <div style={{ width: "100%", height: 350 }}>
       {/*
         Review Torvalds: 10/10
-        Verdict: Corrélation des temps (moyen vs complet) avec axes Y synchronisés.
+        Verdict: Time correlation (average vs complete) with synchronized Y axes.
       */}
       <ResponsiveContainer>
         <LineChart
@@ -103,7 +103,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
             labelFormatter={(label, payload) => {
               if (payload && payload.length > 0) {
                 const data = payload[0].payload;
-                return `${label} - ${data.date} à ${data.time}`;
+                return `${label} - ${data.date} at ${data.time}`;
               }
               return label;
             }}
@@ -115,7 +115,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
               yAxisId="left"
               type="monotone"
               dataKey="successRate"
-              name="Bonnes réponses (%)"
+              name="Success Rate (%)"
               stroke="#8884d8"
               activeDot={{ r: 8 }}
               strokeWidth={3}
@@ -126,7 +126,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
                 yAxisId="left"
                 type="monotone"
                 dataKey="avgTime"
-                name="Temps moy./question (s)"
+                name="Avg. Time/Question (s)"
                 stroke="#82ca9d"
                 activeDot={{ r: 8 }}
                 strokeWidth={3}
@@ -135,7 +135,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
                 yAxisId="right"
                 type="monotone"
                 dataKey="totalTime"
-                name="Temps total session (m)"
+                name="Total Session Time (m)"
                 stroke="#ffc658"
                 strokeWidth={3}
               />

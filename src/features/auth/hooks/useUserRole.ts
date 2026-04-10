@@ -12,8 +12,8 @@ interface UseUserRoleReturn {
 }
 
 /**
- * Hook pour gérer le rôle de l'utilisateur connecté
- * Récupère le rôle depuis les custom claims Firebase
+ * Hook to manage the logged-in user's role
+ * Fetches the role from Firebase custom claims
  */
 export const useUserRole = (): UseUserRoleReturn => {
 	const user = useUserStore((state) => state.user);
@@ -29,15 +29,15 @@ export const useUserRole = (): UseUserRoleReturn => {
 			}
 
 			try {
-				// Récupérer le token pour accéder aux custom claims
+				// Refresh the token to access custom claims
 				const idTokenResult = await user.getIdTokenResult();
 				const userRole = (idTokenResult.claims.role as UserRole) || 'client';
 
-				console.log('🔑 Rôle utilisateur:', userRole);
+				console.log('🔑 User role:', userRole);
 				setRole(userRole);
 			} catch (error) {
-				console.error('Erreur lors de la récupération du rôle:', error);
-				setRole('client'); // Rôle par défaut en cas d'erreur
+				console.error('Error fetching role:', error);
+				setRole('client'); // Default role on error
 			} finally {
 				setLoading(false);
 			}
@@ -53,7 +53,7 @@ export const useUserRole = (): UseUserRoleReturn => {
 		loading,
 		isDev: role === 'dev',
 		isAdmin: role === 'admin' || role === 'dev',
-		isClient: !!role, // Tous les utilisateurs connectés sont au moins clients
+		isClient: !!role, // All logged-in users are at least clients
 		permissions,
 	};
 };

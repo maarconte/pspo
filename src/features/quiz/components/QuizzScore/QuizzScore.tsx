@@ -68,7 +68,7 @@ const QuizzScore: FC = () => {
             )
           }
           value={`${percent}%`}
-          label="Score Final"
+          label="Final Score"
         />
 
         {/* Progression Card */}
@@ -84,7 +84,7 @@ const QuizzScore: FC = () => {
           variant="warning"
           icon={<Timer size={24} strokeWidth={2.5} />}
           value={formatDuration(totalTimeSpent)}
-          label="Temps total"
+          label="Total Time"
         />
       </div>
     </div>

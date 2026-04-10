@@ -15,7 +15,7 @@ export const MagicLinkForm = () => {
 		e.preventDefault();
 
 		if (!email || !email.includes('@')) {
-			toast.error('Veuillez saisir une adresse email valide');
+			toast.error('Please enter a valid email address');
 			return;
 		}
 
@@ -24,9 +24,9 @@ export const MagicLinkForm = () => {
 		try {
 			await authService.sendMagicLink(email);
 			setEmailSent(true);
-			toast.success('Lien de connexion envoyé ! Vérifiez votre boîte mail.');
+			toast.success('Sign-in link sent! Check your inbox.');
 		} catch (error: any) {
-			toast.error(error.message || 'Échec de l\'envoi du lien');
+			toast.error(error.message || 'Failed to send link');
 		} finally {
 			setIsLoading(false);
 		}
@@ -35,15 +35,15 @@ export const MagicLinkForm = () => {
 	if (emailSent) {
 		return (
 			<div className="magic-link-sent">
-				<h2>Email envoyé !</h2>
+				<h2>Email sent!</h2>
 				<p>
-					Un lien de connexion a été envoyé à <strong>{email}</strong>.
+					A sign-in link has been sent to <strong>{email}</strong>.
 				</p>
-				<p>Cliquez sur le lien dans l'email pour vous connecter.</p>
+				<p>Click the link in the email to log in.</p>
 				<Button
 					type={Button_Type.SECONDARY}
 					onClick={() => setEmailSent(false)}
-					label="Renvoyer le lien"
+					label="Resend link"
 				/>
 			</div>
 		);
@@ -51,14 +51,14 @@ export const MagicLinkForm = () => {
 
 	return (
 		<form onSubmit={handleSubmit} className="magic-link-form">
-			<h2>Connexion</h2>
-			<p>Entrez votre email pour recevoir un lien de connexion</p>
+			<h2>Sign In</h2>
+			<p>Enter your email to receive a sign-in link</p>
 
 			<Input
 				type="email"
 				value={email}
 				onChange={(e) => setEmail(e.target.value)}
-				placeholder="votre@email.com"
+				placeholder="your@email.com"
 				required
 				disabled={isLoading}
 				className="mb-1"
@@ -69,7 +69,7 @@ export const MagicLinkForm = () => {
 				type={Button_Type.PRIMARY}
 				onClick={handleSubmit}
 				disabled={isLoading}
-				label={isLoading ? 'Envoi en cours...' : 'Envoyer le lien'}
+				label={isLoading ? 'Sending...' : 'Send link'}
 			/>
 		</form>
 	);

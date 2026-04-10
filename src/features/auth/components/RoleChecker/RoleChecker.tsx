@@ -12,8 +12,8 @@ interface RoleCheckerProps {
 }
 
 /**
- * Composant pour protéger les routes selon le rôle utilisateur
- * Redirige vers une autre page si l'utilisateur n'a pas les permissions
+ * Component to protect routes based on user role
+ * Redirects to another page if the user does not have permissions
  */
 export const RoleChecker = ({
 	children,
@@ -27,7 +27,7 @@ export const RoleChecker = ({
 		return (
 			<div className="role-checker-loading">
 				<div className="spinner"></div>
-				<p>Vérification des permissions...</p>
+				<p>Verifying permissions...</p>
 			</div>
 		);
 	}

@@ -43,10 +43,10 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
   if (sessionsWithErrors.length === 0) {
     return (
       <div className="profile-errors-section">
-        <h2 className="errors-title h4">Mes erreurs</h2>
+        <h2 className="errors-title h4">My Errors</h2>
         <div className="empty-state">
           <Check size={48} className="text-success" />
-          <p>Félicitations ! Vous n'avez fait aucune erreur dans vos sessions récentes.</p>
+          <p>Congratulations! You haven't made any errors in your recent sessions.</p>
         </div>
       </div>
     );
@@ -54,7 +54,7 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
 
   return (
     <div className="profile-errors-section">
-      <h2 className="errors-title h4">Mes erreurs</h2>
+      <h2 className="errors-title h4">My Errors</h2>
 
       <Nav
         appearance="subtle"
@@ -66,7 +66,7 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
         className="mb-4"
       >
         {sessionsWithErrors.map((session) => {
-          const date = new Date(session.timestamp).toLocaleDateString("fr-FR", {
+          const date = new Date(session.timestamp).toLocaleDateString("en-US", {
             day: "2-digit",
             month: "short"
           });

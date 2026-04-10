@@ -34,7 +34,7 @@ const Header: FC<HeaderProps> = () => {
         )}
         {user && (
           <Button
-            label="Profil"
+            label="Profile"
             style={Button_Style.OUTLINED}
             icon={<User size={16} />}
             onClick={() => navigate("/profile")}
