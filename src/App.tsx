@@ -27,6 +27,7 @@ function App() {
           <MagicLinkRedirector />
           <Header />
           <Suspense fallback={<Loader />}>
+            <div className="p-2">
             <Routes>
               {routes.map((route) => (
                 <Route
@@ -43,7 +44,8 @@ function App() {
                   }
                 />
               ))}
-            </Routes>
+              </Routes>
+              </div>
           </Suspense>
         </QuestionsLoader>
       </Router>
