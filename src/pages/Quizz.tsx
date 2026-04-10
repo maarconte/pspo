@@ -180,7 +180,7 @@ export default function Quizz() {
     setShowAnswer(false);
     setIsFinished(false);
     setIsPaused(false);
-    setTimeSpent(0);
+    timeSpentRef.current = 0;
     resetTurn();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };

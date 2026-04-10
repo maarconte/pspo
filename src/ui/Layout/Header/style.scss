@@ -1,13 +1,149 @@
-@use '../../../assets/scss/base' as *;
+@use '../../../assets/scss/variables' as *;
 
 .Header {
-  height: 80px;
-  border-bottom: 1px solid $primary-100;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid rgba($primary-500, 0.1);
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  img {
-    height: 100%;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin-bottom: 2rem;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+
+      img {
+        height: 42px;
+        width: auto;
+      }
+    }
+
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+
+      .nav-link {
+        color: $primary-700;
+        text-decoration: none;
+        font-weight: 700;
+        transition: color 0.2s;
+
+        &:hover {
+          color: $primary-500;
+        }
+      }
+
+      .nav-dropdown-toggle {
+        color: $primary-700;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        cursor: pointer;
+        transition: color 0.2s;
+
+        &:hover {
+          color: $primary-500;
+        }
+      }
+    }
+  }
+
+  .header-right {
+    .user-profile-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      color: $primary-700;
+
+      transition: color 0.2s;
+
+      &:hover {
+        color: $primary-500;
+
+        .user-avatar-small {
+          background-color: $primary-100;
+        }
+      }
+
+      .user-avatar-small {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: $primary-50;
+        color: $primary-700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        transition: background-color 0.2s;
+      }
+
+      .user-email {
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+    }
+
+    .btn-login {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid $primary-100;
+      background: transparent;
+      color: $primary-500;
+      font-weight: 600;
+      transition: all 0.2s;
+
+      &:hover {
+        background: $primary-50;
+        border-color: $primary-500;
+      }
+    }
+  }
+}
+
+// Global RSuite Dropdown overrides for Header
+.rs-dropdown-menu {
+  border: none !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 0.5rem !important;
+  margin-top: 0.5rem !important;
+
+  .rs-dropdown-item {
+    border-radius: 8px !important;
+    color: $primary-700 !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    padding: 0.6rem 1rem !important;
+
+    &:hover {
+      background-color: $primary-50 !important;
+      color: $primary-500 !important;
+    }
+
+    svg {
+      opacity: 0.7;
+    }
   }
 }
