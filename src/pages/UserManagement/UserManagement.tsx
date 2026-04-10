@@ -16,12 +16,12 @@ const UserManagement = () => {
 
 		try {
 			await roleService.setUserRole(userId, newRole);
-			toast.success(`Rôle mis à jour avec succès`);
+			toast.success('Role updated successfully');
 
-			// Rafraîchir la liste des utilisateurs
+			// Refresh user list
 			await refetch();
 		} catch (error: any) {
-			toast.error(error.message || 'Échec de la mise à jour du rôle');
+			toast.error(error.message || 'Failed to update role');
 		} finally {
 			setUpdatingUserId(null);
 		}
@@ -30,8 +30,8 @@ const UserManagement = () => {
 	if (loading) {
 		return (
 			<div className="user-management">
-				<h1>Gestion des utilisateurs</h1>
-				<p>Chargement des utilisateurs...</p>
+				<h1>User Management</h1>
+				<p>Loading users...</p>
 			</div>
 		);
 	}
@@ -39,10 +39,10 @@ const UserManagement = () => {
 	if (error) {
 		return (
 			<div className="user-management">
-				<h1>Gestion des utilisateurs</h1>
-				<p className="error">Erreur : {error}</p>
+				<h1>User Management</h1>
+				<p className="error">Error: {error}</p>
 				<Button
-					label="Réessayer"
+					label="Retry"
 					style={Button_Style.SOLID}
 					onClick={refetch}
 				/>
@@ -52,9 +52,9 @@ const UserManagement = () => {
 
 	return (
 		<div className="user-management">
-			<h1>Gestion des utilisateurs</h1>
+			<h1>User Management</h1>
 			<p className="subtitle">
-				{users.length} utilisateur{users.length > 1 ? 's' : ''} enregistré{users.length > 1 ? 's' : ''}
+				{users.length} registered user{users.length > 1 ? 's' : ''}
 			</p>
 
 			<div className="users-table">
@@ -62,9 +62,9 @@ const UserManagement = () => {
 					<thead>
 						<tr>
 							<th>Email</th>
-							<th>Rôle actuel</th>
-							<th>Changer le rôle</th>
-							<th>Date de création</th>
+							<th>Current Role</th>
+							<th>Change Role</th>
+							<th>Creation Date</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -88,11 +88,11 @@ const UserManagement = () => {
 										<option value={ROLES.DEV}>{ROLE_LABELS.dev}</option>
 									</select>
 									{updatingUserId === user.uid && (
-										<span className="updating">Mise à jour...</span>
+										<span className="updating">Updating...</span>
 									)}
 								</td>
 								<td>
-									{user.createdAt?.toLocaleDateString('fr-FR', {
+									{user.createdAt?.toLocaleDateString('en-US', {
 										year: 'numeric',
 										month: 'short',
 										day: 'numeric',

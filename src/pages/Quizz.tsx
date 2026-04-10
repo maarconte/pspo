@@ -207,7 +207,7 @@ export default function Quizz() {
               <QuizzScore />
               <div className="d-flex justify-content-center">
                 <Button
-                  label="Recommencer un Quiz"
+                  label="Restart Quiz"
                   type={Button_Type.PRIMARY}
                   onClick={handleRestart}
                 />
@@ -242,7 +242,7 @@ export default function Quizz() {
                           ? "—"
                           : `${successPercent}% (${correctCount}/${answeredCount})`
                       }
-                      label="Score actuel"
+                      label="Current Score"
                     />
                   )}
                   <Button
@@ -282,7 +282,7 @@ export default function Quizz() {
         {isFinished ? (
           <div className="d-flex justify-content-center mt-5 mb-5">
             <Button
-              label="Recommencer un Quiz"
+              label="Restart Quiz"
               type={Button_Type.PRIMARY}
               onClick={handleRestart}
             />
@@ -339,7 +339,7 @@ export default function Quizz() {
         }}
         type="warning"
       >
-        <p>Voulez-vous vraiment terminer votre session ?</p>
+        <p>Are you sure you want to finish your session?</p>
       </Modal>
 
       {/* Coop Participant Display */}

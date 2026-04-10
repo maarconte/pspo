@@ -14,14 +14,14 @@ export const MagicLinkVerification = () => {
 	const [needsEmail, setNeedsEmail] = useState(false);
 
 	useEffect(() => {
-		// Délai minimum pour afficher le loader (évite le flash)
-		const minLoadingTime = 1000; // 1 seconde
+		// Minimum delay to show the loader (avoids flash)
+		const minLoadingTime = 1000; // 1 second
 		const startTime = Date.now();
 
 		const verify = async () => {
 			await verifyMagicLink();
 
-			// S'assurer que le loader est affiché pendant au moins 1 seconde
+			// Ensure loader is shown for at least 1 second
 			const elapsed = Date.now() - startTime;
 			if (elapsed < minLoadingTime) {
 				await new Promise(resolve => setTimeout(resolve, minLoadingTime - elapsed));
@@ -35,10 +35,10 @@ export const MagicLinkVerification = () => {
 		setIsVerifying(true);
 		setError(null);
 
-		// Vérifier si c'est bien un Magic Link
+		// Check if it's a valid Magic Link
 		if (!authService.isMagicLink()) {
-			console.error('❌ Ce n\'est pas un Magic Link valide');
-			setError('Lien de connexion invalide');
+			console.error('❌ Not a valid Magic Link');
+			setError('Invalid sign-in link');
 			setIsVerifying(false);
 			return;
 		}
@@ -46,14 +46,14 @@ export const MagicLinkVerification = () => {
 		try {
 			await authService.completeMagicLinkSignIn(providedEmail);
 
-			// Attendre un peu pour que le store se mette à jour
+			// Wait a bit for the store to update
 			setTimeout(() => {
-				navigate('/'); // Rediriger vers la page d'accueil
+				navigate('/'); // Redirect to home page
 			}, 500);
 		} catch (error: any) {
-			console.error('❌ Erreur de vérification:', error.message);
+			console.error('❌ Verification error:', error.message);
 
-			if (error.message.includes('Email manquant')) {
+			if (error.message.includes('Missing email') || error.message.includes('Email manquant')) {
 				setNeedsEmail(true);
 			} else {
 				setError(error.message);
@@ -71,8 +71,8 @@ export const MagicLinkVerification = () => {
 	if (isVerifying) {
 		return (
 			<div className="magic-link-verification">
-				<h2>Vérification en cours...</h2>
-				<p>Veuillez patienter pendant que nous vérifions votre lien de connexion.</p>
+				<h2>Verifying...</h2>
+				<p>Please wait while we verify your sign-in link.</p>
 			</div>
 		);
 	}
@@ -80,15 +80,15 @@ export const MagicLinkVerification = () => {
 	if (needsEmail) {
 		return (
 			<div className="magic-link-verification">
-				<h2>Confirmation de l'email</h2>
-				<p>Veuillez saisir votre adresse email pour compléter la connexion.</p>
+				<h2>Email Confirmation</h2>
+				<p>Please enter your email address to complete the sign-in.</p>
 
 				<form onSubmit={handleEmailSubmit}>
 					<Input
 						type="email"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
-						placeholder="votre@email.com"
+						placeholder="your@email.com"
 						required
 						className="mb-1"
 						name="email"
@@ -96,7 +96,7 @@ export const MagicLinkVerification = () => {
 					<Button
 						type={Button_Type.PRIMARY}
 						onClick={handleEmailSubmit}
-						label="Confirmer"
+						label="Confirm"
 					/>
 				</form>
 			</div>
@@ -106,12 +106,12 @@ export const MagicLinkVerification = () => {
 	if (error) {
 		return (
 			<div className="magic-link-verification error">
-				<h2>Erreur de connexion</h2>
+				<h2>Sign-in Error</h2>
 				<p>{error}</p>
 				<Button
 					type={Button_Type.PRIMARY}
 					onClick={() => navigate('/login')}
-					label="Retour à la connexion"
+					label="Back to Sign In"
 				/>
 			</div>
 		);

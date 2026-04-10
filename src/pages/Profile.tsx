@@ -15,7 +15,7 @@ export default function Profile() {
   if (!user) {
     return (
       <div className="container mt-5 text-center">
-        <h2>Veuillez vous connecter pour voir votre profil.</h2>
+        <h2>Please log in to view your profile.</h2>
       </div>
     );
   }
@@ -41,8 +41,8 @@ export default function Profile() {
           </div>
         )}
         <div>
-          <h1 className="h3 mb-0">Profil de {user.displayName || user.email}</h1>
-          <p className="text-muted">Statistiques et progression</p>
+          <h1 className="h3 mb-0">{user.displayName || user.email}'s Profile</h1>
+          <p className="text-muted">Statistics and progress</p>
         </div>
       </div>
 
@@ -54,7 +54,7 @@ export default function Profile() {
 
         {error && (
           <div className="alert alert-danger">
-            Une erreur est survenue lors de la récupération de vos statistiques.
+            An error occurred while retrieving your statistics.
           </div>
         )}
 
@@ -64,7 +64,7 @@ export default function Profile() {
             <div className="row g-4 mb-5">
               <div className="col-12 col-md-6">
                 <div className="bg-white p-4 rounded shadow-sm h-100">
-                  <h3 className="h5 text-center mb-4">Taux de Réussite (%)</h3>
+                  <h3 className="h5 text-center mb-4">Success Rate (%)</h3>
                   <QuizStatsChart data={history} metric="successRate" />
                 </div>
               </div>
@@ -74,7 +74,7 @@ export default function Profile() {
               </div>
               <div className="col-12 col-md-6">
                 <div className="bg-white p-4 rounded shadow-sm h-100">
-                  <h3 className="h5 text-center mb-4">Temps Moyen (s)</h3>
+                  <h3 className="h5 text-center mb-4">Average Time (s)</h3>
                   <QuizStatsChart data={history} metric="avgTime" />
                 </div>
               </div>
@@ -82,7 +82,7 @@ export default function Profile() {
             <div className="row g-4 mb-5">
               <div className="col-12">
                 <div className="bg-white p-4 rounded shadow-sm">
-                  <h3 className="h5 text-center mb-4">Mauvaises Réponses</h3>
+                  <h3 className="h5 text-center mb-4">Wrong Answers</h3>
                   <QuizErrorsChart data={history} />
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function Profile() {
 
         {!isLoading && !error && history && history.length === 0 && (
           <div className="d-flex justify-content-center align-items-center bg-light p-5 rounded">
-            <p className="text-muted fw-bold">Aucune donnée disponible pour le moment. Fais un quiz !</p>
+            <p className="text-muted fw-bold">No data available yet. Take a quiz!</p>
           </div>
         )}
       </div>

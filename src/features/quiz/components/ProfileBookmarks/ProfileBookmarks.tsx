@@ -76,10 +76,10 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
   if (sessionsWithBookmarks.length === 0) {
     return (
       <div className="profile-bookmarks-section">
-        <h2 className="bookmarks-title h4">Mes marques pages</h2>
+        <h2 className="bookmarks-title h4">My Bookmarks</h2>
         <div className="empty-state">
           <BookmarkX size={48} className="text-muted" />
-          <p>Vous n'avez pas encore de marque-page dans vos sessions précédentes.</p>
+          <p>You don't have any bookmarks from your previous sessions yet.</p>
         </div>
       </div>
     );
@@ -87,7 +87,7 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
 
   return (
     <div className="profile-bookmarks-section">
-      <h2 className="bookmarks-title h4">Mes marques pages</h2>
+      <h2 className="bookmarks-title h4">My Bookmarks</h2>
 
       <Nav
         appearance="subtle"
@@ -99,7 +99,7 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
         className="mb-4"
       >
         {sessionsWithBookmarks.map((session, idx) => {
-          const date = new Date(session.timestamp).toLocaleDateString("fr-FR", {
+          const date = new Date(session.timestamp).toLocaleDateString("en-US", {
             day: "2-digit",
             month: "short",
           });
@@ -155,7 +155,7 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
                   </div>
                   {question.feedback && (
                     <div className="feedback-box">
-                      <strong>Feedback :</strong> {question.feedback}
+                      <strong>Feedback:</strong> {question.feedback}
                     </div>
                   )}
                 </div>
@@ -169,13 +169,13 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         setIsClosed={setIsDeleteModalOpen}
-        title="Supprimer le marque page"
-        labelOnConfirm="Supprimer"
-        labelOnCancel="Annuler"
+        title="Remove Bookmark"
+        labelOnConfirm="Remove"
+        labelOnCancel="Cancel"
         onConfirm={confirmDelete}
         type="warning"
       >
-        <p>Voulez-vous supprimer ce marque page ?</p>
+        <p>Do you want to remove this bookmark?</p>
       </Modal>
     </div>
   );

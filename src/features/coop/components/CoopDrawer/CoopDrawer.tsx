@@ -28,7 +28,7 @@ export const CoopDrawer: React.FC = () => {
       setNewName("");
       setError(null);
     } else {
-      setError(result.error || "Erreur lors de l'ajout");
+      setError(result.error || "Error adding participant");
     }
   };
 
@@ -47,7 +47,7 @@ export const CoopDrawer: React.FC = () => {
         id="coop-mode-tab"
       >
         <Users size={18} />
-        <span className="coop-tab__label">Mode coop</span>
+        <span className="coop-tab__label">Co-op Mode</span>
         {participants.length > 0 && (
           <span className="coop-tab__badge">{participants.length}</span>
         )}
@@ -65,20 +65,20 @@ export const CoopDrawer: React.FC = () => {
           <Drawer.Title>
             <div className="d-flex align-items-center gap-2">
               <Users size={20} />
-              <span>Mode coop ({participants.length})</span>
+              <span>Co-op Mode ({participants.length})</span>
             </div>
           </Drawer.Title>
         </Drawer.Header>
         <Drawer.Body>
           <div className="coop-drawer__content">
             <p className="coop-drawer__description">
-              Outil de collaboration, inscrivez le prénom des différents participants
+              Collaboration tool: enter the names of the participants.
             </p>
 
             <div className="coop-drawer__form">
               <div className={`coop-drawer__input-group ${error ? "has-error" : ""}`}>
                 <Input
-                  placeholder="Prénom..."
+                  placeholder="First name..."
                   value={newName}
                   onChange={(val) => setNewName(val)}
                   onKeyPress={handleKeyPress}
@@ -88,7 +88,7 @@ export const CoopDrawer: React.FC = () => {
                   appearance="primary"
                   onClick={handleAdd}
                   className="coop-drawer__add-btn"
-                  label="Ajouter"
+                  label="Add"
                   icon={<Plus size={18} />}
                 />
               </div>
@@ -105,7 +105,7 @@ export const CoopDrawer: React.FC = () => {
                       type={Button_Type.SECONDARY}
                       style={Button_Style.OUTLINED}
                       size="S"
-                      label="Vider tout"
+                      label="Clear all"
                       //className="coop-drawer__clear-btn"
                       icon={<X size={14} color="red" />}
                     />
@@ -130,7 +130,7 @@ export const CoopDrawer: React.FC = () => {
                 </>
               ) : (
                 <div className="coop-drawer__empty">
-                  Aucun participant pour le moment
+                  No participants yet
                 </div>
               )}
             </div>

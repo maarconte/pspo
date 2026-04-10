@@ -12,8 +12,8 @@ export interface UserData {
 }
 
 /**
- * Hook pour récupérer la liste de tous les utilisateurs
- * Réservé aux utilisateurs dev
+ * Hook to retrieve the list of all users
+ * Reserved for dev users
  */
 export const useUsers = () => {
 	const [users, setUsers] = useState<UserData[]>([]);
@@ -41,8 +41,8 @@ export const useUsers = () => {
 
 			setUsers(usersData);
 		} catch (err: any) {
-			console.error('Erreur lors de la récupération des utilisateurs:', err);
-			setError(err.message || 'Échec de la récupération des utilisateurs');
+			console.error('Error fetching users:', err);
+			setError(err.message || 'Failed to fetch users');
 		} finally {
 			setLoading(false);
 		}

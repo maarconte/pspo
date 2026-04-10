@@ -7,9 +7,9 @@ import {
 } from 'firebase/auth';
 import { auth } from '../../../lib/firebase';
 
-// Configuration pour le Magic Link
+// Magic Link configuration
 const actionCodeSettings = {
-	// En production, inclure le base path /pspo/
+	// In production, include the base path /pspo/
 	url: import.meta.env.PROD
 		? 'https://maarconte.github.io/pspo/'
 		: 'http://localhost:3000/auth/verify',
@@ -18,29 +18,29 @@ const actionCodeSettings = {
 
 export const authService = {
 	/**
-	 * Envoie un Magic Link à l'adresse email fournie
-	 * @param email - Adresse email de l'utilisateur
+	 * Sends a Magic Link to the provided email address
+	 * @param email - User's email address
 	 * @returns Promise<void>
-	 * @throws Error si l'email est invalide ou l'envoi échoue
+	 * @throws Error if email is invalid or sending fails
 	 */
 	sendMagicLink: async (email: string): Promise<void> => {
-		// Validation basique de l'email
+		// Basic email validation
 		if (!email || !email.includes('@')) {
-			throw new Error('Adresse email invalide');
+			throw new Error('Invalid email address');
 		}
 
 		try {
 			await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-			// Sauvegarder l'email localement pour compléter la connexion
+			// Save email locally to complete sign-in
 			window.localStorage.setItem('emailForSignIn', email);
 		} catch (error: any) {
-			console.error('Erreur lors de l\'envoi du Magic Link:', error);
-			throw new Error(error.message || 'Échec de l\'envoi du lien de connexion');
+			console.error('Error sending Magic Link:', error);
+			throw new Error(error.message || 'Failed to send sign-in link');
 		}
 	},
 
 	/**
-	 * Vérifie si l'URL actuelle est un lien de connexion Magic Link
+	 * Checks if the current URL is a Magic Link sign-in link
 	 * @returns boolean
 	 */
 	isMagicLink: (): boolean => {
@@ -48,62 +48,61 @@ export const authService = {
 	},
 
 	/**
-	 * Complète la connexion avec le Magic Link
-	 * @param email - Email de l'utilisateur (optionnel si sauvegardé)
+	 * Completes the sign-in with the Magic Link
+	 * @param email - User's email (optional if saved)
 	 * @returns Promise<User>
-	 * @throws Error si le lien est invalide ou expiré
+	 * @throws Error if link is invalid or expired
 	 */
 	completeMagicLinkSignIn: async (email?: string): Promise<User> => {
-		// Récupérer l'email sauvegardé si non fourni
+		// Get saved email if not provided
 		let userEmail = email;
 		if (!userEmail) {
 			userEmail = window.localStorage.getItem('emailForSignIn') || undefined;
 		}
 
 		if (!userEmail) {
-			throw new Error('Email manquant. Veuillez saisir votre adresse email.');
+			throw new Error('Missing email. Please enter your email address.');
 		}
 
 		try {
 			const result = await signInWithEmailLink(auth, userEmail, window.location.href);
-			// Nettoyer l'email sauvegardé
+			// Clean up saved email
 			window.localStorage.removeItem('emailForSignIn');
 			return result.user;
 		} catch (error: any) {
-			console.error('Erreur lors de la vérification du Magic Link:', error);
+			console.error('Error verifying Magic Link:', error);
 
-			// Messages d'erreur personnalisés
+			// Custom error messages
 			if (error.code === 'auth/invalid-action-code') {
-				throw new Error('Le lien de connexion est invalide ou a expiré. Veuillez demander un nouveau lien.');
+				throw new Error('The sign-in link is invalid or has expired. Please request a new link.');
 			} else if (error.code === 'auth/expired-action-code') {
-				throw new Error('Le lien de connexion a expiré. Veuillez demander un nouveau lien.');
+				throw new Error('The sign-in link has expired. Please request a new link.');
 			}
 
-			throw new Error(error.message || 'Échec de la connexion');
+			throw new Error(error.message || 'Authentication failed');
 		}
 	},
 
 	/**
-	 * Déconnecte l'utilisateur
+	 * Signs out the user
 	 */
 	signOut: async (): Promise<void> => {
 		await firebaseSignOut(auth);
-		// Nettoyer l'email sauvegardé au cas où
+		// Clean up saved email just in case
 		window.localStorage.removeItem('emailForSignIn');
 	},
 
 	/**
-	 * Récupère l'utilisateur actuellement connecté
+	 * Gets the currently signed-in user
 	 */
 	getCurrentUser: (): User | null => {
 		return auth.currentUser;
 	},
 
 	/**
-	 * Récupère l'email sauvegardé pour la connexion
+	 * Gets the saved email for sign-in
 	 */
 	getSavedEmail: (): string | null => {
 		return window.localStorage.getItem('emailForSignIn');
 	},
 };
-

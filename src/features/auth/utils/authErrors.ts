@@ -3,16 +3,16 @@ export const getAuthErrorMessage = (errorCode: string): string => {
     case 'auth/user-not-found':
     case 'auth/wrong-password':
     case 'auth/invalid-credential':
-      return 'Identifiants invalides.';
+      return 'Invalid credentials.';
     case 'auth/email-already-in-use':
-      return 'Cette adresse e-mail est déjà utilisée.';
+      return 'This email address is already in use.';
     case 'auth/invalid-email':
-      return 'Adresse e-mail invalide.';
+      return 'Invalid email address.';
     case 'auth/weak-password':
-      return 'Le mot de passe est trop faible.';
+      return 'The password is too weak.';
     case 'auth/too-many-requests':
-      return 'Trop de tentatives échouées. Veuillez réessayer plus tard.';
+      return 'Too many failed attempts. Please try again later.';
     default:
-      return 'Une erreur est survenue lors de l\'authentification.';
+      return 'An error occurred during authentication.';
   }
 };

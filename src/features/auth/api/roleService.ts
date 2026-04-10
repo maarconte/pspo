@@ -14,12 +14,12 @@ interface SetUserRoleResponse {
 }
 
 /**
- * Service pour gérer les rôles utilisateur via Cloud Functions
+ * Service to manage user roles via Cloud Functions
  */
 export const roleService = {
 	/**
-	 * Attribue un rôle à un utilisateur
-	 * Nécessite le rôle "dev"
+	 * Assigns a role to a user
+	 * Requires "dev" role
 	 */
 	setUserRole: async (userId: string, role: UserRole): Promise<SetUserRoleResponse> => {
 		const setUserRole = httpsCallable<SetUserRoleParams, SetUserRoleResponse>(
@@ -31,8 +31,8 @@ export const roleService = {
 			const result = await setUserRole({ userId, role });
 			return result.data;
 		} catch (error: any) {
-			console.error('Erreur lors de l\'attribution du rôle:', error);
-			throw new Error(error.message || 'Échec de l\'attribution du rôle');
+			console.error('Error assigning role:', error);
+			throw new Error(error.message || 'Failed to assign role');
 		}
 	},
 };

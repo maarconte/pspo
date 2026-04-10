@@ -45,7 +45,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
         variant="success"
         icon={<CheckCircle size={24} strokeWidth={2.5} />}
         value={`${stats.avgSuccessRate}%`}
-        label="Réussite moy. (3 derniers)"
+        label="Avg. Success (last 3)"
       />
 
       {/* Response Time Card */}
@@ -53,7 +53,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
         variant="warning"
         icon={<Clock size={24} strokeWidth={2.5} />}
         value={`${stats.avgResponseTime}s`}
-        label="Temps moy. (3 derniers)"
+        label="Avg. Duration (last 3)"
       />
 
       {/* Sessions Card */}
@@ -61,7 +61,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
         variant="info"
         icon={<Activity size={24} strokeWidth={2.5} />}
         value={stats.totalSessions}
-        label="Sessions totales"
+        label="Total Sessions"
       />
     </div>
   );

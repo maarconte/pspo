@@ -28,7 +28,7 @@ export const useCoopStore = create<CoopState>()(
         if (participants.length >= 30) {
           return {
             success: false,
-            error: "Zut, vous êtes nombreux ! Malheureusement l'outil est limité à 30 personnes",
+            error: "Wow, that's a lot of people! Unfortunately, the tool is limited to 30 participants.",
           };
         }
         if (!name.trim()) return { success: false };
