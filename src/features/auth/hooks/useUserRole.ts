@@ -33,7 +33,6 @@ export const useUserRole = (): UseUserRoleReturn => {
 				const idTokenResult = await user.getIdTokenResult();
 				const userRole = (idTokenResult.claims.role as UserRole) || 'client';
 
-				console.log('🔑 Rôle utilisateur:', userRole);
 				setRole(userRole);
 			} catch (error) {
 				console.error('Erreur lors de la récupération du rôle:', error);
