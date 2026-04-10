@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import "./QuizStatsChart.scss";
 import { QuizSessionStat } from "../../../../utils/types";
 
 interface QuizStatsChartProps {
@@ -22,7 +23,8 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
     return [...data]
       .sort((a, b) => a.timestamp - b.timestamp)
       .map((session, index) => {
-        const percent = session.totalQuestions > 0 ? (session.score / session.totalQuestions) * 100 : 0;
+        const answeredQuestions = session.details?.filter(d => d.userAnswer !== null).length || 0;
+        const percent = answeredQuestions > 0 ? (session.score / answeredQuestions) * 100 : 0;
         return {
           name: `Sess. ${index + 1}`,
           successRate: parseFloat(percent.toFixed(1)),
@@ -30,6 +32,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
           totalTime: parseFloat((session.totalTimeMs / 60000).toFixed(1)),
           date: new Date(session.timestamp).toLocaleDateString('en-US', { day: '2-digit', month: 'short' }),
           time: new Date(session.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+          answeredQuestions,
         };
       });
   }, [data]);
@@ -58,12 +61,36 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
 
   const isSuccess = metric === 'successRate';
 
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="chart-tooltip">
+          <p className="chart-tooltip-title">
+            {label} — {data.date} at {data.time}
+          </p>
+          <div className="chart-tooltip-content">
+            <div className="chart-tooltip-row">
+              <span className="metric-label success">Success:</span>
+              <span className="metric-value">{data.successRate}% ({data.answeredQuestions})</span>
+            </div>
+            <div className="chart-tooltip-row">
+              <span className="metric-label avg-time">Avg. Time:</span>
+              <span className="metric-value">{data.avgTime}m</span>
+            </div>
+            <div className="chart-tooltip-row">
+              <span className="metric-label total-time">Total Time:</span>
+              <span className="metric-value">{data.totalTime}m</span>
+          </div>
+        </div>
+      </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <div style={{ width: "100%", height: 350 }}>
-      {/*
-        Review Torvalds: 10/10
-        Verdict: Time correlation (average vs complete) with synchronized Y axes.
-      */}
+    <div className="chart-container">
       <ResponsiveContainer>
         <LineChart
           data={chartData}
@@ -89,7 +116,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
             tickFormatter={(value) => isSuccess ? `${value}%` : `${value}m`}
           />
 
-          {/* Secondary Y-Axis for Total Time (only in avgTime mode) */}
+          {/* Secondary Y-Axis for Time Metrics (only in non-success mode) */}
           {!isSuccess && (
             <YAxis
               yAxisId="right"
@@ -99,15 +126,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
             />
           )}
 
-          <Tooltip
-            labelFormatter={(label, payload) => {
-              if (payload && payload.length > 0) {
-                const data = payload[0].payload;
-                return `${label} - ${data.date} at ${data.time}`;
-              }
-              return label;
-            }}
-          />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
 
           {isSuccess ? (

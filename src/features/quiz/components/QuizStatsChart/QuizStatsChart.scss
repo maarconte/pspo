@@ -1,0 +1,59 @@
+@use "../../../../assets/scss/variables" as *;
+
+.chart-container {
+  width: 100%;
+  height: 350px;
+}
+
+.chart-tooltip {
+  background-color: #fff;
+  padding: 1rem;
+  border: 1px solid $primary-100;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 180px;
+
+  .chart-tooltip-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $primary-50;
+    font-size: 0.9rem;
+    color: $primary-800;
+  }
+
+  .chart-tooltip-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .chart-tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    .metric-label {
+      font-weight: 600;
+
+      &.success {
+        color: #8884d8;
+      }
+
+      &.avg-time {
+        color: $success-500;
+      }
+
+      &.total-time {
+        color: $warning-500;
+      }
+    }
+
+    .metric-value {
+      font-weight: 700;
+      color: $primary-900;
+    }
+  }
+}
