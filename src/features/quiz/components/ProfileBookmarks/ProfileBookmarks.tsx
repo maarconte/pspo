@@ -97,7 +97,7 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
             setActiveSessionId(key);
             setExpandedQuestionId(null); // Close accordion on tab change
           }}
-          className="mb-4"
+
         >
           {sessionsWithBookmarks.map((session, idx) => {
             const date = new Date(session.timestamp).toLocaleDateString("en-US", {
