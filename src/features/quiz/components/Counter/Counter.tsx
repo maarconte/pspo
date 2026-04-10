@@ -34,7 +34,7 @@ const parseTimer = (timerString: string): [number, number, number] => {
   return [hours, minutes, seconds];
 };
 
-const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
+const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz, onTick, currentQuestion }) => {
   const [countdownSeconds, setCountdownSeconds] = useState(INITIAL_COUNTDOWN_SECONDS);
   const [openModal, setOpenModal] = useState(false);
   const [timer, setTimer] = useState(INITIAL_TIMER);
@@ -42,6 +42,8 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
 
   const countdownIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  // Tracks elapsed seconds for the current question without extra state/re-renders
+  const elapsedSecondsRef = useRef(0);
 
   const handlePauseResume = () => {
     setIsPaused(!isPaused);
@@ -58,10 +60,18 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
     setStartTimer(true);
   };
 
+  // Reset elapsed counter when the question changes
+  useEffect(() => {
+    elapsedSecondsRef.current = 0;
+  }, [currentQuestion]);
+
   // Countdown timer effect
   useEffect(() => {
     if (!isPaused && !startTimer) {
       countdownIntervalRef.current = setInterval(() => {
+        elapsedSecondsRef.current += 1;
+        onTick?.(elapsedSecondsRef.current);
+
         setCountdownSeconds((prev) => {
           if (prev <= 1) {
             if (countdownIntervalRef.current) {
@@ -83,7 +93,7 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz }) => {
         clearInterval(countdownIntervalRef.current);
       }
     };
-  }, [isPaused, startTimer]);
+  }, [isPaused, startTimer, onTick]);
 
   // Show modal when countdown reaches zero
   useEffect(() => {
