@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Button } from "../ui";
 import { Button_Style, Button_Type } from "../ui/Button/Button.types";
@@ -27,7 +27,8 @@ export default function Quizz() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [timeSpent, setTimeSpent] = useState(0);
+  // useRef: no re-render needed — only used in the toast callback
+  const timeSpentRef = useRef(0);
   const [open, setOpen] = React.useState(false);
   const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
 
@@ -47,7 +48,7 @@ export default function Quizz() {
 
   const notificationContent = (time: string) => (
     <div className="toast-content">
-      <p className={`mb-0 time fs-4 fw-bold color-${toastType(timeSpent)}`}>
+      <p className={`mb-0 time fs-4 fw-bold color-${toastType(timeSpentRef.current)}`}>
         {time}
       </p>
     </div>
@@ -60,8 +61,8 @@ export default function Quizz() {
   };
 
   const notifyTime = () => {
-    if (timeSpent <= 3) return;
-    toast(notificationContent(formatTime(timeSpent)), toastOptions);
+    if (timeSpentRef.current <= 3) return;
+    toast(notificationContent(formatTime(timeSpentRef.current)), toastOptions);
   };
 
   const toastOptions: any = {
@@ -82,27 +83,13 @@ export default function Quizz() {
   }, [startTracking, resetStats]);
 
   useEffect(() => {
-    setTimeSpent(0);
+    timeSpentRef.current = 0;
     if (!isFinished) {
       startQuestion(currentQuestion);
     }
   }, [currentQuestion, isFinished, startQuestion]);
 
   // Saving final stats is now handled synchronously in finishQuizz
-
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout | undefined;
-
-    if (!isPaused && !isFinished) {
-      intervalId = setInterval(() => {
-        setTimeSpent((prevTime) => prevTime + 1);
-      }, 1000);
-    } else {
-      clearInterval(intervalId);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [isPaused, currentQuestion, isFinished]);
 
   const handleEndQuestion = (index: number) => {
     const question = questions[index];
@@ -210,6 +197,8 @@ export default function Quizz() {
               isPaused={isPaused}
               setIsPaused={setIsPaused}
               finishQuizz={finishQuizz}
+              currentQuestion={currentQuestion}
+              onTick={(seconds) => { timeSpentRef.current = seconds; }}
             />
           )}
 

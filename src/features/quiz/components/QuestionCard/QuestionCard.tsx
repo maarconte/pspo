@@ -115,16 +115,15 @@ const QuestionCard: FC<QuestionCardProps> = ({
         checked={isSelected(index)}
         onChange={() => {
           inputType === "radio" ? handleToggleRadio(index) : handleToggleMultiple(index);
-        }}
+        } }
         isReadOnly={readOnly}
-        status={getAnswerStatus(index)}
-      />
+        status={getAnswerStatus(index)} id={""}      />
     ));
   };
 
-  const hasMissedMultipleChoice = 
-    showAnswer && 
-    question.answerType === "M" && 
+  const hasMissedMultipleChoice =
+    showAnswer &&
+    question.answerType === "M" &&
     question.answers?.some((_, index) => getAnswerStatus(index) === "missed");
 
   return (
