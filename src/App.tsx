@@ -15,12 +15,14 @@ import { queryClient } from "./lib/react-query/queryClient";
 
 import { MagicLinkRedirector } from "./features/auth/components/MagicLinkRedirector/MagicLinkRedirector";
 import { CoopDrawer } from "./features/coop/components/CoopDrawer/CoopDrawer";
+import { DocumentationDrawer } from "./features/documentation/components/DocumentationDrawer/DocumentationDrawer";
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router basename={import.meta.env.BASE_URL}>
         <CoopDrawer />
+        <DocumentationDrawer />
         <QuestionsLoader>
           <MagicLinkRedirector />
           <Header />
