@@ -1,12 +1,14 @@
-import React, { FC, useState, useMemo } from "react";
+import { FC, useState, useMemo } from "react";
 import "./ProfileBookmarks.scss";
 import { Nav } from "rsuite";
-import { Bookmark, ChevronDown, Check, X, BookmarkX } from "lucide-react";
+import { Bookmark, ChevronDown, BookmarkX } from "lucide-react";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { QuizSessionStat, QuestionStat } from "../../../../utils/types";
 import { updateQuizSession } from "../../../../lib/firebase/stats";
 import Modal from "../../../../ui/Modal/Modal";
 import { useUserStore } from "../../../../stores/useUserStore";
+import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
+import { getInputType, isUserChoice, getAnswerStatus, getAnswerLabel } from "../../utils/answerUtils";
 
 interface ProfileBookmarksProps {
   history: QuizSessionStat[];
@@ -71,35 +73,6 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
     return allQuestions.find(q => q.id === id);
   };
 
-  const renderCorrectness = (question: any, userAnswer: any, index: number) => {
-    // Handle True/False (TF) questions logic
-    const isTF = question.answerType === "TF";
-    const label = isTF ? (index === 0 ? "True" : "False") : question.answers[index];
-
-    // For TF: index 0 is true, index 1 is false
-    const isUserChoice = isTF
-      ? (userAnswer === true && index === 0) || (userAnswer === false && index === 1)
-      : Array.isArray(userAnswer) ? userAnswer.includes(index) : userAnswer === index;
-
-    const isCorrect = isTF
-      ? (question.answer === true && index === 0) || (question.answer === false && index === 1)
-      : Array.isArray(question.answer) ? question.answer.includes(index) : question.answer === index;
-
-    let className = "answer-row";
-    if (isCorrect) className += " correct";
-    else if (isUserChoice) className += " incorrect-selection";
-
-    return (
-      <div key={index} className={className}>
-        <div className="status-indicator">
-          {isCorrect && <Check size={18} className="text-success" />}
-          {isUserChoice && !isCorrect && <X size={18} className="text-danger" />}
-        </div>
-        <span>{label}</span>
-      </div>
-    );
-  };
-
   if (sessionsWithBookmarks.length === 0) {
     return (
       <div className="profile-bookmarks-section">
@@ -126,14 +99,13 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
         className="mb-4"
       >
         {sessionsWithBookmarks.map((session, idx) => {
-          console.log(session);
           const date = new Date(session.timestamp).toLocaleDateString("fr-FR", {
             day: "2-digit",
-            month: "short"
+            month: "short",
           });
           return (
             <Nav.Item key={session.id} eventKey={session.id}>
-            Sess. {date}
+              Sess. {date}
             </Nav.Item>
           );
         })}
@@ -165,9 +137,20 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
 
               {isOpen && (
                 <div className="accordion-content">
-                  <p className="question-text">{question.title}</p>
                   <div className="answers-list">
-                    {Array.from({ length: answersCount }).map((_, idx) => renderCorrectness(question, detail.userAnswer, idx))}
+                    {Array.from({ length: answersCount }).map((_, idx) => (
+                      <QuestionAnswer
+                        key={idx}
+                        id={`${detail.questionId}-${idx}`}
+                        name={detail.questionId}
+                        type={getInputType(question.answerType)}
+                        label={getAnswerLabel(question, idx)}
+                        checked={isUserChoice(question, detail.userAnswer, idx)}
+                        onChange={() => {}}
+                        isReadOnly
+                        status={getAnswerStatus(question, detail.userAnswer, idx)}
+                      />
+                    ))}
                   </div>
                   {question.feedback && (
                     <div className="feedback-box">

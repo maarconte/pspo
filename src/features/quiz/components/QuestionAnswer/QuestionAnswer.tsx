@@ -1,5 +1,6 @@
 import { FC, useId } from "react";
 import { CheckCircle, XCircle } from "lucide-react";
+import "./style.scss";
 import { QuestionAnswerProps } from "./QuestionAnswer.types";
 
 /**
