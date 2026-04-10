@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-// Décommissionné dans 30 jours à partir du 2026-04-10
+// Decommissioned in 30 days starting from 2026-04-10
 const EXPIRY_DATE = new Date("2026-05-10T00:00:00.000Z").getTime();
 
 interface InfoPopupState {

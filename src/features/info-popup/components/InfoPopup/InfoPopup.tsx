@@ -18,31 +18,29 @@ export function InfoPopup() {
       <div className="info-popup" role="dialog" aria-modal="true" aria-labelledby="info-popup-title">
 
         <h2 id="info-popup-title" className="info-popup__title">
-          Avez-vous vu ?
+          Did you know?
         </h2>
         <p className="info-popup__body">
-          Maintenant vous pouvez vous connecter pour retrouver vos quizz
-          terminés, vos erreurs, vos marque-pages et vos statistiques.
-
+          You can now log in to find your completed quizzes, mistakes, bookmarks, and statistics.
         </p>
-                <div className="d-flex gap-1">
-        <div className="info-popup__icon-wrapper">
-          <User size={28} strokeWidth={1.8} className="info-popup__icon" />
-        </div>
-
-        <div className="info-popup__icon-wrapper">
-          <Bookmark size={28} strokeWidth={1.8} className="info-popup__icon" />
+        <div className="d-flex gap-1">
+          <div className="info-popup__icon-wrapper">
+            <User size={28} strokeWidth={1.8} className="info-popup__icon" />
           </div>
-              <div className="info-popup__icon-wrapper">
-          <ChartLine size={28} strokeWidth={1.8} className="info-popup__icon" />
+
+          <div className="info-popup__icon-wrapper">
+            <Bookmark size={28} strokeWidth={1.8} className="info-popup__icon" />
+          </div>
+          <div className="info-popup__icon-wrapper">
+            <ChartLine size={28} strokeWidth={1.8} className="info-popup__icon" />
+          </div>
         </div>
-        </div>
-          <p className="info-popup__highlight">
-            Pratique pour voir votre progression&nbsp;!
-          </p>
+        <p className="info-popup__highlight">
+          Track your progress easily!
+        </p>
         <div className="info-popup__footer">
           <Button
-            label="J'ai compris"
+            label="Got it"
             onClick={dismiss}
           />
         </div>
