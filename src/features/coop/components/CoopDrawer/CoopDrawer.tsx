@@ -87,7 +87,6 @@ export const CoopDrawer: React.FC = () => {
                 <Button
                   appearance="primary"
                   onClick={handleAdd}
-                  disabled={participants.length >= 30}
                   className="coop-drawer__add-btn"
                   label="Ajouter"
                   icon={<Plus size={18} />}
