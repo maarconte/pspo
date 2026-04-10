@@ -18,8 +18,8 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
 
     // Average success rate across LAST 3 sessions
     const sumSuccessRate = recentData.reduce((acc, sess) => {
-      const rate =
-        sess.totalQuestions > 0 ? (sess.score / sess.totalQuestions) * 100 : 0;
+      const answeredCount = sess.details?.filter(d => d.userAnswer !== null).length || 0;
+      const rate = answeredCount > 0 ? (sess.score / answeredCount) * 100 : 0;
       return acc + rate;
     }, 0);
 
