@@ -13,6 +13,12 @@
   }
 }
 
+.Profile .container {
+  @include breakpoint(tablet) {
+    max-width: 1440px;
+  }
+}
+
 .Quizz .container {
   @include breakpoint(tablet) {
     max-width: 750px;

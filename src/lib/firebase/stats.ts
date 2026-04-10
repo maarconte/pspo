@@ -6,7 +6,8 @@ import {
   query, 
   orderBy, 
   limit,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from "firebase/firestore";
 import { db } from "./firestore";
 import { QuizSessionStat } from "../../utils/types";
@@ -47,4 +48,11 @@ export const updateQuizSession = async (userId: string, sessionId: string, data:
 
   const sessionRef = doc(db, "users", userId, "quizSessions", sessionId);
   await updateDoc(sessionRef, data);
+};
+
+export const deleteQuizSession = async (userId: string, sessionId: string) => {
+  if (!userId || !sessionId) throw new Error("User ID and Session ID are required to delete quiz session");
+
+  const sessionRef = doc(db, "users", userId, "quizSessions", sessionId);
+  await deleteDoc(sessionRef);
 };

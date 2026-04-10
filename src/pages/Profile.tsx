@@ -6,6 +6,7 @@ import QuizErrorsChart from "../features/quiz/components/QuizStatsChart/QuizErro
 import StatsOverview from "../features/quiz/components/QuizStatsChart/StatsOverview";
 import ProfileBookmarks from "../features/quiz/components/ProfileBookmarks/ProfileBookmarks";
 import ProfileErrors from "../features/quiz/components/ProfileErrors/ProfileErrors";
+import { ProfileSessionsTable } from "../features/quiz/components/ProfileSessionsTable/ProfileSessionsTable";
 import { Loader } from "../ui";
 
 export default function Profile() {
@@ -24,6 +25,7 @@ export default function Profile() {
   // Verdict: Utilization of suspense-like loading and robust early returns. Clean structure.
 
   return (
+    <div className="Profile">
     <div className="container mt-5">
       <div className="d-flex align-items-center gap-3 mb-4">
         {user.photoURL ? (
@@ -61,24 +63,27 @@ export default function Profile() {
         {!isLoading && !error && history && history.length > 0 && (
           <>
             <StatsOverview data={history} />
-            <div className="row g-4 mb-5">
-              <div className="col-12 col-md-6">
-                <div className="bg-white p-4 rounded shadow-sm h-100">
+              <div className="row mb-3">
+                  <div className="col-md-6">
+  <ProfileSessionsTable history={history} onUpdate={refetch} />
+              </div>
+              <div className=" col-md-6">
                   <h3 className="h5 text-center mb-4">Success Rate (%)</h3>
-                  <QuizStatsChart data={history} metric="successRate" />
-                </div>
-              </div>
-              <div className="col-12 col-md-6">
-                <ProfileBookmarks history={history} onUpdate={refetch} />
-                <ProfileErrors history={history} />
-              </div>
-              <div className="col-12 col-md-6">
-                <div className="bg-white p-4 rounded shadow-sm h-100">
-                  <h3 className="h5 text-center mb-4">Average Time (m)</h3>
+                    <QuizStatsChart data={history} metric="successRate" />
+                      <h3 className="h5 text-center mb-4">Average Time (m)</h3>
                   <QuizStatsChart data={history} metric="avgTime" />
-                </div>
               </div>
+
             </div>
+              <div className="row mb-3">
+                  <div className="col-12">
+                  <ProfileErrors history={history} />
+                </div>
+                <div className="col-12">
+                <ProfileBookmarks history={history} onUpdate={refetch} />
+                </div>
+
+              </div>
           </>
         )}
 
@@ -88,6 +93,7 @@ export default function Profile() {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }
