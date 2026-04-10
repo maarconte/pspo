@@ -186,7 +186,7 @@ export default function Quizz() {
     }
   };
   return (
-    <div className="Quizz">
+    <div className="Quizz p-2">
       <div className="container">
         {/* Header */}
         <h1 className="text-center mb-2">{formation || "Study Group Quiz"}</h1>
