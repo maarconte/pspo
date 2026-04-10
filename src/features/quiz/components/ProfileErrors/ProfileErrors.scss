@@ -9,26 +9,82 @@
     font-weight: 700;
   }
 
-  .rs-nav-subtle.rs-nav-horizontal {
-    border-bottom: 2px solid $primary-50;
-    padding-bottom: .80rem;
+  .nav-scroll-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1.5rem;
 
-    .rs-nav-item {
-      padding: 12px 24px;
-      font-weight: 600;
-      color: $primary-500;
-      transition: all 0.2s ease;
+    // Hide scrollbars
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
-      &:hover {
-        background: $primary-50;
-        color: $primary-700;
-        text-decoration: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    .rs-nav-subtle.rs-nav-horizontal {
+      border-bottom: 2px solid $primary-50;
+      display: inline-flex; // Ensure it stays horizontal
+      min-width: 100%;
+
+      .rs-nav-item {
+        padding: 12px 24px; // Slightly reduced padding
+        font-weight: 600;
+        color: $primary-500;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: visible;
+
+        &::after {
+          display: none !important; // Hide default rsuite indicator if any
+        }
+
+        &:hover {
+          background: $primary-50;
+          color: $primary-700;
+          text-decoration: none;
+
+        }
+
+        &.rs-nav-item-active {
+          color: $primary-600;
+          border-bottom: 2px solid $primary-600;
+          margin-bottom: -2px;
+        }
+
+        .session-nav-content {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .error-badge {
+          position: absolute;
+          right: 2px;
+          top: 2px;
+          background: $secondary-500;
+          color: #fff;
+          font-size: 0.7rem;
+          padding: 0;
+          border-radius: 99px;
+          font-weight: 700;
+          min-width: 18px;
+          height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 4px rgba($secondary-500, 0.3);
+        }
       }
 
-      &.rs-nav-item-active {
-        color: $primary-600;
-        border-bottom: 2px solid $primary-600;
-        margin-bottom: -2px;
+      @media (max-width: 576px) {
+        .rs-nav-item {
+          padding: 10px 14px;
+          font-size: 0.85rem;
+        }
       }
     }
   }

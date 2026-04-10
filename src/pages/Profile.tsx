@@ -74,21 +74,11 @@ export default function Profile() {
               </div>
               <div className="col-12 col-md-6">
                 <div className="bg-white p-4 rounded shadow-sm h-100">
-                  <h3 className="h5 text-center mb-4">Average Time (s)</h3>
+                  <h3 className="h5 text-center mb-4">Average Time (m)</h3>
                   <QuizStatsChart data={history} metric="avgTime" />
                 </div>
               </div>
             </div>
-            <div className="row g-4 mb-5">
-              <div className="col-12">
-                <div className="bg-white p-4 rounded shadow-sm">
-                  <h3 className="h5 text-center mb-4">Wrong Answers</h3>
-                  <QuizErrorsChart data={history} />
-                </div>
-              </div>
-            </div>
-
-
           </>
         )}
 

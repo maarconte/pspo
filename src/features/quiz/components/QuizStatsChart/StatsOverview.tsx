@@ -32,7 +32,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
     return {
       totalSessions,
       avgSuccessRate: (sumSuccessRate / recentCount).toFixed(1),
-      avgResponseTime: (sumAvgTimeMs / recentCount / 1000).toFixed(1), // seconds
+      avgResponseTime: (sumAvgTimeMs / recentCount / 60000).toFixed(2), // minutes
     };
   }, [data]);
 
@@ -52,7 +52,7 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
       <StatCard
         variant="warning"
         icon={<Clock size={24} strokeWidth={2.5} />}
-        value={`${stats.avgResponseTime}s`}
+        value={`${stats.avgResponseTime}m`}
         label="Avg. Duration (last 3)"
       />
 

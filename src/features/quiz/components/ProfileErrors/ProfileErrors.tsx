@@ -56,27 +56,34 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
     <div className="profile-errors-section">
       <h2 className="errors-title h4">My Errors</h2>
 
-      <Nav
-        appearance="subtle"
-        activeKey={activeSessionId}
-        onSelect={(key) => {
-          setActiveSessionId(key);
-          setExpandedQuestionId(null);
-        }}
-        className="mb-4"
-      >
-        {sessionsWithErrors.map((session) => {
-          const date = new Date(session.timestamp).toLocaleDateString("en-US", {
-            day: "2-digit",
-            month: "short"
-          });
-          return (
-            <Nav.Item key={session.id} eventKey={session.id}>
-              Sess. {date}
-            </Nav.Item>
-          );
-        })}
-      </Nav>
+      <div className="nav-scroll-wrapper">
+        <Nav
+          appearance="subtle"
+          activeKey={activeSessionId}
+          onSelect={(key) => {
+            setActiveSessionId(key);
+            setExpandedQuestionId(null);
+          }}
+          className="mb-4"
+        >
+          {sessionsWithErrors.map((session) => {
+            const date = new Date(session.timestamp).toLocaleDateString("en-US", {
+              day: "2-digit",
+              month: "short"
+            });
+            const errorCount = session.details?.filter(d => d.isCorrect === false && d.userAnswer !== null).length || 0;
+
+            return (
+              <Nav.Item key={session.id} eventKey={session.id}>
+                <div className="session-nav-content">
+                  <span>Sess. {date}</span>
+                  {errorCount > 0 && <span className="error-badge">{errorCount}</span>}
+                </div>
+              </Nav.Item>
+            );
+          })}
+        </Nav>
+      </div>
 
       <div className="errors-accordion">
         {errorDetails.map((detail) => {
