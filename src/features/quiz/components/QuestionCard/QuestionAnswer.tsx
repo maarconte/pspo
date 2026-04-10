@@ -44,7 +44,7 @@ const QuestionAnswer: FC<QuestionAnswerProps> = ({
         <span>{label}</span>
         {status === "success" && <CheckCircle size={24} className="status-icon status-icon-success flex-shrink-0" />}
         {status === "error" && <XCircle size={24} className="status-icon status-icon-error flex-shrink-0" />}
-        {status === "missed" && <CheckCircle size={24} className="status-icon status-icon-missed flex-shrink-0" />}
+        {status === "missed" && <CheckCircle size={22} className="status-icon status-icon-missed flex-shrink-0" />}
       </label>
     </div>
   );
