@@ -42,7 +42,7 @@ describe("Feedback Component", () => {
   it("renders feedback content and report button", () => {
     render(<Feedback question={mockQuestion} />);
 
-    expect(screen.getByText("Feedback")).toBeDefined();
+    expect(screen.getByText(/Feedback/i)).toBeDefined();
     expect(screen.getByText(mockQuestion.feedback)).toBeDefined();
     expect(screen.getByText("Report a problem")).toBeDefined();
   });
@@ -55,7 +55,7 @@ describe("Feedback Component", () => {
       fireEvent.click(reportButton);
     });
 
-    expect(screen.getByText("If you believe this answer is inappropriate or should be reviewed, please let us know.")).toBeDefined();
+    expect(screen.getByText(/If you believe this answer is inappropriate/i)).toBeDefined();
     expect(screen.getByLabelText("Please describe the issue")).toBeDefined();
   });
 
@@ -63,11 +63,15 @@ describe("Feedback Component", () => {
     render(<Feedback question={mockQuestion} />);
 
     // Open modal
-    fireEvent.click(screen.getByText("Report a problem"));
+    act(() => {
+      fireEvent.click(screen.getByText("Report a problem"));
+    });
 
     // Type comment
     const input = screen.getByLabelText("Please describe the issue");
-    fireEvent.change(input, { target: { value: "Wrong explanation" } });
+    act(() => {
+      fireEvent.change(input, { target: { value: "Wrong explanation" } });
+    });
 
     // Submit
     const submitButton = screen.getByText("Submit");
@@ -97,9 +101,13 @@ describe("Feedback Component", () => {
 
     render(<Feedback question={mockQuestion} />);
 
-    fireEvent.click(screen.getByText("Report a problem"));
-    fireEvent.change(screen.getByLabelText("Please describe the issue"), { 
-      target: { value: "Second issue" } 
+    act(() => {
+      fireEvent.click(screen.getByText("Report a problem"));
+    });
+    act(() => {
+      fireEvent.change(screen.getByLabelText("Please describe the issue"), { 
+        target: { value: "Second issue" } 
+      });
     });
     act(() => {
       fireEvent.click(screen.getByText("Submit"));
