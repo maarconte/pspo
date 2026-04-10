@@ -26,7 +26,7 @@ export const DocumentationDrawer: React.FC = () => {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         placement="right"
-        size="sm"
+        size="lg"
         className="doc-drawer"
       >
         <Drawer.Header>
