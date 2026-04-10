@@ -69,7 +69,7 @@ describe('useCoopStore', () => {
             act(() => {
                 const res = result.current.addParticipant('Too Many');
                 expect(res.success).toBe(false);
-                expect(res.error).toContain('30 personnes');
+                expect(res.error).toContain('30 participants');
             });
 
             expect(result.current.participants).toHaveLength(30);

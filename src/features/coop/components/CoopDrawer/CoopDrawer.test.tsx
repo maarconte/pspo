@@ -45,7 +45,7 @@ describe("CoopDrawer Component", () => {
 
     it("renders the toggle tab with count 0 initially", () => {
         render(<CoopDrawer />);
-        expect(screen.getByText("Mode coop")).toBeDefined();
+        expect(screen.getByText("Co-op Mode")).toBeDefined();
         // Badge should not be visible if 0 participants
         expect(screen.queryByText("0")).toBeNull();
     });
@@ -58,7 +58,7 @@ describe("CoopDrawer Component", () => {
 
     it("opens the drawer when clicking the tab", () => {
         render(<CoopDrawer />);
-        const tab = screen.getByText("Mode coop").closest("div");
+        const tab = screen.getByText("Co-op Mode").closest("div");
         fireEvent.click(tab!);
 
         expect(screen.getByTestId("drawer")).toBeDefined();
@@ -79,7 +79,7 @@ describe("CoopDrawer Component", () => {
         render(<CoopDrawer />);
 
         const input = screen.getByTestId("coop-input");
-        const addButton = screen.getByText("Ajouter");
+        const addButton = screen.getByText("Add");
 
         fireEvent.change(input, { target: { value: "Alice" } });
         fireEvent.click(addButton);
@@ -110,7 +110,7 @@ describe("CoopDrawer Component", () => {
       render(<CoopDrawer />);
       
       const input = screen.getByTestId("coop-input");
-      const addButton = screen.getByText("Ajouter");
+      const addButton = screen.getByText("Add");
 
       fireEvent.change(input, { target: { value: "Wait" } });
       fireEvent.click(addButton);
