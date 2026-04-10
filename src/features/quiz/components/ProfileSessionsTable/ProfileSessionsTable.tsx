@@ -113,7 +113,7 @@ export const ProfileSessionsTable: FC<ProfileSessionsTableProps> = ({ history, o
         labelOnConfirm="Delete"
         labelOnCancel="Cancel"
         onConfirm={confirmDelete}
-        type="danger"
+        type="error"
       >
         <p>Would really delete this sessions ?</p>
       </Modal>
