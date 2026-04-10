@@ -64,7 +64,6 @@ const ProfileErrors: FC<ProfileErrorsProps> = ({ history }) => {
             setActiveSessionId(key);
             setExpandedQuestionId(null);
           }}
-          className="mb-4"
         >
           {sessionsWithErrors.map((session) => {
             const date = new Date(session.timestamp).toLocaleDateString("en-US", {
