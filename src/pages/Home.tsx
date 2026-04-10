@@ -4,6 +4,8 @@ import { AlertCircle, Clock, Layers, Play, Target, Undo2 } from "lucide-react";
 
 import { Button, SegmentedControl } from "../ui";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
+import { useUserStore } from "../features/auth/stores/useAuthStore";
+import { useInfoPopupStore } from "../stores/useInfoPopupStore";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -14,9 +16,18 @@ export default function Home() {
 
   const navigate = useNavigate();
 
+  const user = useUserStore((s) => s.user);
+  const openInfoPopup = useInfoPopupStore((s) => s.open);
+  const isDismissed = useInfoPopupStore((s) => s.isDismissed);
+  const isExpired = useInfoPopupStore((s) => s.isExpired());
+
   const handleStartExam = () => {
-    startNewExam();
-    navigate("/quizz");
+    if (!user && /* !isDismissed && */ !isExpired) {
+      openInfoPopup();
+    } else {
+      startNewExam();
+      navigate("/quizz");
+    }
   };
 
   return (
