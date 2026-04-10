@@ -22,7 +22,7 @@ export default function Home() {
   const isExpired = useInfoPopupStore((s) => s.isExpired());
 
   const handleStartExam = () => {
-    if (!user && /* !isDismissed && */ !isExpired) {
+    if (!user && !isDismissed && !isExpired) {
       openInfoPopup();
     } else {
       startNewExam();
