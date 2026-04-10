@@ -16,6 +16,8 @@
   }
 
   .table {
+    width: 100%;
+
     thead th {
       background-color: #f8f9fa;
       color: $primary-700;
@@ -61,10 +63,10 @@
 @media (max-width: 768px) {
   .profile-sessions-table-container {
     padding: 1rem;
-    
+
     .table {
       font-size: 0.85rem;
-      
+
       thead th {
         font-size: 0.7rem;
       }

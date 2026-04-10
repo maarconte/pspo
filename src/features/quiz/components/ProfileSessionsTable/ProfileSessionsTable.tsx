@@ -56,7 +56,7 @@ export const ProfileSessionsTable: FC<ProfileSessionsTableProps> = ({ history, o
               <th>Formation</th>
               <th>Score</th>
               <th>Duration</th>
-              <th className="text-end pe-4">Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
