@@ -21,7 +21,7 @@ const UserManagement = () => {
 			// Rafraîchir la liste des utilisateurs
 			await refetch();
 		} catch (error: any) {
-			toast.error(error.message || 'Échec de la mise à jour du rôle');
+			toast.error('Échec de la mise à jour du rôle');
 		} finally {
 			setUpdatingUserId(null);
 		}

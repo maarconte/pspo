@@ -32,7 +32,7 @@ export const roleService = {
 			return result.data;
 		} catch (error: any) {
 			console.error('Erreur lors de l\'attribution du rôle:', error);
-			throw new Error(error.message || 'Échec de l\'attribution du rôle');
+			throw new Error('Échec de l\'attribution du rôle');
 		}
 	},
 };
