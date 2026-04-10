@@ -26,8 +26,8 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
         return {
           name: `Sess. ${index + 1}`,
           successRate: parseFloat(percent.toFixed(1)),
-          avgTime: parseFloat((session.averageTimeMs / 1000).toFixed(1)), // convert ms to seconds
-          totalTime: parseFloat((session.totalTimeMs / 1000 / 60).toFixed(1)), // convert ms to minutes
+          avgTime: parseFloat((session.averageTimeMs / 60000).toFixed(2)),
+          totalTime: parseFloat((session.totalTimeMs / 60000).toFixed(1)),
           date: new Date(session.timestamp).toLocaleDateString('en-US', { day: '2-digit', month: 'short' }),
           time: new Date(session.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         };
@@ -81,20 +81,20 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
             tick={<CustomAxisTick />}
             interval={0}
           />
-          
+
           {/* Primary Y-Axis */}
-          <YAxis 
+          <YAxis
             yAxisId="left"
-            domain={isSuccess ? [0, 100] : [0, 'auto']} 
-            tickFormatter={(value) => isSuccess ? `${value}%` : `${value}s`}
+            domain={isSuccess ? [0, 100] : [0, 'auto']}
+            tickFormatter={(value) => isSuccess ? `${value}%` : `${value}m`}
           />
 
           {/* Secondary Y-Axis for Total Time (only in avgTime mode) */}
           {!isSuccess && (
-            <YAxis 
+            <YAxis
               yAxisId="right"
               orientation="right"
-              domain={[0, 'auto']} 
+              domain={[0, 'auto']}
               tickFormatter={(value) => `${value}m`}
             />
           )}
@@ -126,7 +126,7 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
                 yAxisId="left"
                 type="monotone"
                 dataKey="avgTime"
-                name="Avg. Time/Question (s)"
+                name="Avg. Time/Question (m)"
                 stroke="#82ca9d"
                 activeDot={{ r: 8 }}
                 strokeWidth={3}

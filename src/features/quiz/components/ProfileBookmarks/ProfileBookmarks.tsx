@@ -89,27 +89,29 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
     <div className="profile-bookmarks-section">
       <h2 className="bookmarks-title h4">My Bookmarks</h2>
 
-      <Nav
-        appearance="subtle"
-        activeKey={activeSessionId}
-        onSelect={(key) => {
-          setActiveSessionId(key);
-          setExpandedQuestionId(null); // Close accordion on tab change
-        }}
-        className="mb-4"
-      >
-        {sessionsWithBookmarks.map((session, idx) => {
-          const date = new Date(session.timestamp).toLocaleDateString("en-US", {
-            day: "2-digit",
-            month: "short",
-          });
-          return (
-            <Nav.Item key={session.id} eventKey={session.id}>
-              Sess. {date}
-            </Nav.Item>
-          );
-        })}
-      </Nav>
+      <div className="nav-scroll-wrapper">
+        <Nav
+          appearance="subtle"
+          activeKey={activeSessionId}
+          onSelect={(key) => {
+            setActiveSessionId(key);
+            setExpandedQuestionId(null); // Close accordion on tab change
+          }}
+          className="mb-4"
+        >
+          {sessionsWithBookmarks.map((session, idx) => {
+            const date = new Date(session.timestamp).toLocaleDateString("en-US", {
+              day: "2-digit",
+              month: "short",
+            });
+            return (
+              <Nav.Item key={session.id} eventKey={session.id}>
+                Sess. {date}
+              </Nav.Item>
+            );
+          })}
+        </Nav>
+      </div>
 
       <div className="bookmarks-accordion">
         {bookmarkedDetails.map((detail) => {
