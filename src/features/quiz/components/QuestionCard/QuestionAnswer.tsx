@@ -40,8 +40,8 @@ const QuestionAnswer: FC<QuestionAnswerProps> = ({
         onChange={() => !isReadOnly && onChange()}
         disabled={isReadOnly}
       />
-      <label htmlFor={inputId} className="d-flex justify-content-between align-items-center w-100">
-        <span>{label}</span>
+      <label htmlFor={inputId} className="d-flex justify-content-between align-items-center w-100 gap-1">
+        <span className="label">{label}</span>
         {status === "success" && <CheckCircle size={24} className="status-icon status-icon-success flex-shrink-0" />}
         {status === "error" && <XCircle size={24} className="status-icon status-icon-error flex-shrink-0" />}
         {status === "missed" && <CheckCircle size={22} className="status-icon status-icon-missed flex-shrink-0" />}

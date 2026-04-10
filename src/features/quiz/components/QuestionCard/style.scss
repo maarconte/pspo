@@ -8,6 +8,10 @@
   position: relative;
   position: relative;
 
+  .label {
+    flex: 1;
+  }
+
   &::before {
     content: "";
     background: $gradient;
