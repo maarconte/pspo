@@ -41,5 +41,23 @@
       border-color: $primary-500;
       color: $primary-50;
     }
+
+    &.correct {
+      background-color: $success-100;
+      border-color: $success-500;
+      color: $success-700;
+    }
+
+    &.incorrect {
+      background-color: $secondary-50;
+      border-color: $secondary-500;
+      color: $secondary-700;
+    }
+
+    &.not-answered {
+      background-color: $primary-50;
+      border-color: $primary-500;
+      color: $primary-700;
+    }
   }
 }
