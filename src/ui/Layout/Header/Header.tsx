@@ -50,7 +50,7 @@ const Header: FC<HeaderProps> = () => {
         )}
         {isAdmin && (
           <Button
-            label="Admin"
+            label="Edit questions"
             style={Button_Style.OUTLINED}
             icon={<Settings size={16} />}
             onClick={() => navigate("/admin")}
