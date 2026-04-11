@@ -224,7 +224,7 @@ export default function Quizz() {
                 <Button
                   label="Navigation"
                   style={Button_Style.OUTLINED}
-                  onClick={() => setOpen(true)}
+                  onClick={() => setOpen(!open)}
                 />
               </div>
             </div>
