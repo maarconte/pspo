@@ -30,9 +30,10 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
           successRate: parseFloat(percent.toFixed(1)),
           avgTime: parseFloat((session.averageTimeMs / 60000).toFixed(2)),
           totalTime: parseFloat((session.totalTimeMs / 60000).toFixed(1)),
-          date: new Date(session.timestamp).toLocaleDateString('en-US', { day: '2-digit', month: 'short' }),
-          time: new Date(session.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+          date: new Date(session.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+          time: new Date(session.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
           answeredQuestions,
+          formation: session.formation,
         };
       });
   }, [data]);
@@ -64,26 +65,35 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
+
       return (
         <div className="chart-tooltip">
           <p className="chart-tooltip-title">
-            {label} — {data.date} at {data.time}
+            {label} - {data.date} - {data.time}
           </p>
           <div className="chart-tooltip-content">
             <div className="chart-tooltip-row">
-              <span className="metric-label success">Success:</span>
-              <span className="metric-value">{data.successRate}% ({data.answeredQuestions})</span>
+              <span className="metric-label success">Module:</span>
+              <span className="metric-value">{data.formation}</span>
             </div>
             <div className="chart-tooltip-row">
-              <span className="metric-label avg-time">Avg. Time:</span>
+              <span className="metric-label success">Score:</span>
+              <span className="metric-value">{data.successRate}%</span>
+            </div>
+            <div className="chart-tooltip-row">
+              <span className="metric-label success">Questions:</span>
+              <span className="metric-value">{data.answeredQuestions}/80</span>
+            </div>
+            <div className="chart-tooltip-row">
+              <span className="metric-label avg-time">Time per question:</span>
               <span className="metric-value">{data.avgTime}m</span>
             </div>
             <div className="chart-tooltip-row">
-              <span className="metric-label total-time">Total Time:</span>
+              <span className="metric-label total-time">Total time:</span>
               <span className="metric-value">{data.totalTime}m</span>
+            </div>
           </div>
         </div>
-      </div>
       );
     }
     return null;
