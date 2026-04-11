@@ -38,57 +38,61 @@ export const ProfileSessionsTable: FC<ProfileSessionsTableProps> = ({ history, o
     }
   };
 
-  const formatDuration = (ms: number) => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}m ${seconds}s`;
-  };
-
   return (
     <div className="profile-sessions-table-container mt-2">
-      <h3 className="h5 mb-4">Completed Quizzes</h3>
       <div className="table-responsive shadow-sm rounded">
         <table className="table table-hover align-middle mb-0">
           <thead>
             <tr>
+              <th>Session</th>
               <th>Date</th>
-              <th>Formation</th>
+              <th>Module</th>
               <th>Score</th>
-              <th>Duration</th>
+              <th>Questions</th>
+              <th>Total time</th>
+              <th>Time per question</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {[...history]
               .sort((a, b) => b.timestamp - a.timestamp)
-              .map((session) => {
-                const date = new Date(session.timestamp).toLocaleDateString("en-US", {
-                  year: "numeric",
+              .map((session, index) => {
+                const sessionNumber = history.length - index;
+                const sessionDate = new Date(session.timestamp);
+
+                const formattedDate = sessionDate.toLocaleDateString("en-FR", {
+                  day: "2-digit",
                   month: "short",
-                  day: "numeric",
+                });
+                const formattedTime = sessionDate.toLocaleTimeString("en-FR", {
                   hour: "2-digit",
                   minute: "2-digit",
                 });
-                const percentage = Math.round((session.score / session.totalQuestions) * 100);
+
+                const answeredCount = session.details?.filter(d => d.userAnswer !== null).length || 0;
+                const successPercent = answeredCount > 0 ? Math.round((session.score / answeredCount) * 100) : 0;
+
+                const avgMin = (session.averageTimeMs / 60000).toFixed(2);
+                const totalMin = (session.totalTimeMs / 60000).toFixed(1);
 
                 return (
                   <tr key={session.id}>
+                    <td className="fw-bold text-primary">Session #{sessionNumber}</td>
                     <td>
-                      <span className="fw-medium">{date}</span>
+                      <span className="text-muted">{formattedDate} - {formattedTime}</span>
                     </td>
                     <td>
                       <span className="badge bg-light text-primary border">{session.formation}</span>
                     </td>
                     <td>
-                      <div className="d-flex align-items-center gap-2">
-                        <span className={`fw-bold ${percentage >= 85 ? 'text-success' : 'text-danger'}`}>
-                          {percentage}%
-                        </span>
-                        <small className="text-muted">({session.score}/{session.totalQuestions})</small>
-                      </div>
+                      <span className={`fw-bold ${successPercent >= 85 ? 'text-success' : 'text-danger'}`}>
+                        {successPercent}%
+                      </span>
                     </td>
-                    <td className="text-muted">{formatDuration(session.totalTimeMs)}</td>
+                    <td className="text-muted">{answeredCount} / 80</td>
+                    <td className="text-muted">{totalMin}min</td>
+                    <td className="text-muted">{avgMin}min</td>
                     <td className="text-end pe-4">
                       <button
                         className="btn btn-link text-danger p-1 delete-btn"
