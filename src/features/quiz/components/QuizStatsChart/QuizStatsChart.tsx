@@ -30,8 +30,8 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
           successRate: parseFloat(percent.toFixed(1)),
           avgTime: parseFloat((session.averageTimeMs / 60000).toFixed(2)),
           totalTime: parseFloat((session.totalTimeMs / 60000).toFixed(1)),
-          date: new Date(session.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
-          time: new Date(session.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+          date: new Date(session.timestamp).toLocaleDateString('en-FR', { day: '2-digit', month: 'short' }),
+          time: new Date(session.timestamp).toLocaleTimeString('en-FR', { hour: '2-digit', minute: '2-digit' }),
           answeredQuestions,
           formation: session.formation,
         };
