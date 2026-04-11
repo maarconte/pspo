@@ -62,8 +62,7 @@ export default function Home() {
               <Layers size={24} strokeWidth={2.5} />
             </div>
             <div className="bento-content">
-              <strong>80 Questions</strong>
-              <span>Randomly selected for a realistic exam simulation.</span>
+              <p>  <strong>80 Questions </strong>  <span>Randomly selected for a realistic exam simulation.</span></p>
             </div>
           </div>
 
@@ -72,8 +71,10 @@ export default function Home() {
               <Clock size={24} strokeWidth={2.5} />
             </div>
             <div className="bento-content">
-              <strong>60 Minutes</strong>
-              <span>The timer will start as soon as the quiz begins.</span>
+              <p>
+                <strong>60 Minutes </strong>
+                <span>The timer will start as soon as the quiz begins.</span>
+              </p>
             </div>
           </div>
 
@@ -82,8 +83,10 @@ export default function Home() {
               <Target size={24} strokeWidth={2.5} />
             </div>
             <div className="bento-content">
-              <strong>85% Required</strong>
-              <span>Passing goal: you are allowed a maximum of 12 errors.</span>
+              <p>
+                <strong>85% Required </strong>
+                <span>Passing goal: you are allowed a maximum of 12 errors.</span>
+              </p>
             </div>
           </div>
 
@@ -92,8 +95,10 @@ export default function Home() {
               <AlertCircle size={24} strokeWidth={2.5} />
             </div>
             <div className="bento-content">
-              <strong>Single Session</strong>
-              <span>The exam must be completed in one go with no saving possible.</span>
+              <p>
+                <strong>Single Session </strong>
+                <span>The exam must be completed in one go with no saving possible.</span>
+              </p>
             </div>
           </div>
 
@@ -102,8 +107,10 @@ export default function Home() {
               <Undo2 size={24} strokeWidth={2.5} />
             </div>
             <div className="bento-content">
-              <strong>Flexible</strong>
-              <span>You can go back and modify your answers at any time.</span>
+              <p>
+                <strong>Flexible </strong>
+                <span>You can go back and modify your answers at any time.</span>
+              </p>
             </div>
           </div>
         </div>

@@ -97,16 +97,14 @@
 }
 
 .bento-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
+  max-width: 700px;
   margin-bottom: 1.5rem;
 
 }
 
 .bento-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.5);
@@ -143,7 +141,6 @@
 
   .bento-content {
     display: flex;
-    flex-direction: column;
 
     strong {
       font-size: 1.1rem;
