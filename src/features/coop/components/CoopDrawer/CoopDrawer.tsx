@@ -38,6 +38,16 @@ export const CoopDrawer: React.FC = () => {
     }
   };
 
+  const handleRemove = (index: number) => {
+    removeParticipant(index);
+    setError(null);
+  };
+
+  const handleClear = () => {
+    clearParticipants();
+    setError(null);
+  };
+
   return (
     <>
       {/* Tab (Languette) */}
@@ -101,7 +111,7 @@ export const CoopDrawer: React.FC = () => {
                   <div className="coop-drawer__list-header">
                     <h3>Participants</h3>
                     <Button
-                      onClick={clearParticipants}
+                      onClick={handleClear}
                       type={Button_Type.SECONDARY}
                       style={Button_Style.OUTLINED}
                       size="S"
@@ -116,7 +126,7 @@ export const CoopDrawer: React.FC = () => {
                       <div className="d-flex justify-content-between align-items-center w-100">
                         <span className="coop-drawer__name">{name}</span>
                         <Button
-                          onClick={() => removeParticipant(index)}
+                          onClick={() => handleRemove(index)}
                           className="coop-drawer__remove-btn"
                           type={Button_Type.WHITE}
                           size="sm"
