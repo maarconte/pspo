@@ -40,6 +40,8 @@ const Button: FC<ButtonProps> = ({
         return "#5236ab";
       case "outlined-enabled-secondary":
         return "#171C60";
+      case "tonal-enabled-error":
+        return "#FF5326";
       default:
         break;
     }

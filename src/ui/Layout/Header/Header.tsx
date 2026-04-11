@@ -11,6 +11,8 @@ import { useUserRole } from "../../../features/auth/hooks/useUserRole";
 import { useLogout } from "../../../features/auth/hooks/useLogout";
 import logo from "../../../assets/img/StudyGroup.webp";
 import { HeaderProps } from "./Header.types";
+import Button from "../../Button";
+import { Button_Type, Button_Style } from "../../Button/Button.types";
 
 const Header: FC<HeaderProps> = () => {
   const { user } = useUserStore();
@@ -26,61 +28,31 @@ const Header: FC<HeaderProps> = () => {
         <Link to="/" className="logo-container">
           <img src={logo} alt="Logo" />
         </Link>
-
-        {user && (
-          <nav className="header-nav">
-            <Link to="/profile" className="nav-link">
-              Statistiques
-            </Link>
-
-            {isAdmin && (
-              <Dropdown
-                title={
-                  <span className="nav-dropdown-toggle">
-                    Admin <ChevronDown size={14} />
-                  </span>
-                }
-                noCaret
-                className="nav-dropdown"
-              >
-                {isDev && (
-                  <Dropdown.Item onClick={() => navigate("/dev/users")} icon={<Users size={16} />}>
-                    Manage users
-                  </Dropdown.Item>
-                )}
-                {isAdmin && (
-                  <Dropdown.Item onClick={() => navigate("/admin")} icon={<Settings size={16} />}>
-                    Edit questions
-                  </Dropdown.Item>
-                )}
-              </Dropdown>
-            )}
-          </nav>
-        )}
       </div>
 
       <div className="header-right">
         {user ? (
-          <Dropdown
-            title={
-              <div className="user-profile-toggle">
-                <div className="user-avatar-small">{userInitial}</div>
-                <span className="user-email">{user.email}</span>
-                <ChevronDown size={14} className="ms-1" />
-              </div>
-            }
-            noCaret
-            placement="bottomEnd"
-            className="user-dropdown"
-          >
-            {/* <Dropdown.Item onClick={() => navigate("/profile")} icon={<User size={16} />}>
-              Mon Compte
-            </Dropdown.Item>
-            <Dropdown.Separator /> */}
-            <Dropdown.Item onClick={logout} icon={<LogOut size={16} />} className="text-danger">
-              Logout
-            </Dropdown.Item>
-          </Dropdown>
+          <div className="header-right-content">
+            <nav className="header-nav">
+            <Link to="/profile" className="nav-link">
+              Profile
+              </Link>
+              {isAdmin && (
+                <Link to="/admin" className="nav-link">
+                  Edit questions
+                </Link>
+              )}
+
+              {isDev && (
+                <Link to="/dev/users" className="nav-link">
+                  Manage users
+                </Link>
+              )}
+              <Button onClick={logout} icon={<LogOut size={16} />} type={Button_Type.ERROR} style={Button_Style.TONAL} isIconButton>
+                Logout
+              </Button>
+          </nav>
+          </div>
         ) : (
           <button className="btn-login" onClick={() => navigate("/login")}>
             <User size={18} />
