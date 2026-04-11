@@ -67,6 +67,20 @@ button {
     }
   }
 
+  &-tonal.btn-error {
+    background-color: $secondary_50;
+    color: $secondary_500;
+
+    &:hover {
+      background-color: $secondary_100;
+    }
+
+    &:disabled {
+      background-color: $secondary_100;
+      border-color: $secondary_200;
+    }
+  }
+
   // Secondary
   &-solid.btn-secondary {
     background-color: $secondary_500;
