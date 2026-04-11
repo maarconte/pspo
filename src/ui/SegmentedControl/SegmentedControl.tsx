@@ -4,6 +4,7 @@ import "./SegmentedControl.scss";
 interface Option {
   label: string;
   value: string;
+  icon?: React.ReactNode;
 }
 
 interface SegmentedControlProps {
@@ -33,7 +34,10 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
             checked={value === option.value}
             onChange={() => onChange(option.value)}
           />
-          <span className="segmented-label">{option.label}</span>
+          <div className="segmented-label">
+            {option.icon && <span className="segmented-icon">{option.icon}</span>}
+            <span>{option.label}</span>
+          </div>
         </label>
       ))}
       <div 
