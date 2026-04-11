@@ -31,10 +31,24 @@
   }
 
   .segmented-label {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: $primary-400;
     transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .segmented-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
   }
 
   &.active .segmented-label {
