@@ -57,14 +57,12 @@ const QuizzScore: FC = () => {
   return (
     <div className="quizz-score-dashboard">
       <div className="stats-overview-grid">
-
-
-        {/* Progression Card */}
+      {/* Time Card */}
         <StatCard
-          variant="info"
-          icon={<ClipboardCheck size={24} strokeWidth={2.5} />}
-          value={`${answeredCount} / ${questions.length}`}
-          label="Questions"
+          variant="warning"
+          icon={<Timer size={24} strokeWidth={2.5} />}
+          value={formatDuration(totalTimeSpent)}
+          label="Total Time"
         />
           {/* Score Card */}
         <StatCard
@@ -80,13 +78,12 @@ const QuizzScore: FC = () => {
           value={`${percent}%`}
           label="Final Score"
         />
-
-        {/* Time Card */}
+    {/* Progression Card */}
         <StatCard
-          variant="warning"
-          icon={<Timer size={24} strokeWidth={2.5} />}
-          value={formatDuration(totalTimeSpent)}
-          label="Total Time"
+          variant="info"
+          icon={<ClipboardCheck size={24} strokeWidth={2.5} />}
+          value={`${answeredCount} / ${questions.length}`}
+          label="Questions"
         />
       </div>
     </div>
