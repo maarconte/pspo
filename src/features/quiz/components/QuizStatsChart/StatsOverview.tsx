@@ -52,7 +52,6 @@ export default function StatsOverview({ data }: StatsOverviewProps) {
       {/* Success Rate Card */}
       <StatCard
         variant={isPassed ? "success" : "danger"}
-        isFeatured={true}
         icon={
           isPassed ? (
             <Trophy size={24} strokeWidth={2.5} />
