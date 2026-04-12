@@ -26,7 +26,6 @@ import ModalEditQuestion from "../ModalEditQuestion/ModalEditQuestion";
 
 const TableQuestions: FC = () => {
   // --- States ---
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 50 });
@@ -82,22 +81,21 @@ const TableQuestions: FC = () => {
   };
 
   // --- Table Config ---
-  const columns = useQuestionColumns({
+  const columns = useMemo(() => useQuestionColumns({
     onSelect: handleSelectQuestion,
     onDeleteRequest: handleDeleteRequest,
     selection: {
       selected: selectedQuestions,
       onToggle: handleToggleSelection,
     }
-  });
+  }), [selectedQuestions]);
 
   const table = useReactTable({
     data: allQuestions,
     columns,
     filterFns: { fuzzy: fuzzyFilter },
-    state: { pagination, sorting, columnFilters, globalFilter },
-    globalFilterFn: fuzzyFilter,
-    onColumnFiltersChange: setColumnFilters,
+    state: { pagination, sorting, globalFilter },
+    globalFilterFn: 'fuzzy',
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
