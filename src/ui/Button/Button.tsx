@@ -77,11 +77,12 @@ const Button: FC<ButtonProps> = ({
         <button
           className={buttonClass}
           type={buttonType}
-          disabled={disabled}
+          disabled={disabled || isLoader}
           onClick={onClick}
           {...rest}
         >
           {label}
+          {isLoader && <div className="btn-loader" />}
           {icon &&
             !isLoader &&
             React.isValidElement(icon) &&

@@ -35,4 +35,23 @@ export const roleService = {
 			throw new Error(error.message || 'Failed to assign role');
 		}
 	},
+
+	/**
+	 * Deletes a user and all their data
+	 * Requires "dev" role
+	 */
+	deleteUser: async (userId: string): Promise<SetUserRoleResponse> => {
+		const deleteUserFunc = httpsCallable<{ userId: string }, SetUserRoleResponse>(
+			functions,
+			'deleteUser'
+		);
+
+		try {
+			const result = await deleteUserFunc({ userId });
+			return result.data;
+		} catch (error: any) {
+			console.error('Error deleting user:', error);
+			throw new Error(error.message || 'Failed to delete user');
+		}
+	},
 };
