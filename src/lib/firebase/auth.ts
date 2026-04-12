@@ -3,7 +3,7 @@ import {
 	setPersistence,
 	browserSessionPersistence,
 	updateProfile,
-	updateEmail
+	verifyBeforeUpdateEmail
 } from 'firebase/auth';
 import { app } from './config';
 
@@ -21,8 +21,8 @@ export const updateUserDisplayName = async (newName: string) => {
 	return auth.currentUser;
 };
 
-export const updateUserEmail = async (newEmail: string) => {
+export const verifyAndUpdateUserEmail = async (newEmail: string) => {
 	if (!auth.currentUser) throw new Error("No user logged in");
-	await updateEmail(auth.currentUser, newEmail);
+	await verifyBeforeUpdateEmail(auth.currentUser, newEmail);
 	return auth.currentUser;
 };
