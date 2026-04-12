@@ -113,4 +113,66 @@
 		color: $primary-600;
 		font-style: italic;
 	}
+
+	.actions-cell {
+		text-align: center;
+	}
+
+	.delete-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		padding: 0;
+		background: transparent;
+		color: $secondary-400;
+		border: 1px solid transparent;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+		&:hover:not(:disabled) {
+			background: $secondary-50;
+			color: $secondary-600;
+			border-color: $secondary-200;
+			transform: scale(1.05);
+		}
+
+		&:active:not(:disabled) {
+			transform: scale(0.95);
+		}
+
+		&:disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
+		}
+	}
+}
+
+.delete-confirmation-content {
+	p {
+		margin-bottom: 1rem;
+		line-height: 1.5;
+	}
+
+	.warning-text {
+		color: $secondary-600;
+		font-weight: 500;
+	}
+
+	ul {
+		margin: 1rem 0;
+		padding-left: 1.5rem;
+		color: $primary-600;
+
+		li {
+			margin-bottom: 0.5rem;
+			position: relative;
+
+			&::marker {
+				color: $secondary-500;
+			}
+		}
+	}
 }

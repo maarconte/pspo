@@ -3,13 +3,18 @@ import { useUsers } from '../../features/auth/hooks/useUsers';
 import { roleService } from '../../features/auth/api/roleService';
 import { UserRole, ROLE_LABELS, ROLES } from '../../features/auth/types/roles.types';
 import { toast } from 'react-toastify';
+import { Trash2 } from 'lucide-react';
 import Button from '../../ui/Button/Button';
-import { Button_Style } from '../../ui/Button/Button.types';
+import { Button_Style, Button_Type } from '../../ui/Button/Button.types';
+import { Modal } from '../../ui';
 import './style.scss';
 
 const UserManagement = () => {
 	const { users, loading, error, refetch } = useUsers();
 	const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
+	const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
+	const [userToDelete, setUserToDelete] = useState<any | null>(null);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const handleRoleChange = async (userId: string, newRole: UserRole) => {
 		setUpdatingUserId(userId);
@@ -25,6 +30,28 @@ const UserManagement = () => {
 		} finally {
 			setUpdatingUserId(null);
 		}
+	};
+
+	const handleDeleteConfirm = async () => {
+		if (!userToDelete) return;
+
+		setDeletingUserId(userToDelete.uid);
+		try {
+			await roleService.deleteUser(userToDelete.uid);
+			toast.success('User and data deleted successfully');
+			setIsDeleteModalOpen(false);
+			setUserToDelete(null);
+			await refetch();
+		} catch (error: any) {
+			toast.error(error.message || 'Failed to delete user');
+		} finally {
+			setDeletingUserId(null);
+		}
+	};
+
+	const openDeleteModal = (user: any) => {
+		setUserToDelete(user);
+		setIsDeleteModalOpen(true);
 	};
 
 	if (loading) {
@@ -65,6 +92,7 @@ const UserManagement = () => {
 							<th>Current Role</th>
 							<th>Change Role</th>
 							<th>Creation Date</th>
+							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -98,11 +126,46 @@ const UserManagement = () => {
 										day: 'numeric',
 									})}
 								</td>
+								<td className="actions-cell">
+									<button
+										className="delete-button"
+										onClick={() => openDeleteModal(user)}
+										disabled={updatingUserId === user.uid || deletingUserId === user.uid}
+										title="Delete user"
+									>
+										<Trash2 size={18} />
+									</button>
+								</td>
 							</tr>
 						))}
 					</tbody>
 				</table>
 			</div>
+
+			<Modal
+				isOpen={isDeleteModalOpen}
+				onClose={() => setIsDeleteModalOpen(false)}
+				onConfirm={handleDeleteConfirm}
+				title="Confirm Deletion"
+				type="error"
+				labelOnConfirm="Delete Permanently"
+				labelOnCancel="Cancel"
+				isConfirmLoading={deletingUserId !== null}
+				confirmButtonDisabled={deletingUserId !== null}
+				setIsClosed={setIsDeleteModalOpen}
+			>
+				<div className="delete-confirmation-content">
+					<p>Are you sure you want to delete user <strong>{userToDelete?.email}</strong>?</p>
+					<p className="warning-text">
+						This action is <strong>irreversible</strong>. It will permanently delete:
+					</p>
+					<ul>
+						<li>User profile and account</li>
+						<li>All quiz sessions and history</li>
+						<li>All bookmarks and statistics</li>
+					</ul>
+				</div>
+			</Modal>
 		</div>
 	);
 };

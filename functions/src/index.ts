@@ -92,3 +92,57 @@ export const onUserCreated = functions.auth.user().onCreate(async (user) => {
 		// Ne pas throw pour ne pas bloquer la création de l'utilisateur
 	}
 });
+
+/**
+ * Cloud Function pour supprimer un utilisateur et toutes ses données
+ * Réservée aux utilisateurs avec le rôle "dev"
+ */
+export const deleteUser = functions.https.onCall(async (data, context) => {
+	// Vérifier que l'utilisateur est authentifié
+	if (!context.auth) {
+		throw new functions.https.HttpsError(
+			'unauthenticated',
+			'Vous devez être connecté pour effectuer cette action'
+		);
+	}
+
+	// Vérifier que l'appelant est un dev
+	if (context.auth.token.role !== 'dev') {
+		throw new functions.https.HttpsError(
+			'permission-denied',
+			'Seuls les développeurs peuvent supprimer des utilisateurs'
+		);
+	}
+
+	const { userId } = data;
+
+	if (!userId || typeof userId !== 'string') {
+		throw new functions.https.HttpsError(
+			'invalid-argument',
+			'userId est requis'
+		);
+	}
+
+	try {
+		const userDocRef = admin.firestore().collection('users').doc(userId);
+
+		// 1. Supprimer les données Firestore récursivement (sessions, stats, etc.)
+		await admin.firestore().recursiveDelete(userDocRef);
+
+		// 2. Supprimer l'utilisateur de Firebase Auth
+		await admin.auth().deleteUser(userId);
+
+		functions.logger.info(`Utilisateur ${userId} et toutes ses données supprimés par ${context.auth.uid}`);
+
+		return {
+			success: true,
+			message: `Utilisateur supprimé avec succès`
+		};
+	} catch (error: any) {
+		functions.logger.error('Erreur lors de la suppression de l\'utilisateur:', error);
+		throw new functions.https.HttpsError(
+			'internal',
+			'Erreur lors de la suppression: ' + error.message
+		);
+	}
+});
