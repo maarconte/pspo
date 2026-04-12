@@ -8,6 +8,7 @@ import ProfileBookmarks from "../features/quiz/components/ProfileBookmarks/Profi
 import ProfileErrors from "../features/quiz/components/ProfileErrors/ProfileErrors";
 import { ProfileSessionsTable } from "../features/quiz/components/ProfileSessionsTable/ProfileSessionsTable";
 import { Loader, SegmentedControl } from "../ui";
+import ProfileHeader from "../features/quiz/components/ProfileHeader/ProfileHeader";
 
 export default function Profile() {
   const user = useUserStore((state) => state.user);
@@ -30,26 +31,7 @@ export default function Profile() {
   return (
     <div className="Profile">
       <div className="container mt-5">
-        <div className="d-flex align-items-center gap-3 mb-4">
-          {user.photoURL ? (
-            <img
-              src={user.photoURL}
-              alt="Profile pic"
-              referrerPolicy="no-referrer"
-              className="rounded-circle"
-              width={64}
-              height={64}
-            />
-          ) : (
-            <div className="user-avatar">
-              {user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase()}
-            </div>
-          )}
-          <div>
-            <h1 className="h3 mb-0">{user.displayName || user.email}'s Profile</h1>
-            <p className="text-muted">Statistics and progress</p>
-          </div>
-        </div>
+        <ProfileHeader user={user} />
 
         <hr />
 
