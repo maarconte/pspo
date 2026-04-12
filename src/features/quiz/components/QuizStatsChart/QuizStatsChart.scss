@@ -2,24 +2,40 @@
 
 .chart-container {
   width: 100%;
-  height: 350px;
+  height: 400px;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    height: 300px;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    height: 250px;
+  }
 }
 
 .chart-tooltip {
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
   padding: 1rem;
-  border: 1px solid $primary-100;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  min-width: 180px;
+  border: 1px solid rgba($primary-500, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  min-width: 200px;
+
+  @media (max-width: 480px) {
+    padding: 0.75rem;
+    min-width: 160px;
+  }
 
   .chart-tooltip-title {
     font-weight: 700;
     margin-bottom: 0.5rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid $primary-50;
+    border-bottom: 1px solid rgba($primary-500, 0.1);
     font-size: 0.9rem;
-    color: $primary-800;
+    color: $primary-900;
   }
 
   .chart-tooltip-content {
@@ -27,6 +43,11 @@
     flex-direction: column;
     gap: 0.4rem;
     font-size: 0.85rem;
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+      gap: 0.3rem;
+    }
   }
 
   .chart-tooltip-row {
@@ -37,17 +58,18 @@
 
     .metric-label {
       font-weight: 600;
+      color: $primary-600;
 
       &.success {
         color: #8884d8;
       }
 
       &.avg-time {
-        color: $success-500;
+        color: $success-600;
       }
 
       &.total-time {
-        color: $warning-500;
+        color: $warning-600;
       }
     }
 

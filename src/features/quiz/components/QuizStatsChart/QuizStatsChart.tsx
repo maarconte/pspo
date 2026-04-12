@@ -106,9 +106,9 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
           data={chartData}
           margin={{
             top: 20,
-            right: 30,
-            left: 20,
-            bottom: 40,
+            right: 20,
+            left: 0,
+            bottom: 20,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
@@ -116,7 +116,8 @@ export default function QuizStatsChart({ data, metric }: QuizStatsChartProps) {
             dataKey="name"
             height={60}
             tick={<CustomAxisTick />}
-            interval={0}
+            interval="preserveStartEnd"
+            minTickGap={10}
           />
 
           {/* Primary Y-Axis */}
