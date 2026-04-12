@@ -81,6 +81,20 @@ button {
     }
   }
 
+  &-tonal.btn-primary {
+    background-color: $primary_50;
+    color: $primary_500;
+
+    &:hover {
+      background-color: $primary_100;
+    }
+
+    &:disabled {
+      background-color: $primary_100;
+      border-color: $primary_200;
+    }
+  }
+
   // Secondary
   &-solid.btn-secondary {
     background-color: $secondary_500;
@@ -155,7 +169,8 @@ button {
     flex-shrink: 0;
   }
 
-  &-outlined, &-tonal {
+  &-outlined,
+  &-tonal {
     .btn-loader {
       border-color: rgba(0, 0, 0, 0.1);
       border-top-color: currentColor;
@@ -164,5 +179,7 @@ button {
 }
 
 @keyframes spin-button {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

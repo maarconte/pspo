@@ -9,12 +9,30 @@ import { Button_Style, Button_Type } from '../../ui/Button/Button.types';
 import { Modal } from '../../ui';
 import './style.scss';
 
+import { 
+	getCoreRowModel, 
+	getFilteredRowModel, 
+	getPaginationRowModel, 
+	getSortedRowModel, 
+	SortingState, 
+	useReactTable 
+} from '@tanstack/react-table';
+import { useUserColumns } from './hooks/useUserColumns';
+import { fuzzyFilter } from '../../features/admin/components/TableQuestions/utils/tableUtils';
+import Table from '../../ui/Table/Table';
+import TableSearch from '../../ui/Table/TableSearch';
+
 const UserManagement = () => {
 	const { users, loading, error, refetch } = useUsers();
 	const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
 	const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
 	const [userToDelete, setUserToDelete] = useState<any | null>(null);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+	// TanStack Table States
+	const [sorting, setSorting] = useState<SortingState>([]);
+	const [globalFilter, setGlobalFilter] = useState('');
+	const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 20 });
 
 	const handleRoleChange = async (userId: string, newRole: UserRole) => {
 		setUpdatingUserId(userId);
@@ -54,6 +72,29 @@ const UserManagement = () => {
 		setIsDeleteModalOpen(true);
 	};
 
+	// Table Configuration
+	const columns = useUserColumns({
+		onRoleChange: handleRoleChange,
+		onDeleteRequest: openDeleteModal,
+		updatingUserId,
+		deletingUserId,
+	});
+
+	const table = useReactTable({
+		data: users,
+		columns,
+		filterFns: { fuzzy: fuzzyFilter },
+		state: { sorting, globalFilter, pagination },
+		globalFilterFn: 'fuzzy',
+		onSortingChange: setSorting,
+		onGlobalFilterChange: setGlobalFilter,
+		onPaginationChange: setPagination,
+		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+	});
+
 	if (loading) {
 		return (
 			<div className="user-management">
@@ -79,67 +120,23 @@ const UserManagement = () => {
 
 	return (
 		<div className="user-management">
-			<h1>User Management</h1>
-			<p className="subtitle">
-				{users.length} registered user{users.length > 1 ? 's' : ''}
-			</p>
+			<div className="header-section">
+				<div>
+					<h1>User Management</h1>
+					<p className="subtitle">
+						{users.length} registered user{users.length > 1 ? 's' : ''}
+					</p>
+				</div>
+				<div className="search-wrapper">
+					<TableSearch
+						value={globalFilter}
+						onChange={(val) => setGlobalFilter(String(val))}
+					/>
+				</div>
+			</div>
 
 			<div className="users-table">
-				<table>
-					<thead>
-						<tr>
-							<th>Email</th>
-							<th>Current Role</th>
-							<th>Change Role</th>
-							<th>Creation Date</th>
-							<th>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						{users.map((user) => (
-							<tr key={user.uid}>
-								<td>{user.email}</td>
-								<td>
-									<span className={`role-badge role-${user.role}`}>
-										{ROLE_LABELS[user.role as UserRole]}
-									</span>
-								</td>
-								<td>
-									<select
-										value={user.role}
-										onChange={(e) => handleRoleChange(user.uid, e.target.value as UserRole)}
-										disabled={updatingUserId === user.uid}
-										className="role-select"
-									>
-										<option value={ROLES.CLIENT}>{ROLE_LABELS.client}</option>
-										<option value={ROLES.ADMIN}>{ROLE_LABELS.admin}</option>
-										<option value={ROLES.DEV}>{ROLE_LABELS.dev}</option>
-									</select>
-									{updatingUserId === user.uid && (
-										<span className="updating">Updating...</span>
-									)}
-								</td>
-								<td>
-									{user.createdAt?.toLocaleDateString('en-US', {
-										year: 'numeric',
-										month: 'short',
-										day: 'numeric',
-									})}
-								</td>
-								<td className="actions-cell">
-									<button
-										className="delete-button"
-										onClick={() => openDeleteModal(user)}
-										disabled={updatingUserId === user.uid || deletingUserId === user.uid}
-										title="Delete user"
-									>
-										<Trash2 size={18} />
-									</button>
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+				<Table data={table} />
 			</div>
 
 			<Modal

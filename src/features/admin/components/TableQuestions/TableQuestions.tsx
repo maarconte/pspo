@@ -18,6 +18,8 @@ import {
 import { Question } from "../../../../utils/types";
 import { toast } from "react-toastify";
 
+import TableActions from "../../../../ui/Table/TableActions/TableActions";
+import TableSearch from "../../../../ui/Table/TableSearch";
 import Table from "../../../../ui/Table/Table";
 import Modal from "../../../../ui/Modal/Modal";
 import ModalEditQuestion from "../ModalEditQuestion/ModalEditQuestion";
@@ -109,10 +111,24 @@ const TableQuestions: FC = () => {
     <div className="TableQuestions">
       <Table
         data={table}
-        selectedQuestion={selectedQuestion}
-        selectedQuestions={selectedQuestions}
-        setSelectedQuestion={setSelectedQuestion}
-        setSelectedQuestions={setSelectedQuestions}
+        selectedItem={selectedQuestion}
+        selectedItems={selectedQuestions}
+        setSelectedItem={setSelectedQuestion}
+        setSelectedItems={setSelectedQuestions}
+        renderHeaderAddon={(tableInstance) => (
+          <div className="d-flex gap-1 w-100 justify-content-between">
+            <TableActions
+              selectedQuestions={selectedQuestions}
+              setSelectedQuestions={setSelectedQuestions}
+              setSelectedQuestion={setSelectedQuestion}
+              selectedQuestion={selectedQuestion}
+            />
+            <TableSearch
+              value={globalFilter ?? ""}
+              onChange={(value) => setGlobalFilter(String(value))}
+            />
+          </div>
+        )}
       />
 
       {isModalOpen && (
