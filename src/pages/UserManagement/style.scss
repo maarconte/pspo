@@ -5,13 +5,33 @@
 	margin: 2rem auto;
 	padding: 0 1rem;
 
-	h1 {
-		margin-bottom: 0.5rem;
-	}
-
-	.subtitle {
-		color: $primary-600;
+	.header-section {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
 		margin-bottom: 2rem;
+		gap: 2rem;
+
+		@media (max-width: 768px) {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
+		}
+
+		h1 {
+			margin-bottom: 0.5rem;
+		}
+
+		.subtitle {
+			color: $primary-600;
+			margin-bottom: 0;
+		}
+
+		.search-wrapper {
+			flex: 1;
+			max-width: 400px;
+			width: 100%;
+		}
 	}
 
 	.error {
@@ -20,43 +40,10 @@
 	}
 
 	.users-table {
-		overflow-x: auto;
 		background: white;
 		border-radius: 8px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-		table {
-			width: 100%;
-			border-collapse: collapse;
-
-			thead {
-				background: $primary-50;
-
-				th {
-					padding: 1rem;
-					text-align: left;
-					font-weight: 600;
-					color: $primary-700;
-					border-bottom: 2px solid $primary-200;
-				}
-			}
-
-			tbody {
-				tr {
-					border-bottom: 1px solid $primary-100;
-					transition: background-color 0.2s;
-
-					&:hover {
-						background: $primary-50;
-					}
-
-					td {
-						padding: 1rem;
-						vertical-align: middle;
-					}
-				}
-			}
-		}
+		overflow: hidden; // Ensure rounded corners work with the table
 	}
 
 	.role-badge {

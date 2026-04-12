@@ -3,6 +3,8 @@ import { Question } from "../../../../../utils/types";
 import { Trash2, XCircle, CheckSquare, Edit, ToggleRight, Circle } from "lucide-react";
 import { formatTimestamp } from "../../../../../utils/hooks";
 import React from "react";
+import Button from "../../../../../ui/Button";
+import { Button_Type, Button_Style } from "../../../../../ui/Button/Button.types";
 
 interface AnswerTypeOption {
   value: string;
@@ -23,7 +25,7 @@ const renderAnswerType = (answerType: string) => {
   return (
     <div className="d-flex align-items-center gap-05">
       {IconComponent && (
-        <span className="tag">
+        <span className="tag-icon">
           <IconComponent size={16} color="#8b78c7" />
         </span>
       )}
@@ -41,10 +43,10 @@ interface UseQuestionColumnsProps {
   };
 }
 
-export const useQuestionColumns = ({ 
-  onSelect, 
+export const useQuestionColumns = ({
+  onSelect,
   onDeleteRequest,
-  selection 
+  selection
 }: UseQuestionColumnsProps): ColumnDef<Question>[] => {
   return [
     {
@@ -70,6 +72,7 @@ export const useQuestionColumns = ({
     {
       id: "index",
       header: "",
+      size: 42,
       enableColumnFilter: false,
       cell: ({ row }) => (
         <span className="pointer" onClick={() => onSelect(row.original)}>
@@ -91,11 +94,16 @@ export const useQuestionColumns = ({
       ),
     },
     {
-      header: "Formation",
+      header: "Module",
       accessorKey: "type",
       size: 150,
       enableSorting: true,
       enableColumnFilter: false,
+      cell: ({ getValue }) => (
+        <div className="text-center">
+          {getValue<string>()}
+        </div>
+      ),
     },
     {
       header: "Answer type",
@@ -107,7 +115,7 @@ export const useQuestionColumns = ({
     {
       header: "Reported",
       accessorKey: "isFlagged",
-      size: 80,
+
       enableColumnFilter: false,
       cell: ({ getValue }) =>
         getValue() && (
@@ -119,7 +127,6 @@ export const useQuestionColumns = ({
     {
       header: "Feedback",
       accessorKey: "feedback",
-      size: 80,
       enableColumnFilter: false,
       cell: ({ getValue }) =>
         !getValue() && (
@@ -131,7 +138,7 @@ export const useQuestionColumns = ({
     {
       header: "Last modified",
       accessorKey: "updatedAt",
-      size: 200,
+      size: 150,
       enableColumnFilter: false,
       cell: ({ getValue }) => (
         <div className="text-center">
@@ -142,7 +149,7 @@ export const useQuestionColumns = ({
     {
       header: "Created at",
       accessorKey: "createdAt",
-      size: 200,
+      size: 150,
       enableColumnFilter: false,
       cell: ({ getValue }) => (
         <div className="text-center">
@@ -153,22 +160,26 @@ export const useQuestionColumns = ({
     {
       id: "actions",
       header: "",
-      size: 60,
+size: 80,
       enableColumnFilter: false,
       cell: ({ row }) => (
         <div className="d-flex gap-05 actions">
-          <Edit
-            size={32}
-            className="pointer action"
-            color="#8b78c7"
+          <Button
+            size="sm"
+            isIconButton
             onClick={() => onSelect(row.original)}
+            icon={<Edit size={16} />}
+            style={Button_Style.TONAL}
+            type={Button_Type.PRIMARY}
           />
-          <Trash2
-            size={32}
-            className="pointer action"
-            color="#8b78c7"
-            onClick={() => onDeleteRequest(row.original)}
-          />
+      <Button
+      size="sm"
+      isIconButton
+      onClick={() => onDeleteRequest(row.original)}
+      icon={<Trash2 size={16} />}
+      style={Button_Style.TONAL}
+      type={Button_Type.ERROR}
+      />
         </div>
       ),
     },

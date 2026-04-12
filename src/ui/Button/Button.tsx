@@ -42,6 +42,8 @@ const Button: FC<ButtonProps> = ({
         return "#171C60";
       case "tonal-enabled-error":
         return "#FF5326";
+      case "tonal-enabled-primary":
+        return "#5236ab";
       default:
         break;
     }

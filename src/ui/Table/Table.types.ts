@@ -1,14 +1,14 @@
 import { Table as TanStackTable } from "@tanstack/react-table";
-import { Question } from "../../utils/types";
 
-export interface TableProps {
-  data: TanStackTable<Question>;
-  selectedQuestions?: Question[];
-  selectedQuestion?: Question;
-  setSelectedQuestions?: React.Dispatch<React.SetStateAction<Question[]>>;
-  setSelectedQuestion?: React.Dispatch<
-    React.SetStateAction<Question | undefined>
+export interface TableProps<T> {
+  data: TanStackTable<T>;
+  selectedItems?: T[];
+  selectedItem?: T;
+  setSelectedItems?: React.Dispatch<React.SetStateAction<T[]>>;
+  setSelectedItem?: React.Dispatch<
+    React.SetStateAction<T | undefined>
   >;
   setIsSelectAll?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSelectNone?: React.Dispatch<React.SetStateAction<boolean>>;
+  renderHeaderAddon?: (table: TanStackTable<T>) => React.ReactNode;
 }

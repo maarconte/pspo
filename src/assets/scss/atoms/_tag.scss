@@ -7,3 +7,12 @@
   display: inline-block;
   background-color: $primary-50;
 }
+
+.tag-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background-color: $primary-50;
+}
