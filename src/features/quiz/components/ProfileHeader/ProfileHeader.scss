@@ -14,32 +14,17 @@
     font-weight: 700;
   }
 
-  .text-gradient {
-    background: linear-gradient(90deg, $primary-900, $primary-700);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .name-input {
+  .name-input,
+  .email-input {
     font-weight: 600;
     border: 2px solid rgba($primary-500, 0.2);
     border-radius: 12px;
     transition: all 0.2s ease;
+    padding: 0.5rem 1rem;
 
     &:focus {
-      border-color: $primary-500;
       box-shadow: 0 0 0 4px rgba($primary-500, 0.1);
     }
-  }
-
-  .btn-icon {
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
   }
 
   .edit-btn {
