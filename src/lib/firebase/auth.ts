@@ -2,7 +2,8 @@ import {
 	getAuth,
 	setPersistence,
 	browserSessionPersistence,
-	updateProfile
+	updateProfile,
+	updateEmail
 } from 'firebase/auth';
 import { app } from './config';
 
@@ -17,5 +18,11 @@ setPersistence(auth, browserSessionPersistence).catch((error) => {
 export const updateUserDisplayName = async (newName: string) => {
 	if (!auth.currentUser) throw new Error("No user logged in");
 	await updateProfile(auth.currentUser, { displayName: newName });
+	return auth.currentUser;
+};
+
+export const updateUserEmail = async (newEmail: string) => {
+	if (!auth.currentUser) throw new Error("No user logged in");
+	await updateEmail(auth.currentUser, newEmail);
 	return auth.currentUser;
 };
