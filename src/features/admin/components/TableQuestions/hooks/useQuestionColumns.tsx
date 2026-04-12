@@ -56,6 +56,7 @@ export const useQuestionColumns = ({
       size: 42,
       enableSorting: false,
       enableColumnFilter: false,
+      enableGlobalFilter: false,
       cell: ({ row }) => (
         <div className="checkbox-container">
           <input
@@ -74,6 +75,7 @@ export const useQuestionColumns = ({
       header: "",
       size: 42,
       enableColumnFilter: false,
+      enableGlobalFilter: false,
       cell: ({ row }) => (
         <span className="pointer" onClick={() => onSelect(row.original)}>
           {row.index + 1}
@@ -87,6 +89,7 @@ export const useQuestionColumns = ({
       enableSorting: true,
       sortingFn: sortingFns.text,
       enableColumnFilter: true,
+      enableGlobalFilter: true,
       cell: ({ row, getValue }) => (
         <div className="ellipsis pointer" onClick={() => onSelect(row.original)}>
           {getValue<string>()}
@@ -99,6 +102,7 @@ export const useQuestionColumns = ({
       size: 150,
       enableSorting: true,
       enableColumnFilter: false,
+      enableGlobalFilter: true,
       cell: ({ getValue }) => (
         <div className="text-center">
           {getValue<string>()}
@@ -110,13 +114,14 @@ export const useQuestionColumns = ({
       accessorKey: "answerType",
       size: 150,
       enableColumnFilter: false,
+      enableGlobalFilter: false,
       cell: ({ getValue }) => renderAnswerType(getValue<string>()),
     },
     {
       header: "Reported",
       accessorKey: "isFlagged",
-
       enableColumnFilter: false,
+      enableGlobalFilter: false,
       cell: ({ getValue }) =>
         getValue() && (
           <div className="text-center">
@@ -128,6 +133,7 @@ export const useQuestionColumns = ({
       header: "Feedback",
       accessorKey: "feedback",
       enableColumnFilter: false,
+      enableGlobalFilter: false,
       cell: ({ getValue }) =>
         !getValue() && (
           <div className="text-center">
@@ -140,6 +146,7 @@ export const useQuestionColumns = ({
       accessorKey: "updatedAt",
       size: 150,
       enableColumnFilter: false,
+      enableGlobalFilter: false,
       cell: ({ getValue }) => (
         <div className="text-center">
           {(getValue() as any) && formatTimestamp(getValue(), "fr-FR")}
@@ -151,6 +158,7 @@ export const useQuestionColumns = ({
       accessorKey: "createdAt",
       size: 150,
       enableColumnFilter: false,
+      enableGlobalFilter: false,
       cell: ({ getValue }) => (
         <div className="text-center">
           {(getValue() as any) && formatTimestamp(getValue(), "fr-FR")}
@@ -160,8 +168,9 @@ export const useQuestionColumns = ({
     {
       id: "actions",
       header: "",
-size: 80,
+      size: 80,
       enableColumnFilter: false,
+      enableGlobalFilter: false,
       cell: ({ row }) => (
         <div className="d-flex gap-05 actions">
           <Button
