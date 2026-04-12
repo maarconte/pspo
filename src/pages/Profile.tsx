@@ -94,11 +94,11 @@ export default function Profile() {
               )}
 
               <div className="row mb-3">
-                <div className="col-12">
-                  <ProfileErrors history={history} />
+                      <div className="col-12">
+                  <ProfileBookmarks history={history} onUpdate={refetch} />
                 </div>
                 <div className="col-12">
-                  <ProfileBookmarks history={history} onUpdate={refetch} />
+                  <ProfileErrors history={history} />
                 </div>
               </div>
             </>
