@@ -1,7 +1,7 @@
 import React, { FC, useState, useTransition } from "react";
 import { User } from "firebase/auth";
 import { Edit2, Check, X, User as UserIcon, Mail } from "lucide-react";
-import { updateUserDisplayName, updateUserEmail } from "../../../../lib/firebase/auth";
+import { updateUserDisplayName, verifyAndUpdateUserEmail } from "../../../../lib/firebase/auth";
 import { useUserStore } from "../../../../stores/useUserStore";
 import { toast } from "react-toastify";
 import Button from "../../../../ui/Button";
@@ -84,9 +84,8 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user }) => {
 
     startTransition(async () => {
       try {
-        const updatedUser = await updateUserEmail(newEmail.trim());
-        setUser({ ...updatedUser } as User);
-        toast.success("Email address updated");
+        await verifyAndUpdateUserEmail(newEmail.trim());
+        toast.info(`Verification email sent to ${newEmail.trim()}. Please check your inbox.`);
         setIsEditingEmail(false);
       } catch (error: any) {
         console.error("Error updating email:", error);
@@ -95,7 +94,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ user }) => {
         } else if (error.code === 'auth/email-already-in-use') {
           toast.error("This email is already associated with another account.");
         } else {
-          toast.error("Failed to update email address");
+          toast.error("Failed to send verification email");
         }
       }
     });
