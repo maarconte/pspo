@@ -6,9 +6,9 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%) translateX(calc(100% - 40px));
-  background: rgba($primary-500, 0.85);
-  backdrop-filter: blur(10px);
-  color: white;
+  background: rgba($primary-600, 0.25);
+  backdrop-filter: blur(2px);
+  color: $primary-300;
   display: flex;
   align-items: center;
   gap: $SPACE_2;
@@ -22,6 +22,7 @@
   &:hover {
     transform: translateY(-50%) translateX(calc(100% - 70px));
     background: $primary-600;
+    color: white;
   }
 
   &.open {
