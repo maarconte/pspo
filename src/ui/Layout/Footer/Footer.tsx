@@ -3,9 +3,14 @@ import logo from '../../../assets/img/StudyGroup.webp';
 import Button from '../../Button';
 import { Heart } from 'lucide-react';
 import { Button_Style, Button_Type } from '../../Button/Button.types';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Footer = () => {
+  const location = useLocation();
+
+  if (location.pathname === '/quizz') {
+    return null;
+  }
 
   return (
     <footer className="Footer">
