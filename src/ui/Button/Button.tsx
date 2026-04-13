@@ -44,6 +44,8 @@ const Button: FC<ButtonProps> = ({
         return "#FF5326";
       case "tonal-enabled-primary":
         return "#5236ab";
+      case "tonal-enabled-warning":
+        return "#af7e19";
       default:
         break;
     }
@@ -73,33 +75,53 @@ const Button: FC<ButtonProps> = ({
     isIconButton && "btn-icon"
   }`;
 
-  return (
+  const isExternal =
+    url?.startsWith("http") ||
+    url?.startsWith("https") ||
+    url?.startsWith("mailto:");
+
+  const renderContent = () => (
     <>
-      {type !== Button_Type.LINK ? (
-        <button
+      {label && <span>{label}</span>}
+      {isLoader && <div className="btn-loader" />}
+      {icon &&
+        !isLoader &&
+        React.isValidElement(icon) &&
+        React.cloneElement(icon, iconProps)}
+    </>
+  );
+
+  if (url) {
+    if (isExternal) {
+      return (
+        <a
+          href={url}
           className={buttonClass}
-          type={buttonType}
-          disabled={disabled || isLoader}
-          onClick={onClick}
+          target="_blank"
+          rel="noopener noreferrer"
           {...rest}
         >
-          {label}
-          {isLoader && <div className="btn-loader" />}
-          {icon &&
-            !isLoader &&
-            React.isValidElement(icon) &&
-            React.cloneElement(icon, iconProps)}
-        </button>
-      ) : (
-        <Link to={url ?? ""} className={buttonClass}>
-          {label}
-          {icon &&
-            !isLoader &&
-            React.isValidElement(icon) &&
-            React.cloneElement(icon, iconProps)}
-        </Link>
-      )}
-    </>
+          {renderContent()}
+        </a>
+      );
+    }
+    return (
+      <Link to={url} className={buttonClass} {...rest}>
+        {renderContent()}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      className={buttonClass}
+      type={buttonType}
+      disabled={disabled || isLoader}
+      onClick={onClick}
+      {...rest}
+    >
+      {renderContent()}
+    </button>
   );
 };
 

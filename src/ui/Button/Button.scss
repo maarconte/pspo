@@ -5,6 +5,10 @@ button {
   background-color: transparent;
 }
 
+a.btn:hover {
+  text-decoration: none;
+}
+
 .btn {
   display: flex;
   flex-direction: row;
@@ -28,6 +32,7 @@ button {
 
     &:hover {
       cursor: not-allowed;
+
     }
   }
 
@@ -92,6 +97,20 @@ button {
     &:disabled {
       background-color: $primary_100;
       border-color: $primary_200;
+    }
+  }
+
+  &-tonal.btn-warning {
+    background-color: $warning_50;
+    color: $warning_700;
+
+    &:hover {
+      background-color: $warning_100;
+    }
+
+    &:disabled {
+      background-color: $warning_100;
+      border-color: $warning_200;
     }
   }
 
