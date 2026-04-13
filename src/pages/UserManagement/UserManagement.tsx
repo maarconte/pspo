@@ -44,7 +44,7 @@ const UserManagement = () => {
 			// Refresh user list
 			await refetch();
 		} catch (error: any) {
-			toast.error(error.message || 'Failed to update role');
+			toast.error('Failed to update role');
 		} finally {
 			setUpdatingUserId(null);
 		}
@@ -61,7 +61,7 @@ const UserManagement = () => {
 			setUserToDelete(null);
 			await refetch();
 		} catch (error: any) {
-			toast.error(error.message || 'Failed to delete user');
+			toast.error('Failed to delete user');
 		} finally {
 			setDeletingUserId(null);
 		}
