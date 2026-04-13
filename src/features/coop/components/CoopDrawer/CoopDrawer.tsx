@@ -4,9 +4,13 @@ import { Button } from "../../../../ui";
 import { Button_Type, Button_Style } from "../../../../ui/Button/Button.types";
 import { Users, Plus, Trash2, X } from "lucide-react";
 import { useCoopStore } from "../../../../stores/useCoopStore";
+import { useLocation } from "react-router-dom";
 import "./CoopDrawer.scss";
 
 export const CoopDrawer: React.FC = () => {
+  const location = useLocation();
+  const isAllowedPath = location.pathname === "/" || location.pathname === "/quizz";
+
   const {
     participants,
     isOpen,
@@ -19,6 +23,8 @@ export const CoopDrawer: React.FC = () => {
 
   const [newName, setNewName] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  if (!isAllowedPath) return null;
 
   const handleAdd = () => {
     if (!newName.trim()) return;

@@ -28,14 +28,12 @@
   }
 
   .edit-btn {
-    opacity: 0;
+    opacity: 0.5;
     transition: all 0.2s ease;
-    transform: translateX(-5px);
   }
 
   &:hover .edit-btn {
     opacity: 1;
-    transform: translateX(0);
   }
 
   .max-w-sm {
