@@ -4,12 +4,16 @@ import { Button } from "../../../../ui";
 import { Button_Type, Button_Style } from "../../../../ui/Button/Button.types";
 import { Users, Plus, Trash2, X } from "lucide-react";
 import { useCoopStore } from "../../../../stores/useCoopStore";
+import { useUserStore } from "../../../../stores/useUserStore";
 import { useLocation } from "react-router-dom";
 import "./CoopDrawer.scss";
 
 export const CoopDrawer: React.FC = () => {
+  const { user } = useUserStore();
   const location = useLocation();
   const isAllowedPath = location.pathname === "/" || location.pathname === "/quizz";
+
+  const currentUserName = user?.displayName || user?.email?.split("@")[0] || null;
 
   const {
     participants,
@@ -20,6 +24,8 @@ export const CoopDrawer: React.FC = () => {
     setOpen,
     clearParticipants,
   } = useCoopStore();
+
+  const isUserInParticipants = currentUserName ? participants.includes(currentUserName) : false;
 
   const [newName, setNewName] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -90,6 +96,23 @@ export const CoopDrawer: React.FC = () => {
             <p className="coop-drawer__description">
               Collaboration tool: enter the names of the participants.
             </p>
+
+            {user && currentUserName && !isUserInParticipants && (
+              <div className="coop-drawer__suggestion">
+                <div className="coop-drawer__suggestion-text">
+                  <span>Welcome back, <strong>{currentUserName}</strong>!</span>
+                </div>
+                <Button
+                  label="Add automatically"
+                  icon={<Plus size={16} />}
+                  onClick={() => addParticipant(currentUserName)}
+                  type={Button_Type.PRIMARY}
+                  style={Button_Style.TONAL}
+                  size="S"
+                  className="w-100 mt-2"
+                />
+              </div>
+            )}
 
             <div className="coop-drawer__form">
               <div className={`coop-drawer__input-group ${error ? "has-error" : ""}`}>
