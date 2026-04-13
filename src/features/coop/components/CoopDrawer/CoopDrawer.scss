@@ -110,6 +110,25 @@
     margin: 0;
   }
 
+  &__suggestion {
+    background: linear-gradient(135deg, rgba($primary-50, 0.8), rgba(white, 0.9));
+    border: 1px solid rgba($primary-100, 0.5);
+    padding: $SPACE_4;
+    border-radius: 12px;
+    margin-bottom: $SPACE_2;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.05);
+
+    &-text {
+      font-size: 0.9rem;
+      color: $primary-800;
+      margin-bottom: $SPACE_1;
+      
+      strong {
+        color: $primary-600;
+      }
+    }
+  }
+
   &__list-container {
     margin-top: $SPACE_2;
     border-top: 1px solid rgba($primary-100, 0.5);
