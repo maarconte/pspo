@@ -6,9 +6,9 @@
   right: 0;
   top: calc(50% + 80px);
   transform: translateX(calc(100% - 40px));
-  background: rgba($primary-400, 0.85);
-  backdrop-filter: blur(10px);
-  color: white;
+  background: rgba($primary-600, 0.25);
+  backdrop-filter: blur(2px);
+  color: $primary-300;
   display: flex;
   align-items: center;
   gap: $SPACE_2;
@@ -21,7 +21,8 @@
 
   &:hover {
     transform: translateX(calc(100% - 70px));
-    background: $primary-500;
+    background: $primary-600;
+    color: white;
   }
 
   &.open {
