@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 import AuthChecker from "./features/auth/components/Auth/AuthChecker";
-import { Header, Loader } from "./ui";
+import { Header, Footer, Loader } from "./ui";
 import { QuestionsLoader } from "./features/quiz";
 import routes from "./utils/routes";
 import { queryClient } from "./lib/react-query/queryClient";
@@ -49,6 +49,7 @@ function App() {
               </Routes>
 
           </Suspense>
+          <Footer />
         </QuestionsLoader>
       </Router>
     </QueryClientProvider>
