@@ -64,7 +64,7 @@ export const setUserRole = functions.https.onCall(async (data, context) => {
 		functions.logger.error('Erreur lors de l\'attribution du rôle:', error);
 		throw new functions.https.HttpsError(
 			'internal',
-			'Erreur lors de l\'attribution du rôle: ' + error.message
+			'Erreur lors de l\'attribution du rôle'
 		);
 	}
 });
