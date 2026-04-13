@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { QuizSessionStat } from "../../../../utils/types";
+import { QuizSessionStat, QuestionStat } from "../../../../../utils/types";
 import { Trash2 } from "lucide-react";
 import React from "react";
 import Button from "../../../../../ui/Button";
@@ -57,14 +57,14 @@ export const useSessionColumns = ({
       sortingFn: (rowA, rowB) => {
         const getPercent = (row: any) => {
           const session = row.original;
-          const answeredCount = session.details?.filter((d: any) => d.userAnswer !== null).length || 0;
+          const answeredCount = session.details?.filter((d: QuestionStat) => d.userAnswer !== null).length || 0;
           return answeredCount > 0 ? session.score / answeredCount : 0;
         };
         return getPercent(rowA) - getPercent(rowB);
       },
       cell: ({ row }) => {
         const session = row.original;
-        const answeredCount = session.details?.filter(d => d.userAnswer !== null).length || 0;
+        const answeredCount = session.details?.filter((d: QuestionStat) => d.userAnswer !== null).length || 0;
         const successPercent = answeredCount > 0 ? Math.round((session.score / answeredCount) * 100) : 0;
         return (
           <span className={`fw-bold ${successPercent >= 85 ? "text-success" : "text-danger"}`}>
@@ -77,7 +77,7 @@ export const useSessionColumns = ({
       header: "Questions",
       id: "questions",
       cell: ({ row }) => {
-        const answeredCount = row.original.details?.filter(d => d.userAnswer !== null).length || 0;
+        const answeredCount = row.original.details?.filter((d: QuestionStat) => d.userAnswer !== null).length || 0;
         return <span className="text-muted">{answeredCount} / 80</span>;
       },
     },
