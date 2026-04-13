@@ -1,7 +1,9 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
+import { MemoryRouter } from "react-router-dom";
 import { CoopDrawer } from "./CoopDrawer";
 import { useCoopStore } from "../../../../stores/useCoopStore";
+import { useUserStore } from "../../../../stores/useUserStore";
 
 // Mock rsuite components
 vi.mock("rsuite", () => {
@@ -34,17 +36,28 @@ vi.mock("rsuite", () => {
 });
 
 describe("CoopDrawer Component", () => {
+    const renderWithRouter = (ui: React.ReactElement) => {
+        return render(
+            <MemoryRouter>
+                {ui}
+            </MemoryRouter>
+        );
+    };
+
     beforeEach(() => {
-        // Reset store state
+        // Reset stores state
         useCoopStore.setState({
             participants: [],
             currentIndex: 0,
             isOpen: false,
         });
+        useUserStore.setState({
+            user: null
+        });
     });
 
     it("renders the toggle tab with count 0 initially", () => {
-        render(<CoopDrawer />);
+        renderWithRouter(<CoopDrawer />);
         expect(screen.getByText("Co-op Mode")).toBeDefined();
         // Badge should not be visible if 0 participants
         expect(screen.queryByText("0")).toBeNull();
@@ -52,12 +65,12 @@ describe("CoopDrawer Component", () => {
 
     it("renders the badge when participants are present", () => {
         useCoopStore.setState({ participants: ["Alice", "Bob"] });
-        render(<CoopDrawer />);
+        renderWithRouter(<CoopDrawer />);
         expect(screen.getByText("2")).toBeDefined();
     });
 
     it("opens the drawer when clicking the tab", () => {
-        render(<CoopDrawer />);
+        renderWithRouter(<CoopDrawer />);
         const tab = screen.getByText("Co-op Mode").closest("div");
         fireEvent.click(tab!);
 
@@ -66,7 +79,7 @@ describe("CoopDrawer Component", () => {
 
     it("calls setOpen(false) when drawer is closed", () => {
         useCoopStore.setState({ isOpen: true });
-        render(<CoopDrawer />);
+        renderWithRouter(<CoopDrawer />);
         
         const closeBtn = screen.getByTestId("close-drawer");
         fireEvent.click(closeBtn);
@@ -76,7 +89,7 @@ describe("CoopDrawer Component", () => {
 
     it("adds a participant through input and button click", () => {
         useCoopStore.setState({ isOpen: true });
-        render(<CoopDrawer />);
+        renderWithRouter(<CoopDrawer />);
 
         const input = screen.getByTestId("coop-input");
         const addButton = screen.getByText("Add");
@@ -90,7 +103,7 @@ describe("CoopDrawer Component", () => {
 
     it("adds a participant when pressing Enter", () => {
         useCoopStore.setState({ isOpen: true });
-        render(<CoopDrawer />);
+        renderWithRouter(<CoopDrawer />);
 
         const input = screen.getByTestId("coop-input");
         fireEvent.change(input, { target: { value: "Bob" } });
@@ -107,7 +120,7 @@ describe("CoopDrawer Component", () => {
       const originalAdd = useCoopStore.getState().addParticipant;
       useCoopStore.setState({ addParticipant: mockAdd, isOpen: true });
 
-      render(<CoopDrawer />);
+      renderWithRouter(<CoopDrawer />);
       
       const input = screen.getByTestId("coop-input");
       const addButton = screen.getByText("Add");
@@ -123,7 +136,7 @@ describe("CoopDrawer Component", () => {
 
     it("removes a participant via trash icon", () => {
         useCoopStore.setState({ isOpen: true, participants: ["Alice"] });
-        render(<CoopDrawer />);
+        renderWithRouter(<CoopDrawer />);
 
         // The trash icon is inside a button. Button has icon props.
         // We can find the button that contains Trash2 or just by finding the remove button.
@@ -138,5 +151,25 @@ describe("CoopDrawer Component", () => {
         fireEvent.click(removeBtn!);
 
         expect(useCoopStore.getState().participants).not.toContain("Alice");
+    });
+
+    it("shows suggestion 'Add automatically' when user is logged in", () => {
+        // Mock user
+        useUserStore.setState({
+            user: { displayName: "John Doe", email: "john@example.com" } as any
+        });
+        useCoopStore.setState({ isOpen: true, participants: [] });
+
+        renderWithRouter(<CoopDrawer />);
+        
+        expect(screen.getByText(/Welcome back/)).toBeDefined();
+        expect(screen.getByText("Add automatically")).toBeDefined();
+
+        const addAutoBtn = screen.getByText("Add automatically");
+        fireEvent.click(addAutoBtn);
+
+        expect(useCoopStore.getState().participants).toContain("John Doe");
+        // Suggestion should disappear (but we'd need a re-render or to check state)
+        expect(useCoopStore.getState().participants.length).toBe(1);
     });
 });

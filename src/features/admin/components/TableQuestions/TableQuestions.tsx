@@ -95,7 +95,7 @@ const TableQuestions: FC = () => {
     columns,
     filterFns: { fuzzy: fuzzyFilter },
     state: { pagination, sorting, globalFilter },
-    globalFilterFn: 'fuzzy',
+    globalFilterFn: fuzzyFilter,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,

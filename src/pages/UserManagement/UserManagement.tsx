@@ -85,7 +85,7 @@ const UserManagement = () => {
 		columns,
 		filterFns: { fuzzy: fuzzyFilter },
 		state: { sorting, globalFilter, pagination },
-		globalFilterFn: 'fuzzy',
+		globalFilterFn: fuzzyFilter,
 		onSortingChange: setSorting,
 		onGlobalFilterChange: setGlobalFilter,
 		onPaginationChange: setPagination,
