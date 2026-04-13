@@ -2,8 +2,7 @@ import "./style.scss";
 import "./style-mobile.scss";
 
 import React, { FC } from "react";
-import { Dropdown } from "rsuite";
-import { ChevronDown, Settings, User, Users, LogOut, BarChart2 } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useUserStore } from "../../../stores/useUserStore";
@@ -42,15 +41,12 @@ const Header: FC<HeaderProps> = () => {
                   Edit questions
                 </Link>
               )}
-
               {isDev && (
                 <Link to="/dev/users" className="nav-link">
                   Manage users
                 </Link>
               )}
-              <Button onClick={logout} icon={<LogOut size={16} />} type={Button_Type.ERROR} style={Button_Style.TONAL} isIconButton>
-                Logout
-              </Button>
+              <Button onClick={logout} icon={<LogOut size={16} />} type={Button_Type.ERROR} style={Button_Style.TONAL} label="Logout" />
           </nav>
           </div>
         ) : (
