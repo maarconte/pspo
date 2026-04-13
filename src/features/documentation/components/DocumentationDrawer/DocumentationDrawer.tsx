@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { Drawer } from "rsuite";
 import { FileText } from "lucide-react";
 import pdfUrl from "../../../../assets/img/StudyGroup-PSPO1-Super-PDF-v2.2.pdf";
+import { useLocation } from "react-router-dom";
 import "./DocumentationDrawer.scss";
 
 export const DocumentationDrawer: React.FC = () => {
+  const location = useLocation();
+  const isAllowedPath = location.pathname === "/" || location.pathname === "/quizz";
   const [isOpen, setIsOpen] = useState(false);
+
+  if (!isAllowedPath) return null;
 
   const toggleDrawer = () => setIsOpen((prev) => !prev);
 
