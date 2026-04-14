@@ -6,6 +6,7 @@ import {
 	User
 } from 'firebase/auth';
 import { auth } from '../../../lib/firebase';
+import { getAuthErrorMessage } from '../utils/authErrors';
 
 // Magic Link configuration
 const actionCodeSettings = {
@@ -35,7 +36,8 @@ export const authService = {
 			window.localStorage.setItem('emailForSignIn', email);
 		} catch (error: any) {
 			console.error('Error sending Magic Link:', error);
-			throw new Error(error.message || 'Failed to send sign-in link');
+			const safeMessage = error?.code ? getAuthErrorMessage(error.code) : 'Failed to send sign-in link';
+			throw new Error(safeMessage);
 		}
 	},
 
@@ -79,7 +81,8 @@ export const authService = {
 				throw new Error('The sign-in link has expired. Please request a new link.');
 			}
 
-			throw new Error(error.message || 'Authentication failed');
+			const safeMessage = error?.code ? getAuthErrorMessage(error.code) : 'Authentication failed';
+			throw new Error(safeMessage);
 		}
 	},
 
