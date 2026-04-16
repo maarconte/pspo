@@ -35,7 +35,7 @@ export const authService = {
 			window.localStorage.setItem('emailForSignIn', email);
 		} catch (error: any) {
 			console.error('Error sending Magic Link:', error);
-			throw new Error(error.message || 'Failed to send sign-in link');
+			throw new Error('Failed to send sign-in link');
 		}
 	},
 
@@ -79,7 +79,7 @@ export const authService = {
 				throw new Error('The sign-in link has expired. Please request a new link.');
 			}
 
-			throw new Error(error.message || 'Authentication failed');
+			throw new Error('Authentication failed');
 		}
 	},
 

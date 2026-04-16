@@ -42,7 +42,7 @@ export const useUsers = () => {
 			setUsers(usersData);
 		} catch (err: any) {
 			console.error('Error fetching users:', err);
-			setError(err.message || 'Failed to fetch users');
+			setError('Failed to fetch users');
 		} finally {
 			setLoading(false);
 		}
