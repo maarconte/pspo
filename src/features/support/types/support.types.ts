@@ -1,0 +1,56 @@
+import { Timestamp } from 'firebase/firestore';
+
+// ─── Enums / Union Types ───────────────────────────────────────────────────────
+
+export type TicketStatus = 'todo' | 'in_progress' | 'done';
+export type TicketPriority = 'P1' | 'P2' | 'P3';
+
+export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
+  todo: 'À faire',
+  in_progress: 'En cours',
+  done: 'Terminé',
+};
+
+export const TICKET_PRIORITY_LABELS: Record<TicketPriority, string> = {
+  P1: 'P1 — Critique',
+  P2: 'P2 — Majeur',
+  P3: 'P3 — Mineur',
+};
+
+// ─── Ticket ───────────────────────────────────────────────────────────────────
+
+export interface Ticket {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl?: string;
+  imagePath?: string; // Firebase Storage path pour suppression RGPD
+  authorId: string;
+  authorName: string;
+  status: TicketStatus;
+  priority: TicketPriority;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
+export type CreateTicketPayload = Pick<Ticket, 'name' | 'description'> & {
+  imageFile?: File;
+};
+
+export type UpdateTicketPayload = Partial<
+  Pick<Ticket, 'status' | 'priority' | 'name' | 'description'>
+>;
+
+// ─── Message ──────────────────────────────────────────────────────────────────
+
+export interface TicketMessage {
+  id: string;
+  content: string;
+  authorId: string;
+  authorName: string;
+  authorRole: string;
+  createdAt: Timestamp;
+  readBy: string[];
+}
+
+export type SendMessagePayload = Pick<TicketMessage, 'content' | 'authorId' | 'authorName' | 'authorRole'>;

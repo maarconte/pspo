@@ -1,8 +1,9 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import React, { FC } from "react";
-import { User, LogOut } from "lucide-react";
+import { FC } from "react";
+import { User, LogOut, Bug } from "lucide-react";
+import { NotificationBadge } from "../../../features/support/components/NotificationBadge/NotificationBadge";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useUserStore } from "../../../stores/useUserStore";
@@ -35,7 +36,12 @@ const Header: FC<HeaderProps> = () => {
             <nav className="header-nav">
             <Link to="/profile" className="nav-link">
               Profile
-              </Link>
+            </Link>
+            <Link to="/support" className="nav-link nav-link--support">
+              <Bug size={16} />
+              Support
+              <NotificationBadge />
+            </Link>
               {isAdmin && (
                 <Link to="/admin" className="nav-link">
                   Edit questions

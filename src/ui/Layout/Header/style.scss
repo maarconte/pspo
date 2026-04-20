@@ -51,6 +51,13 @@
           &:hover {
             color: $primary-500;
           }
+
+          &--support {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            position: relative;
+          }
         }
 
         .nav-dropdown-toggle {

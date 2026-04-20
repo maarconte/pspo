@@ -7,6 +7,7 @@ const Login = lazy(() => import("../../pages/Login"));
 const Quizz = lazy(() => import("../../pages/Quizz"));
 const UserManagement = lazy(() => import("../../pages/UserManagement/UserManagement"));
 const Profile = lazy(() => import("../../pages/Profile"));
+const Support = lazy(() => import("../../pages/Support"));
 // MagicLinkVerification is a named export, so we need to map it to default
 const MagicLinkVerification = lazy(() => import("../../features/auth/components/MagicLinkVerification").then(module => ({ default: module.MagicLinkVerification })));
 
@@ -72,6 +73,12 @@ const routes: RouteType[] = [
     path: "/profile",
     component: Profile,
     name: "Profile",
+    protected: true,
+  },
+  {
+    path: "/support",
+    component: Support,
+    name: "Support",
     protected: true,
   },
 ];
