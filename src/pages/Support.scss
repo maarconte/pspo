@@ -1,0 +1,124 @@
+@use '../assets/scss/variables' as *;
+
+.support-page {
+  min-height: 80vh;
+  padding-bottom: 4rem;
+
+  &__hero {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  &__hero-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, $primary-600 0%, $primary-400 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba($primary-600, 0.3);
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1a1a2e;
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.03em;
+  }
+
+  &__description {
+    font-size: 0.9375rem;
+    color: #777;
+    margin: 0;
+  }
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 1.75rem;
+    align-items: flex-start;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__form-col {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  &__table-col {
+    min-width: 0;
+  }
+
+  &__table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  &__section-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  &__count {
+    background: $primary-500;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.1rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem 2rem;
+    color: #888;
+    font-size: 0.9rem;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid rgba($primary-500, 0.12);
+  }
+
+  &__spinner {
+    width: 22px;
+    height: 22px;
+    border: 2.5px solid rgba($primary-500, 0.2);
+    border-top-color: $primary-500;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  &__error {
+    padding: 1.25rem 1.5rem;
+    background: rgba($secondary-500, 0.07);
+    border: 1px solid rgba($secondary-500, 0.2);
+    border-radius: 12px;
+    color: $secondary-700;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
