@@ -1,12 +1,12 @@
 import { Fragment, useState, useMemo } from 'react';
-import { 
-  Trash2, 
-  MessageSquare, 
-  Eye, 
-  EyeOff, 
-  ArrowUpDown, 
-  ChevronUp, 
-  ChevronDown 
+import {
+  Trash2,
+  MessageSquare,
+  Eye,
+  EyeOff,
+  ArrowUpDown,
+  ChevronUp,
+  ChevronDown
 } from 'lucide-react';
 import {
   useReactTable,
@@ -76,13 +76,6 @@ export const TicketsTable = ({
         header: 'Ticket',
         cell: (info) => (
           <div className="tickets-table__name-wrapper">
-            {info.row.original.imageUrl && (
-              <img
-                src={info.row.original.imageUrl}
-                alt=""
-                className="tickets-table__thumb"
-              />
-            )}
             <span className="tickets-table__ticket-name">{info.getValue()}</span>
           </div>
         ),
@@ -156,7 +149,7 @@ export const TicketsTable = ({
             </select>
           ) : (
             <span className={`badge ${priorityClass[ticket.priority]}`}>
-              {ticket.priority}
+              {TICKET_PRIORITY_LABELS[ticket.priority]}
             </span>
           );
         },
@@ -246,7 +239,7 @@ export const TicketsTable = ({
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
-                      
+
                       {isSortable && (
                         <span className={`tickets-table__sort-icon ${sorted ? 'tickets-table__sort-icon--active' : ''}`}>
                           {sorted === 'asc' ? (

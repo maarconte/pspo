@@ -69,7 +69,7 @@ export default function Support() {
               <h2 className="support-page__section-title">
                 Tickets ouverts
                 {tickets.length > 0 && (
-                  <span className="support-page__count">{tickets.length}</span>
+                  <span className="support-page__count badge">{tickets.length}</span>
                 )}
               </h2>
             </div>

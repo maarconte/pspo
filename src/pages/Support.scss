@@ -76,12 +76,16 @@
   }
 
   &__count {
-    background: $primary-500;
-    color: #fff;
+    background: $primary-50;
+    color: $primary-500;
     font-size: 0.75rem;
     font-weight: 700;
     padding: 0.1rem 0.5rem;
     border-radius: 12px;
+    height: 24px;
+    line-height: 24px;
+    min-width: 24px;
+    text-align: center;
   }
 
   &__loading {
