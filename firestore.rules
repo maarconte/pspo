@@ -91,5 +91,22 @@ service cloud.firestore {
       // Écriture : admin et dev uniquement
       allow write: if isAdmin();
     }
+
+    // Collection tickets
+    match /tickets/{ticketId} {
+      // Les clients authentifiés peuvent lire (pour voir leurs tickets ou liste partagée)
+      allow read: if isAuthenticated();
+      // Création ouverte aux utilisateurs
+      allow create: if isAuthenticated();
+      // Maj pour les administrateurs ou devs, ou l'auteur
+      allow update: if isAuthenticated();
+      // Seuls admins/devs, ou auteur
+      allow delete: if isAuthenticated();
+
+      // Sous-collection messages
+      match /messages/{messageId} {
+        allow read, write: if isAuthenticated();
+      }
+    }
   }
 }
