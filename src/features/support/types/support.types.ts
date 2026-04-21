@@ -12,9 +12,9 @@ export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
 };
 
 export const TICKET_PRIORITY_LABELS: Record<TicketPriority, string> = {
-  P1: 'P1 — Critique',
-  P2: 'P2 — Majeur',
-  P3: 'P3 — Mineur',
+  P1: 'Critique',
+  P2: 'Majeur',
+  P3: 'Mineur',
 };
 
 // ─── Ticket ───────────────────────────────────────────────────────────────────

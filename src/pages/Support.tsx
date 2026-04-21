@@ -41,7 +41,7 @@ export default function Support() {
   };
 
   return (
-    <div className="support-page">
+    <div className="Support support-page">
       <div className="container mt-5">
         {/* Page Header */}
         <div className="support-page__hero">

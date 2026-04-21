@@ -13,7 +13,8 @@
   }
 }
 
-.Profile .container {
+.Profile .container,
+.Support .container {
   @include breakpoint(tablet) {
     max-width: 1440px;
   }
