@@ -37,11 +37,7 @@ const Header: FC<HeaderProps> = () => {
             <Link to="/profile" className="nav-link">
               Profile
             </Link>
-            <Link to="/support" className="nav-link nav-link--support">
-              <Bug size={16} />
-              Support
-              <NotificationBadge />
-            </Link>
+
               {isAdmin && (
                 <Link to="/admin" className="nav-link">
                   Edit questions
@@ -52,6 +48,10 @@ const Header: FC<HeaderProps> = () => {
                   Manage users
                 </Link>
               )}
+              <Link to="/support" className="nav-link nav-link--support">
+                <Bug size={24} />
+                <NotificationBadge />
+              </Link>
               <Button onClick={logout} icon={<LogOut size={16} />} type={Button_Type.ERROR} style={Button_Style.TONAL} label="Logout" />
           </nav>
           </div>
