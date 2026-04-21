@@ -61,8 +61,13 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
   );
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // limit file size to 5MB
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Le fichier doit faire moins de 5 Mo');
+      return;
+    }
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
   };
