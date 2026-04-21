@@ -64,7 +64,7 @@ export const setUserRole = functions.https.onCall(async (data, context) => {
 		functions.logger.error('Erreur lors de l\'attribution du rôle:', error);
 		throw new functions.https.HttpsError(
 			'internal',
-			'Erreur lors de l\'attribution du rôle: ' + error.message
+			'Une erreur est survenue lors de l\'attribution du rôle.'
 		);
 	}
 });
@@ -142,7 +142,7 @@ export const deleteUser = functions.https.onCall(async (data, context) => {
 		functions.logger.error('Erreur lors de la suppression de l\'utilisateur:', error);
 		throw new functions.https.HttpsError(
 			'internal',
-			'Erreur lors de la suppression: ' + error.message
+			'Une erreur est survenue lors de la suppression de l\'utilisateur.'
 		);
 	}
 });
