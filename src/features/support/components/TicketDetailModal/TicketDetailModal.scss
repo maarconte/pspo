@@ -137,7 +137,10 @@
     color: #aaa;
     text-align: center;
 
-    p { margin: 0; font-size: 0.9rem; }
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
   }
 
   &__message {
@@ -159,7 +162,7 @@
       .ticket-modal__message-author,
       .ticket-modal__message-role,
       .ticket-modal__message-time {
-        color: rgba(255,255,255,0.8);
+        color: rgba(255, 255, 255, 0.8);
       }
     }
   }
@@ -232,14 +235,18 @@
     color: #1a1a2e;
     min-width: 0;
 
-    &::placeholder { color: #bbb; }
+    &::placeholder {
+      color: #bbb;
+    }
 
     &:focus {
       border-color: $primary-500;
       box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
     }
 
-    &:disabled { opacity: 0.6; }
+    &:disabled {
+      opacity: 0.6;
+    }
   }
 
   &__compose-send {
@@ -261,7 +268,10 @@
       box-shadow: 0 4px 12px rgba($primary-600, 0.35);
     }
 
-    &:disabled { opacity: 0.6; cursor: not-allowed; }
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 
   &__compose-error {
@@ -274,7 +284,7 @@
   &__spinner {
     width: 18px;
     height: 18px;
-    border: 2px solid rgba(255,255,255,0.35);
+    border: 2px solid rgba(255, 255, 255, 0.35);
     border-top-color: #fff;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
@@ -283,7 +293,7 @@
   &__readonly-notice {
     padding: 0.875rem 1.5rem;
     border-top: 1px solid rgba($primary-500, 0.1);
-    background: #fafafa;
+    background-color: #fafafa;
     font-size: 0.8125rem;
     color: #888;
     text-align: center;
@@ -297,29 +307,73 @@
   border-radius: 20px;
   font-weight: 600;
 
-  &--todo { background: rgba(#fff, 0.2); color: #fff; }
-  &--in-progress { background: rgba($warning-300, 0.3); color: $warning-200; }
-  &--done { background: rgba($success-300, 0.3); color: $success-200; }
-  &--p1 { background: rgba($secondary-300, 0.3); color: $secondary-200; }
-  &--p2 { background: rgba($warning-300, 0.3); color: $warning-200; }
-  &--p3 { background: rgba(#fff, 0.2); color: #fff; }
+  &--todo {
+    background-color: rgba(#fff, 0.2);
+    color: #fff;
+  }
+
+  &--in-progress {
+    background-color: rgba($warning-300, 0.3);
+    color: $warning-200;
+  }
+
+  &--done {
+    background-color: rgba($success-300, 0.3);
+    color: $success-200;
+  }
+
+  &--p1 {
+    background-color: rgba($secondary-300, 0.3);
+    color: $secondary-200;
+  }
+
+  &--p2 {
+    background-color: rgba($warning-300, 0.3);
+    color: $warning-200;
+  }
+
+  &--p3 {
+    background-color: rgba(#fff, 0.2);
+    color: #fff;
+  }
 }
 
 @keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to   { transform: translateX(0);    opacity: 1; }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes messageIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
