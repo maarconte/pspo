@@ -27,7 +27,7 @@ export default function Support() {
   if (!user) return null;
 
   const authorName =
-    user.displayName || user.email?.split('@')[0] || 'Utilisateur';
+    user.displayName || user.email?.split('@')[0] || 'User';
 
   const handleConfirmDelete = async () => {
     if (!ticketToDelete) return;
@@ -51,7 +51,7 @@ export default function Support() {
           <div>
             <h1 className="support-page__title">Support & Bug Reports</h1>
             <p className="support-page__description">
-              Signalez un problème ou suivez l'avancement des bugs remontés par la communauté.
+              Report an issue or track the progress of bugs reported by the community.
             </p>
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function Support() {
           <div className="support-page__table-col">
             <div className="support-page__table-header">
               <h2 className="support-page__section-title">
-                Tickets ouverts
+                Open Tickets
                 {tickets.length > 0 && (
                   <span className="support-page__count badge">{tickets.length}</span>
                 )}
@@ -77,11 +77,11 @@ export default function Support() {
             {isLoading ? (
               <div className="support-page__loading">
                 <span className="support-page__spinner" />
-                <span>Chargement des tickets...</span>
+                <span>Loading tickets...</span>
               </div>
             ) : error ? (
               <div className="support-page__error">
-                Une erreur est survenue lors du chargement des tickets.
+                An error occurred while loading tickets.
               </div>
             ) : (
               <TicketsTable
@@ -100,21 +100,21 @@ export default function Support() {
       {/* Modal de confirmation de suppression */}
       <Modal
         isOpen={!!ticketToDelete}
-        title="Supprimer le ticket"
+        title="Delete ticket"
         type="error"
-        labelOnConfirm="Supprimer"
-        labelOnCancel="Annuler"
+        labelOnConfirm="Delete"
+        labelOnCancel="Cancel"
         onClose={() => setTicketToDelete(null)}
         setIsClosed={() => setTicketToDelete(null)}
         onConfirm={handleConfirmDelete}
         isConfirmLoading={isDeleting}
       >
         <p>
-          Êtes-vous sûr de vouloir supprimer le ticket{' '}
-          <strong>"{ticketToDelete?.name}"</strong> ?
+          Are you sure you want to delete the ticket{' '}
+          <strong>"{ticketToDelete?.name}"</strong>?
         </p>
         <p style={{ color: '#888', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-          Cette action est irréversible. L'image associée sera également supprimée.
+          This action is irreversible. The associated image will also be deleted.
         </p>
       </Modal>
 

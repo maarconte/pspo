@@ -6,15 +6,15 @@ export type TicketStatus = 'todo' | 'in_progress' | 'done';
 export type TicketPriority = 'P1' | 'P2' | 'P3';
 
 export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
-  todo: 'À faire',
-  in_progress: 'En cours',
-  done: 'Terminé',
+  todo: 'To do',
+  in_progress: 'In progress',
+  done: 'Done',
 };
 
 export const TICKET_PRIORITY_LABELS: Record<TicketPriority, string> = {
-  P1: 'Critique',
-  P2: 'Majeur',
-  P3: 'Mineur',
+  P1: 'Critical',
+  P2: 'Major',
+  P3: 'Minor',
 };
 
 // ─── Ticket ───────────────────────────────────────────────────────────────────

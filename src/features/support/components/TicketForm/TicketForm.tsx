@@ -23,8 +23,8 @@ async function submitTicketAction(
   const description = (formData.get('description') as string)?.trim();
   const imageFile = formData.get('image') as File | null;
 
-  if (!name) return { success: false, error: 'Le nom du ticket est obligatoire.' };
-  if (!description) return { success: false, error: 'La description est obligatoire.' };
+  if (!name) return { success: false, error: 'Ticket name is required.' };
+  if (!description) return { success: false, error: 'Description is required.' };
 
   try {
     await createTicket(
@@ -34,7 +34,7 @@ async function submitTicketAction(
     );
     return { success: true, error: null };
   } catch {
-    return { success: false, error: 'Une erreur est survenue. Veuillez réessayer.' };
+    return { success: false, error: 'An error occurred. Please try again.' };
   }
 }
 
@@ -65,7 +65,7 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-      alert('Le fichier doit faire moins de 5 Mo');
+      alert('File must be less than 5MB');
       return;
     }
     setImageFile(file);
@@ -81,9 +81,9 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
   return (
     <div className="ticket-form">
       <div className="ticket-form__header">
-        <h2 className="ticket-form__title">Signaler un bug</h2>
+        <h2 className="ticket-form__title">Report a bug</h2>
         <p className="ticket-form__subtitle">
-          Décrivez le problème rencontré et notre équipe prendra en charge votre ticket.
+          Describe the issue you encountered and our team will handle your ticket.
         </p>
       </div>
 
@@ -91,14 +91,14 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
         {/* Nom */}
         <div className="ticket-form__field">
           <label htmlFor="ticket-name" className="ticket-form__label">
-            Nom du ticket <span className="ticket-form__required">*</span>
+            Ticket name <span className="ticket-form__required">*</span>
           </label>
           <input
             id="ticket-name"
             name="name"
             type="text"
             className="ticket-form__input"
-            placeholder="Ex : Erreur lors du chargement du quiz"
+            placeholder="e.g., Error while loading the quiz"
             required
             disabled={isPending}
           />
@@ -113,7 +113,7 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
             id="ticket-description"
             name="description"
             className="ticket-form__textarea"
-            placeholder="Décrivez le bug en détail : contexte, étapes pour reproduire, comportement attendu..."
+            placeholder="Describe the bug in detail: context, steps to reproduce, expected behavior..."
             rows={5}
             required
             disabled={isPending}
@@ -122,7 +122,7 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
 
         {/* Image */}
         <div className="ticket-form__field">
-          <label className="ticket-form__label">Capture d'écran (optionnel)</label>
+          <label className="ticket-form__label">Screenshot (optional)</label>
           {imagePreview ? (
             <div className="ticket-form__image-preview">
               <img src={imagePreview} alt="Preview" />
@@ -130,7 +130,7 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
                 type="button"
                 className="ticket-form__image-remove"
                 onClick={clearImage}
-                aria-label="Supprimer l'image"
+                aria-label="Remove image"
               >
                 <X size={16} />
               </button>
@@ -142,8 +142,8 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
               onClick={() => fileInputRef.current?.click()}
             >
               <ImagePlus size={32} className="ticket-form__upload-icon" />
-              <span>Cliquez pour ajouter une image</span>
-              <span className="ticket-form__upload-hint">PNG, JPG, WEBP · max 5 Mo</span>
+              <span>Click to add an image</span>
+              <span className="ticket-form__upload-hint">PNG, JPG, WEBP · max 5MB</span>
             </button>
           )}
           <input
@@ -164,7 +164,7 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
         )}
         {state.success && (
           <div className="ticket-form__success" role="status">
-            ✓ Ticket créé avec succès !
+            ✓ Ticket created successfully!
           </div>
         )}
 
@@ -179,7 +179,7 @@ export const TicketForm = ({ authorId, authorName }: TicketFormProps) => {
           ) : (
             <Send size={18} />
           )}
-          {isPending ? 'Envoi en cours...' : 'Envoyer le ticket'}
+          {isPending ? 'Sending...' : 'Send ticket'}
         </button>
       </form>
     </div>

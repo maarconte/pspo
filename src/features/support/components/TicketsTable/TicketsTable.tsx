@@ -50,7 +50,7 @@ const priorityClass: Record<TicketPriority, string> = {
 
 const formatDate = (ts: any): string => {
   if (!ts?.toDate) return '—';
-  return ts.toDate().toLocaleDateString('fr-FR', {
+  return ts.toDate().toLocaleDateString('en-US', {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -81,7 +81,7 @@ export const TicketsTable = ({
         ),
       }),
       columnHelper.accessor('authorName', {
-        header: 'Auteur',
+        header: 'Author',
         cell: (info) => (
           <div className="tickets-table__author">
             <div className="tickets-table__author-avatar">
@@ -101,7 +101,7 @@ export const TicketsTable = ({
         },
       }),
       columnHelper.accessor('status', {
-        header: 'Statut',
+        header: 'Status',
         cell: (info) => {
           const ticket = info.row.original;
           return canEditTicket ? (
@@ -112,7 +112,7 @@ export const TicketsTable = ({
               onChange={(e) =>
                 onUpdate(ticket.id, { status: e.target.value as TicketStatus })
               }
-              aria-label={`Modifier le statut de ${ticket.name}`}
+              aria-label={`Change status of ${ticket.name}`}
             >
               {STATUS_OPTIONS.map((s) => (
                 <option key={s} value={s}>
@@ -128,7 +128,7 @@ export const TicketsTable = ({
         },
       }),
       columnHelper.accessor('priority', {
-        header: 'Priorité',
+        header: 'Priority',
         cell: (info) => {
           const ticket = info.row.original;
           return canEditTicket ? (
@@ -139,7 +139,7 @@ export const TicketsTable = ({
               onChange={(e) =>
                 onUpdate(ticket.id, { priority: e.target.value as TicketPriority })
               }
-              aria-label={`Modifier la priorité de ${ticket.name}`}
+              aria-label={`Change priority of ${ticket.name}`}
             >
               {PRIORITY_OPTIONS.map((p) => (
                 <option key={p} value={p}>
@@ -168,7 +168,7 @@ export const TicketsTable = ({
               <button
                 className="tickets-table__action-btn tickets-table__action-btn--detail"
                 onClick={() => onOpenDetail(ticket)}
-                title="Ouvrir le détail"
+                title="Open details"
               >
                 <MessageSquare size={16} />
               </button>
@@ -177,7 +177,7 @@ export const TicketsTable = ({
                 <button
                   className="tickets-table__action-btn tickets-table__action-btn--expand"
                   onClick={() => setExpandedRow(isExpanded ? null : ticket.id)}
-                  title={isExpanded ? 'Réduire' : 'Voir la description'}
+                  title={isExpanded ? 'Collapse' : 'View description'}
                 >
                   {isExpanded ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -187,7 +187,7 @@ export const TicketsTable = ({
                 <button
                   className="tickets-table__action-btn tickets-table__action-btn--delete"
                   onClick={() => onDelete(ticket)}
-                  title="Supprimer"
+                  title="Delete"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -215,8 +215,8 @@ export const TicketsTable = ({
     return (
       <div className="tickets-table__empty">
         <MessageSquare size={40} strokeWidth={1.2} />
-        <p>Aucun ticket pour le moment.</p>
-        <span>Soyez le premier à signaler un bug !</span>
+        <p>No tickets at the moment.</p>
+        <span>Be the first to report a bug!</span>
       </div>
     );
   }

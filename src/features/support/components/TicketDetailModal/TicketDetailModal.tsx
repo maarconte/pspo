@@ -67,7 +67,7 @@ export const TicketDetailModal = ({
   ): Promise<MessageFormState> => {
     if (!ticket) return prevState;
     const content = (formData.get('message') as string)?.trim();
-    if (!content) return { error: 'Le message ne peut pas être vide.' };
+    if (!content) return { error: 'Message cannot be empty.' };
 
     try {
       await sendMessage(ticket.id, {
@@ -78,7 +78,7 @@ export const TicketDetailModal = ({
       });
       return { error: null };
     } catch {
-      return { error: 'Erreur lors de l\'envoi du message.' };
+      return { error: 'Error while sending message.' };
     }
   };
 
@@ -91,7 +91,7 @@ export const TicketDetailModal = ({
 
   const formatTime = (ts: any) => {
     if (!ts?.toDate) return '';
-    return ts.toDate().toLocaleString('fr-FR', {
+    return ts.toDate().toLocaleString('en-US', {
       day: '2-digit',
       month: 'short',
       hour: '2-digit',
@@ -123,14 +123,14 @@ export const TicketDetailModal = ({
                 <span className={`badge badge--${ticket.priority.toLowerCase()}`}>
                   {ticket.priority}
                 </span>
-                <span className="ticket-modal__author">par {ticket.authorName}</span>
+                <span className="ticket-modal__author">by {ticket.authorName}</span>
               </div>
             </div>
           </div>
           <button
             className="ticket-modal__close"
             onClick={onClose}
-            aria-label="Fermer"
+            aria-label="Close"
           >
             <X size={20} />
           </button>
@@ -144,7 +144,7 @@ export const TicketDetailModal = ({
               <a href={ticket.imageUrl} target="_blank" rel="noopener noreferrer">
                 <img
                   src={ticket.imageUrl}
-                  alt="Capture d'écran du bug"
+                  alt="Bug screenshot"
                   className="ticket-modal__screenshot"
                 />
               </a>
@@ -155,11 +155,11 @@ export const TicketDetailModal = ({
         {/* Messages */}
         <div className="ticket-modal__messages">
           {isLoading ? (
-            <div className="ticket-modal__loading">Chargement...</div>
+            <div className="ticket-modal__loading">Loading...</div>
           ) : messages.length === 0 ? (
             <div className="ticket-modal__no-messages">
               <MessageSquare size={32} strokeWidth={1.2} />
-              <p>Aucun message pour ce ticket.</p>
+              <p>No messages for this ticket.</p>
             </div>
           ) : (
             messages.map((msg) => {
@@ -193,8 +193,8 @@ export const TicketDetailModal = ({
               className="ticket-modal__compose-input"
               placeholder={
                 canInitiateMessage
-                  ? 'Demandez des précisions à l\'auteur...'
-                  : 'Répondre à l\'équipe...'
+                  ? 'Ask the author for details...'
+                  : 'Reply to the team...'
               }
               disabled={isSending}
               autoComplete="off"
@@ -204,7 +204,7 @@ export const TicketDetailModal = ({
               type="submit"
               className="ticket-modal__compose-send"
               disabled={isSending}
-              aria-label="Envoyer"
+              aria-label="Send"
             >
               {isSending ? <span className="ticket-modal__spinner" /> : <Send size={18} />}
             </button>
@@ -214,7 +214,7 @@ export const TicketDetailModal = ({
           </form>
         ) : (
           <div className="ticket-modal__readonly-notice">
-            Seul l'auteur et l'équipe support peuvent échanger sur ce ticket.
+            Only the author and the support team can exchange on this ticket.
           </div>
         )}
       </div>
