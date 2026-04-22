@@ -63,7 +63,13 @@ describe("CoopDrawer Component", () => {
         expect(screen.queryByText("0")).toBeNull();
     });
 
-    it("renders the badge when participants are present", () => {
+    it("does not render the badge when only 1 participant is present", () => {
+        useCoopStore.setState({ participants: ["Alice"] });
+        renderWithRouter(<CoopDrawer />);
+        expect(screen.queryByText("1")).toBeNull();
+    });
+
+    it("renders the badge when multiple participants are present", () => {
         useCoopStore.setState({ participants: ["Alice", "Bob"] });
         renderWithRouter(<CoopDrawer />);
         expect(screen.getByText("2")).toBeDefined();
@@ -153,23 +159,34 @@ describe("CoopDrawer Component", () => {
         expect(useCoopStore.getState().participants).not.toContain("Alice");
     });
 
-    it("shows suggestion 'Add automatically' when user is logged in", () => {
-        // Mock user
+    it("automatically adds user when logged in and not in participants", async () => {
         useUserStore.setState({
             user: { displayName: "John Doe", email: "john@example.com" } as any
         });
-        useCoopStore.setState({ isOpen: true, participants: [] });
+        useCoopStore.setState({ participants: [] });
 
         renderWithRouter(<CoopDrawer />);
         
-        expect(screen.getByText(/Welcome back/)).toBeDefined();
-        expect(screen.getByText("Add automatically")).toBeDefined();
-
-        const addAutoBtn = screen.getByText("Add automatically");
-        fireEvent.click(addAutoBtn);
-
         expect(useCoopStore.getState().participants).toContain("John Doe");
-        // Suggestion should disappear (but we'd need a re-render or to check state)
-        expect(useCoopStore.getState().participants.length).toBe(1);
+    });
+
+    it("allows manual removal after auto-add without re-adding immediately", async () => {
+        useUserStore.setState({
+            user: { displayName: "John Doe", email: "john@example.com" } as any
+        });
+        useCoopStore.setState({ participants: [] });
+
+        const { rerender } = renderWithRouter(<CoopDrawer />);
+        
+        // Should be added
+        expect(useCoopStore.getState().participants).toContain("John Doe");
+
+        // Remove manually
+        act(() => {
+            useCoopStore.getState().removeParticipant(0);
+        });
+
+        // Rerender or wait
+        expect(useCoopStore.getState().participants).not.toContain("John Doe");
     });
 });

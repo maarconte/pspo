@@ -188,7 +188,7 @@ export default function Quizz() {
   const nextQuestion = () => {
     if (currentQuestion < (questions?.length || 0) - 1) {
       handleQuestionChange(currentQuestion + 1);
-      if (participants.length > 0) {
+      if (participants.length > 1) {
         nextTurn();
       }
     } else {
@@ -360,7 +360,7 @@ export default function Quizz() {
       </Modal>
 
       {/* Coop Participant Display */}
-      {!isFinished && currentParticipant && (
+      {!isFinished && participants.length > 1 && currentParticipant && (
         <div
           className={`coop-current-participant ${open ? "drawer-open" : ""}`}
         >
