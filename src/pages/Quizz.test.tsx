@@ -154,13 +154,10 @@ describe("Quizz Component - Coop Mode", () => {
     vi.clearAllMocks();
   });
 
-  it("displays the current participant name when coop mode is active (2+ participants)", () => {
+  it("displays the current participant name based on question index (2+ participants)", () => {
     vi.mocked(useCoopStore).mockImplementation((selector: any) => {
       const state = {
         participants: ["Alice", "Bob"],
-        currentIndex: 0,
-        nextTurn: vi.fn(),
-        resetTurn: vi.fn(),
       };
       return selector ? selector(state) : state;
     });
@@ -171,42 +168,62 @@ describe("Quizz Component - Coop Mode", () => {
       </MemoryRouter>
     );
 
+    // Q1 (index 0) -> Alice
     expect(screen.getByText("Alice")).toBeDefined();
-  });
 
-  it("calls nextTurn() when clicking 'Next' if multiple participants are present", () => {
-    const nextTurnMock = vi.fn();
-    vi.mocked(useCoopStore).mockImplementation((selector: any) => {
-      const state = {
-        participants: ["Alice", "Bob"],
-        currentIndex: 0,
-        nextTurn: nextTurnMock,
-        resetTurn: vi.fn(),
-      };
-      return selector ? selector(state) : state;
-    });
-
-    render(
-      <MemoryRouter>
-        <Quizz />
-      </MemoryRouter>
-    );
-
+    // Navigate to Q2 (index 1) -> Bob
     const nextButton = screen.getByText("Next");
     act(() => {
       fireEvent.click(nextButton);
     });
+    expect(screen.getByText("Bob")).toBeDefined();
 
-    expect(nextTurnMock).toHaveBeenCalled();
+    // Navigate back to Q1 -> Alice
+    const prevButton = screen.getByText("Previous");
+    act(() => {
+      fireEvent.click(prevButton);
+    });
+    expect(screen.getByText("Alice")).toBeDefined();
+  });
+
+  it("updates participant name when jumping to a question", () => {
+    vi.mocked(useCoopStore).mockImplementation((selector: any) => {
+      const state = {
+        participants: ["Alice", "Bob", "Charlie"],
+      };
+      return selector ? selector(state) : state;
+    });
+
+    render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+
+    // Q1 -> Alice
+    expect(screen.getByText("Alice")).toBeDefined();
+
+    // Simulate jumping to Q3 (index 2) -> Charlie
+    // In Quizz.tsx, handleQuestionChange(2) would happen via Drawer.
+    // We can't easily click the Drawer items here without more setup, 
+    // but we can verify that the derivation logic is correct.
+    // Let's use the 'Next' button twice.
+    const nextButton = screen.getByText("Next");
+    act(() => {
+      fireEvent.click(nextButton); // Q2 -> Bob
+    });
+    expect(screen.getByText("Bob")).toBeDefined();
+    
+    act(() => {
+      fireEvent.click(nextButton); // Q3 -> Charlie
+    });
+    expect(screen.getByText("Charlie")).toBeDefined();
   });
 
   it("does NOT display participant name if only one participant", () => {
     vi.mocked(useCoopStore).mockImplementation((selector: any) => {
       const state = {
         participants: ["Alice"],
-        currentIndex: 0,
-        nextTurn: vi.fn(),
-        resetTurn: vi.fn(),
       };
       return selector ? selector(state) : state;
     });
@@ -220,39 +237,10 @@ describe("Quizz Component - Coop Mode", () => {
     expect(screen.queryByText("Alice")).toBeNull();
   });
 
-  it("does NOT call nextTurn() when clicking 'Next' if only one participant is present", () => {
-    const nextTurnMock = vi.fn();
-    vi.mocked(useCoopStore).mockImplementation((selector: any) => {
-      const state = {
-        participants: ["Alice"],
-        currentIndex: 0,
-        nextTurn: nextTurnMock,
-        resetTurn: vi.fn(),
-      };
-      return selector ? selector(state) : state;
-    });
-
-    render(
-      <MemoryRouter>
-        <Quizz />
-      </MemoryRouter>
-    );
-
-    const nextButton = screen.getByText("Next");
-    act(() => {
-      fireEvent.click(nextButton);
-    });
-
-    expect(nextTurnMock).not.toHaveBeenCalled();
-  });
-
   it("does NOT display participant name if no participants", () => {
     vi.mocked(useCoopStore).mockImplementation((selector: any) => {
       const state = {
         participants: [],
-        currentIndex: 0,
-        nextTurn: vi.fn(),
-        resetTurn: vi.fn(),
       };
       return selector ? selector(state) : state;
     });

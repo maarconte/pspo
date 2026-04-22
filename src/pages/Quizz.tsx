@@ -43,8 +43,8 @@ export default function Quizz() {
   const { mutate: saveQuizSession } = useSaveQuizSession();
   const setTotalTimeSpent = useQuestionsStore((s) => s.setTotalTimeSpent);
 
-  const { participants, currentIndex, nextTurn, resetTurn } = useCoopStore();
-  const currentParticipant = participants[currentIndex];
+  const { participants } = useCoopStore();
+  const currentParticipant = participants.length > 0 ? participants[currentQuestion % participants.length] : null;
 
   const notificationContent = (time: string) => (
     <div className="toast-content">
@@ -181,16 +181,12 @@ export default function Quizz() {
     setIsFinished(false);
     setIsPaused(false);
     timeSpentRef.current = 0;
-    resetTurn();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const nextQuestion = () => {
     if (currentQuestion < (questions?.length || 0) - 1) {
       handleQuestionChange(currentQuestion + 1);
-      if (participants.length > 1) {
-        nextTurn();
-      }
     } else {
       finishQuizz();
     }
