@@ -54,6 +54,10 @@ describe("QuizzScore", () => {
         setScore: setScoreMock,
         userAnswers: mockUserAnswers,
         questions: mockQuestions,
+        getSuccessPercentage: () => {
+          const answeredCount = mockUserAnswers.filter((a) => a?.answer !== undefined).length;
+          return answeredCount > 0 ? Math.min(100, Math.round((state.score / answeredCount) * 100)) : 0;
+        }
       };
       return selector ? selector(state) : state;
     });
@@ -83,6 +87,10 @@ describe("QuizzScore", () => {
         setScore: setScoreMock,
         userAnswers: mockUserAnswers,
         questions: mockQuestions,
+        getSuccessPercentage: () => {
+          const answeredCount = mockUserAnswers.filter((a) => a?.answer !== undefined).length;
+          return answeredCount > 0 ? Math.min(100, Math.round((state.score / answeredCount) * 100)) : 0;
+        }
       };
       return selector ? selector(state) : state;
     });
@@ -108,6 +116,10 @@ describe("QuizzScore", () => {
         setScore: setScoreMock,
         userAnswers: mockUserAnswers,
         questions: mockQuestions,
+        getSuccessPercentage: () => {
+          const answeredCount = mockUserAnswers.filter((a) => a?.answer !== undefined).length;
+          return answeredCount > 0 ? Math.min(100, Math.round((state.score / answeredCount) * 100)) : 0;
+        }
       };
       return selector ? selector(state) : state;
     });
@@ -137,6 +149,10 @@ describe("QuizzScore", () => {
         setScore: setScoreMock,
         userAnswers: mockUserAnswers,
         questions: mockQuestions,
+        getSuccessPercentage: () => {
+          const answeredCount = mockUserAnswers.filter((a) => a?.answer !== undefined).length;
+          return answeredCount > 0 ? Math.min(100, Math.round((state.score / answeredCount) * 100)) : 0;
+        }
       };
       return selector ? selector(state) : state;
     });

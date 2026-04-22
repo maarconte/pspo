@@ -24,6 +24,7 @@ vi.mock("../stores/useQuestionsStore", () => ({
       setScore: vi.fn(),
       formation: "pspo-I",
       calculateScore: vi.fn(() => 0),
+      getSuccessPercentage: vi.fn(() => 0),
       setAnswer: vi.fn(),
       toggleBookmark: vi.fn(),
     };
