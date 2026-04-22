@@ -104,23 +104,6 @@ export const CoopDrawer: React.FC = () => {
               Collaboration tool: enter the names of the participants.
             </p>
 
-            {user && currentUserName && !isUserInParticipants && (
-              <div className="coop-drawer__suggestion">
-                <div className="coop-drawer__suggestion-text">
-                  <span>Welcome back, <strong>{currentUserName}</strong>!</span>
-                </div>
-                <Button
-                  label="Add automatically"
-                  icon={<Plus size={16} />}
-                  onClick={() => addParticipant(currentUserName)}
-                  type={Button_Type.PRIMARY}
-                  style={Button_Style.TONAL}
-                  size="S"
-                  className="w-100 mt-2"
-                />
-              </div>
-            )}
-
             <div className="coop-drawer__form">
               <div className={`coop-drawer__input-group ${error ? "has-error" : ""}`}>
                 <Input
