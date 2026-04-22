@@ -26,6 +26,7 @@ interface QuestionsState {
 	setAnswer: (index: number, answer: UserAnswer['answer']) => void;
 	toggleBookmark: (index: number) => void;
 	calculateScore: () => number;
+	getSuccessPercentage: () => number;
 	startNewExam: () => void;
 }
 
@@ -144,6 +145,17 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 			}
 		});
 		return currentScore;
+	},
+
+	getSuccessPercentage: () => {
+		const score = get().calculateScore();
+		const userAnswers = get().userAnswers;
+		const answeredCount = userAnswers.filter((a) => a?.answer !== undefined).length;
+		
+		if (answeredCount === 0) return 0;
+		
+		const percentage = Math.round((score / answeredCount) * 100);
+		return Math.min(100, percentage);
 	},
 
 	startNewExam: () => {

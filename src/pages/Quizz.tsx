@@ -22,7 +22,7 @@ export default function Quizz() {
   const questions = useQuestionsStore((s) => s.questions);
   const setScore = useQuestionsStore((s) => s.setScore);
   const formation = useQuestionsStore((s) => s.formation);
-  const calculateScore = useQuestionsStore((s) => s.calculateScore);
+  const getSuccessPercentage = useQuestionsStore((s) => s.getSuccessPercentage);
   const userAnswers = useQuestionsStore((s) => s.userAnswers);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -230,12 +230,8 @@ export default function Quizz() {
               const answeredCount = userAnswers.filter(
                 (a) => a?.answer !== undefined,
               ).length;
-              const correctCount = calculateScore();
-              const successPercent =
-                answeredCount > 0
-                  ? Math.round((correctCount / answeredCount) * 100)
-                  : 0;
-              const isPassed = successPercent >= 85;
+              const correctCount = getSuccessPercentage();
+              const isPassed = correctCount >= 85;
               return (
                 <div className="d-flex gap-1 align-items-center flex-wrap">
                   {showAnswer && (
@@ -252,7 +248,7 @@ export default function Quizz() {
                       value={
                         answeredCount === 0
                           ? "—"
-                          : `${successPercent}%`
+                          : `${correctCount}%`
                       }
                       label="Current Score"
                     />
