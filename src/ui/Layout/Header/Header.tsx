@@ -52,7 +52,7 @@ const Header: FC<HeaderProps> = () => {
                 <Bug size={24} />
                 <NotificationBadge />
               </Link>
-              <Button onClick={logout} icon={<LogOut size={16} />} type={Button_Type.ERROR} style={Button_Style.TONAL} label="Logout" />
+              <Button onClick={logout} icon={<LogOut size={16} />} type={Button_Type.ERROR} style={Button_Style.TONAL} isIconButton />
           </nav>
           </div>
         ) : (
