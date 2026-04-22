@@ -122,7 +122,7 @@
       font-size: 0.9rem;
       color: $primary-800;
       margin-bottom: $SPACE_1;
-      
+
       strong {
         color: $primary-600;
       }
@@ -203,7 +203,7 @@
   right: $SPACE_6;
   z-index: 1050; // Above header
   padding: $SPACE_2 $SPACE_4;
-  background: rgba(white, 0.8);
+  background-color: $warning-500;
   backdrop-filter: blur(8px);
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -218,7 +218,7 @@
     margin: 0;
     font-size: 1.5rem; // fs-4 equivalent
     font-weight: 700; // fw-bold
-    color: $primary-500;
+    color: $warning-900;
     text-transform: capitalize;
   }
 }

@@ -14,7 +14,7 @@ import { useQuizStatsStore } from "../stores/useQuizStatsStore";
 import { useUserStore } from "../stores/useUserStore";
 import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
 import { useCoopStore } from "../stores/useCoopStore";
-import { AlertTriangle, Trophy } from "lucide-react";
+import { AlertTriangle, Trophy, User } from "lucide-react";
 import StatCard from "../ui/StatCard/StatCard";
 
 export default function Quizz() {
@@ -360,7 +360,7 @@ export default function Quizz() {
         <div
           className={`coop-current-participant ${open ? "drawer-open" : ""}`}
         >
-          <p className="coop-current-participant__name">{currentParticipant}</p>
+          <p className="coop-current-participant__name"><User size={24}/> {currentParticipant}</p>
         </div>
       )}
     </div>
