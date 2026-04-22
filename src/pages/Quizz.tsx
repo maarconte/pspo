@@ -161,7 +161,7 @@ export default function Quizz() {
     handleEndQuestion(currentQuestion);
     if (shouldNotify) notifyTime();
     setCurrentQuestion(newIndex);
-    setShowAnswer(false);
+    if (!isFinished) setShowAnswer(false);
 
     if (isFinished) {
       setTimeout(() => {
@@ -287,7 +287,7 @@ export default function Quizz() {
                 key={index}
                 question={question}
                 currentQuestion={index}
-                showAnswer={showAnswer}
+                showAnswer={true}
               />
             ))}
         {/* Navigation / Bottom Restart */}
