@@ -22,6 +22,7 @@ export default function Quizz() {
   const questions = useQuestionsStore((s) => s.questions);
   const setScore = useQuestionsStore((s) => s.setScore);
   const formation = useQuestionsStore((s) => s.formation);
+  const calculateScore = useQuestionsStore((s) => s.calculateScore);
   const getSuccessPercentage = useQuestionsStore((s) => s.getSuccessPercentage);
   const userAnswers = useQuestionsStore((s) => s.userAnswers);
   const [showAnswer, setShowAnswer] = useState(false);
