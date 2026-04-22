@@ -154,7 +154,7 @@ describe("Quizz Component - Coop Mode", () => {
     vi.clearAllMocks();
   });
 
-  it("displays the current participant name when coop mode is active", () => {
+  it("displays the current participant name when coop mode is active (2+ participants)", () => {
     vi.mocked(useCoopStore).mockImplementation((selector: any) => {
       const state = {
         participants: ["Alice", "Bob"],
@@ -174,7 +174,7 @@ describe("Quizz Component - Coop Mode", () => {
     expect(screen.getByText("Alice")).toBeDefined();
   });
 
-  it("calls nextTurn() when clicking 'Next' if participants are present", () => {
+  it("calls nextTurn() when clicking 'Next' if multiple participants are present", () => {
     const nextTurnMock = vi.fn();
     vi.mocked(useCoopStore).mockImplementation((selector: any) => {
       const state = {
@@ -200,6 +200,52 @@ describe("Quizz Component - Coop Mode", () => {
     expect(nextTurnMock).toHaveBeenCalled();
   });
 
+  it("does NOT display participant name if only one participant", () => {
+    vi.mocked(useCoopStore).mockImplementation((selector: any) => {
+      const state = {
+        participants: ["Alice"],
+        currentIndex: 0,
+        nextTurn: vi.fn(),
+        resetTurn: vi.fn(),
+      };
+      return selector ? selector(state) : state;
+    });
+
+    render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText("Alice")).toBeNull();
+  });
+
+  it("does NOT call nextTurn() when clicking 'Next' if only one participant is present", () => {
+    const nextTurnMock = vi.fn();
+    vi.mocked(useCoopStore).mockImplementation((selector: any) => {
+      const state = {
+        participants: ["Alice"],
+        currentIndex: 0,
+        nextTurn: nextTurnMock,
+        resetTurn: vi.fn(),
+      };
+      return selector ? selector(state) : state;
+    });
+
+    render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+
+    const nextButton = screen.getByText("Next");
+    act(() => {
+      fireEvent.click(nextButton);
+    });
+
+    expect(nextTurnMock).not.toHaveBeenCalled();
+  });
+
   it("does NOT display participant name if no participants", () => {
     vi.mocked(useCoopStore).mockImplementation((selector: any) => {
       const state = {
@@ -217,13 +263,6 @@ describe("Quizz Component - Coop Mode", () => {
       </MemoryRouter>
     );
 
-    // Current participant display is wrapped in !isFinished && currentParticipant
-    const container = screen.queryByClassName?.("coop-current-participant");
-    // Since queryByClassName isn't a standard RTL query on screen, let's just check text
-    // The component renders <p className="coop-current-participant__name">{currentParticipant}</p>
-    // If currentParticipant is undefined, nothing should be there.
-    
-    // Check for any p with that class or just confirm no participant name is there
     expect(screen.queryByText("Alice")).toBeNull();
     expect(screen.queryByText("Bob")).toBeNull();
   });

@@ -42,6 +42,18 @@ describe('useCoopStore', () => {
             expect(result.current.participants).toEqual(['Bob']);
         });
 
+        it('should not add duplicate name (case insensitive)', () => {
+            const { result } = renderHook(() => useCoopStore());
+
+            act(() => {
+                result.current.addParticipant('Alice');
+                const res = result.current.addParticipant('ALICE');
+                expect(res.success).toBe(true); // Should return true as it's already "handled"
+            });
+
+            expect(result.current.participants).toEqual(['Alice']);
+        });
+
         it('should not add empty name', () => {
             const { result } = renderHook(() => useCoopStore());
 

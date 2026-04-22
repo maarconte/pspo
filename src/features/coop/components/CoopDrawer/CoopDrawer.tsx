@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Drawer, Input, List } from "rsuite";
 import { Button } from "../../../../ui";
 import { Button_Type, Button_Style } from "../../../../ui/Button/Button.types";
@@ -29,6 +29,13 @@ export const CoopDrawer: React.FC = () => {
 
   const [newName, setNewName] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  // Auto-add current user if logged in
+  useEffect(() => {
+    if (user && currentUserName && !participants.includes(currentUserName)) {
+      addParticipant(currentUserName);
+    }
+  }, [user, currentUserName, addParticipant]); // Only run when user/name changes, not when participants list changes
 
   if (!isAllowedPath) return null;
 
@@ -70,7 +77,7 @@ export const CoopDrawer: React.FC = () => {
       >
         <Users size={18} />
         <span className="coop-tab__label">Co-op Mode</span>
-        {participants.length > 0 && (
+        {participants.length > 1 && (
           <span className="coop-tab__badge">{participants.length}</span>
         )}
       </div>

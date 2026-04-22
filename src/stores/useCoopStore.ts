@@ -25,15 +25,22 @@ export const useCoopStore = create<CoopState>()(
 
       addParticipant: (name) => {
         const { participants } = get();
+        const trimmedName = name.trim();
+        
+        if (!trimmedName) return { success: false };
+
+        if (participants.some(p => p.toLowerCase() === trimmedName.toLowerCase())) {
+          return { success: true }; // Already added, return success silently or handled by UI
+        }
+
         if (participants.length >= 30) {
           return {
             success: false,
             error: "Wow, that's a lot of people! Unfortunately, the tool is limited to 30 participants.",
           };
         }
-        if (!name.trim()) return { success: false };
 
-        set({ participants: [...participants, name.trim()] });
+        set({ participants: [...participants, trimmedName] });
         return { success: true };
       },
 
