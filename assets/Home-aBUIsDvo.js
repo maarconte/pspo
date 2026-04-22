@@ -1,0 +1,22 @@
+import{c as i,u as n,l as u,m as p,n as a,j as e,B as y}from"./index-B_vq6WOO.js";import{S as N,C as v}from"./SegmentedControl-mAtHtRaw.js";import{P as g}from"./play-B4WK_jkz.js";/**
+ * @license lucide-react v0.561.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const b=[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["line",{x1:"12",x2:"12",y1:"8",y2:"12",key:"1pkeuh"}],["line",{x1:"12",x2:"12.01",y1:"16",y2:"16",key:"4dfq90"}]],k=i("circle-alert",b);/**
+ * @license lucide-react v0.561.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const f=[["path",{d:"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z",key:"zw3jo"}],["path",{d:"M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12",key:"1wduqc"}],["path",{d:"M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17",key:"kqbvx6"}]],S=i("layers",f);/**
+ * @license lucide-react v0.561.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const z=[["circle",{cx:"12",cy:"12",r:"10",key:"1mglay"}],["circle",{cx:"12",cy:"12",r:"6",key:"1vlfrh"}],["circle",{cx:"12",cy:"12",r:"2",key:"1c9p78"}]],w=i("target",z);/**
+ * @license lucide-react v0.561.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const M=[["path",{d:"M9 14 4 9l5-5",key:"102s5s"}],["path",{d:"M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11",key:"f3b9sd"}]],P=i("undo-2",M);function E(){const o=n(s=>s.formation),c=n(s=>s.setFormation),t=n(s=>s.questions),r=n(s=>s.startNewExam),l=u(),d=p(s=>s.user),x=a(s=>s.open),m=a(s=>s.isDismissed),h=a(s=>s.isExpired()),j=()=>{!d&&!m&&!h?x():(r(),l("/quizz"))};return e.jsxs("div",{className:"home-container",children:[e.jsx("div",{className:"home-content",children:e.jsxs("div",{className:"hero-content",children:[e.jsx("h1",{className:"hero-title",children:"Study Group"}),e.jsx("p",{className:"hero-subtitle",children:"Test your knowledge and prepare for your certification"})]})}),e.jsxs("div",{className:"glass-card",children:[e.jsxs("div",{className:"selector-section",children:[e.jsx("h2",{children:"Module"}),e.jsx(N,{name:"formation",value:o,onChange:s=>{c(s)},options:[{label:"PSPO-I",value:"pspo-I"},{label:"PSM-I",value:"PSM-I"}]})]}),e.jsxs("div",{className:"bento-grid",children:[e.jsxs("div",{className:"bento-item",children:[e.jsx("div",{className:"icon-container",children:e.jsx(S,{size:24,strokeWidth:2.5})}),e.jsx("div",{className:"bento-content",children:e.jsxs("p",{children:["  ",e.jsx("strong",{children:"80 Questions "}),"  ",e.jsx("span",{children:"Randomly selected for a realistic exam simulation."})]})})]}),e.jsxs("div",{className:"bento-item",children:[e.jsx("div",{className:"icon-container",children:e.jsx(v,{size:24,strokeWidth:2.5})}),e.jsx("div",{className:"bento-content",children:e.jsxs("p",{children:[e.jsx("strong",{children:"60 Minutes "}),e.jsx("span",{children:"The timer will start as soon as the quiz begins."})]})})]}),e.jsxs("div",{className:"bento-item",children:[e.jsx("div",{className:"icon-container",children:e.jsx(w,{size:24,strokeWidth:2.5})}),e.jsx("div",{className:"bento-content",children:e.jsxs("p",{children:[e.jsx("strong",{children:"85% Required "}),e.jsx("span",{children:"Passing goal: you are allowed a maximum of 12 errors."})]})})]}),e.jsxs("div",{className:"bento-item",children:[e.jsx("div",{className:"icon-container",children:e.jsx(k,{size:24,strokeWidth:2.5})}),e.jsx("div",{className:"bento-content",children:e.jsxs("p",{children:[e.jsx("strong",{children:"Single Session "}),e.jsx("span",{children:"The exam must be completed in one go with no saving possible."})]})})]}),e.jsxs("div",{className:"bento-item",children:[e.jsx("div",{className:"icon-container",children:e.jsx(P,{size:24,strokeWidth:2.5})}),e.jsx("div",{className:"bento-content",children:e.jsxs("p",{children:[e.jsx("strong",{children:"Flexible "}),e.jsx("span",{children:"You can go back and modify your answers at any time."})]})})]})]}),e.jsx("div",{className:"start-action",children:e.jsx(y,{label:"Start Exam",icon:e.jsx(g,{size:18,fill:"currentColor"}),onClick:j,disabled:t.length===0,className:"px-4 py-3"})})]})]})}export{E as default};
+//# sourceMappingURL=Home-aBUIsDvo.js.map
