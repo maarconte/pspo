@@ -1,2 +1,0 @@
-import{j as e}from"./index-CYGiFNkt.js";const p=({value:t,onChange:i,placeholder:u,required:c,className:a,errorMessage:l,type:x,name:r,id:s,...d})=>e.jsxs("div",{className:`input-box ${a}`,children:[x==="textarea"?e.jsx("textarea",{value:t,onChange:i,required:!0,name:r,id:s||r,...d,placeholder:""}):e.jsx("input",{value:t,onChange:i,type:x,id:s||r,name:r,required:!0,...d,placeholder:""}),e.jsx("label",{htmlFor:s||r,children:u}),l&&e.jsx("span",{className:"error-message",children:l})]});export{p as I};
-//# sourceMappingURL=Input-BJElJ-69.js.map
