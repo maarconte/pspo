@@ -12,7 +12,7 @@ const actionCodeSettings = {
 	// In production, include the base path /pspo/
 	url: import.meta.env.PROD
 		? 'https://maarconte.github.io/pspo/'
-		: 'http://localhost:3000/auth/verify',
+		: 'http://localhost:3000/',
 	handleCodeInApp: true,
 };
 

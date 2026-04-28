@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../api/authService';
 import Button from '../../../../ui/Button/Button';
@@ -13,12 +13,16 @@ export const MagicLinkVerification = () => {
 	const [email, setEmail] = useState('');
 	const [needsEmail, setNeedsEmail] = useState(false);
 
+	const isVerifyingRef = useRef(false);
+
 	useEffect(() => {
 		// Minimum delay to show the loader (avoids flash)
 		const minLoadingTime = 1000; // 1 second
 		const startTime = Date.now();
 
 		const verify = async () => {
+			if (isVerifyingRef.current) return;
+			isVerifyingRef.current = true;
 			await verifyMagicLink();
 
 			// Ensure loader is shown for at least 1 second
@@ -47,6 +51,11 @@ export const MagicLinkVerification = () => {
 		try {
 			await authService.completeMagicLinkSignIn(providedEmail, url);
 			sessionStorage.removeItem('magicLinkOriginalUrl');
+
+			// Clean up the URL to prevent re-triggering the magic link flow on reload
+			const cleanUrl = new URL(window.location.href);
+			cleanUrl.search = '';
+			window.history.replaceState({}, document.title, cleanUrl.toString());
 
 			setTimeout(() => {
 				navigate('/');
