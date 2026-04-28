@@ -1,0 +1,16 @@
+name: Sync Linear ticket status
+
+on:
+  push:
+
+jobs:
+  sync-linear:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update Linear tickets to Done
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          COMMITS_JSON: ${{ toJson(github.event.commits) }}
+        run: python3 .github/scripts/linear_sync.py
