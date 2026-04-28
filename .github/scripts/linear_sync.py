@@ -58,15 +58,14 @@ done_state_id = done_state["id"]
 
 for ticket in tickets:
     issue_data = gql(
-        "query($id: String!) { issues(filter: {identifier: {eq: $id}}) { nodes { id } } }",
+        "query($id: String!) { issue(id: $id) { id } }",
         {"id": ticket},
     )
-    nodes = issue_data["issues"]["nodes"]
-    if not nodes:
+    if not issue_data.get("issue"):
         print(f"::warning::Ticket {ticket} not found in Linear, skipping")
         continue
 
-    issue_id = nodes[0]["id"]
+    issue_id = issue_data["issue"]["id"]
     update_data = gql(
         "mutation($id: String!, $stateId: String!) { issueUpdate(id: $id, input: {stateId: $stateId}) { success } }",
         {"id": issue_id, "stateId": done_state_id},
