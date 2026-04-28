@@ -1,37 +1,26 @@
 import {
-	sendSignInLinkToEmail,
 	isSignInWithEmailLink,
 	signInWithEmailLink,
 	signOut as firebaseSignOut,
 	User
 } from 'firebase/auth';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { auth } from '../../../lib/firebase';
 
-// Magic Link configuration
-const actionCodeSettings = {
-	// In production, include the base path /pspo/
-	url: import.meta.env.PROD
-		? 'https://maarconte.github.io/pspo/'
-		: 'http://localhost:3000/',
-	handleCodeInApp: true,
-};
-
 export const authService = {
-	/**
-	 * Sends a Magic Link to the provided email address
-	 * @param email - User's email address
-	 * @returns Promise<void>
-	 * @throws Error if email is invalid or sending fails
-	 */
 	sendMagicLink: async (email: string): Promise<void> => {
-		// Basic email validation
 		if (!email || !email.includes('@')) {
 			throw new Error('Invalid email address');
 		}
 
+		const continueUrl = import.meta.env.PROD
+			? 'https://maarconte.github.io/pspo/'
+			: 'http://localhost:3000/';
+
 		try {
-			await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-			// Save email locally to complete sign-in
+			const functions = getFunctions();
+			const sendCustomMagicLink = httpsCallable(functions, 'sendCustomMagicLink');
+			await sendCustomMagicLink({ email, continueUrl });
 			window.localStorage.setItem('emailForSignIn', email);
 		} catch (error: any) {
 			console.error('Error sending Magic Link:', error);
