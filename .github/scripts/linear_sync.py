@@ -38,17 +38,17 @@ def gql(query, variables=None):
     return data["data"]
 
 
-# Fetch Done state ID once for the whole run
-state_data = gql(
-    'query($name: String!, $key: String!) { workflowStates(filter: {name: {eq: $name}, team: {key: {eq: $key}}}) { nodes { id } } }',
-    {"name": TARGET_STATE, "key": TEAM_KEY},
+# Fetch Done state ID by navigating team → states (workflowStates doesn't support team filter)
+team_data = gql(
+    'query($key: String!, $name: String!) { teams(filter: {key: {eq: $key}}) { nodes { states(filter: {name: {eq: $name}}) { nodes { id } } } } }',
+    {"key": TEAM_KEY, "name": TARGET_STATE},
 )
-states = state_data["workflowStates"]["nodes"]
-if not states:
+teams = team_data["teams"]["nodes"]
+if not teams or not teams[0]["states"]["nodes"]:
     print(f"::error::State '{TARGET_STATE}' not found for team {TEAM_KEY}")
     raise SystemExit(1)
 
-done_state_id = states[0]["id"]
+done_state_id = teams[0]["states"]["nodes"][0]["id"]
 
 for ticket in tickets:
     issue_data = gql(
