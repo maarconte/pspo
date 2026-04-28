@@ -27,7 +27,7 @@ def gql(query, variables=None):
         LINEAR_API,
         data=body,
         headers={
-            "Authorization": f"Bearer {api_key}",
+            "Authorization": api_key,
             "Content-Type": "application/json",
         },
     )
