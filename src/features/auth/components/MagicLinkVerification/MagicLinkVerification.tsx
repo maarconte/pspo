@@ -35,8 +35,9 @@ export const MagicLinkVerification = () => {
 		setIsVerifying(true);
 		setError(null);
 
-		// Check if it's a valid Magic Link
-		if (!authService.isMagicLink()) {
+		const url = sessionStorage.getItem('magicLinkOriginalUrl') ?? window.location.href;
+
+		if (!authService.isMagicLink(url)) {
 			console.error('❌ Not a valid Magic Link');
 			setError('Invalid sign-in link');
 			setIsVerifying(false);
@@ -44,11 +45,11 @@ export const MagicLinkVerification = () => {
 		}
 
 		try {
-			await authService.completeMagicLinkSignIn(providedEmail);
+			await authService.completeMagicLinkSignIn(providedEmail, url);
+			sessionStorage.removeItem('magicLinkOriginalUrl');
 
-			// Wait a bit for the store to update
 			setTimeout(() => {
-				navigate('/'); // Redirect to home page
+				navigate('/');
 			}, 500);
 		} catch (error: any) {
 			console.error('❌ Verification error:', error.message);

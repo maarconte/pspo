@@ -39,21 +39,11 @@ export const authService = {
 		}
 	},
 
-	/**
-	 * Checks if the current URL is a Magic Link sign-in link
-	 * @returns boolean
-	 */
-	isMagicLink: (): boolean => {
-		return isSignInWithEmailLink(auth, window.location.href);
+	isMagicLink: (url?: string): boolean => {
+		return isSignInWithEmailLink(auth, url ?? window.location.href);
 	},
 
-	/**
-	 * Completes the sign-in with the Magic Link
-	 * @param email - User's email (optional if saved)
-	 * @returns Promise<User>
-	 * @throws Error if link is invalid or expired
-	 */
-	completeMagicLinkSignIn: async (email?: string): Promise<User> => {
+	completeMagicLinkSignIn: async (email?: string, url?: string): Promise<User> => {
 		// Get saved email if not provided
 		let userEmail = email;
 		if (!userEmail) {
@@ -65,7 +55,7 @@ export const authService = {
 		}
 
 		try {
-			const result = await signInWithEmailLink(auth, userEmail, window.location.href);
+			const result = await signInWithEmailLink(auth, userEmail, url ?? window.location.href);
 			// Clean up saved email
 			window.localStorage.removeItem('emailForSignIn');
 			return result.user;

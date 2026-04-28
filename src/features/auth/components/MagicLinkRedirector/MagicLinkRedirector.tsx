@@ -7,9 +7,8 @@ export const MagicLinkRedirector = () => {
 
   useEffect(() => {
     if (authService.isMagicLink()) {
-      console.log('🔗 Magic Link detected on root, redirecting to verification page...');
-      // Preserve the query parameters which contain the auth code
-      navigate('/auth/verify' + window.location.search);
+      sessionStorage.setItem('magicLinkOriginalUrl', window.location.href);
+      navigate('/auth/verify');
     }
   }, [navigate]);
 
