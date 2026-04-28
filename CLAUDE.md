@@ -89,6 +89,18 @@ Three functions in `functions/src/index.ts`:
 
 Vite 5, base path is `/pspo/` in production and `/` in dev. SCSS uses the modern Sass compiler API (not legacy). TypeScript strict mode is enabled throughout.
 
+## Git Convention
+
+Every commit message must reference a Linear ticket ID (`THA-XXX`) somewhere on the first line. This is enforced by a Husky `commit-msg` hook.
+
+Valid formats:
+
+- `feat: THA-42 ajout page résultats`
+- `fix(auth): correction login [THA-7]`
+- `THA-100 refactor store`
+
+Merge and revert commits are exempt. For WIP commits without a ticket: `git commit --no-verify`.
+
 ## Code Quality Standards
 
 - **No `any`** — use proper types.
