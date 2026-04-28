@@ -31,24 +31,30 @@ def gql(query, variables=None):
             "Content-Type": "application/json",
         },
     )
-    with urllib.request.urlopen(req) as resp:
-        data = json.loads(resp.read())
+    try:
+        with urllib.request.urlopen(req) as resp:
+            data = json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        print(f"::error::Linear API {e.code}: {e.read().decode()}")
+        raise SystemExit(1)
     if "errors" in data:
-        raise RuntimeError(data["errors"])
+        print(f"::error::GraphQL errors: {json.dumps(data['errors'])}")
+        raise SystemExit(1)
     return data["data"]
 
 
-# Fetch Done state ID by navigating team → states (workflowStates doesn't support team filter)
-team_data = gql(
-    'query($key: String!, $name: String!) { teams(filter: {key: {eq: $key}}) { nodes { states(filter: {name: {eq: $name}}) { nodes { id } } } } }',
-    {"key": TEAM_KEY, "name": TARGET_STATE},
+# Fetch all workflow states and filter locally — avoids relying on filter schema
+states_data = gql("{ workflowStates { nodes { id name team { key } } } }")
+done_state = next(
+    (s for s in states_data["workflowStates"]["nodes"]
+     if s["name"] == TARGET_STATE and s["team"]["key"] == TEAM_KEY),
+    None,
 )
-teams = team_data["teams"]["nodes"]
-if not teams or not teams[0]["states"]["nodes"]:
+if not done_state:
     print(f"::error::State '{TARGET_STATE}' not found for team {TEAM_KEY}")
     raise SystemExit(1)
 
-done_state_id = teams[0]["states"]["nodes"][0]["id"]
+done_state_id = done_state["id"]
 
 for ticket in tickets:
     issue_data = gql(
