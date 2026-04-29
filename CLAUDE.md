@@ -91,17 +91,7 @@ Vite 5, base path is `/pspo/` in production and `/` in dev. SCSS uses the modern
 
 ## Git Convention
 
-Every commit message must reference a Linear ticket ID (`THA-XXX`) somewhere on the first line. This is enforced by a Husky `commit-msg` hook. On push, a GitHub Actions workflow (`.github/workflows/linear-sync.yml`) automatically transitions the mentioned tickets to **Done** via the Linear API.
-
-**Required GitHub secret:** `LINEAR_API_KEY` — generate a personal API key in Linear → Settings → API.
-
-Valid formats:
-
-- `feat: THA-42 ajout page résultats`
-- `fix(auth): correction login [THA-7]`
-- `THA-100 refactor store`
-
-Merge and revert commits are exempt. For WIP commits without a ticket: `git commit --no-verify`.
+No enforced commit message format. The `commit-msg` Husky hook has been removed.
 
 ## Code Quality Standards
 
