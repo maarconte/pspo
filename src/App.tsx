@@ -3,7 +3,7 @@ import "rsuite/dist/rsuite.min.css";
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, HashRouter as Router, Routes } from "react-router-dom";
 
 import AuthChecker from "./features/auth/components/Auth/AuthChecker";
 import { Header, Footer, Loader } from "./ui";
@@ -21,7 +21,7 @@ import { InfoPopup } from "./features/info-popup/components/InfoPopup/InfoPopup"
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router basename={import.meta.env.BASE_URL}>
+      <Router>
         <CoopDrawer />
         <DocumentationDrawer />
         <InfoPopup />

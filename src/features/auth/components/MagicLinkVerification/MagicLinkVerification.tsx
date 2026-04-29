@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../api/authService';
 import Button from '../../../../ui/Button/Button';
 import { Button_Type } from '../../../../ui/Button/Button.types';
 import Input from '../../../../ui/Input/Input';
 import './style.scss';
+import { trackEvent } from '../../../../lib/analytics';
 
 export const MagicLinkVerification = () => {
 	const navigate = useNavigate();
@@ -13,12 +14,16 @@ export const MagicLinkVerification = () => {
 	const [email, setEmail] = useState('');
 	const [needsEmail, setNeedsEmail] = useState(false);
 
+	const isVerifyingRef = useRef(false);
+
 	useEffect(() => {
 		// Minimum delay to show the loader (avoids flash)
 		const minLoadingTime = 1000; // 1 second
 		const startTime = Date.now();
 
 		const verify = async () => {
+			if (isVerifyingRef.current) return;
+			isVerifyingRef.current = true;
 			await verifyMagicLink();
 
 			// Ensure loader is shown for at least 1 second
@@ -35,8 +40,9 @@ export const MagicLinkVerification = () => {
 		setIsVerifying(true);
 		setError(null);
 
-		// Check if it's a valid Magic Link
-		if (!authService.isMagicLink()) {
+		const url = sessionStorage.getItem('magicLinkOriginalUrl') ?? window.location.href;
+
+		if (!authService.isMagicLink(url)) {
 			console.error('❌ Not a valid Magic Link');
 			setError('Invalid sign-in link');
 			setIsVerifying(false);
@@ -44,11 +50,17 @@ export const MagicLinkVerification = () => {
 		}
 
 		try {
-			await authService.completeMagicLinkSignIn(providedEmail);
+			await authService.completeMagicLinkSignIn(providedEmail, url);
+			trackEvent('login_success');
+			sessionStorage.removeItem('magicLinkOriginalUrl');
 
-			// Wait a bit for the store to update
+			// Clean up the URL to prevent re-triggering the magic link flow on reload
+			const cleanUrl = new URL(window.location.href);
+			cleanUrl.search = '';
+			window.history.replaceState({}, document.title, cleanUrl.toString());
+
 			setTimeout(() => {
-				navigate('/'); // Redirect to home page
+				navigate('/');
 			}, 500);
 		} catch (error: any) {
 			console.error('❌ Verification error:', error.message);

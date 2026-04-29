@@ -1,37 +1,26 @@
 import {
-	sendSignInLinkToEmail,
 	isSignInWithEmailLink,
 	signInWithEmailLink,
 	signOut as firebaseSignOut,
 	User
 } from 'firebase/auth';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { auth } from '../../../lib/firebase';
 
-// Magic Link configuration
-const actionCodeSettings = {
-	// In production, include the base path /pspo/
-	url: import.meta.env.PROD
-		? 'https://maarconte.github.io/pspo/'
-		: 'http://localhost:3000/auth/verify',
-	handleCodeInApp: true,
-};
-
 export const authService = {
-	/**
-	 * Sends a Magic Link to the provided email address
-	 * @param email - User's email address
-	 * @returns Promise<void>
-	 * @throws Error if email is invalid or sending fails
-	 */
 	sendMagicLink: async (email: string): Promise<void> => {
-		// Basic email validation
 		if (!email || !email.includes('@')) {
 			throw new Error('Invalid email address');
 		}
 
+		const continueUrl = import.meta.env.PROD
+			? 'https://maarconte.github.io/pspo/'
+			: 'http://localhost:3000/';
+
 		try {
-			await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-			// Save email locally to complete sign-in
+			const functions = getFunctions();
+			const sendCustomMagicLink = httpsCallable(functions, 'sendCustomMagicLink');
+			await sendCustomMagicLink({ email, continueUrl });
 			window.localStorage.setItem('emailForSignIn', email);
 		} catch (error: any) {
 			console.error('Error sending Magic Link:', error);
@@ -39,21 +28,11 @@ export const authService = {
 		}
 	},
 
-	/**
-	 * Checks if the current URL is a Magic Link sign-in link
-	 * @returns boolean
-	 */
-	isMagicLink: (): boolean => {
-		return isSignInWithEmailLink(auth, window.location.href);
+	isMagicLink: (url?: string): boolean => {
+		return isSignInWithEmailLink(auth, url ?? window.location.href);
 	},
 
-	/**
-	 * Completes the sign-in with the Magic Link
-	 * @param email - User's email (optional if saved)
-	 * @returns Promise<User>
-	 * @throws Error if link is invalid or expired
-	 */
-	completeMagicLinkSignIn: async (email?: string): Promise<User> => {
+	completeMagicLinkSignIn: async (email?: string, url?: string): Promise<User> => {
 		// Get saved email if not provided
 		let userEmail = email;
 		if (!userEmail) {
@@ -65,7 +44,7 @@ export const authService = {
 		}
 
 		try {
-			const result = await signInWithEmailLink(auth, userEmail, window.location.href);
+			const result = await signInWithEmailLink(auth, userEmail, url ?? window.location.href);
 			// Clean up saved email
 			window.localStorage.removeItem('emailForSignIn');
 			return result.user;

@@ -16,6 +16,7 @@ import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
 import { useCoopStore } from "../stores/useCoopStore";
 import { AlertTriangle, Trophy, User } from "lucide-react";
 import StatCard from "../ui/StatCard/StatCard";
+import { trackEvent } from "../lib/analytics";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -23,6 +24,7 @@ export default function Quizz() {
   const setScore = useQuestionsStore((s) => s.setScore);
   const formation = useQuestionsStore((s) => s.formation);
   const calculateScore = useQuestionsStore((s) => s.calculateScore);
+  const getSuccessPercentage = useQuestionsStore((s) => s.getSuccessPercentage);
   const userAnswers = useQuestionsStore((s) => s.userAnswers);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -83,6 +85,13 @@ export default function Quizz() {
   }, [startTracking, resetStats]);
 
   useEffect(() => {
+    if (participants.length >= 2) {
+      trackEvent('coop_session_started', { participant_count: participants.length, formation });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     timeSpentRef.current = 0;
     if (!isFinished) {
       startQuestion(currentQuestion);
@@ -124,9 +133,19 @@ export default function Quizz() {
     setShowAnswer(true);
     setIsPaused(true);
 
+    const summary = getSummary?.();
+    const finalScore = calculateScore?.();
+    const scorePct = getSuccessPercentage();
+    trackEvent('quiz_completed', {
+      formation: formation || 'unknown',
+      score_pct: scorePct,
+      passed: scorePct >= 85,
+      total_time_sec: summary ? Math.round(summary.totalTimeMs / 1000) : 0,
+      questions_answered: summary?.totalQuestions ?? 0,
+      bookmarks_count: summary?.details.filter((d) => d.isBookmarked).length ?? 0,
+    });
+
     if (user?.uid) {
-      const summary = getSummary?.();
-      const finalScore = calculateScore?.();
 
       if (summary) {
         setTotalTimeSpent(summary.totalTimeMs);
@@ -161,7 +180,7 @@ export default function Quizz() {
     handleEndQuestion(currentQuestion);
     if (shouldNotify) notifyTime();
     setCurrentQuestion(newIndex);
-    setShowAnswer(false);
+    if (!isFinished) setShowAnswer(false);
 
     if (isFinished) {
       setTimeout(() => {
@@ -174,6 +193,7 @@ export default function Quizz() {
   };
 
   const handleRestart = () => {
+    trackEvent('quiz_restarted', { formation, previous_score_pct: getSuccessPercentage() });
     startNewExam();
     setCurrentQuestion(0);
     setScore(0);
@@ -230,12 +250,8 @@ export default function Quizz() {
               const answeredCount = userAnswers.filter(
                 (a) => a?.answer !== undefined,
               ).length;
-              const correctCount = calculateScore();
-              const successPercent =
-                answeredCount > 0
-                  ? Math.round((correctCount / answeredCount) * 100)
-                  : 0;
-              const isPassed = successPercent >= 85;
+              const correctCount = getSuccessPercentage();
+              const isPassed = correctCount >= 85;
               return (
                 <div className="d-flex gap-1 align-items-center flex-wrap">
                   {showAnswer && (
@@ -252,7 +268,7 @@ export default function Quizz() {
                       value={
                         answeredCount === 0
                           ? "—"
-                          : `${successPercent}%`
+                          : `${correctCount}%`
                       }
                       label="Current Score"
                     />
@@ -287,7 +303,7 @@ export default function Quizz() {
                 key={index}
                 question={question}
                 currentQuestion={index}
-                showAnswer={showAnswer}
+                showAnswer={true}
               />
             ))}
         {/* Navigation / Bottom Restart */}

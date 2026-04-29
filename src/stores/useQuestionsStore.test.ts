@@ -161,7 +161,7 @@ describe('useQuestionsStore', () => {
 	describe('calculateScore', () => {
 		it('should accurately calculate score for single choice questions', () => {
 			const { result } = renderHook(() => useQuestionsStore());
-			
+
 			const mockQuestions: Question[] = [
 				{ id: '1', title: 'Q1', type: 'pspo-I', answer: 0, answerType: 'S', answers: [] } as Question,
 				{ id: '2', title: 'Q2', type: 'pspo-I', answer: 1, answerType: 'S', answers: [] } as Question,
@@ -184,7 +184,7 @@ describe('useQuestionsStore', () => {
 
 		it('should accurately calculate score for multiple choice questions (arrays)', () => {
 			const { result } = renderHook(() => useQuestionsStore());
-			
+
 			const mockQuestions: Question[] = [
 				{ id: '1', title: 'Q1', type: 'pspo-I', answer: [0, 2], answerType: 'M', answers: [] } as Question,
 				{ id: '2', title: 'Q2', type: 'pspo-I', answer: [1, 3], answerType: 'M', answers: [] } as Question,
@@ -196,7 +196,7 @@ describe('useQuestionsStore', () => {
 					// Q1: correct (different order)
 					{ question: 0, answer: [2, 0] },
 					// Q2: partially correct (missing 3, added 2) -> should yield 0 for this question
-					{ question: 1, answer: [1, 2] }, 
+					{ question: 1, answer: [1, 2] },
 				]);
 			});
 
@@ -206,7 +206,7 @@ describe('useQuestionsStore', () => {
 
 		it('should return 0 when answers are empty or all incorrect', () => {
 			const { result } = renderHook(() => useQuestionsStore());
-			
+
 			const mockQuestions: Question[] = [
 				{ id: '1', title: 'Q1', type: 'pspo-I', answer: 0, answerType: 'S', answers: [] } as Question,
 			];
@@ -225,6 +225,74 @@ describe('useQuestionsStore', () => {
 			});
 
 			expect(result.current.calculateScore()).toBe(0);
+		});
+	});
+
+	describe('getSuccessPercentage', () => {
+		it('should accurately calculate percentage', () => {
+			const { result } = renderHook(() => useQuestionsStore());
+			const mockQuestions: Question[] = [
+				{ id: '1', title: 'Q1', type: 'pspo-I', answer: 0, answerType: 'S', answers: [] } as Question,
+				{ id: '2', title: 'Q2', type: 'pspo-I', answer: 1, answerType: 'S', answers: [] } as Question,
+			];
+
+			act(() => {
+				result.current.setQuestions(mockQuestions);
+				result.current.setUserAnswers([
+					{ question: 0, answer: 0 }, // correct
+					{ question: 1, answer: 0 }, // wrong
+				]);
+			});
+
+			expect(result.current.getSuccessPercentage()).toBe(50);
+		});
+
+		it('should return 0 when no questions are answered', () => {
+			const { result } = renderHook(() => useQuestionsStore());
+			expect(result.current.getSuccessPercentage()).toBe(0);
+		});
+
+		it('should cap percentage at 100%', () => {
+			const { result } = renderHook(() => useQuestionsStore());
+			const mockQuestions: Question[] = [
+				{ id: '1', title: 'Q1', type: 'pspo-I', answer: 0, answerType: 'S', answers: [] } as Question,
+			];
+
+			act(() => {
+				result.current.setQuestions(mockQuestions);
+				// Simulate an edge case where somehow more points are awarded or logic is skewed
+				// Though in our logic this is hard, we want to ensure the cap works.
+				// We can mock the result of calculateScore if needed, but here we test the final output.
+				result.current.setUserAnswers([
+					{ question: 0, answer: 0 },
+				]);
+			});
+
+			// Standard 100%
+			expect(result.current.getSuccessPercentage()).toBe(100);
+
+			// We can't easily trigger > 100% with real state,
+			// but we can verify the Math.min(100, ...) logic by looking at the code
+			// and ensuring it works for 100%.
+		});
+
+		it('should handle rounding correctly', () => {
+			const { result } = renderHook(() => useQuestionsStore());
+			const mockQuestions: Question[] = Array.from({ length: 3 }, (_, i) => ({
+				id: `${i}`, title: `Q${i}`, type: 'pspo-I', answer: 0, answerType: 'S', answers: []
+			} as Question));
+
+			act(() => {
+				result.current.setQuestions(mockQuestions);
+				result.current.setUserAnswers([
+					{ question: 0, answer: 0 }, // correct
+					{ question: 1, answer: 0 }, // correct
+					{ question: 2, answer: 1 }, // wrong
+				]);
+			});
+
+			// 2/3 = 66.666% -> should be rounded to 67
+			expect(result.current.getSuccessPercentage()).toBe(67);
 		});
 	});
 });

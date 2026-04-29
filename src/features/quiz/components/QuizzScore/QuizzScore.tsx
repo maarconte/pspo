@@ -10,16 +10,14 @@ const QuizzScore: FC = () => {
   const userAnswers = useQuestionsStore((s) => s.userAnswers);
   const questions = useQuestionsStore((s) => s.questions);
   const totalTimeSpent = useQuestionsStore((s) => s.totalTimeSpent);
+  const getSuccessPercentage = useQuestionsStore((s) => s.getSuccessPercentage);
 
   const answeredCount = useMemo(
     () => userAnswers?.filter((a) => a?.answer !== undefined).length || 0,
     [userAnswers],
   );
 
-  const percent = useMemo(
-    () => (answeredCount > 0 ? Math.round((score / answeredCount) * 100) : 0),
-    [score, answeredCount],
-  );
+  const percent = getSuccessPercentage();
 
   useEffect(() => {
     let currentScore = 0;

@@ -24,6 +24,7 @@ vi.mock("../stores/useQuestionsStore", () => ({
       setScore: vi.fn(),
       formation: "pspo-I",
       calculateScore: vi.fn(() => 0),
+      getSuccessPercentage: vi.fn(() => 0),
       setAnswer: vi.fn(),
       toggleBookmark: vi.fn(),
     };
@@ -205,7 +206,7 @@ describe("Quizz Component - Coop Mode", () => {
 
     // Simulate jumping to Q3 (index 2) -> Charlie
     // In Quizz.tsx, handleQuestionChange(2) would happen via Drawer.
-    // We can't easily click the Drawer items here without more setup, 
+    // We can't easily click the Drawer items here without more setup,
     // but we can verify that the derivation logic is correct.
     // Let's use the 'Next' button twice.
     const nextButton = screen.getByText("Next");
@@ -213,7 +214,7 @@ describe("Quizz Component - Coop Mode", () => {
       fireEvent.click(nextButton); // Q2 -> Bob
     });
     expect(screen.getByText("Bob")).toBeDefined();
-    
+
     act(() => {
       fireEvent.click(nextButton); // Q3 -> Charlie
     });

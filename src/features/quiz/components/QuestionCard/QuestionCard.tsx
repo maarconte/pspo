@@ -13,6 +13,7 @@ import { AnswerStatus } from "../QuestionAnswer/QuestionAnswer.types";
 import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
 import { QuestionCardProps } from "./QuestionCard.types";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { trackEvent } from "../../../../lib/analytics";
 
 /**
  * Review Torvalds: 10/10
@@ -84,6 +85,11 @@ const QuestionCard: FC<QuestionCardProps> = ({
   };
 
   const handleBookmark = () => {
+    const isCurrentlyBookmarked = !!userAnswer?.isBookmarked;
+    trackEvent(isCurrentlyBookmarked ? 'question_unbookmarked' : 'question_bookmarked', {
+      question_id: question.id,
+      question_index: currentQuestion,
+    });
     toggleBookmark(currentQuestion);
   };
 
