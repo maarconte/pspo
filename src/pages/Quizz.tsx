@@ -16,6 +16,7 @@ import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
 import { useCoopStore } from "../stores/useCoopStore";
 import { AlertTriangle, Trophy, User } from "lucide-react";
 import StatCard from "../ui/StatCard/StatCard";
+import { trackEvent } from "../lib/analytics";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -84,6 +85,13 @@ export default function Quizz() {
   }, [startTracking, resetStats]);
 
   useEffect(() => {
+    if (participants.length >= 2) {
+      trackEvent('coop_session_started', { participant_count: participants.length, formation });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     timeSpentRef.current = 0;
     if (!isFinished) {
       startQuestion(currentQuestion);
@@ -125,9 +133,19 @@ export default function Quizz() {
     setShowAnswer(true);
     setIsPaused(true);
 
+    const summary = getSummary?.();
+    const finalScore = calculateScore?.();
+    const scorePct = getSuccessPercentage();
+    trackEvent('quiz_completed', {
+      formation: formation || 'unknown',
+      score_pct: scorePct,
+      passed: scorePct >= 85,
+      total_time_sec: summary ? Math.round(summary.totalTimeMs / 1000) : 0,
+      questions_answered: summary?.totalQuestions ?? 0,
+      bookmarks_count: summary?.details.filter((d) => d.isBookmarked).length ?? 0,
+    });
+
     if (user?.uid) {
-      const summary = getSummary?.();
-      const finalScore = calculateScore?.();
 
       if (summary) {
         setTotalTimeSpent(summary.totalTimeMs);
@@ -175,6 +193,7 @@ export default function Quizz() {
   };
 
   const handleRestart = () => {
+    trackEvent('quiz_restarted', { formation, previous_score_pct: getSuccessPercentage() });
     startNewExam();
     setCurrentQuestion(0);
     setScore(0);

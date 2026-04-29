@@ -7,6 +7,7 @@ import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useUserStore } from "../features/auth/stores/useAuthStore";
 import { useInfoPopupStore } from "../stores/useInfoPopupStore";
 import { useNavigate } from "react-router-dom";
+import { trackEvent } from "../lib/analytics";
 
 export default function Home() {
   const formation = useQuestionsStore((s) => s.formation);
@@ -25,6 +26,7 @@ export default function Home() {
     if (!user && !isDismissed && !isExpired) {
       openInfoPopup();
     } else {
+      trackEvent('quiz_started', { formation, is_logged_in: !!user });
       startNewExam();
       navigate("/quizz");
     }

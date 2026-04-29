@@ -5,6 +5,7 @@ import Button from '../../../../ui/Button/Button';
 import { Button_Type } from '../../../../ui/Button/Button.types';
 import Input from '../../../../ui/Input/Input';
 import './style.scss';
+import { trackEvent } from '../../../../lib/analytics';
 
 export const MagicLinkVerification = () => {
 	const navigate = useNavigate();
@@ -50,6 +51,7 @@ export const MagicLinkVerification = () => {
 
 		try {
 			await authService.completeMagicLinkSignIn(providedEmail, url);
+			trackEvent('login_success');
 			sessionStorage.removeItem('magicLinkOriginalUrl');
 
 			// Clean up the URL to prevent re-triggering the magic link flow on reload
