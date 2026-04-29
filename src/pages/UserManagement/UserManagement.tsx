@@ -1,21 +1,20 @@
 import { useState } from 'react';
 import { useUsers } from '../../features/auth/hooks/useUsers';
 import { roleService } from '../../features/auth/api/roleService';
-import { UserRole, ROLE_LABELS, ROLES } from '../../features/auth/types/roles.types';
+import { UserRole} from '../../features/auth/types/roles.types';
 import { toast } from 'react-toastify';
-import { Trash2 } from 'lucide-react';
 import Button from '../../ui/Button/Button';
 import { Button_Style, Button_Type } from '../../ui/Button/Button.types';
 import { Modal } from '../../ui';
 import './style.scss';
 
-import { 
-	getCoreRowModel, 
-	getFilteredRowModel, 
-	getPaginationRowModel, 
-	getSortedRowModel, 
-	SortingState, 
-	useReactTable 
+import {
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	SortingState,
+	useReactTable
 } from '@tanstack/react-table';
 import { useUserColumns } from './hooks/useUserColumns';
 import { fuzzyFilter } from '../../features/admin/components/TableQuestions/utils/tableUtils';

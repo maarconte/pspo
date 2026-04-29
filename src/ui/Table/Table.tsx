@@ -8,12 +8,6 @@ import { TableProps } from "./Table.types";
 
 const Table = <T,>({
   data,
-  selectedItems,
-  selectedItem,
-  setSelectedItems,
-  setSelectedItem,
-  setIsSelectAll,
-  setIsSelectNone,
   renderHeaderAddon,
 }: TableProps<T>) => {
   return (
