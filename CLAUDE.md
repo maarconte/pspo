@@ -35,7 +35,7 @@ npm run deploy           # Deploy functions to Firebase
 
 ### Feature-Based Structure
 
-```
+```text
 src/
 ├── features/            # Domain modules (admin, auth, coop, quiz, support, ...)
 ├── pages/               # Route-level components (lazy-loaded)
@@ -57,6 +57,7 @@ src/
 Stores live in `src/stores/`. Always consume via selectors to prevent unnecessary re-renders.
 
 Key stores:
+
 - `useQuestionsStore` — quiz questions, answers, scoring, bookmarks (core logic)
 - `useUserStore` — auth state and user roles
 - `useCoopStore` — co-op mode participants & turn management (persisted to localStorage)
@@ -81,6 +82,7 @@ Firebase credentials are injected via `VITE_FIREBASE_*` env vars (see `src/fireb
 ### Cloud Functions
 
 Three functions in `functions/src/index.ts`:
+
 - `setUserRole` — callable, dev-only, assigns roles
 - `onUserCreated` — auth trigger, auto-assigns `client` role + creates Firestore doc
 - `deleteUser` — callable, dev-only, deletes user + all associated data
@@ -88,6 +90,19 @@ Three functions in `functions/src/index.ts`:
 ### Build
 
 Vite 5, base path is `/pspo/` in production and `/` in dev. SCSS uses the modern Sass compiler API (not legacy). TypeScript strict mode is enabled throughout.
+
+## Linear Issue Creation
+
+To create a Linear issue on demand, run:
+
+```bash
+python3 .github/scripts/linear_create.py --title "Issue title" [--description "..."] [--priority 3]
+```
+
+Priority: 0=none, 1=urgent, 2=high, 3=medium, 4=low (default: 0)
+
+Issues are automatically assigned to project **Study Group** and to `marconte@thatmuch.fr`.
+Requires `LINEAR_API_KEY` in the shell env or in `.env.local`. When the user asks to create a Linear issue, use this script via Bash.
 
 ## Git Convention
 
