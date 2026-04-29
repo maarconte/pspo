@@ -93,13 +93,26 @@ Vite 5, base path is `/pspo/` in production and `/` in dev. SCSS uses the modern
 
 ## Linear Issue Creation
 
-To create a Linear issue on demand, run:
+**Via CLI (on demand):**
 
 ```bash
 python3 .github/scripts/linear_create.py --title "Issue title" [--description "..."] [--priority 3]
 ```
 
 Priority: 0=none, 1=urgent, 2=high, 3=medium, 4=low (default: 0)
+
+**Via `activity/` folder (automatic on push):**
+Drop a `.md` file in `activity/` — GitHub Actions le pousse automatiquement comme **project update** sur le projet Study Group dans Linear.
+
+```markdown
+---
+health: onTrack   # onTrack | atRisk | offTrack  (optionnel)
+---
+
+Contenu de l'update en markdown...
+```
+
+Le frontmatter est optionnel. Files prefixed with `_` (e.g. `_example.md`) are ignored. See `activity/_example.md` for reference.
 
 Issues are automatically assigned to project **Study Group** and to `marconte@thatmuch.fr`.
 Requires `LINEAR_API_KEY` in the shell env or in `.env.local`. When the user asks to create a Linear issue, use this script via Bash.

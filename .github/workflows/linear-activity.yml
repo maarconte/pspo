@@ -1,0 +1,30 @@
+name: Linear activity sync
+
+on:
+  push:
+    paths:
+      - 'activity/**.md'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Get added/modified activity files
+        id: changed
+        run: |
+          files=$(git diff-tree --no-commit-id -r --diff-filter=AM --name-only HEAD -- 'activity/*.md' | tr '\n' ' ')
+          echo "files=$files" >> $GITHUB_OUTPUT
+
+      - name: Process activity files
+        if: steps.changed.outputs.files != ''
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+        run: |
+          for file in ${{ steps.changed.outputs.files }}; do
+            echo "→ $file"
+            python3 .github/scripts/linear_activity.py "$file"
+          done
