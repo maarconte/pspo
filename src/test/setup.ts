@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 // Mock Firebase
-vi.mock('../firebase', () => ({
+vi.mock('../lib/firebase', () => ({
 	Firebase: {
 		options: {},
 	},

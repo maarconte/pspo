@@ -4,7 +4,7 @@ import { useUserStore } from './useUserStore';
 import type { User } from 'firebase/auth';
 
 // Mock Firebase auth
-vi.mock('../firebase', () => ({
+vi.mock('../lib/firebase', () => ({
 	auth: {
 		currentUser: null,
 		onAuthStateChanged: vi.fn((callback) => {
