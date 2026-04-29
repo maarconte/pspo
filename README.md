@@ -49,6 +49,25 @@ An interactive study platform designed for Professional Scrum Product Owner (PSP
 - **React Toastify** - Real-time notifications
 - **Recharts** - Dynamic performance visualization
 
+## 📊 Google Analytics 4 (GA4)
+
+The application tracks user engagement and learning progress through custom GA4 events.
+
+### Implemented Events
+
+| Event Name | Description | Parameters |
+|:---|:---|:---|
+| `login_success` | User successfully authenticated via Magic Link. | - |
+| `quiz_started` | A new quiz session was initiated. | `formation`, `is_logged_in` |
+| `coop_session_started` | A collaborative session began with 2+ participants. | `formation`, `participant_count` |
+| `quiz_completed` | User reached the end of the quiz. | `formation`, `score_pct`, `passed`, `total_time_sec`, `questions_answered`, `bookmarks_count` |
+| `quiz_restarted` | User reset the current session to start over. | `formation`, `previous_score_pct` |
+| `question_bookmarked` | A question was saved for future review. | `question_id`, `question_index` |
+| `question_unbookmarked`| A question was removed from bookmarks. | `question_id`, `question_index` |
+
+### Debugging
+To enable GA4 debug mode locally, add `?ga_debug` to the URL. This will bypass the localhost disable filter and send events to the GA4 DebugView.
+
 ## 🏗️ Architecture
 
 The project follows a **Feature-Based Architecture** for maximum scalability:
