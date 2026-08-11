@@ -16,10 +16,12 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1S1TB0PT50"></script>
     <script>
-      if (
+      var isLocalhost =
         window.location.hostname === "localhost" ||
-        window.location.hostname === "127.0.0.1"
-      ) {
+        window.location.hostname === "127.0.0.1";
+      var isDebugMode = new URLSearchParams(window.location.search).has("ga_debug");
+
+      if (isLocalhost && !isDebugMode) {
         window["ga-disable-G-1S1TB0PT50"] = true;
       }
 
@@ -29,9 +31,9 @@
       }
       gtag("js", new Date());
 
-      gtag("config", "G-1S1TB0PT50");
+      gtag("config", "G-1S1TB0PT50", isDebugMode ? { debug_mode: true } : {});
     </script>
-    <script type="module" crossorigin src="/pspo/assets/index-BCUUIX-Z.js"></script>
+    <script type="module" crossorigin src="/pspo/assets/index-Bnu6C-9h.js"></script>
     <link rel="stylesheet" crossorigin href="/pspo/assets/index-CqEdHTuq.css">
   </head>
   <body>
