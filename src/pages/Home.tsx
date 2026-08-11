@@ -35,7 +35,8 @@ export default function Home() {
   return (
     <div className="home-container">
       <div className="home-content">
-          Study Group
+        <div className="hero-content">
+          <h1 className="hero-title">Study Group</h1>
           <p className="hero-subtitle">Test your knowledge and prepare for your certification</p>
         </div>
       </div>
