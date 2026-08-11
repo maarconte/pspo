@@ -16,10 +16,20 @@ vi.mock('../lib/firebase', () => ({
 		currentUser: null,
 		onAuthStateChanged: vi.fn(),
 	},
-	Providers: {
+	db: {},
+	GoogleAuthProviders: {
 		google: {},
 	},
 }));
+
+// Mock the onIdTokenChanged subscription used by useAuthStore's token-refresh listener
+vi.mock('firebase/auth', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('firebase/auth')>();
+	return {
+		...actual,
+		onIdTokenChanged: vi.fn(() => vi.fn()),
+	};
+});
 
 // Mock Firebase Firestore
 vi.mock('firebase/firestore', () => ({
