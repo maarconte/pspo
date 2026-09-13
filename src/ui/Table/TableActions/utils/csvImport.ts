@@ -14,7 +14,6 @@ export interface CsvQuestionRow {
   title?: string;
   feedback?: string;
   answerType?: string;
-  type?: string;
   domain?: string;
   correctAnswer?: string;
   [answerColumn: string]: string | undefined;
@@ -102,7 +101,8 @@ export const parseCorrectAnswer = (
 
 export const parseCsvRow = (
   row: CsvQuestionRow,
-  lineNumber: number
+  lineNumber: number,
+  moduleType: string
 ): { question: QuestionDraft } | { error: string } => {
   const title = row.title?.trim();
   const answerType = row.answerType?.trim() ?? "";
@@ -136,7 +136,7 @@ export const parseCsvRow = (
       title,
       feedback: row.feedback?.trim() ?? "",
       answerType,
-      type: row.type?.trim() || "pspo-I",
+      type: moduleType,
       answers,
       answer: correctAnswer.value,
       ...(answerExplanations ? { answerExplanations } : {}),

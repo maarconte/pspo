@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
-import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
+import { useDeleteDoc } from "../../../utils/hooks";
+import { useModules } from "../../../features/admin/hooks/useModules";
+import { getFormationValue } from "../../../utils/helpers/formationLabel";
 
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
+import Select from "../../Select";
 import FileUploader from "../../FileUploader";
 import ImportPreviewModal from "./ImportPreviewModal/ImportPreviewModal";
 import Modal from "../../Modal";
 import ModalEditQuestion from "../../../features/admin/components/ModalEditQuestion/ModalEditQuestion";
-import Papa, { ParseResult } from "papaparse";
 import { Question } from "../../../utils/types";
 import { QUESTIONS_COLLECTION } from "../../../utils/constants";
 import { toast } from "react-toastify";
-import {
-  CsvQuestionRow,
-  QuestionDraft,
-  parseCsvRow,
-} from "./utils/csvImport";
+import { useCsvQuestionImport } from "./utils/useCsvQuestionImport";
 
 interface TableActionsProps {
   selectedQuestions: Question[];
@@ -36,13 +34,18 @@ const TableActions: React.FC<TableActionsProps> = ({
   setIsSelectAll,
   setIsSelectNone,
 }) => {
-  const [csvData, setCsvData] = useState<QuestionDraft[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [isImporting, setIsImporting] = useState(false);
-  const { handleAdd } = useAddDoc(QUESTIONS_COLLECTION);
+  const [importModuleType, setImportModuleType] = useState("");
   const { handleDelete } = useDeleteDoc(QUESTIONS_COLLECTION);
+  const { modules } = useModules();
+  const csvImport = useCsvQuestionImport();
+
+  const moduleOptions = modules.map((module) => ({
+    label: `${module.title}${!module.isActive ? " (désactivé)" : ""}`,
+    value: getFormationValue(module.title),
+  }));
+
   const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
@@ -55,83 +58,24 @@ const TableActions: React.FC<TableActionsProps> = ({
     setIsSelectNone(false);
   };
 
-  const handleFileUpload = async (file: File) => {
-    if (!file) return;
-
-    // Without an explicit `newline`, Papa Parse's auto-detection can
-    // misparse a quoted field sitting right at end-of-file (observed:
-    // "Quoted field unterminated" on an otherwise well-formed file whose
-    // last row's last field — correctAnswer — was quoted). Detect the
-    // file's actual convention ourselves instead of hardcoding one, since
-    // forcing "\n" on a \r\n file leaks a stray \r into the last column's
-    // name (e.g. "correctAnswer\r"), silently dropping every row.
-    const text = await file.text();
-    const newline = text.includes("\r\n") ? "\r\n" : "\n";
-
-    Papa.parse<CsvQuestionRow>(text, {
-      header: true,
-      skipEmptyLines: true,
-      newline,
-      complete: (result: ParseResult<CsvQuestionRow>) => {
-        const errors: string[] = [];
-        const questions: QuestionDraft[] = [];
-
-        result.data.forEach((row, index) => {
-          const parsed = parseCsvRow(row, index + 2); // +1 header, +1 1-based
-          if ("error" in parsed) {
-            errors.push(parsed.error);
-          } else {
-            questions.push(parsed.question);
-          }
-        });
-
-        if (errors.length > 0) {
-          console.warn("Erreurs d'import CSV :", errors);
-          toast.error(
-            `${errors.length} ligne(s) ignorée(s) : ${errors
-              .slice(0, 3)
-              .join(" | ")}${errors.length > 3 ? "…" : ""}`
-          );
-        }
-
-        setCsvData(questions);
-      },
-      error: (error: Error) => {
-        console.error("Error parsing CSV file:", error);
-        toast.error("Impossible de lire le fichier CSV");
-      },
-    });
-  };
-
-  const handleRemoveFromPreview = (index: number) => {
-    setCsvData((current) => current.filter((_, i) => i !== index));
-  };
-
-  const addAllQuestions = async () => {
-    if (csvData.length === 0) return;
-    setIsImporting(true);
-    try {
-      for (const question of csvData) {
-        await handleAdd(question);
-      }
-      setCsvData([]);
-      setIsPreviewModalOpen(false);
-      toast.success("The questions have been added");
-    } catch (error) {
-      toast.error(
-        "An error occurred while adding the questions. Please try again."
-      );
-    } finally {
-      setIsImporting(false);
-    }
-  };
   return (
     <div className="d-flex gap-05 justify-content-end mb-1">
-      <FileUploader handleFile={handleFileUpload} />
-      {csvData.length > 0 && (
+      <Select
+        name="importModule"
+        id="importModule"
+        options={moduleOptions}
+        value={importModuleType}
+        placeholder="Module à importer"
+        handleChange={(value) => setImportModuleType(String(value))}
+      />
+      <FileUploader
+        handleFile={(file: File) => csvImport.parseFile(file, importModuleType)}
+        disabled={!importModuleType}
+      />
+      {csvImport.csvData.length > 0 && (
         <Button
-          label={`Prévisualiser ${csvData.length} question(s)`}
-          onClick={() => setIsPreviewModalOpen(true)}
+          label={`Prévisualiser ${csvImport.csvData.length} question(s)`}
+          onClick={csvImport.openPreview}
           icon={<Plus size={16} />}
         />
       )}
@@ -157,14 +101,14 @@ const TableActions: React.FC<TableActionsProps> = ({
         />
       )}
 
-      {isPreviewModalOpen && (
+      {csvImport.isPreviewOpen && (
         <ImportPreviewModal
-          isOpen={isPreviewModalOpen}
-          questions={csvData}
-          isImporting={isImporting}
-          onRemove={handleRemoveFromPreview}
-          onConfirm={addAllQuestions}
-          onClose={() => setIsPreviewModalOpen(false)}
+          isOpen={csvImport.isPreviewOpen}
+          questions={csvImport.csvData}
+          isImporting={csvImport.isImporting}
+          onRemove={csvImport.removeFromPreview}
+          onConfirm={csvImport.confirmImport}
+          onClose={csvImport.closePreview}
         />
       )}
 

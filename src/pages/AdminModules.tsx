@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ArrowLeft, CheckCircle2, Layers, Plus } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useModules } from '../features/admin/hooks/useModules';
 import { updateModule, deleteModule } from '../features/admin/api/modules.api';
+import { getFormationValue } from '../utils/helpers/formationLabel';
 import { ModulesTable } from '../features/admin/components/ModulesTable/ModulesTable';
 import { ModuleFormModal } from '../features/admin/components/ModuleFormModal/ModuleFormModal';
+import ModalEditQuestion from '../features/admin/components/ModalEditQuestion/ModalEditQuestion';
+import ImportPreviewModal from '../ui/Table/TableActions/ImportPreviewModal/ImportPreviewModal';
+import { useCsvQuestionImport } from '../ui/Table/TableActions/utils/useCsvQuestionImport';
 import Button from '../ui/Button/Button';
 import { Button_Type, Button_Style } from '../ui/Button/Button.types';
 import Modal from '../ui/Modal/Modal';
@@ -23,10 +27,29 @@ export default function AdminModules() {
   const [moduleToDelete, setModuleToDelete] = useState<Module | null>(null);
   const [isDeletionBlockedOpen, setIsDeletionBlockedOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [addQuestionModule, setAddQuestionModule] = useState<Module | null>(null);
+  const [csvImportModule, setCsvImportModule] = useState<Module | null>(null);
+  const csvFileInputRef = useRef<HTMLInputElement>(null);
+  const csvImport = useCsvQuestionImport();
 
   const openAddModal = () => setModalState({ isOpen: true, module: undefined });
   const openEditModal = (module: Module) => setModalState({ isOpen: true, module });
   const closeModal = () => setModalState({ isOpen: false });
+
+  const handleImportCsvClick = (module: Module) => {
+    setCsvImportModule(module);
+    csvFileInputRef.current?.click();
+  };
+
+  const handleCsvFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (file && csvImportModule) {
+      csvImport.parseFile(file, getFormationValue(csvImportModule.title), {
+        autoOpenPreview: true,
+      });
+    }
+  };
 
   const handleToggleStatus = async (module: Module) => {
     setTogglingModuleId(module.id);
@@ -127,6 +150,8 @@ export default function AdminModules() {
             onEdit={openEditModal}
             onToggleStatus={handleToggleStatus}
             onDelete={handleDeleteClick}
+            onImportCsv={handleImportCsvClick}
+            onAddQuestion={setAddQuestionModule}
             togglingModuleId={togglingModuleId}
           />
         )}
@@ -174,6 +199,33 @@ export default function AdminModules() {
           demande à l'équipe support.
         </p>
       </Modal>
+
+      <input
+        ref={csvFileInputRef}
+        type="file"
+        accept=".csv"
+        onChange={handleCsvFileSelected}
+        style={{ display: 'none' }}
+      />
+
+      {addQuestionModule && (
+        <ModalEditQuestion
+          isOpen={!!addQuestionModule}
+          setIsOpen={(open) => !open && setAddQuestionModule(null)}
+          defaultType={getFormationValue(addQuestionModule.title)}
+        />
+      )}
+
+      {csvImport.isPreviewOpen && (
+        <ImportPreviewModal
+          isOpen={csvImport.isPreviewOpen}
+          questions={csvImport.csvData}
+          isImporting={csvImport.isImporting}
+          onRemove={csvImport.removeFromPreview}
+          onConfirm={csvImport.confirmImport}
+          onClose={csvImport.closePreview}
+        />
+      )}
     </div>
   );
 }
