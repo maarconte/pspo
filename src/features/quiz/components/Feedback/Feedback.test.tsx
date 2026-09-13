@@ -1,8 +1,15 @@
-import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import Feedback from "./Feedback";
-import { useUpdateDoc } from "../../../../utils/hooks/";
 import { toast } from "react-toastify";
+import { useUpdateDoc } from "../../../../utils/hooks/";
 
 // Mock the hooks and toast
 vi.mock("../../../../utils/hooks/", () => ({
@@ -44,18 +51,20 @@ describe("Feedback Component", () => {
 
     expect(screen.getByText(/Feedback/i)).toBeDefined();
     expect(screen.getByText(mockQuestion.feedback)).toBeDefined();
-    expect(screen.getByText("Report a problem")).toBeDefined();
+    expect(screen.getByText("Report question")).toBeDefined();
   });
 
-  it("opens the modal when 'Report a problem' is clicked", () => {
+  it("opens the modal when 'Report question' is clicked", () => {
     render(<Feedback question={mockQuestion} />);
 
-    const reportButton = screen.getByText("Report a problem");
+    const reportButton = screen.getByText("Report question");
     act(() => {
       fireEvent.click(reportButton);
     });
 
-    expect(screen.getByText(/If you believe this answer is inappropriate/i)).toBeDefined();
+    expect(
+      screen.getByText(/If you believe this answer is inappropriate/i),
+    ).toBeDefined();
     expect(screen.getByLabelText("Please describe the issue")).toBeDefined();
   });
 
@@ -64,7 +73,7 @@ describe("Feedback Component", () => {
 
     // Open modal
     act(() => {
-      fireEvent.click(screen.getByText("Report a problem"));
+      fireEvent.click(screen.getByText("Report question"));
     });
 
     // Type comment
@@ -102,11 +111,11 @@ describe("Feedback Component", () => {
     render(<Feedback question={mockQuestion} />);
 
     act(() => {
-      fireEvent.click(screen.getByText("Report a problem"));
+      fireEvent.click(screen.getByText("Report question"));
     });
     act(() => {
-      fireEvent.change(screen.getByLabelText("Please describe the issue"), { 
-        target: { value: "Second issue" } 
+      fireEvent.change(screen.getByLabelText("Please describe the issue"), {
+        target: { value: "Second issue" },
       });
     });
     act(() => {
@@ -135,6 +144,8 @@ describe("Feedback Component", () => {
       rerender(<Feedback question={mockQuestion} />);
     });
 
-    expect(toast.error).toHaveBeenCalledWith("An error occurred while updating the question");
+    expect(toast.error).toHaveBeenCalledWith(
+      "An error occurred while updating the question",
+    );
   });
 });

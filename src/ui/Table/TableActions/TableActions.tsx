@@ -5,11 +5,18 @@ import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
 import FileUploader from "../../FileUploader";
+import ImportPreviewModal from "./ImportPreviewModal/ImportPreviewModal";
 import Modal from "../../Modal";
 import ModalEditQuestion from "../../../features/admin/components/ModalEditQuestion/ModalEditQuestion";
-import Papa from "papaparse";
+import Papa, { ParseResult } from "papaparse";
 import { Question } from "../../../utils/types";
+import { QUESTIONS_COLLECTION } from "../../../utils/constants";
 import { toast } from "react-toastify";
+import {
+  CsvQuestionRow,
+  QuestionDraft,
+  parseCsvRow,
+} from "./utils/csvImport";
 
 interface TableActionsProps {
   selectedQuestions: Question[];
@@ -29,11 +36,13 @@ const TableActions: React.FC<TableActionsProps> = ({
   setIsSelectAll,
   setIsSelectNone,
 }) => {
-  const [csvData, setCsvData] = useState([]);
+  const [csvData, setCsvData] = useState<QuestionDraft[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { handleAdd } = useAddDoc("questions");
-  const { handleDelete } = useDeleteDoc("questions");
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const { handleAdd } = useAddDoc(QUESTIONS_COLLECTION);
+  const { handleDelete } = useDeleteDoc(QUESTIONS_COLLECTION);
   const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;
@@ -46,67 +55,74 @@ const TableActions: React.FC<TableActionsProps> = ({
     setIsSelectNone(false);
   };
 
-  const handleFileUpload = (file: any) => {
-    if (file) {
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (result: any) => {
-          //parse data so that answers is an array. each item is separated by a /
-          result.data = result.data.map((item: any) => {
-            const keys = Object.keys(item);
-            const answerListKeys = keys.filter((key) =>
-              key.startsWith("answerList")
-            );
+  const handleFileUpload = async (file: File) => {
+    if (!file) return;
 
-            if (answerListKeys.length > 0) {
-              item.answers = answerListKeys
-                .map((key) => item[key])
-                .filter((answer: string) => answer !== "");
-              // remove the answerList keys from the item
-              answerListKeys.forEach((key) => delete item[key]);
-            }
-            if (item.answerType === "S") {
-              if (!isNaN(Number(item.answer))) {
-                item.answer = Number(item.answer);
-              }
-              return item;
-            }
-            if (item.answerType === "M") {
-              item.answer = item.answer.split(",").map((answer: string) => {
-                answer = answer.trim();
-                // transform answer to number if possible
-                if (!isNaN(Number(answer))) {
-                  return Number(answer);
-                }
-                return answer;
-              });
-            }
-            return item;
-          });
+    // Without an explicit `newline`, Papa Parse's auto-detection can
+    // misparse a quoted field sitting right at end-of-file (observed:
+    // "Quoted field unterminated" on an otherwise well-formed file whose
+    // last row's last field — correctAnswer — was quoted). Detect the
+    // file's actual convention ourselves instead of hardcoding one, since
+    // forcing "\n" on a \r\n file leaks a stray \r into the last column's
+    // name (e.g. "correctAnswer\r"), silently dropping every row.
+    const text = await file.text();
+    const newline = text.includes("\r\n") ? "\r\n" : "\n";
 
-          setCsvData(result.data); // Store the parsed data
-          // Add validation or processing logic here
-        },
-        error: (error: any) => {
-          console.error("Error parsing CSV file:", error);
-        },
-      });
-    }
+    Papa.parse<CsvQuestionRow>(text, {
+      header: true,
+      skipEmptyLines: true,
+      newline,
+      complete: (result: ParseResult<CsvQuestionRow>) => {
+        const errors: string[] = [];
+        const questions: QuestionDraft[] = [];
+
+        result.data.forEach((row, index) => {
+          const parsed = parseCsvRow(row, index + 2); // +1 header, +1 1-based
+          if ("error" in parsed) {
+            errors.push(parsed.error);
+          } else {
+            questions.push(parsed.question);
+          }
+        });
+
+        if (errors.length > 0) {
+          console.warn("Erreurs d'import CSV :", errors);
+          toast.error(
+            `${errors.length} ligne(s) ignorée(s) : ${errors
+              .slice(0, 3)
+              .join(" | ")}${errors.length > 3 ? "…" : ""}`
+          );
+        }
+
+        setCsvData(questions);
+      },
+      error: (error: Error) => {
+        console.error("Error parsing CSV file:", error);
+        toast.error("Impossible de lire le fichier CSV");
+      },
+    });
+  };
+
+  const handleRemoveFromPreview = (index: number) => {
+    setCsvData((current) => current.filter((_, i) => i !== index));
   };
 
   const addAllQuestions = async () => {
-    if (!csvData) return;
+    if (csvData.length === 0) return;
+    setIsImporting(true);
     try {
       for (const question of csvData) {
         await handleAdd(question);
       }
       setCsvData([]);
+      setIsPreviewModalOpen(false);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(
         "An error occurred while adding the questions. Please try again."
       );
+    } finally {
+      setIsImporting(false);
     }
   };
   return (
@@ -114,8 +130,8 @@ const TableActions: React.FC<TableActionsProps> = ({
       <FileUploader handleFile={handleFileUpload} />
       {csvData.length > 0 && (
         <Button
-          label={`Add ${csvData.length} questions`}
-          onClick={addAllQuestions}
+          label={`Prévisualiser ${csvData.length} question(s)`}
+          onClick={() => setIsPreviewModalOpen(true)}
           icon={<Plus size={16} />}
         />
       )}
@@ -138,6 +154,17 @@ const TableActions: React.FC<TableActionsProps> = ({
         <ModalEditQuestion
           isOpen={isAddModalOpen}
           setIsOpen={setIsAddModalOpen}
+        />
+      )}
+
+      {isPreviewModalOpen && (
+        <ImportPreviewModal
+          isOpen={isPreviewModalOpen}
+          questions={csvData}
+          isImporting={isImporting}
+          onRemove={handleRemoveFromPreview}
+          onConfirm={addAllQuestions}
+          onClose={() => setIsPreviewModalOpen(false)}
         />
       )}
 

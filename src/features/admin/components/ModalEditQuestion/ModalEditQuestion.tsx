@@ -6,6 +6,7 @@ import { Trash2, Plus } from "lucide-react";
 import { Field, FieldArray, Formik } from "formik";
 import { toast } from "react-toastify";
 import { useAddDoc, useUpdateDoc } from "../../../../utils/hooks";
+import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 
 import Button from "../../../../ui/Button/Button";
 import { Button_Style } from "../../../../ui/Button/Button.types";
@@ -22,10 +23,10 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   setIsOpen,
   setSelectQuestion,
 }) => {
-  const { handleAdd } = useAddDoc("questions");
+  const { handleAdd } = useAddDoc(QUESTIONS_COLLECTION);
   const { handleUpdate, error } = useUpdateDoc({
     docId: question?.id || "",
-    collectionName: "questions",
+    collectionName: QUESTIONS_COLLECTION,
   });
   const handleAnswerChange = (index: number, answer: any) => {
     let newAnswer = Array.isArray(answer) ? [...answer] : [];
@@ -93,7 +94,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     className="select-modal"
                   >
                     <option value="pspo-I">pspo-I</option>
-                    <option value="psm-I">psm-I</option>
+                    <option value="PSM-I">PSM-I</option>
                   </Field>
                 </div>
                 <div className="col-sm-9">
@@ -269,6 +270,9 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 value={values.feedback}
                 onChange={handleChange}
               />
+              <small className="text-muted d-block mb-1">
+                Balises HTML supportées à l'affichage : {"<i>, <b>, <br>, <a href>"}
+              </small>
               {values.isFlagged && (
                 <>
                   <h4>Comments</h4>
