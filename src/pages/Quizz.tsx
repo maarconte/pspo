@@ -41,6 +41,8 @@ export default function Quizz() {
   const endQuestion = useQuizStatsStore((s) => s.endQuestion);
   const getSummary = useQuizStatsStore((s) => s.getSummary);
   const resetStats = useQuizStatsStore((s) => s.resetStats);
+  const pauseTracking = useQuizStatsStore((s) => s.pauseTracking);
+  const resumeTracking = useQuizStatsStore((s) => s.resumeTracking);
   const startNewExam = useQuestionsStore((s) => s.startNewExam);
 
   const user = useUserStore((s) => s.user);
@@ -85,6 +87,17 @@ export default function Quizz() {
     startTracking();
     return () => resetStats();
   }, [startTracking, resetStats]);
+
+  // Exclude paused time (manual pause, or the "Time's up!" decision modal)
+  // from the per-question elapsed time so the final "Total Time" can't
+  // drift above the quiz duration just because the quiz was sitting paused.
+  useEffect(() => {
+    if (isPaused) {
+      pauseTracking();
+    } else {
+      resumeTracking();
+    }
+  }, [isPaused, pauseTracking, resumeTracking]);
 
   useEffect(() => {
     if (participants.length >= 2) {

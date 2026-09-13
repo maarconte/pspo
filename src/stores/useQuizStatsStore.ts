@@ -4,19 +4,22 @@ import { QuestionStat } from "../utils/types";
 interface QuizStatsState {
   isTracking: boolean;
   questionStartTime: number | null;
-  currentQuestionId: number | null; // This was an index, let's keep it for compatibility or rename to currentQuestionIndex if needed. 
+  currentQuestionId: number | null; // This was an index, let's keep it for compatibility or rename to currentQuestionIndex if needed.
                                      // Actually, we'll store the persistent ID in QuestionStat.
   questionStats: QuestionStat[];
-  
+  pausedAt: number | null;
+
   // Actions
   startTracking: () => void;
   startQuestion: (questionIndex: number) => void;
-  endQuestion: (params: { 
-    questionId: string; 
-    isCorrect: boolean; 
-    userAnswer: any; 
-    isBookmarked: boolean; 
+  endQuestion: (params: {
+    questionId: string;
+    isCorrect: boolean;
+    userAnswer: any;
+    isBookmarked: boolean;
   }) => void;
+  pauseTracking: () => void;
+  resumeTracking: () => void;
   resetStats: () => void;
   getSummary: () => {
     totalQuestions: number;
@@ -31,6 +34,7 @@ export const useQuizStatsStore = create<QuizStatsState>((set, get) => ({
   questionStartTime: null,
   currentQuestionId: null,
   questionStats: [],
+  pausedAt: null,
 
   startTracking: () => {
     set({
@@ -38,6 +42,7 @@ export const useQuizStatsStore = create<QuizStatsState>((set, get) => ({
       questionStartTime: null,
       currentQuestionId: null,
       questionStats: [],
+      pausedAt: null,
     });
   },
 
@@ -80,12 +85,33 @@ export const useQuizStatsStore = create<QuizStatsState>((set, get) => ({
     });
   },
 
+  // Exclude paused time from the running question's elapsed time by pushing
+  // questionStartTime forward once resumed, instead of tracking a separate
+  // paused-duration ledger per question.
+  pauseTracking: () => {
+    const { isTracking, questionStartTime, pausedAt } = get();
+    if (!isTracking || questionStartTime === null || pausedAt !== null) return;
+    set({ pausedAt: Date.now() });
+  },
+
+  resumeTracking: () => {
+    const { pausedAt, questionStartTime } = get();
+    if (pausedAt === null) return;
+    const pausedDurationMs = Date.now() - pausedAt;
+    set({
+      questionStartTime:
+        questionStartTime !== null ? questionStartTime + pausedDurationMs : null,
+      pausedAt: null,
+    });
+  },
+
   resetStats: () => {
     set({
       isTracking: false,
       questionStartTime: null,
       currentQuestionId: null,
       questionStats: [],
+      pausedAt: null,
     });
   },
 

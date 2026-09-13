@@ -61,6 +61,8 @@ vi.mock("../stores/useQuizStatsStore", () => ({
           details: [],
         })),
       resetStats: vi.fn(),
+      pauseTracking: vi.fn(),
+      resumeTracking: vi.fn(),
     };
     return selector ? selector(state) : state;
   }),
