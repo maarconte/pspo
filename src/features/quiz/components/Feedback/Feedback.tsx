@@ -11,12 +11,13 @@ import { FeedbackProps } from "./Feedback.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
 import { useUpdateDoc } from "../../../../utils/hooks/";
+import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 
 const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
   const [showModal, setShowModal] = useState(false);
   const [comment, setComment] = useState<string>("");
   const { data, handleUpdate, isUpdating, error } = useUpdateDoc({
-    collectionName: "questions",
+    collectionName: QUESTIONS_COLLECTION,
     docId: question.id,
   });
 

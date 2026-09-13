@@ -16,6 +16,7 @@ import {
   useReactTable 
 } from "@tanstack/react-table";
 import { Question } from "../../../../utils/types";
+import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 import { toast } from "react-toastify";
 
 import TableActions from "../../../../ui/Table/TableActions/TableActions";
@@ -37,7 +38,7 @@ const TableQuestions: FC = () => {
 
   // --- Store & Hooks ---
   const allQuestions = useQuestionsStore((state) => state.allQuestions);
-  const { handleDelete } = useDeleteDoc("questions");
+  const { handleDelete } = useDeleteDoc(QUESTIONS_COLLECTION);
 
   // --- Handlers ---
   const handleSelectQuestion = (question: Question) => {

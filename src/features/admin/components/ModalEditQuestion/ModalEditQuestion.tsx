@@ -6,6 +6,7 @@ import { Trash2, Plus } from "lucide-react";
 import { Field, FieldArray, Formik } from "formik";
 import { toast } from "react-toastify";
 import { useAddDoc, useUpdateDoc } from "../../../../utils/hooks";
+import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 
 import Button from "../../../../ui/Button/Button";
 import { Button_Style } from "../../../../ui/Button/Button.types";
@@ -22,10 +23,10 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   setIsOpen,
   setSelectQuestion,
 }) => {
-  const { handleAdd } = useAddDoc("questions");
+  const { handleAdd } = useAddDoc(QUESTIONS_COLLECTION);
   const { handleUpdate, error } = useUpdateDoc({
     docId: question?.id || "",
-    collectionName: "questions",
+    collectionName: QUESTIONS_COLLECTION,
   });
   const handleAnswerChange = (index: number, answer: any) => {
     let newAnswer = Array.isArray(answer) ? [...answer] : [];

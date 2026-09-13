@@ -12,7 +12,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { db } from "../../lib/firebase";
-import { DEFAULT_QUESTION_DATE } from "../constants";
+import { DEFAULT_QUESTION_DATE, QUESTIONS_COLLECTION } from "../constants";
 
 
 export function useFetchFirebase<T = any>(collectionName: string) {
@@ -32,7 +32,7 @@ export function useFetchFirebase<T = any>(collectionName: string) {
 
       querySnapshot.forEach((doc) => {
         const docData = doc.data();
-        const isQuestion = collectionName === "questions";
+        const isQuestion = collectionName === QUESTIONS_COLLECTION;
 
         fetchedData.push({
           id: doc.id,

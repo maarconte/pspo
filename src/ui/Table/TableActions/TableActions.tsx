@@ -9,6 +9,7 @@ import Modal from "../../Modal";
 import ModalEditQuestion from "../../../features/admin/components/ModalEditQuestion/ModalEditQuestion";
 import Papa, { ParseResult } from "papaparse";
 import { Question } from "../../../utils/types";
+import { QUESTIONS_COLLECTION } from "../../../utils/constants";
 import { toast } from "react-toastify";
 import {
   CsvQuestionRow,
@@ -37,8 +38,8 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [csvData, setCsvData] = useState<QuestionDraft[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { handleAdd } = useAddDoc("questions");
-  const { handleDelete } = useDeleteDoc("questions");
+  const { handleAdd } = useAddDoc(QUESTIONS_COLLECTION);
+  const { handleDelete } = useDeleteDoc(QUESTIONS_COLLECTION);
   const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
     if (!setSelectedQuestions || !setIsSelectAll || !setIsSelectNone) return;

@@ -83,6 +83,20 @@ service cloud.firestore {
       allow create, delete: if isAdmin();
     }
 
+    // Collection questions_dev (bac à sable utilisé par `npm run dev`,
+    // notamment pour tester les imports CSV sans toucher aux questions
+    // publiées en prod). Mêmes règles que la collection questions.
+    match /questions_dev/{questionId} {
+      allow read: if true;
+
+      allow update: if isAdmin() || (
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['comments', 'isFlagged', 'updatedAt'])
+      );
+
+      allow create, delete: if isAdmin();
+    }
+
     // Collection categories (si vous en avez)
     match /categories/{categoryId} {
       // Lecture : tout le monde
