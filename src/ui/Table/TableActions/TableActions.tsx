@@ -53,15 +53,11 @@ const TableActions: React.FC<TableActionsProps> = ({
 
   return (
     <div className="d-flex gap-05 justify-content-end mb-1">
-      <FileUploader
-        handleFile={(file: File) => csvImport.parseFile(file, importModuleType)}
-        disabled={!importModuleType}
-        title={
-          !importModuleType
-            ? "Choisis un module dans le filtre pour importer des questions"
-            : undefined
-        }
-      />
+      {importModuleType && (
+        <FileUploader
+          handleFile={(file: File) => csvImport.parseFile(file, importModuleType)}
+        />
+      )}
       {csvImport.csvData.length > 0 && (
         <Button
           label={`Prévisualiser ${csvImport.csvData.length} question(s)`}
