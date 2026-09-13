@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
 import { useDeleteDoc } from "../../../utils/hooks";
-import { useModules } from "../../../features/admin/hooks/useModules";
-import { getFormationValue } from "../../../utils/helpers/formationLabel";
 
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
-import Select from "../../Select";
 import FileUploader from "../../FileUploader";
 import ImportPreviewModal from "./ImportPreviewModal/ImportPreviewModal";
 import Modal from "../../Modal";
@@ -25,6 +22,8 @@ interface TableActionsProps {
   >;
   setIsSelectAll?: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSelectNone?: React.Dispatch<React.SetStateAction<boolean>>;
+  /** Raw module value ("" = all modules) driven by the table's module filter; imported questions are stamped with it. */
+  importModuleType: string;
 }
 const TableActions: React.FC<TableActionsProps> = ({
   selectedQuestions,
@@ -33,18 +32,12 @@ const TableActions: React.FC<TableActionsProps> = ({
   setSelectedQuestion,
   setIsSelectAll,
   setIsSelectNone,
+  importModuleType,
 }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [importModuleType, setImportModuleType] = useState("");
   const { handleDelete } = useDeleteDoc(QUESTIONS_COLLECTION);
-  const { modules } = useModules();
   const csvImport = useCsvQuestionImport();
-
-  const moduleOptions = modules.map((module) => ({
-    label: `${module.title}${!module.isActive ? " (désactivé)" : ""}`,
-    value: getFormationValue(module.title),
-  }));
 
   const handleDeleteAll = async () => {
     if (!selectedQuestions || selectedQuestions.length === 0) return;
@@ -60,17 +53,14 @@ const TableActions: React.FC<TableActionsProps> = ({
 
   return (
     <div className="d-flex gap-05 justify-content-end mb-1">
-      <Select
-        name="importModule"
-        id="importModule"
-        options={moduleOptions}
-        value={importModuleType}
-        placeholder="Module à importer"
-        handleChange={(value) => setImportModuleType(String(value))}
-      />
       <FileUploader
         handleFile={(file: File) => csvImport.parseFile(file, importModuleType)}
         disabled={!importModuleType}
+        title={
+          !importModuleType
+            ? "Choisis un module dans le filtre pour importer des questions"
+            : undefined
+        }
       />
       {csvImport.csvData.length > 0 && (
         <Button

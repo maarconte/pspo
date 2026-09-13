@@ -6,8 +6,9 @@ import { Upload } from "lucide-react";
 type FileUploaderProps = {
   handleFile: any; // Function to handle the uploaded file
   disabled?: boolean;
+  title?: string;
 };
-const FileUploader = ({ handleFile, disabled }: FileUploaderProps) => {
+const FileUploader = ({ handleFile, disabled, title }: FileUploaderProps) => {
   // Create a reference to the hidden file input element
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
@@ -37,6 +38,7 @@ const FileUploader = ({ handleFile, disabled }: FileUploaderProps) => {
         icon={<Upload size={16} />}
         onClick={handleClick}
         disabled={disabled}
+        title={title}
       />
 
       <input
