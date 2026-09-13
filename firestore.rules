@@ -111,8 +111,17 @@ service cloud.firestore {
       // Lecture : tout le monde peut lire (pour le choix du quiz)
       allow read: if true;
 
-      // Création, modification, suppression : admin et dev uniquement
-      allow create, update, delete: if isAdmin();
+      // Modification : admin et dev peuvent tout faire.
+      // Un utilisateur authentifié peut seulement incrémenter le compteur
+      // de quiz terminés (+1 exactement), déclenché en fin de quiz.
+      allow update: if isAdmin() || (
+        isAuthenticated() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['completedCount']) &&
+        request.resource.data.completedCount == resource.data.completedCount + 1
+      );
+
+      // Création, suppression : admin et dev uniquement
+      allow create, delete: if isAdmin();
     }
 
     // Collection tickets

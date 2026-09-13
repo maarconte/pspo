@@ -42,6 +42,21 @@
     margin-left: auto;
   }
 
+  &__back-btn {
+    flex-shrink: 0;
+  }
+
+  &__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    > * {
+      flex: 1 1 200px;
+    }
+  }
+
   &__loading {
     display: flex;
     align-items: center;

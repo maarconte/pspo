@@ -5,9 +5,12 @@ import {
   deleteDoc,
   doc,
   query,
+  where,
   orderBy,
   onSnapshot,
+  getDocs,
   serverTimestamp,
+  increment,
   Unsubscribe,
 } from 'firebase/firestore';
 import {
@@ -19,6 +22,7 @@ import {
 } from 'firebase/storage';
 import { db } from '../../../lib/firebase/firestore';
 import { app } from '../../../lib/firebase/config';
+import { getFormationLabel } from '../../../utils/helpers/formationLabel';
 import type {
   Module,
   CreateModulePayload,
@@ -62,6 +66,7 @@ export const createModule = async (
 ): Promise<string> => {
   let pdfUrl: string | undefined;
   let pdfPath: string | undefined;
+  let pdfSizeBytes: number | undefined;
 
   if (payload.pdfFile) {
     const path = `modules/${Date.now()}_${payload.pdfFile.name}`;
@@ -69,6 +74,7 @@ export const createModule = async (
     await uploadBytes(storageRef, payload.pdfFile);
     pdfUrl = await getDownloadURL(storageRef);
     pdfPath = path;
+    pdfSizeBytes = payload.pdfFile.size;
   }
 
   const docRef = await addDoc(collection(db, MODULES_COLLECTION), {
@@ -79,6 +85,8 @@ export const createModule = async (
     minSuccessPercent: payload.minSuccessPercent,
     pdfUrl: pdfUrl ?? null,
     pdfPath: pdfPath ?? null,
+    pdfSizeBytes: pdfSizeBytes ?? null,
+    completedCount: 0,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -96,6 +104,7 @@ export const updateModule = async (
   const { pdfFile, removePdf, ...rest } = payload;
   let pdfUrl: string | undefined;
   let pdfPath: string | undefined;
+  let pdfSizeBytes: number | undefined;
 
   if (pdfFile) {
     const path = `modules/${Date.now()}_${pdfFile.name}`;
@@ -103,6 +112,7 @@ export const updateModule = async (
     await uploadBytes(storageRef, pdfFile);
     pdfUrl = await getDownloadURL(storageRef);
     pdfPath = path;
+    pdfSizeBytes = pdfFile.size;
 
     if (previousPdfPath) {
       try {
@@ -122,10 +132,29 @@ export const updateModule = async (
   const moduleRef = doc(db, MODULES_COLLECTION, moduleId);
   await updateDoc(moduleRef, {
     ...rest,
-    ...(pdfUrl ? { pdfUrl, pdfPath } : {}),
-    ...(!pdfUrl && removePdf ? { pdfUrl: null, pdfPath: null } : {}),
+    ...(pdfUrl ? { pdfUrl, pdfPath, pdfSizeBytes } : {}),
+    ...(!pdfUrl && removePdf ? { pdfUrl: null, pdfPath: null, pdfSizeBytes: null } : {}),
     updatedAt: serverTimestamp(),
   });
+};
+
+// ─── Completed quiz counter ────────────────────────────────────────────────────
+
+/**
+ * Increments the completed-quiz counter of the module matching a formation.
+ * Called after a quiz session is saved; silently no-ops if no module matches
+ * (e.g. formation has no corresponding module yet).
+ */
+export const incrementModuleCompletedCount = async (
+  formation: string,
+): Promise<void> => {
+  const title = getFormationLabel(formation);
+  const q = query(collection(db, MODULES_COLLECTION), where('title', '==', title));
+  const snapshot = await getDocs(q);
+  const moduleDoc = snapshot.docs[0];
+  if (!moduleDoc) return;
+
+  await updateDoc(moduleDoc.ref, { completedCount: increment(1) });
 };
 
 // ─── Delete ───────────────────────────────────────────────────────────────────

@@ -9,6 +9,9 @@ export interface Module {
   minSuccessPercent: number;
   pdfUrl?: string;
   pdfPath?: string; // Firebase Storage path, used to delete the file
+  pdfSizeBytes?: number;
+  /** Number of quiz sessions completed for this module, incremented on quiz completion. */
+  completedCount?: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
