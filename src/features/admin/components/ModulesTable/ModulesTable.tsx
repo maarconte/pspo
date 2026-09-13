@@ -1,12 +1,13 @@
-import { FileText, Layers } from 'lucide-react';
+import { FileText, Layers, Pencil } from 'lucide-react';
 import type { Module } from '../../types/module.types';
 import './style.scss';
 
 interface ModulesTableProps {
   modules: Module[];
+  onEdit: (module: Module) => void;
 }
 
-export const ModulesTable = ({ modules }: ModulesTableProps) => {
+export const ModulesTable = ({ modules, onEdit }: ModulesTableProps) => {
   if (modules.length === 0) {
     return (
       <div className="modules-table__empty">
@@ -29,6 +30,7 @@ export const ModulesTable = ({ modules }: ModulesTableProps) => {
               <th>Nbr question</th>
               <th>% minimum to success</th>
               <th>PDF</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -61,6 +63,16 @@ export const ModulesTable = ({ modules }: ModulesTableProps) => {
                   ) : (
                     '—'
                   )}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    className="modules-table__edit-btn"
+                    onClick={() => onEdit(module)}
+                    title={`Éditer ${module.title}`}
+                  >
+                    <Pencil size={16} />
+                  </button>
                 </td>
               </tr>
             ))}

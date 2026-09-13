@@ -1,13 +1,16 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FileText, Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Modal from '../../../../ui/Modal/Modal';
-import { createModule } from '../../api/modules.api';
+import { createModule, updateModule } from '../../api/modules.api';
+import type { Module } from '../../types/module.types';
 import './style.scss';
 
-interface AddModuleModalProps {
+interface ModuleFormModalProps {
   isOpen: boolean;
   onClose: () => void;
+  /** When provided, the modal edits this module instead of creating a new one. */
+  module?: Module;
 }
 
 const MIN_DURATION_MINUTES = 15; // 00:15
@@ -26,7 +29,7 @@ const durationToMinutes = (hhmm: string): number | null => {
   return Number(match[1]) * 60 + Number(match[2]);
 };
 
-const initialState = {
+const emptyState = {
   title: '',
   isActive: false,
   quizDuration: '',
@@ -34,37 +37,46 @@ const initialState = {
   minSuccessPercent: '',
 };
 
-type TouchedFields = Record<keyof typeof initialState, boolean>;
+const stateFromModule = (module: Module) => ({
+  title: module.title,
+  isActive: module.isActive,
+  quizDuration: module.quizDuration,
+  questionCount: String(module.questionCount),
+  minSuccessPercent: String(module.minSuccessPercent),
+});
 
-export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
-  const [form, setForm] = useState(initialState);
-  const [touched, setTouched] = useState<TouchedFields>({
-    title: false,
-    isActive: false,
-    quizDuration: false,
-    questionCount: false,
-    minSuccessPercent: false,
-  });
+type TouchedFields = Record<keyof typeof emptyState, boolean>;
+const untouchedFields: TouchedFields = {
+  title: false,
+  isActive: false,
+  quizDuration: false,
+  questionCount: false,
+  minSuccessPercent: false,
+};
+
+export const ModuleFormModal = ({ isOpen, onClose, module }: ModuleFormModalProps) => {
+  const isEditMode = !!module;
+  const [form, setForm] = useState(module ? stateFromModule(module) : emptyState);
+  const [touched, setTouched] = useState<TouchedFields>(untouchedFields);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfError, setPdfError] = useState<string | null>(null);
+  const [removeExistingPdf, setRemoveExistingPdf] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const resetForm = () => {
-    setForm(initialState);
-    setTouched({
-      title: false,
-      isActive: false,
-      quizDuration: false,
-      questionCount: false,
-      minSuccessPercent: false,
-    });
-    setPdfFile(null);
-    setPdfError(null);
-  };
+  // Re-sync the form whenever a new module is opened for editing (or the modal reopens in add mode).
+  useEffect(() => {
+    if (isOpen) {
+      setForm(module ? stateFromModule(module) : emptyState);
+      setTouched(untouchedFields);
+      setPdfFile(null);
+      setPdfError(null);
+      setRemoveExistingPdf(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, module?.id]);
 
   const handleClose = () => {
-    resetForm();
     onClose();
   };
 
@@ -105,11 +117,13 @@ export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
 
     setPdfError(null);
     setPdfFile(file);
+    setRemoveExistingPdf(false);
   };
 
   const removePdf = () => {
     setPdfFile(null);
     setPdfError(null);
+    setRemoveExistingPdf(true);
   };
 
   const handleConfirm = async () => {
@@ -117,38 +131,55 @@ export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
 
     setIsSubmitting(true);
     try {
-      await createModule({
+      const payload = {
         title: form.title.trim(),
         isActive: form.isActive,
         quizDuration: form.quizDuration,
         questionCount: Number(form.questionCount),
         minSuccessPercent: Number(form.minSuccessPercent),
         pdfFile: pdfFile ?? undefined,
-      });
-      toast.success('Module bien ajouté');
-      resetForm();
+      };
+
+      if (isEditMode && module) {
+        await updateModule(
+          module.id,
+          { ...payload, removePdf: removeExistingPdf },
+          module.pdfPath
+        );
+        toast.success('Modifications saved');
+      } else {
+        await createModule(payload);
+        toast.success('Module bien ajouté');
+      }
       onClose();
     } catch {
-      toast.error("Une erreur est survenue lors de l'ajout du module");
+      toast.error(
+        isEditMode
+          ? "Une erreur est survenue lors de la mise à jour du module"
+          : "Une erreur est survenue lors de l'ajout du module"
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const hasPdf = !!pdfFile || (isEditMode && !!module?.pdfUrl && !removeExistingPdf);
+  const pdfName = pdfFile?.name ?? (hasPdf ? 'Fichier existant' : null);
+
   return (
     <Modal
       isOpen={isOpen}
-      title="Add module"
+      title={isEditMode ? 'Edit module' : 'Add module'}
       onClose={handleClose}
       setIsClosed={handleClose}
       onConfirm={handleConfirm}
-      labelOnConfirm="Add module"
+      labelOnConfirm={isEditMode ? 'Save' : 'Add module'}
       labelOnCancel="Cancel"
       confirmButtonDisabled={!isFormValid}
       isConfirmLoading={isSubmitting}
     >
-      <div className="add-module-form">
-        <div className="add-module-form__field">
+      <div className="module-form">
+        <div className="module-form__field">
           <label htmlFor="module-title">Title</label>
           <input
             id="module-title"
@@ -160,18 +191,18 @@ export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
             required
           />
           {touched.title && !isTitleValid && (
-            <span className="add-module-form__error">{REQUIRED_FIELD_MESSAGE}</span>
+            <span className="module-form__error">{REQUIRED_FIELD_MESSAGE}</span>
           )}
         </div>
 
-        <div className="add-module-form__field">
-          <span className="add-module-form__label">Statut</span>
+        <div className="module-form__field">
+          <span className="module-form__label">Statut</span>
           <button
             type="button"
-            className={`add-module-form__status-toggle ${
+            className={`module-form__status-toggle ${
               form.isActive
-                ? 'add-module-form__status-toggle--active'
-                : 'add-module-form__status-toggle--inactive'
+                ? 'module-form__status-toggle--active'
+                : 'module-form__status-toggle--inactive'
             }`}
             onClick={() => setForm((f) => ({ ...f, isActive: !f.isActive }))}
           >
@@ -179,7 +210,7 @@ export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
           </button>
         </div>
 
-        <div className="add-module-form__field">
+        <div className="module-form__field">
           <label htmlFor="module-duration">Quizz duration</label>
           <input
             id="module-duration"
@@ -193,11 +224,11 @@ export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
             required
           />
           {touched.quizDuration && !isDurationValid && (
-            <span className="add-module-form__error">{REQUIRED_FIELD_MESSAGE}</span>
+            <span className="module-form__error">{REQUIRED_FIELD_MESSAGE}</span>
           )}
         </div>
 
-        <div className="add-module-form__field">
+        <div className="module-form__field">
           <label htmlFor="module-question-count">Nbr question</label>
           <input
             id="module-question-count"
@@ -211,11 +242,11 @@ export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
             required
           />
           {touched.questionCount && !isQuestionCountValid && (
-            <span className="add-module-form__error">{REQUIRED_FIELD_MESSAGE}</span>
+            <span className="module-form__error">{REQUIRED_FIELD_MESSAGE}</span>
           )}
         </div>
 
-        <div className="add-module-form__field">
+        <div className="module-form__field">
           <label htmlFor="module-min-success">% minimum to success</label>
           <input
             id="module-min-success"
@@ -229,16 +260,16 @@ export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
             required
           />
           {touched.minSuccessPercent && !isPercentValid && (
-            <span className="add-module-form__error">{REQUIRED_FIELD_MESSAGE}</span>
+            <span className="module-form__error">{REQUIRED_FIELD_MESSAGE}</span>
           )}
         </div>
 
-        <div className="add-module-form__field">
-          <span className="add-module-form__label">Support de cours (PDF)</span>
-          <div className="add-module-form__pdf-row">
+        <div className="module-form__field">
+          <span className="module-form__label">Support de cours (PDF)</span>
+          <div className="module-form__pdf-row">
             <button
               type="button"
-              className="add-module-form__icon-btn"
+              className="module-form__icon-btn"
               onClick={() => fileInputRef.current?.click()}
               title="Ajouter un PDF"
             >
@@ -246,33 +277,33 @@ export const AddModuleModal = ({ isOpen, onClose }: AddModuleModalProps) => {
             </button>
             <button
               type="button"
-              className="add-module-form__icon-btn"
+              className="module-form__icon-btn"
               onClick={() => fileInputRef.current?.click()}
-              disabled={!pdfFile}
+              disabled={!hasPdf}
               title="Remplacer le PDF"
             >
               <Pencil size={18} />
             </button>
             <button
               type="button"
-              className="add-module-form__icon-btn"
+              className="module-form__icon-btn"
               onClick={removePdf}
-              disabled={!pdfFile}
+              disabled={!hasPdf}
               title="Supprimer le PDF"
             >
               <Trash2 size={18} />
             </button>
-            {pdfFile && <span className="add-module-form__pdf-name">{pdfFile.name}</span>}
+            {pdfName && <span className="module-form__pdf-name">{pdfName}</span>}
           </div>
           <input
             ref={fileInputRef}
             type="file"
             accept="application/pdf"
             onChange={handlePdfSelected}
-            className="add-module-form__file-input"
+            className="module-form__file-input"
             aria-hidden="true"
           />
-          {pdfError && <span className="add-module-form__error">{pdfError}</span>}
+          {pdfError && <span className="module-form__error">{pdfError}</span>}
         </div>
       </div>
     </Modal>

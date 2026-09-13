@@ -93,7 +93,7 @@ export const updateModule = async (
   payload: UpdateModulePayload,
   previousPdfPath?: string | null,
 ): Promise<void> => {
-  const { pdfFile, ...rest } = payload;
+  const { pdfFile, removePdf, ...rest } = payload;
   let pdfUrl: string | undefined;
   let pdfPath: string | undefined;
 
@@ -111,12 +111,19 @@ export const updateModule = async (
         console.warn('Storage cleanup warning:', err);
       }
     }
+  } else if (removePdf && previousPdfPath) {
+    try {
+      await deleteObject(ref(storage, previousPdfPath));
+    } catch (err) {
+      console.warn('Storage cleanup warning:', err);
+    }
   }
 
   const moduleRef = doc(db, MODULES_COLLECTION, moduleId);
   await updateDoc(moduleRef, {
     ...rest,
     ...(pdfUrl ? { pdfUrl, pdfPath } : {}),
+    ...(!pdfUrl && removePdf ? { pdfUrl: null, pdfPath: null } : {}),
     updatedAt: serverTimestamp(),
   });
 };

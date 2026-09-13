@@ -50,6 +50,25 @@
     }
   }
 
+  &__edit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid rgba($primary-500, 0.2);
+    border-radius: 8px;
+    background: #fafafa;
+    color: $primary-500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+
+    &:hover {
+      background: rgba($primary-50, 0.9);
+      border-color: $primary-500;
+    }
+  }
+
   &__empty {
     display: flex;
     flex-direction: column;

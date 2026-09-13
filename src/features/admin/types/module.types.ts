@@ -24,4 +24,6 @@ export type UpdateModulePayload = Partial<
   Pick<Module, 'title' | 'isActive' | 'quizDuration' | 'questionCount' | 'minSuccessPercent'>
 > & {
   pdfFile?: File;
+  /** Explicitly detach the existing PDF without uploading a new one. Ignored if `pdfFile` is set. */
+  removePdf?: boolean;
 };
