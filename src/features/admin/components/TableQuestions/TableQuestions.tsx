@@ -5,11 +5,12 @@ import { FC, useMemo, useState } from "react";
 import { Copy } from "lucide-react";
 import { useDeleteDoc } from "../../../../utils/hooks";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { useModules } from "../../hooks/useModules";
+import { getFormationValue } from "../../../../utils/helpers/formationLabel";
 import { useQuestionColumns } from "./hooks/useQuestionColumns";
 import { fuzzyFilter } from "./utils/tableUtils";
 import { findDuplicateQuestions } from "./utils/duplicateDetection";
 import {
-  ColumnFiltersState,
   SortingState,
   getCoreRowModel,
   getFilteredRowModel,
@@ -23,6 +24,7 @@ import { toast } from "react-toastify";
 
 import Button from "../../../../ui/Button/Button";
 import { Button_Style } from "../../../../ui/Button/Button.types";
+import Select from "../../../../ui/Select/Select";
 import TableActions from "../../../../ui/Table/TableActions/TableActions";
 import TableSearch from "../../../../ui/Table/TableSearch";
 import Table from "../../../../ui/Table/Table";
@@ -33,6 +35,7 @@ import DuplicateQuestionsModal from "./DuplicateQuestionsModal/DuplicateQuestion
 const TableQuestions: FC = () => {
   // --- States ---
   const [globalFilter, setGlobalFilter] = useState("");
+  const [moduleFilter, setModuleFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 50 });
   
@@ -45,9 +48,29 @@ const TableQuestions: FC = () => {
   // --- Store & Hooks ---
   const allQuestions = useQuestionsStore((state) => state.allQuestions);
   const { handleDelete, isLoading: isDeletingDuplicate } = useDeleteDoc(QUESTIONS_COLLECTION);
+  const { modules } = useModules();
   const duplicateGroups = useMemo(
     () => findDuplicateQuestions(allQuestions),
     [allQuestions]
+  );
+
+  const moduleFilterOptions = useMemo(
+    () => [
+      { label: "Tous les modules", value: "" },
+      ...modules.map((module) => ({
+        label: `${module.title}${!module.isActive ? " (désactivé)" : ""}`,
+        value: getFormationValue(module.title),
+      })),
+    ],
+    [modules]
+  );
+
+  const filteredQuestions = useMemo(
+    () =>
+      moduleFilter
+        ? allQuestions.filter((question) => question.type === moduleFilter)
+        : allQuestions,
+    [allQuestions, moduleFilter]
   );
 
   // --- Handlers ---
@@ -112,7 +135,7 @@ const TableQuestions: FC = () => {
   }), [selectedQuestions]);
 
   const table = useReactTable({
-    data: allQuestions,
+    data: filteredQuestions,
     columns,
     filterFns: { fuzzy: fuzzyFilter },
     state: { pagination, sorting, globalFilter },
@@ -152,10 +175,20 @@ const TableQuestions: FC = () => {
                 />
               )}
             </div>
-            <TableSearch
-              value={globalFilter ?? ""}
-              onChange={(value) => setGlobalFilter(String(value))}
-            />
+            <div className="d-flex gap-05">
+              <Select
+                name="moduleFilter"
+                id="moduleFilter"
+                options={moduleFilterOptions}
+                value={moduleFilter}
+                placeholder="Tous les modules"
+                handleChange={(value) => setModuleFilter(String(value))}
+              />
+              <TableSearch
+                value={globalFilter ?? ""}
+                onChange={(value) => setGlobalFilter(String(value))}
+              />
+            </div>
           </div>
         )}
       />
