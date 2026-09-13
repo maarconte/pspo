@@ -1,21 +1,27 @@
 import { useState } from 'react';
-import { Layers, Plus } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Layers, Plus } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import { useModules } from '../features/admin/hooks/useModules';
-import { updateModule } from '../features/admin/api/modules.api';
+import { updateModule, deleteModule } from '../features/admin/api/modules.api';
 import { ModulesTable } from '../features/admin/components/ModulesTable/ModulesTable';
 import { ModuleFormModal } from '../features/admin/components/ModuleFormModal/ModuleFormModal';
 import Button from '../ui/Button/Button';
-import { Button_Type } from '../ui/Button/Button.types';
+import { Button_Type, Button_Style } from '../ui/Button/Button.types';
+import Modal from '../ui/Modal/Modal';
+import StatCard from '../ui/StatCard/StatCard';
 import type { Module } from '../features/admin/types/module.types';
 import './AdminModules.scss';
 
 export default function AdminModules() {
+  const navigate = useNavigate();
   const { modules, isLoading, error } = useModules();
   const [modalState, setModalState] = useState<{ isOpen: boolean; module?: Module }>({
     isOpen: false,
   });
   const [togglingModuleId, setTogglingModuleId] = useState<string | null>(null);
+  const [moduleToDelete, setModuleToDelete] = useState<Module | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const openAddModal = () => setModalState({ isOpen: true, module: undefined });
   const openEditModal = (module: Module) => setModalState({ isOpen: true, module });
@@ -37,10 +43,33 @@ export default function AdminModules() {
     }
   };
 
+  const handleConfirmDelete = async () => {
+    if (!moduleToDelete) return;
+    setIsDeleting(true);
+    try {
+      await deleteModule(moduleToDelete.id, moduleToDelete.pdfPath);
+      toast.success('Module supprimé');
+    } catch {
+      toast.error('Une erreur est survenue lors de la suppression du module');
+    } finally {
+      setIsDeleting(false);
+      setModuleToDelete(null);
+    }
+  };
+
+  const activeCount = modules.filter((m) => m.isActive).length;
+
   return (
     <div className="AdminModules admin-modules-page">
       <div className="container mt-5">
         <div className="admin-modules-page__hero">
+          <Button
+            label="Back"
+            icon={<ArrowLeft size={16} />}
+            style={Button_Style.OUTLINED}
+            onClick={() => navigate('/admin')}
+            className="admin-modules-page__back-btn"
+          />
           <div className="admin-modules-page__hero-icon">
             <Layers size={28} />
           </div>
@@ -59,6 +88,21 @@ export default function AdminModules() {
           />
         </div>
 
+        <div className="admin-modules-page__stats">
+          <StatCard
+            icon={<Layers size={24} />}
+            value={modules.length}
+            label="Totals modules"
+            variant="info"
+          />
+          <StatCard
+            icon={<CheckCircle2 size={24} />}
+            value={activeCount}
+            label="Actifs"
+            variant="success"
+          />
+        </div>
+
         {isLoading ? (
           <div className="admin-modules-page__loading">
             <span className="admin-modules-page__spinner" />
@@ -73,6 +117,7 @@ export default function AdminModules() {
             modules={modules}
             onEdit={openEditModal}
             onToggleStatus={handleToggleStatus}
+            onDelete={setModuleToDelete}
             togglingModuleId={togglingModuleId}
           />
         )}
@@ -83,6 +128,26 @@ export default function AdminModules() {
         onClose={closeModal}
         module={modalState.module}
       />
+
+      <Modal
+        isOpen={!!moduleToDelete}
+        title="Supprimer le module"
+        type="error"
+        labelOnConfirm="Supprimer"
+        labelOnCancel="Annuler"
+        onClose={() => setModuleToDelete(null)}
+        setIsClosed={() => setModuleToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        isConfirmLoading={isDeleting}
+      >
+        <p>
+          Êtes-vous sûr de vouloir supprimer le module{' '}
+          <strong>"{moduleToDelete?.title}"</strong> ?
+        </p>
+        <p style={{ color: '#888', fontSize: '0.875rem', marginTop: '0.5rem' }}>
+          Cette action est irréversible. Le PDF associé sera également supprimé.
+        </p>
+      </Modal>
     </div>
   );
 }

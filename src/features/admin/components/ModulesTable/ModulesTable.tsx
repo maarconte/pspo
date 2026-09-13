@@ -1,4 +1,4 @@
-import { FileText, Layers, Pencil } from 'lucide-react';
+import { FileText, Layers, Pencil, Trash2 } from 'lucide-react';
 import type { Module } from '../../types/module.types';
 import { useQuestionsStore } from '../../../../stores/useQuestionsStore';
 import { getFormationLabel } from '../../../../utils/helpers/formationLabel';
@@ -8,13 +8,21 @@ interface ModulesTableProps {
   modules: Module[];
   onEdit: (module: Module) => void;
   onToggleStatus: (module: Module) => void;
+  onDelete: (module: Module) => void;
   togglingModuleId?: string | null;
 }
+
+const formatPdfSize = (bytes?: number): string => {
+  if (!bytes) return '';
+  const mo = bytes / (1024 * 1024);
+  return `${mo.toFixed(1)} Mo`;
+};
 
 export const ModulesTable = ({
   modules,
   onEdit,
   onToggleStatus,
+  onDelete,
   togglingModuleId,
 }: ModulesTableProps) => {
   const allQuestions = useQuestionsStore((s) => s.allQuestions);
@@ -40,6 +48,7 @@ export const ModulesTable = ({
             <tr>
               <th>Title</th>
               <th>Statut</th>
+              <th>Nbr quizz terminé</th>
               <th>Quizz duration</th>
               <th>Nbr question</th>
               <th>Questions en base</th>
@@ -65,6 +74,7 @@ export const ModulesTable = ({
                     {module.isActive ? 'Actived' : 'Desactived'}
                   </button>
                 </td>
+                <td>{module.completedCount || '-'}</td>
                 <td>{module.quizDuration}</td>
                 <td>{module.questionCount}</td>
                 <td>{getLinkedQuestionCount(module)}</td>
@@ -79,20 +89,33 @@ export const ModulesTable = ({
                       title={`Ouvrir le PDF de ${module.title}`}
                     >
                       <FileText size={16} />
+                      {module.pdfSizeBytes ? (
+                        <span>{formatPdfSize(module.pdfSizeBytes)}</span>
+                      ) : null}
                     </a>
                   ) : (
-                    '—'
+                    <span className="modules-table__pdf-none">(none)</span>
                   )}
                 </td>
                 <td>
-                  <button
-                    type="button"
-                    className="modules-table__edit-btn"
-                    onClick={() => onEdit(module)}
-                    title={`Éditer ${module.title}`}
-                  >
-                    <Pencil size={16} />
-                  </button>
+                  <div className="modules-table__actions">
+                    <button
+                      type="button"
+                      className="modules-table__edit-btn"
+                      onClick={() => onEdit(module)}
+                      title={`Éditer ${module.title}`}
+                    >
+                      <Pencil size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      className="modules-table__delete-btn"
+                      onClick={() => onDelete(module)}
+                      title={`Supprimer ${module.title}`}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
