@@ -1,7 +1,8 @@
 import { FileText, Layers, Pencil, Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import type { Module } from '../../types/module.types';
 import { useQuestionsStore } from '../../../../stores/useQuestionsStore';
-import { getFormationLabel } from '../../../../utils/helpers/formationLabel';
+import { getFormationLabel, getFormationValue } from '../../../../utils/helpers/formationLabel';
 import './style.scss';
 
 interface ModulesTableProps {
@@ -92,7 +93,15 @@ export const ModulesTable = ({
                 <td>{module.completedCount || '-'}</td>
                 <td>{module.quizDuration}</td>
                 <td>{module.questionCount}</td>
-                <td>{linkedQuestionCount}</td>
+                <td>
+                  <Link
+                    to={`/admin?module=${encodeURIComponent(getFormationValue(module.title))}`}
+                    className="modules-table__question-count-link"
+                    title={`Voir les questions de ${module.title}`}
+                  >
+                    {linkedQuestionCount}
+                  </Link>
+                </td>
                 <td>{module.minSuccessPercent}%</td>
                 <td>
                   {module.pdfUrl ? (

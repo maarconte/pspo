@@ -2,8 +2,8 @@ import "./style.scss";
 import "./style-mobile.scss";
 
 import React, { FC, useEffect, useState } from "react";
+import { Search } from "lucide-react";
 
-import Input from "../../Input";
 import { TableSearchProps } from "./TableSearch.types";
 
 const TableSearch: FC<TableSearchProps> = ({
@@ -29,12 +29,16 @@ const TableSearch: FC<TableSearchProps> = ({
 
   return (
     <div className="TableSearch">
-      <Input
+      <Search size={16} className="TableSearch__icon" />
+      <input
+        type="text"
         placeholder="Search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         name="search"
         id="TableSearchInput"
+        aria-label="Search"
+        className="TableSearch__input"
       />
     </div>
   );
