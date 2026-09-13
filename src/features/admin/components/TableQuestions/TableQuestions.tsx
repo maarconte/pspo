@@ -2,6 +2,7 @@ import "./style.scss";
 import "./style-mobile.scss";
 
 import { FC, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Copy } from "lucide-react";
 import { useDeleteDoc } from "../../../../utils/hooks";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
@@ -34,8 +35,9 @@ import DuplicateQuestionsModal from "./DuplicateQuestionsModal/DuplicateQuestion
 
 const TableQuestions: FC = () => {
   // --- States ---
+  const [searchParams] = useSearchParams();
   const [globalFilter, setGlobalFilter] = useState("");
-  const [moduleFilter, setModuleFilter] = useState("");
+  const [moduleFilter, setModuleFilter] = useState(() => searchParams.get("module") ?? "");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 50 });
   
