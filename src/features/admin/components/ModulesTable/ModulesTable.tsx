@@ -44,15 +44,26 @@ export const ModulesTable = ({
     <div className="modules-table">
       <div className="modules-table__wrapper">
         <table className="modules-table__table">
+          <colgroup>
+            <col style={{ width: '17%' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '12%' }} />
+            <col style={{ width: '9%' }} />
+            <col style={{ width: '9%' }} />
+            <col style={{ width: '11%' }} />
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '12%' }} />
+            <col style={{ width: '9%' }} />
+          </colgroup>
           <thead>
             <tr>
               <th>Title</th>
               <th>Statut</th>
               <th>Nbr quizz terminé</th>
-              <th>Quizz duration</th>
+              <th>Duration</th>
               <th>Nbr question</th>
               <th>Questions en base</th>
-              <th>% minimum to success</th>
+              <th>% to success</th>
               <th>PDF</th>
               <th>Actions</th>
             </tr>
