@@ -21,6 +21,7 @@ export default function AdminModules() {
   });
   const [togglingModuleId, setTogglingModuleId] = useState<string | null>(null);
   const [moduleToDelete, setModuleToDelete] = useState<Module | null>(null);
+  const [isDeletionBlockedOpen, setIsDeletionBlockedOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const openAddModal = () => setModalState({ isOpen: true, module: undefined });
@@ -40,6 +41,14 @@ export default function AdminModules() {
       toast.error('Une erreur est survenue lors de la mise à jour du statut');
     } finally {
       setTogglingModuleId(null);
+    }
+  };
+
+  const handleDeleteClick = (module: Module, isEmpty: boolean) => {
+    if (isEmpty) {
+      setModuleToDelete(module);
+    } else {
+      setIsDeletionBlockedOpen(true);
     }
   };
 
@@ -117,7 +126,7 @@ export default function AdminModules() {
             modules={modules}
             onEdit={openEditModal}
             onToggleStatus={handleToggleStatus}
-            onDelete={setModuleToDelete}
+            onDelete={handleDeleteClick}
             togglingModuleId={togglingModuleId}
           />
         )}
@@ -146,6 +155,23 @@ export default function AdminModules() {
         </p>
         <p style={{ color: '#888', fontSize: '0.875rem', marginTop: '0.5rem' }}>
           Cette action est irréversible. Le PDF associé sera également supprimé.
+        </p>
+      </Modal>
+
+      <Modal
+        isOpen={isDeletionBlockedOpen}
+        title="Suppression impossible"
+        type="warning"
+        labelOnConfirm="J'ai compris"
+        hideCancelButton
+        onClose={() => setIsDeletionBlockedOpen(false)}
+        setIsClosed={() => setIsDeletionBlockedOpen(false)}
+        onConfirm={() => setIsDeletionBlockedOpen(false)}
+      >
+        <p>
+          Ce module comprend des questions, vous ne pouvez pas le supprimer par
+          vous même. Pour réaliser la suppression, vous devez formuler la
+          demande à l'équipe support.
         </p>
       </Modal>
     </div>

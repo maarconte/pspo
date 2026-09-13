@@ -8,7 +8,7 @@ interface ModulesTableProps {
   modules: Module[];
   onEdit: (module: Module) => void;
   onToggleStatus: (module: Module) => void;
-  onDelete: (module: Module) => void;
+  onDelete: (module: Module, isEmpty: boolean) => void;
   togglingModuleId?: string | null;
 }
 
@@ -125,13 +125,8 @@ export const ModulesTable = ({
                     <button
                       type="button"
                       className="modules-table__delete-btn"
-                      onClick={() => onDelete(module)}
-                      disabled={!isEmpty}
-                      title={
-                        isEmpty
-                          ? `Supprimer ${module.title}`
-                          : 'Un module contenant des questions ne peut pas être supprimé'
-                      }
+                      onClick={() => onDelete(module, isEmpty)}
+                      title={`Supprimer ${module.title}`}
                     >
                       <Trash2 size={16} />
                     </button>
