@@ -3,6 +3,12 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.5.1] - 2026-09-14
+
+### Corrigé
+
+- Le temps de réponse par question continuait de s'accumuler pendant une pause du quiz (pause manuelle ou popup "Temps écoulé"), ce qui pouvait faire dépasser au "Total Time" final la durée configurée sur le module.
+
 ## [2.5.0] - 2026-09-14
 
 ### Modifié
