@@ -3,16 +3,16 @@ import "./style-mobile.scss";
 
 import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
 import { FC, useEffect, useState } from "react";
-import { AlertTriangle } from "lucide-react";
-import { toast } from "react-toastify";
 
+import { AlertTriangle } from "lucide-react";
 import Button from "../../../../ui/Button/Button";
 import { FeedbackProps } from "./Feedback.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
-import SafeHtml from "../../../../ui/SafeHtml/SafeHtml";
-import { useUpdateDoc } from "../../../../utils/hooks/";
 import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
+import SafeHtml from "../../../../ui/SafeHtml/SafeHtml";
+import { toast } from "react-toastify";
+import { useUpdateDoc } from "../../../../utils/hooks/";
 
 const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
   const [showModal, setShowModal] = useState(false);
@@ -66,22 +66,20 @@ const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
       {showReportButton && (
         <div className="d-flex justify-content-end align-items-center mt-1">
           <Button
-            label="Report a problem"
+            label="Report question"
             type={Button_Type.SECONDARY}
             style={Button_Style.OUTLINED}
-            icon={
-            <AlertTriangle size={16} color="#e41937"/>
-          }
-          onClick={() => setShowModal(true)}
-        />
-      </div>
+            icon={<AlertTriangle size={16} color="#e41937" />}
+            onClick={() => setShowModal(true)}
+          />
+        </div>
       )}
 
       <Modal
         isOpen={showModal}
         setIsClosed={setShowModal}
         onClose={() => setShowModal(false)}
-        title="Report a problem"
+        title="Report question"
         labelOnConfirm="Submit"
         onConfirm={() => handleSubmitComment()}
         isConfirmLoading={isUpdating}

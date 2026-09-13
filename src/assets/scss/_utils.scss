@@ -1,5 +1,5 @@
-@use 'sass:string';
-@use './variables' as *;
+@use "sass:string";
+@use "./variables" as *;
 
 .pointer {
   cursor: pointer;
@@ -12,7 +12,9 @@
 .text-center {
   text-align: center !important;
 }
-
+.text-muted {
+  opacity: 0.5;
+}
 .text-right {
   text-align: right !important;
 }
@@ -106,19 +108,19 @@
 
 @for $i from 0 through 5 {
   .mb-#{$i} {
-    margin-bottom: #{$i}rem;
+    margin-bottom: #{$i}rem !important;
   }
 
   .mt-#{$i} {
-    margin-top: #{$i}rem;
+    margin-top: #{$i}rem !important;
   }
 
   .mr-#{$i} {
-    margin-right: #{$i}rem;
+    margin-right: #{$i}rem !important;
   }
 
   .ml-#{$i} {
-    margin-left: #{$i}rem;
+    margin-left: #{$i}rem !important;
   }
 }
 
@@ -164,7 +166,6 @@
 .bg-success {
   background-color: $success-100;
 }
-
 
 .bg-white {
   background-color: white;

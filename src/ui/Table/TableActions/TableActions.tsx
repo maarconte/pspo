@@ -5,6 +5,7 @@ import { useAddDoc, useDeleteDoc } from "../../../utils/hooks";
 import Button from "../../Button";
 import { Button_Type } from "../../Button/Button.types";
 import FileUploader from "../../FileUploader";
+import ImportPreviewModal from "./ImportPreviewModal/ImportPreviewModal";
 import Modal from "../../Modal";
 import ModalEditQuestion from "../../../features/admin/components/ModalEditQuestion/ModalEditQuestion";
 import Papa, { ParseResult } from "papaparse";
@@ -38,6 +39,8 @@ const TableActions: React.FC<TableActionsProps> = ({
   const [csvData, setCsvData] = useState<QuestionDraft[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
   const { handleAdd } = useAddDoc(QUESTIONS_COLLECTION);
   const { handleDelete } = useDeleteDoc(QUESTIONS_COLLECTION);
   const handleDeleteAll = async () => {
@@ -100,18 +103,26 @@ const TableActions: React.FC<TableActionsProps> = ({
     });
   };
 
+  const handleRemoveFromPreview = (index: number) => {
+    setCsvData((current) => current.filter((_, i) => i !== index));
+  };
+
   const addAllQuestions = async () => {
-    if (!csvData) return;
+    if (csvData.length === 0) return;
+    setIsImporting(true);
     try {
       for (const question of csvData) {
         await handleAdd(question);
       }
       setCsvData([]);
+      setIsPreviewModalOpen(false);
       toast.success("The questions have been added");
     } catch (error) {
       toast.error(
         "An error occurred while adding the questions. Please try again."
       );
+    } finally {
+      setIsImporting(false);
     }
   };
   return (
@@ -119,8 +130,8 @@ const TableActions: React.FC<TableActionsProps> = ({
       <FileUploader handleFile={handleFileUpload} />
       {csvData.length > 0 && (
         <Button
-          label={`Add ${csvData.length} questions`}
-          onClick={addAllQuestions}
+          label={`Prévisualiser ${csvData.length} question(s)`}
+          onClick={() => setIsPreviewModalOpen(true)}
           icon={<Plus size={16} />}
         />
       )}
@@ -143,6 +154,17 @@ const TableActions: React.FC<TableActionsProps> = ({
         <ModalEditQuestion
           isOpen={isAddModalOpen}
           setIsOpen={setIsAddModalOpen}
+        />
+      )}
+
+      {isPreviewModalOpen && (
+        <ImportPreviewModal
+          isOpen={isPreviewModalOpen}
+          questions={csvData}
+          isImporting={isImporting}
+          onRemove={handleRemoveFromPreview}
+          onConfirm={addAllQuestions}
+          onClose={() => setIsPreviewModalOpen(false)}
         />
       )}
 
