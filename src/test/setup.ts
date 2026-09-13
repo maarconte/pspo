@@ -45,6 +45,7 @@ vi.mock('firebase/firestore', () => ({
 	query: vi.fn(),
 	where: vi.fn(),
 	orderBy: vi.fn(),
+	onSnapshot: vi.fn(() => vi.fn()),
 	Timestamp: {
 		fromDate: vi.fn((date: Date) => ({
 			toDate: () => date,

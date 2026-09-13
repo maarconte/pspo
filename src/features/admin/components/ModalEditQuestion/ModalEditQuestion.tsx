@@ -7,6 +7,8 @@ import { Field, FieldArray, Formik } from "formik";
 import { toast } from "react-toastify";
 import { useAddDoc, useUpdateDoc } from "../../../../utils/hooks";
 import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
+import { useModules } from "../../hooks/useModules";
+import { getFormationValue } from "../../../../utils/helpers/formationLabel";
 
 import Button from "../../../../ui/Button/Button";
 import { Button_Style } from "../../../../ui/Button/Button.types";
@@ -28,6 +30,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
     docId: question?.id || "",
     collectionName: QUESTIONS_COLLECTION,
   });
+  const { modules } = useModules();
   const handleAnswerChange = (index: number, answer: any) => {
     let newAnswer = Array.isArray(answer) ? [...answer] : [];
     newAnswer?.includes(index)
@@ -84,7 +87,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
             <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-sm-3">
-                  <h6 className="mb-1">Training</h6>
+                  <h6 className="mb-1">Module</h6>
                   <Field
                     as="select"
                     id="type"
@@ -93,8 +96,12 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     onChange={handleChange}
                     className="select-modal"
                   >
-                    <option value="pspo-I">PSPO-I</option>
-                    <option value="PSM-I">PSM-I</option>
+                    {modules.map((module) => (
+                      <option key={module.id} value={getFormationValue(module.title)}>
+                        {module.title}
+                        {!module.isActive ? " (désactivé)" : ""}
+                      </option>
+                    ))}
                   </Field>
                 </div>
                 <div className="col-sm-9">
