@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Drawer } from "rsuite";
 import { FileText } from "lucide-react";
-import pdfUrl from "../../../../assets/img/StudyGroup-PSPO1-Super-PDF-v2.2.pdf";
 import { useLocation } from "react-router-dom";
+import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { useModules } from "../../../admin/hooks/useModules";
+import { getFormationLabel } from "../../../../utils/helpers/formationLabel";
 import "./DocumentationDrawer.scss";
 
 export const DocumentationDrawer: React.FC = () => {
@@ -10,7 +12,14 @@ export const DocumentationDrawer: React.FC = () => {
   const isAllowedPath = location.pathname === "/" || location.pathname === "/quizz";
   const [isOpen, setIsOpen] = useState(false);
 
-  if (!isAllowedPath) return null;
+  const formation = useQuestionsStore((s) => s.formation);
+  const { modules } = useModules();
+  const currentModule = modules.find(
+    (m) => m.title === getFormationLabel(formation)
+  );
+  const pdfUrl = currentModule?.pdfUrl;
+
+  if (!isAllowedPath || !pdfUrl) return null;
 
   const toggleDrawer = () => setIsOpen((prev) => !prev);
 

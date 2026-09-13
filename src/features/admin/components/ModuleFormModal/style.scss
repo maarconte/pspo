@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/variables";
+@use "../../../../assets/scss/variables" as *;
 
 .module-form {
   display: flex;
@@ -29,7 +29,10 @@
     font-family: inherit;
     color: #1a1a2e;
     background: #fafafa;
-    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s,
+      background 0.2s;
     outline: none;
 
     &::placeholder {
@@ -65,7 +68,9 @@
     font-weight: 600;
     color: #fff;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
+    transition:
+      background 0.2s,
+      transform 0.1s;
 
     &:active {
       transform: scale(0.97);
@@ -97,7 +102,9 @@
     background: #fafafa;
     color: $primary-500;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
 
     &:hover:not(:disabled) {
       background: rgba($primary-50, 0.9);

@@ -1,4 +1,4 @@
-@import "../../../../assets/scss/variables";
+@use "../../../../assets/scss/variables" as *;
 
 .modules-table {
   background: #fff;
@@ -61,7 +61,9 @@
     background: #fafafa;
     color: $primary-500;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
 
     &:hover {
       background: rgba($primary-50, 0.9);

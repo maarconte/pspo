@@ -1,0 +1,31 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (request.auth.token.role == 'admin' || request.auth.token.role == 'dev');
+    }
+
+    // Pièces jointes des tickets de support (screenshots)
+    match /tickets/{fileName=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+      allow delete: if isAuthenticated();
+    }
+
+    // PDF de support de cours des modules
+    match /modules/{fileName=**} {
+      // Lecture publique (le PDF est affiché dans la Documentation drawer, page publique)
+      allow read: if true;
+
+      // Upload/suppression réservés aux admins et devs
+      allow write: if isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}
