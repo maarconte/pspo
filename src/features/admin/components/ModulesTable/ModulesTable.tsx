@@ -1,5 +1,7 @@
 import { FileText, Layers, Pencil } from 'lucide-react';
 import type { Module } from '../../types/module.types';
+import { useQuestionsStore } from '../../../../stores/useQuestionsStore';
+import { getFormationLabel } from '../../../../utils/helpers/formationLabel';
 import './style.scss';
 
 interface ModulesTableProps {
@@ -8,6 +10,11 @@ interface ModulesTableProps {
 }
 
 export const ModulesTable = ({ modules, onEdit }: ModulesTableProps) => {
+  const allQuestions = useQuestionsStore((s) => s.allQuestions);
+
+  const getLinkedQuestionCount = (module: Module) =>
+    allQuestions.filter((q) => getFormationLabel(q.type) === module.title).length;
+
   if (modules.length === 0) {
     return (
       <div className="modules-table__empty">
@@ -28,6 +35,7 @@ export const ModulesTable = ({ modules, onEdit }: ModulesTableProps) => {
               <th>Statut</th>
               <th>Quizz duration</th>
               <th>Nbr question</th>
+              <th>Questions en base</th>
               <th>% minimum to success</th>
               <th>PDF</th>
               <th>Actions</th>
@@ -48,6 +56,7 @@ export const ModulesTable = ({ modules, onEdit }: ModulesTableProps) => {
                 </td>
                 <td>{module.quizDuration}</td>
                 <td>{module.questionCount}</td>
+                <td>{getLinkedQuestionCount(module)}</td>
                 <td>{module.minSuccessPercent}%</td>
                 <td>
                   {module.pdfUrl ? (
