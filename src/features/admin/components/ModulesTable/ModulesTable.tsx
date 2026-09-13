@@ -7,9 +7,16 @@ import './style.scss';
 interface ModulesTableProps {
   modules: Module[];
   onEdit: (module: Module) => void;
+  onToggleStatus: (module: Module) => void;
+  togglingModuleId?: string | null;
 }
 
-export const ModulesTable = ({ modules, onEdit }: ModulesTableProps) => {
+export const ModulesTable = ({
+  modules,
+  onEdit,
+  onToggleStatus,
+  togglingModuleId,
+}: ModulesTableProps) => {
   const allQuestions = useQuestionsStore((s) => s.allQuestions);
 
   const getLinkedQuestionCount = (module: Module) =>
@@ -46,13 +53,17 @@ export const ModulesTable = ({ modules, onEdit }: ModulesTableProps) => {
               <tr key={module.id}>
                 <td className="modules-table__title">{module.title}</td>
                 <td>
-                  <span
-                    className={`badge ${
+                  <button
+                    type="button"
+                    className={`badge modules-table__status-btn ${
                       module.isActive ? 'badge--active' : 'badge--inactive'
                     }`}
+                    onClick={() => onToggleStatus(module)}
+                    disabled={togglingModuleId === module.id}
+                    title={`Basculer le statut de ${module.title}`}
                   >
                     {module.isActive ? 'Actived' : 'Desactived'}
-                  </span>
+                  </button>
                 </td>
                 <td>{module.quizDuration}</td>
                 <td>{module.questionCount}</td>

@@ -1,11 +1,14 @@
 import "./Home.scss";
 
+import { useEffect } from "react";
 import { AlertCircle, Clock, Layers, Play, Target, Undo2 } from "lucide-react";
 
 import { Button, SegmentedControl } from "../ui";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useUserStore } from "../features/auth/stores/useAuthStore";
 import { useInfoPopupStore } from "../stores/useInfoPopupStore";
+import { useModules } from "../features/admin/hooks/useModules";
+import { getFormationValue } from "../utils/helpers/formationLabel";
 import { useNavigate } from "react-router-dom";
 import { trackEvent } from "../lib/analytics";
 
@@ -21,6 +24,25 @@ export default function Home() {
   const openInfoPopup = useInfoPopupStore((s) => s.open);
   const isDismissed = useInfoPopupStore((s) => s.isDismissed);
   const isExpired = useInfoPopupStore((s) => s.isExpired());
+
+  const { modules } = useModules();
+  const activeModules = modules.filter((m) => m.isActive);
+  const moduleOptions = activeModules.map((m) => ({
+    label: m.title,
+    value: getFormationValue(m.title),
+  }));
+
+  // Keep the selected formation pointed at an active module: switch away from
+  // one that just got deactivated (or hasn't loaded yet) to the first available.
+  useEffect(() => {
+    if (activeModules.length === 0) return;
+    const isCurrentActive = activeModules.some(
+      (m) => getFormationValue(m.title) === formation
+    );
+    if (!isCurrentActive) {
+      setFormation(getFormationValue(activeModules[0].title));
+    }
+  }, [activeModules, formation, setFormation]);
 
   const handleStartExam = () => {
     if (!user && !isDismissed && !isExpired) {
@@ -51,10 +73,7 @@ export default function Home() {
             onChange={(value) => {
               setFormation(value);
             }}
-            options={[
-              { label: "PSPO-I", value: "pspo-I" },
-              { label: "PSM-I", value: "PSM-I" },
-            ]}
+            options={moduleOptions}
           />
         </div>
 

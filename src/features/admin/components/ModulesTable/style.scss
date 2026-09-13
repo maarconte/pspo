@@ -50,6 +50,25 @@
     }
   }
 
+  &__status-btn {
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+
+    &:hover:not(:disabled) {
+      opacity: 0.85;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
   &__edit-btn {
     display: inline-flex;
     align-items: center;
