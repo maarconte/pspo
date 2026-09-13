@@ -52,12 +52,23 @@ const TableActions: React.FC<TableActionsProps> = ({
     setIsSelectNone(false);
   };
 
-  const handleFileUpload = (file: File) => {
+  const handleFileUpload = async (file: File) => {
     if (!file) return;
 
-    Papa.parse<CsvQuestionRow>(file, {
+    // Without an explicit `newline`, Papa Parse's auto-detection can
+    // misparse a quoted field sitting right at end-of-file (observed:
+    // "Quoted field unterminated" on an otherwise well-formed file whose
+    // last row's last field — correctAnswer — was quoted). Detect the
+    // file's actual convention ourselves instead of hardcoding one, since
+    // forcing "\n" on a \r\n file leaks a stray \r into the last column's
+    // name (e.g. "correctAnswer\r"), silently dropping every row.
+    const text = await file.text();
+    const newline = text.includes("\r\n") ? "\r\n" : "\n";
+
+    Papa.parse<CsvQuestionRow>(text, {
       header: true,
       skipEmptyLines: true,
+      newline,
       complete: (result: ParseResult<CsvQuestionRow>) => {
         const errors: string[] = [];
         const questions: QuestionDraft[] = [];

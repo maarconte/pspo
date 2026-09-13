@@ -8,11 +8,7 @@
  * "questions_dev" with the current prod content again, it does not delete
  * anything else you may have added there via CSV import testing.
  *
- * Setup (one time):
- *   1. Firebase Console > Project settings > Service accounts >
- *      "Generate new private key".
- *   2. Save the downloaded file as functions/serviceAccountKey.json
- *      (already covered by .gitignore, never commit it).
+ * Setup (one time): see functions/scripts/lib/firebaseAdmin.js
  *
  * Usage (from the functions/ directory):
  *   npm run copy-questions-to-dev
@@ -21,41 +17,14 @@
  *   node scripts/copy-questions-to-dev.js
  */
 
-const admin = require("firebase-admin");
-const path = require("path");
-const fs = require("fs");
+const { admin, initAdminApp } = require("./lib/firebaseAdmin");
+
+initAdminApp();
+const db = admin.firestore();
 
 const SOURCE_COLLECTION = "questions";
 const TARGET_COLLECTION = "questions_dev";
 const BATCH_SIZE = 400; // stays under Firestore's 500 writes/batch limit
-
-// The local key always wins over GOOGLE_APPLICATION_CREDENTIALS: that env
-// var is often set globally in a shell for a different project, and using
-// it by mistake here would write into the wrong Firebase project.
-const LOCAL_SERVICE_ACCOUNT_PATH = path.join(
-  __dirname,
-  "..",
-  "serviceAccountKey.json"
-);
-const serviceAccountPath = fs.existsSync(LOCAL_SERVICE_ACCOUNT_PATH)
-  ? LOCAL_SERVICE_ACCOUNT_PATH
-  : process.env.GOOGLE_APPLICATION_CREDENTIALS;
-
-if (!serviceAccountPath || !fs.existsSync(serviceAccountPath)) {
-  console.error(
-    `Clé de service account introuvable.\n` +
-      `Place-la dans functions/serviceAccountKey.json (Firebase Console > ` +
-      `Paramètres du projet > Comptes de service > Générer une nouvelle clé ` +
-      `privée), ou définis GOOGLE_APPLICATION_CREDENTIALS vers son chemin.`
-  );
-  process.exit(1);
-}
-
-admin.initializeApp({
-  credential: admin.credential.cert(require(serviceAccountPath)),
-});
-
-const db = admin.firestore();
 
 async function main() {
   const snapshot = await db.collection(SOURCE_COLLECTION).get();

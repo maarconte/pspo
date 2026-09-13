@@ -94,7 +94,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     className="select-modal"
                   >
                     <option value="pspo-I">pspo-I</option>
-                    <option value="psm-I">psm-I</option>
+                    <option value="PSM-I">PSM-I</option>
                   </Field>
                 </div>
                 <div className="col-sm-9">
@@ -270,6 +270,9 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 value={values.feedback}
                 onChange={handleChange}
               />
+              <small className="text-muted d-block mb-1">
+                Balises HTML supportées à l'affichage : {"<i>, <b>, <br>, <a href>"}
+              </small>
               {values.isFlagged && (
                 <>
                   <h4>Comments</h4>

@@ -6,6 +6,7 @@ import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { QuizSessionStat, QuestionStat } from "../../../../utils/types";
 import { updateQuizSession } from "../../../../lib/firebase/stats";
 import Modal from "../../../../ui/Modal/Modal";
+import SafeHtml from "../../../../ui/SafeHtml/SafeHtml";
 import { useUserStore } from "../../../../stores/useUserStore";
 import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
 import { getInputType, isUserChoice, getAnswerStatus, getAnswerLabel } from "../../utils/answerUtils";
@@ -157,7 +158,7 @@ const ProfileBookmarks: FC<ProfileBookmarksProps> = ({ history, onUpdate }) => {
                   </div>
                   {question.feedback && (
                     <div className="feedback-box">
-                      <strong>Feedback:</strong> {question.feedback}
+                      <strong>Feedback:</strong> <SafeHtml html={question.feedback} />
                     </div>
                   )}
                 </div>

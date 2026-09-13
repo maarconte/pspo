@@ -10,6 +10,7 @@ import Button from "../../../../ui/Button/Button";
 import { FeedbackProps } from "./Feedback.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
+import SafeHtml from "../../../../ui/SafeHtml/SafeHtml";
 import { useUpdateDoc } from "../../../../utils/hooks/";
 import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 
@@ -56,9 +57,11 @@ const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
     <div className="Feedback">
       <div className="feedback-box">
         <strong>Feedback: </strong>
-        {question.feedback
-          ? question.feedback
-          : "No feedback for this question"}
+        {question.feedback ? (
+          <SafeHtml html={question.feedback} />
+        ) : (
+          "No feedback for this question"
+        )}
       </div>
       {showReportButton && (
         <div className="d-flex justify-content-end align-items-center mt-1">

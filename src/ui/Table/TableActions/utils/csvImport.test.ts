@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   CsvQuestionRow,
+  getAnswerExplanations,
   getAnswerOptions,
   parseCorrectAnswer,
   parseCsvRow,
@@ -118,6 +119,46 @@ describe("getAnswerOptions", () => {
   });
 });
 
+describe("getAnswerExplanations", () => {
+  it("returns undefined when no explanation column is present", () => {
+    const row: CsvQuestionRow = { answer1: "A", answer2: "B" };
+    expect(getAnswerExplanations(row)).toBeUndefined();
+  });
+
+  it("returns undefined when every explanation cell is empty", () => {
+    const row: CsvQuestionRow = {
+      answer1: "A",
+      answer2: "B",
+      explanation1: "",
+      explanation2: "  ",
+    };
+    expect(getAnswerExplanations(row)).toBeUndefined();
+  });
+
+  it("stays index-aligned with getAnswerOptions, skipping empty answer slots", () => {
+    const row: CsvQuestionRow = {
+      answer1: "A",
+      answer2: "",
+      answer3: "B",
+      explanation1: "pourquoi A",
+      explanation2: "jamais lue (answer2 est vide)",
+      explanation3: "pourquoi B",
+    };
+    expect(getAnswerOptions(row)).toEqual(["A", "B"]);
+    expect(getAnswerExplanations(row)).toEqual(["pourquoi A", "pourquoi B"]);
+  });
+
+  it("fills missing individual explanations with an empty string", () => {
+    const row: CsvQuestionRow = {
+      answer1: "A",
+      answer2: "B",
+      explanation1: "pourquoi A",
+      // explanation2 absent
+    };
+    expect(getAnswerExplanations(row)).toEqual(["pourquoi A", ""]);
+  });
+});
+
 describe("parseCsvRow", () => {
   it("parses a valid single-choice row", () => {
     const row: CsvQuestionRow = {
@@ -173,6 +214,74 @@ describe("parseCsvRow", () => {
         answer: true,
       },
     });
+  });
+
+  it("includes optional answerExplanations and domain when provided", () => {
+    const row: CsvQuestionRow = {
+      title: "Qui est responsable du Product Backlog ?",
+      answerType: "S",
+      answer1: "Le Scrum Master",
+      answer2: "Le Product Owner",
+      explanation1: "Incorrect : facilite mais ne décide pas.",
+      explanation2: "Correct : seul responsable du backlog.",
+      correctAnswer: "2",
+      domain: "Roles and Responsibilities",
+    };
+
+    const result = parseCsvRow(row, 6);
+    expect("question" in result && result.question.answerExplanations).toEqual([
+      "Incorrect : facilite mais ne décide pas.",
+      "Correct : seul responsable du backlog.",
+    ]);
+    expect("question" in result && result.question.domain).toBe(
+      "Roles and Responsibilities"
+    );
+  });
+
+  it("omits answerExplanations and domain entirely when absent", () => {
+    const row: CsvQuestionRow = {
+      title: "Qui est responsable du Product Backlog ?",
+      answerType: "S",
+      answer1: "Le Scrum Master",
+      answer2: "Le Product Owner",
+      correctAnswer: "2",
+    };
+
+    const result = parseCsvRow(row, 7);
+    expect(
+      "question" in result && "answerExplanations" in result.question
+    ).toBe(false);
+    expect("question" in result && "domain" in result.question).toBe(false);
+  });
+
+  it("reads explanation1/explanation2 for TF as [True, False], independent of answers", () => {
+    const row: CsvQuestionRow = {
+      title: "Le Sprint Backlog est modifiable en cours de Sprint.",
+      answerType: "TF",
+      explanation1: "Vrai : l'équipe ajuste le Sprint Backlog en continu.",
+      explanation2: "Faux : ce serait l'inverse de la réalité.",
+      correctAnswer: "true",
+    };
+
+    const result = parseCsvRow(row, 8);
+    expect("question" in result && result.question.answers).toEqual([]);
+    expect("question" in result && result.question.answerExplanations).toEqual([
+      "Vrai : l'équipe ajuste le Sprint Backlog en continu.",
+      "Faux : ce serait l'inverse de la réalité.",
+    ]);
+  });
+
+  it("omits answerExplanations for TF when no explanation column is provided", () => {
+    const row: CsvQuestionRow = {
+      title: "Le Sprint Backlog est modifiable en cours de Sprint.",
+      answerType: "TF",
+      correctAnswer: "true",
+    };
+
+    const result = parseCsvRow(row, 9);
+    expect(
+      "question" in result && "answerExplanations" in result.question
+    ).toBe(false);
   });
 
   it("defaults type to pspo-I when missing", () => {
