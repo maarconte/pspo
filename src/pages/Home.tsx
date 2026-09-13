@@ -12,6 +12,12 @@ import { getFormationValue } from "../utils/helpers/formationLabel";
 import { useNavigate } from "react-router-dom";
 import { trackEvent } from "../lib/analytics";
 
+const parseDurationMinutes = (hhmm?: string): number | null => {
+  const match = hhmm ? /^(\d{2}):(\d{2})$/.exec(hhmm) : null;
+  if (!match) return null;
+  return Number(match[1]) * 60 + Number(match[2]);
+};
+
 export default function Home() {
   const formation = useQuestionsStore((s) => s.formation);
   const setFormation = useQuestionsStore((s) => s.setFormation);
@@ -31,6 +37,14 @@ export default function Home() {
     label: m.title,
     value: getFormationValue(m.title),
   }));
+  const currentModule = activeModules.find(
+    (m) => getFormationValue(m.title) === formation
+  );
+
+  const questionCount = currentModule?.questionCount ?? 80;
+  const durationMinutes = parseDurationMinutes(currentModule?.quizDuration) ?? 60;
+  const minSuccessPercent = currentModule?.minSuccessPercent ?? 85;
+  const maxErrors = questionCount - Math.ceil((questionCount * minSuccessPercent) / 100);
 
   // Keep the selected formation pointed at an active module: switch away from
   // one that just got deactivated (or hasn't loaded yet) to the first available.
@@ -83,7 +97,7 @@ export default function Home() {
               <Layers size={24} strokeWidth={2.5} />
             </div>
             <div className="bento-content">
-              <p>  <strong>80 Questions </strong>  <span>Randomly selected for a realistic exam simulation.</span></p>
+              <p>  <strong>{questionCount} Questions </strong>  <span>Randomly selected for a realistic exam simulation.</span></p>
             </div>
           </div>
 
@@ -93,7 +107,7 @@ export default function Home() {
             </div>
             <div className="bento-content">
               <p>
-                <strong>60 Minutes </strong>
+                <strong>{durationMinutes} Minutes </strong>
                 <span>The timer will start as soon as the quiz begins.</span>
               </p>
             </div>
@@ -105,8 +119,8 @@ export default function Home() {
             </div>
             <div className="bento-content">
               <p>
-                <strong>85% Required </strong>
-                <span>Passing goal: you are allowed a maximum of 12 errors.</span>
+                <strong>{minSuccessPercent}% Required </strong>
+                <span>Passing goal: you are allowed a maximum of {maxErrors} errors.</span>
               </p>
             </div>
           </div>
