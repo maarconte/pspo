@@ -8,7 +8,7 @@ import { CounterProps } from "./Counter.types";
 import Modal from "../../../../ui/Modal/Modal";
 
 // Constants
-const INITIAL_COUNTDOWN_SECONDS = 60 * 60; // 60 minutes in seconds
+const DEFAULT_DURATION_MINUTES = 60;
 const INITIAL_TIMER = "1:00:00";
 
 // Helper functions
@@ -34,8 +34,15 @@ const parseTimer = (timerString: string): [number, number, number] => {
   return [hours, minutes, seconds];
 };
 
-const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz, onTick, currentQuestion }) => {
-  const [countdownSeconds, setCountdownSeconds] = useState(INITIAL_COUNTDOWN_SECONDS);
+const Counter: FC<CounterProps> = ({
+  isPaused,
+  setIsPaused,
+  finishQuizz,
+  onTick,
+  currentQuestion,
+  durationMinutes = DEFAULT_DURATION_MINUTES,
+}) => {
+  const [countdownSeconds, setCountdownSeconds] = useState(durationMinutes * 60);
   const [openModal, setOpenModal] = useState(false);
   const [timer, setTimer] = useState(INITIAL_TIMER);
   const [startTimer, setStartTimer] = useState(false);
@@ -142,7 +149,7 @@ const Counter: FC<CounterProps> = ({ isPaused, setIsPaused, finishQuizz, onTick,
 
   const counterStyle = {
     "--value": countdownSeconds / 60,
-    "--max": "60",
+    "--max": String(durationMinutes),
   } as React.CSSProperties;
 
   return (

@@ -6,4 +6,6 @@ export interface CounterProps {
   onTick?: (seconds: number) => void;
   /** Current question index — resets the elapsed tick counter when it changes. */
   currentQuestion?: number;
+  /** Countdown duration in minutes, from the selected module's config. Defaults to 60. */
+  durationMinutes?: number;
 }

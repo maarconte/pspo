@@ -73,7 +73,7 @@ Magic Link (passwordless email) via FirebaseUI. Role-based access: `dev` > `admi
 
 ### Quiz Engine
 
-80 random questions per session, filtered by formation type (PSPO-I, PSM, etc.). Supports single and multi-answer questions. Score calculation is centralized in `useQuestionsStore.getSuccessPercentage()`.
+Random questions per session, filtered by formation type (PSPO-I, PSM, etc.). Supports single and multi-answer questions. Score calculation is centralized in `useQuestionsStore.getSuccessPercentage()`. Question count, quiz duration, and the passing threshold are configured per module (`Module.questionCount`/`quizDuration`/`minSuccessPercent`, admin-editable via `ModuleFormModal`) and synced into `useQuestionsStore.quizConfig` when a module is selected on `Home`; they default to 80 questions / 60 minutes / 85% when a module hasn't set them.
 
 ### Firebase / Environment
 

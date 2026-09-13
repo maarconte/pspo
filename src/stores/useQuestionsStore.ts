@@ -2,6 +2,18 @@ import { toast } from "react-toastify";
 import { create } from "zustand";
 import { Question, UserAnswer } from "../utils/types";
 
+export interface QuizConfig {
+	questionCount: number;
+	durationMinutes: number;
+	minSuccessPercent: number;
+}
+
+export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
+	questionCount: 80,
+	durationMinutes: 60,
+	minSuccessPercent: 85,
+};
+
 interface QuestionsState {
 	questions: Question[];
 	allQuestions: Question[];
@@ -11,6 +23,7 @@ interface QuestionsState {
 	isLoading: boolean;
 	error: string | null;
 	totalTimeSpent: number;
+	quizConfig: QuizConfig;
 
 	// Actions
 	setTotalTimeSpent: (time: number) => void;
@@ -21,6 +34,7 @@ interface QuestionsState {
 	setAllQuestions: (questions: Question[]) => void;
 	setLoading: (loading: boolean) => void;
 	setError: (error: string | null) => void;
+	setQuizConfig: (config: QuizConfig) => void;
 	loadQuestions: (data: Question[]) => void;
 	refetch: () => void;
 	setAnswer: (index: number, answer: UserAnswer['answer']) => void;
@@ -39,9 +53,11 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 	isLoading: false,
 	error: null,
 	totalTimeSpent: 0,
+	quizConfig: DEFAULT_QUIZ_CONFIG,
 
 	setTotalTimeSpent: (time) => set({ totalTimeSpent: time }),
 	setScore: (score) => set({ score }),
+	setQuizConfig: (config) => set({ quizConfig: config }),
 
 	setUserAnswers: (answers) => {
 		if (typeof answers === "function") {
@@ -69,7 +85,7 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 	setError: (error) => set({ error }),
 
 	loadQuestions: (data) => {
-		const { formation, questions } = get();
+		const { formation, questions, quizConfig } = get();
 
 		// Filter questions by formation type
 		const selectedQuestionsByType = data.filter(
@@ -79,9 +95,9 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 		let newQuestions = questions;
 		if (questions.length === 0) {
 			if (selectedQuestionsByType.length > 0) {
-				// Shuffle and select 80 random questions initially
+				// Shuffle and select the module's configured question count initially
 				const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
-				newQuestions = shuffled.slice(0, 80);
+				newQuestions = shuffled.slice(0, quizConfig.questionCount);
 			}
 		} else {
 			// Update existing quiz questions with new values from data to avoid shuffling during background sync
@@ -159,13 +175,13 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 	},
 
 	startNewExam: () => {
-		const { allQuestions, formation } = get();
+		const { allQuestions, formation, quizConfig } = get();
 		const selectedQuestionsByType = allQuestions.filter(q => q.type === formation);
-		
+
 		let newQuestions: Question[] = [];
 		if (selectedQuestionsByType.length > 0) {
 			const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
-			newQuestions = shuffled.slice(0, 80);
+			newQuestions = shuffled.slice(0, quizConfig.questionCount);
 		}
 
 		set({

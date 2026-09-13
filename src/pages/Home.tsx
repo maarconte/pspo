@@ -23,6 +23,7 @@ export default function Home() {
   const setFormation = useQuestionsStore((s) => s.setFormation);
   const questions = useQuestionsStore((s) => s.questions);
   const startNewExam = useQuestionsStore((s) => s.startNewExam);
+  const setQuizConfig = useQuestionsStore((s) => s.setQuizConfig);
 
   const navigate = useNavigate();
 
@@ -57,6 +58,13 @@ export default function Home() {
       setFormation(getFormationValue(activeModules[0].title));
     }
   }, [activeModules, formation, setFormation]);
+
+  // Keep the store's quiz config (question count, duration, pass threshold)
+  // in sync with the module currently selected, so it applies both to the
+  // initial question set and to the exam started from this screen.
+  useEffect(() => {
+    setQuizConfig({ questionCount, durationMinutes, minSuccessPercent });
+  }, [questionCount, durationMinutes, minSuccessPercent, setQuizConfig]);
 
   const handleStartExam = () => {
     if (!user && !isDismissed && !isExpired) {

@@ -11,6 +11,7 @@ const QuizzScore: FC = () => {
   const questions = useQuestionsStore((s) => s.questions);
   const totalTimeSpent = useQuestionsStore((s) => s.totalTimeSpent);
   const getSuccessPercentage = useQuestionsStore((s) => s.getSuccessPercentage);
+  const minSuccessPercent = useQuestionsStore((s) => s.quizConfig.minSuccessPercent);
 
   const answeredCount = useMemo(
     () => userAnswers?.filter((a) => a?.answer !== undefined).length || 0,
@@ -50,7 +51,7 @@ const QuizzScore: FC = () => {
     return `${minutes}m ${seconds}s`;
   };
 
-  const isPassed = percent >= 85;
+  const isPassed = percent >= minSuccessPercent;
 
   return (
     <div className="quizz-score-dashboard">

@@ -27,6 +27,7 @@ vi.mock("../stores/useQuestionsStore", () => ({
       getSuccessPercentage: vi.fn(() => 0),
       setAnswer: vi.fn(),
       toggleBookmark: vi.fn(),
+      quizConfig: { questionCount: 80, durationMinutes: 60, minSuccessPercent: 85 },
     };
     return selector ? selector(state) : state;
   }),

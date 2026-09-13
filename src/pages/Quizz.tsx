@@ -26,6 +26,8 @@ export default function Quizz() {
   const calculateScore = useQuestionsStore((s) => s.calculateScore);
   const getSuccessPercentage = useQuestionsStore((s) => s.getSuccessPercentage);
   const userAnswers = useQuestionsStore((s) => s.userAnswers);
+  const minSuccessPercent = useQuestionsStore((s) => s.quizConfig.minSuccessPercent);
+  const durationMinutes = useQuestionsStore((s) => s.quizConfig.durationMinutes);
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -139,7 +141,7 @@ export default function Quizz() {
     trackEvent('quiz_completed', {
       formation: formation || 'unknown',
       score_pct: scorePct,
-      passed: scorePct >= 85,
+      passed: scorePct >= minSuccessPercent,
       total_time_sec: summary ? Math.round(summary.totalTimeMs / 1000) : 0,
       questions_answered: summary?.totalQuestions ?? 0,
       bookmarks_count: summary?.details.filter((d) => d.isBookmarked).length ?? 0,
@@ -225,6 +227,7 @@ export default function Quizz() {
               finishQuizz={finishQuizz}
               currentQuestion={currentQuestion}
               onTick={(seconds) => { timeSpentRef.current = seconds; }}
+              durationMinutes={durationMinutes}
             />
           )}
 
@@ -251,7 +254,7 @@ export default function Quizz() {
                 (a) => a?.answer !== undefined,
               ).length;
               const correctCount = getSuccessPercentage();
-              const isPassed = correctCount >= 85;
+              const isPassed = correctCount >= minSuccessPercent;
               return (
                 <div className="d-flex gap-1 align-items-center flex-wrap">
                   {showAnswer && (
