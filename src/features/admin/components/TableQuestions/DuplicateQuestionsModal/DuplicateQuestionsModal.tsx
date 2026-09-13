@@ -7,6 +7,7 @@ import Button from "../../../../../ui/Button/Button";
 import { Button_Style } from "../../../../../ui/Button/Button.types";
 import Modal from "../../../../../ui/Modal/Modal";
 import { DuplicateQuestionsModalProps } from "./DuplicateQuestionsModal.types";
+import { getFormationLabel } from "../../../../../utils/helpers/formationLabel";
 
 const DuplicateQuestionsModal: FC<DuplicateQuestionsModalProps> = ({
   isOpen,
@@ -56,7 +57,7 @@ const DuplicateQuestionsModal: FC<DuplicateQuestionsModalProps> = ({
                     </span>
                     <div className="DuplicateQuestionsModal__badges">
                       {question.type && (
-                        <span className="badge">{question.type}</span>
+                        <span className="badge">{getFormationLabel(question.type)}</span>
                       )}
                       {question.answerType && (
                         <span className="badge">{question.answerType}</span>

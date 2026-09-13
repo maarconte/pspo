@@ -42,7 +42,7 @@ describe("ImportPreviewModal", () => {
     expect(
       screen.getByText("Le Sprint Backlog est modifiable en cours de Sprint.")
     ).toBeInTheDocument();
-    expect(screen.getByText("pspo-I")).toBeInTheDocument();
+    expect(screen.getByText("PSPO-I")).toBeInTheDocument();
     expect(screen.getByText("Rôles et responsabilités")).toBeInTheDocument();
   });
 

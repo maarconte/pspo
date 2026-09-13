@@ -4,6 +4,7 @@ import Button from "../../../Button/Button";
 import { Button_Style } from "../../../Button/Button.types";
 import { FC } from "react";
 import { Feedback } from "../../../../features/quiz";
+import { getFormationLabel } from "../../../../utils/helpers/formationLabel";
 import { ImportPreviewModalProps } from "./ImportPreviewModal.types";
 import Modal from "../../../Modal/Modal";
 import { QuestionDraft } from "../utils/csvImport";
@@ -63,7 +64,7 @@ const ImportPreviewModal: FC<ImportPreviewModalProps> = ({
             </div>
 
             <div className="ImportPreviewModal__badges">
-              <span className="badge">{question.type}</span>
+              <span className="badge">{getFormationLabel(question.type)}</span>
               <span className="badge">{question.answerType}</span>
               {question.domain && (
                 <span className="badge">{question.domain}</span>

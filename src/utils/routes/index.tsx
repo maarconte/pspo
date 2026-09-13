@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import { RoleChecker } from "../../features/auth/components/RoleChecker";
 
+const AdminModules = lazy(() => import("../../pages/AdminModules"));
 const EditQuestions = lazy(() => import("../../pages/EditQuestions"));
 const Home = lazy(() => import("../../pages/Home"));
 const Login = lazy(() => import("../../pages/Login"));
@@ -45,6 +46,16 @@ const routes: RouteType[] = [
       </RoleChecker>
     ),
     name: "EditQuestions",
+    protected: true,
+  },
+  {
+    path: "/admin/modules",
+    component: () => (
+      <RoleChecker allowedRoles={['admin', 'dev']}>
+        <AdminModules />
+      </RoleChecker>
+    ),
+    name: "AdminModules",
     protected: true,
   },
   {

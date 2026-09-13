@@ -93,7 +93,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     onChange={handleChange}
                     className="select-modal"
                   >
-                    <option value="pspo-I">pspo-I</option>
+                    <option value="pspo-I">PSPO-I</option>
                     <option value="PSM-I">PSM-I</option>
                   </Field>
                 </div>

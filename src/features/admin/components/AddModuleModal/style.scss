@@ -1,0 +1,124 @@
+@import "../../../../assets/scss/variables";
+
+.add-module-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    letter-spacing: 0.01em;
+  }
+
+  input[type="text"],
+  input[type="time"],
+  input[type="number"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid rgba($primary-500, 0.2);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: #1a1a2e;
+    background: #fafafa;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+
+    &::placeholder {
+      color: #aaa;
+    }
+
+    &:focus {
+      border-color: $primary-500;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+    }
+  }
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    letter-spacing: 0.01em;
+  }
+
+  &__error {
+    color: $secondary-600;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  &__status-toggle {
+    align-self: flex-start;
+    padding: 0.5rem 1.25rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &--active {
+      background: $success-600;
+    }
+
+    &--inactive {
+      background: $secondary-500;
+    }
+  }
+
+  &__pdf-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba($primary-500, 0.2);
+    border-radius: 8px;
+    background: #fafafa;
+    color: $primary-500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background: rgba($primary-50, 0.9);
+      border-color: $primary-500;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__pdf-name {
+    font-size: 0.8rem;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__file-input {
+    display: none;
+  }
+}

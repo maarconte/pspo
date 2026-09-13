@@ -2,6 +2,7 @@ import { ColumnDef, sortingFns } from "@tanstack/react-table";
 import { Question } from "../../../../../utils/types";
 import { Trash2, XCircle, CheckSquare, Edit, ToggleRight, Circle } from "lucide-react";
 import { formatTimestamp } from "../../../../../utils/hooks";
+import { getFormationLabel } from "../../../../../utils/helpers/formationLabel";
 import React from "react";
 import Button from "../../../../../ui/Button";
 import { Button_Type, Button_Style } from "../../../../../ui/Button/Button.types";
@@ -105,7 +106,7 @@ export const useQuestionColumns = ({
       enableGlobalFilter: true,
       cell: ({ getValue }) => (
         <div className="text-center">
-          {getValue<string>()}
+          {getFormationLabel(getValue<string>())}
         </div>
       ),
     },

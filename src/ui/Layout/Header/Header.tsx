@@ -43,6 +43,11 @@ const Header: FC<HeaderProps> = () => {
                   Edit questions
                 </Link>
               )}
+              {isAdmin && (
+                <Link to="/admin/modules" className="nav-link">
+                  Modules
+                </Link>
+              )}
               {isDev && (
                 <Link to="/dev/users" className="nav-link">
                   Manage users

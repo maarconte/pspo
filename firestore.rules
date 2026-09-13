@@ -106,6 +106,15 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Collection modules
+    match /modules/{moduleId} {
+      // Lecture : tout le monde peut lire (pour le choix du quiz)
+      allow read: if true;
+
+      // Création, modification, suppression : admin et dev uniquement
+      allow create, update, delete: if isAdmin();
+    }
+
     // Collection tickets
     match /tickets/{ticketId} {
       // Les clients authentifiés peuvent lire (pour voir leurs tickets ou liste partagée)
