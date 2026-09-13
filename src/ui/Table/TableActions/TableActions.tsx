@@ -7,9 +7,14 @@ import { Button_Type } from "../../Button/Button.types";
 import FileUploader from "../../FileUploader";
 import Modal from "../../Modal";
 import ModalEditQuestion from "../../../features/admin/components/ModalEditQuestion/ModalEditQuestion";
-import Papa from "papaparse";
+import Papa, { ParseResult } from "papaparse";
 import { Question } from "../../../utils/types";
 import { toast } from "react-toastify";
+import {
+  CsvQuestionRow,
+  QuestionDraft,
+  parseCsvRow,
+} from "./utils/csvImport";
 
 interface TableActionsProps {
   selectedQuestions: Question[];
@@ -29,7 +34,7 @@ const TableActions: React.FC<TableActionsProps> = ({
   setIsSelectAll,
   setIsSelectNone,
 }) => {
-  const [csvData, setCsvData] = useState([]);
+  const [csvData, setCsvData] = useState<QuestionDraft[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const { handleAdd } = useAddDoc("questions");
@@ -46,53 +51,41 @@ const TableActions: React.FC<TableActionsProps> = ({
     setIsSelectNone(false);
   };
 
-  const handleFileUpload = (file: any) => {
-    if (file) {
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (result: any) => {
-          //parse data so that answers is an array. each item is separated by a /
-          result.data = result.data.map((item: any) => {
-            const keys = Object.keys(item);
-            const answerListKeys = keys.filter((key) =>
-              key.startsWith("answerList")
-            );
+  const handleFileUpload = (file: File) => {
+    if (!file) return;
 
-            if (answerListKeys.length > 0) {
-              item.answers = answerListKeys
-                .map((key) => item[key])
-                .filter((answer: string) => answer !== "");
-              // remove the answerList keys from the item
-              answerListKeys.forEach((key) => delete item[key]);
-            }
-            if (item.answerType === "S") {
-              if (!isNaN(Number(item.answer))) {
-                item.answer = Number(item.answer);
-              }
-              return item;
-            }
-            if (item.answerType === "M") {
-              item.answer = item.answer.split(",").map((answer: string) => {
-                answer = answer.trim();
-                // transform answer to number if possible
-                if (!isNaN(Number(answer))) {
-                  return Number(answer);
-                }
-                return answer;
-              });
-            }
-            return item;
-          });
+    Papa.parse<CsvQuestionRow>(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (result: ParseResult<CsvQuestionRow>) => {
+        const errors: string[] = [];
+        const questions: QuestionDraft[] = [];
 
-          setCsvData(result.data); // Store the parsed data
-          // Add validation or processing logic here
-        },
-        error: (error: any) => {
-          console.error("Error parsing CSV file:", error);
-        },
-      });
-    }
+        result.data.forEach((row, index) => {
+          const parsed = parseCsvRow(row, index + 2); // +1 header, +1 1-based
+          if ("error" in parsed) {
+            errors.push(parsed.error);
+          } else {
+            questions.push(parsed.question);
+          }
+        });
+
+        if (errors.length > 0) {
+          console.warn("Erreurs d'import CSV :", errors);
+          toast.error(
+            `${errors.length} ligne(s) ignorée(s) : ${errors
+              .slice(0, 3)
+              .join(" | ")}${errors.length > 3 ? "…" : ""}`
+          );
+        }
+
+        setCsvData(questions);
+      },
+      error: (error: Error) => {
+        console.error("Error parsing CSV file:", error);
+        toast.error("Impossible de lire le fichier CSV");
+      },
+    });
   };
 
   const addAllQuestions = async () => {

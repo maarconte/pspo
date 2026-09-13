@@ -1,0 +1,6 @@
+title,feedback,answerType,type,answer1,answer2,answer3,answer4,correctAnswer
+"Qui est responsable du contenu du Product Backlog ?","Le Product Owner est seul responsable du contenu, de la disponibilité et de l'ordonnancement du Product Backlog.",S,pspo-I,"Le Scrum Master","Le Product Owner","L'équipe de développement","Le manager",2
+"Quel est l'objectif principal d'une Daily Scrum ?","La Daily Scrum permet à l'équipe de développement d'inspecter les progrès vers l'objectif de Sprint et d'ajuster le plan si nécessaire.",S,psm-I,"Faire un rapport au manager","Planifier le travail des prochaines 24h","Résoudre tous les blocages techniques","",2
+"Quels événements font partie du framework Scrum ?","Le Sprint, la Sprint Planning, la Daily Scrum, la Sprint Review et la Sprint Retrospective sont les 5 événements Scrum.",M,psm-I,"Sprint Planning","Daily Scrum","Comité de pilotage","Sprint Retrospective","1,2,4"
+"Le Sprint Backlog peut être modifié pendant le Sprint.","Vrai : l'équipe de développement peut ajuster le Sprint Backlog au fur et à mesure qu'elle en apprend davantage, tant que l'objectif de Sprint n'est pas compromis.",TF,pspo-I,,,,,true
+"Le Scrum Master a autorité hiérarchique sur l'équipe de développement.","Faux : le Scrum Master est un leader au service de l'équipe (servant leader), sans autorité hiérarchique.",TF,pspo-I,,,,,false
