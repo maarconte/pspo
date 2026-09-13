@@ -40,8 +40,6 @@
   }
 
   &.success {
-    border-color: rgba($success-500, 0.1);
-
     .icon-container {
       background: $success-50;
       color: $success-500;
@@ -56,7 +54,6 @@
   }
 
   &.info {
-
     .icon-container {
       color: $primary-400;
     }
@@ -74,7 +71,6 @@
     border-width: 2px;
     box-shadow: 0 15px 35px rgba(82, 54, 171, 0.1);
     transform: translateY(-5px);
-
 
     &.success .icon-container {
       width: 56px;
