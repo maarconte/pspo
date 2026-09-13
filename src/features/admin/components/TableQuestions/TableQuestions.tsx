@@ -2,28 +2,33 @@ import "./style.scss";
 import "./style-mobile.scss";
 
 import { FC, useMemo, useState } from "react";
+import { Copy } from "lucide-react";
 import { useDeleteDoc } from "../../../../utils/hooks";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { useQuestionColumns } from "./hooks/useQuestionColumns";
 import { fuzzyFilter } from "./utils/tableUtils";
-import { 
-  ColumnFiltersState, 
-  SortingState, 
-  getCoreRowModel, 
-  getFilteredRowModel, 
-  getPaginationRowModel, 
-  getSortedRowModel, 
-  useReactTable 
+import { findDuplicateQuestions } from "./utils/duplicateDetection";
+import {
+  ColumnFiltersState,
+  SortingState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable
 } from "@tanstack/react-table";
 import { Question } from "../../../../utils/types";
 import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 import { toast } from "react-toastify";
 
+import Button from "../../../../ui/Button/Button";
+import { Button_Style } from "../../../../ui/Button/Button.types";
 import TableActions from "../../../../ui/Table/TableActions/TableActions";
 import TableSearch from "../../../../ui/Table/TableSearch";
 import Table from "../../../../ui/Table/Table";
 import Modal from "../../../../ui/Modal/Modal";
 import ModalEditQuestion from "../ModalEditQuestion/ModalEditQuestion";
+import DuplicateQuestionsModal from "./DuplicateQuestionsModal/DuplicateQuestionsModal";
 
 const TableQuestions: FC = () => {
   // --- States ---
@@ -35,10 +40,15 @@ const TableQuestions: FC = () => {
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDuplicatesModalOpen, setIsDuplicatesModalOpen] = useState(false);
 
   // --- Store & Hooks ---
   const allQuestions = useQuestionsStore((state) => state.allQuestions);
-  const { handleDelete } = useDeleteDoc(QUESTIONS_COLLECTION);
+  const { handleDelete, isLoading: isDeletingDuplicate } = useDeleteDoc(QUESTIONS_COLLECTION);
+  const duplicateGroups = useMemo(
+    () => findDuplicateQuestions(allQuestions),
+    [allQuestions]
+  );
 
   // --- Handlers ---
   const handleSelectQuestion = (question: Question) => {
@@ -81,6 +91,16 @@ const TableQuestions: FC = () => {
     }
   };
 
+  const handleDeleteDuplicate = async (questionId: string) => {
+    try {
+      await handleDelete(questionId);
+      toast.success("Question deleted successfully");
+    } catch (error) {
+      console.error("Deletion failed:", error);
+      toast.error("Failed to delete question");
+    }
+  };
+
   // --- Table Config ---
   const columns = useMemo(() => useQuestionColumns({
     onSelect: handleSelectQuestion,
@@ -116,12 +136,22 @@ const TableQuestions: FC = () => {
         setSelectedItems={setSelectedQuestions}
         renderHeaderAddon={(tableInstance) => (
           <div className="d-flex gap-1 w-100 justify-content-between">
-            <TableActions
-              selectedQuestions={selectedQuestions}
-              setSelectedQuestions={setSelectedQuestions}
-              setSelectedQuestion={setSelectedQuestion}
-              selectedQuestion={selectedQuestion}
-            />
+            <div className="d-flex gap-05">
+              <TableActions
+                selectedQuestions={selectedQuestions}
+                setSelectedQuestions={setSelectedQuestions}
+                setSelectedQuestion={setSelectedQuestion}
+                selectedQuestion={selectedQuestion}
+              />
+              {duplicateGroups.length > 0 && (
+                <Button
+                  label={`Doublons (${duplicateGroups.length})`}
+                  style={Button_Style.OUTLINED}
+                  onClick={() => setIsDuplicatesModalOpen(true)}
+                  icon={<Copy size={16} />}
+                />
+              )}
+            </div>
             <TableSearch
               value={globalFilter ?? ""}
               onChange={(value) => setGlobalFilter(String(value))}
@@ -129,6 +159,16 @@ const TableQuestions: FC = () => {
           </div>
         )}
       />
+
+      {isDuplicatesModalOpen && (
+        <DuplicateQuestionsModal
+          isOpen={isDuplicatesModalOpen}
+          groups={duplicateGroups}
+          isDeleting={isDeletingDuplicate}
+          onDelete={handleDeleteDuplicate}
+          onClose={() => setIsDuplicatesModalOpen(false)}
+        />
+      )}
 
       {isModalOpen && (
         <ModalEditQuestion
