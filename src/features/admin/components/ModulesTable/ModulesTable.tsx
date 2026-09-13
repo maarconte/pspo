@@ -69,7 +69,11 @@ export const ModulesTable = ({
             </tr>
           </thead>
           <tbody>
-            {modules.map((module) => (
+            {modules.map((module) => {
+              const linkedQuestionCount = getLinkedQuestionCount(module);
+              const isEmpty = linkedQuestionCount === 0;
+
+              return (
               <tr key={module.id}>
                 <td className="modules-table__title">{module.title}</td>
                 <td>
@@ -88,7 +92,7 @@ export const ModulesTable = ({
                 <td>{module.completedCount || '-'}</td>
                 <td>{module.quizDuration}</td>
                 <td>{module.questionCount}</td>
-                <td>{getLinkedQuestionCount(module)}</td>
+                <td>{linkedQuestionCount}</td>
                 <td>{module.minSuccessPercent}%</td>
                 <td>
                   {module.pdfUrl ? (
@@ -122,14 +126,20 @@ export const ModulesTable = ({
                       type="button"
                       className="modules-table__delete-btn"
                       onClick={() => onDelete(module)}
-                      title={`Supprimer ${module.title}`}
+                      disabled={!isEmpty}
+                      title={
+                        isEmpty
+                          ? `Supprimer ${module.title}`
+                          : 'Un module contenant des questions ne peut pas être supprimé'
+                      }
                     >
                       <Trash2 size={16} />
                     </button>
                   </div>
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

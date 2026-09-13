@@ -131,10 +131,10 @@ export default function AdminModules() {
 
       <Modal
         isOpen={!!moduleToDelete}
-        title="Supprimer le module"
+        title="Supprimer un module"
         type="error"
-        labelOnConfirm="Supprimer"
-        labelOnCancel="Annuler"
+        labelOnConfirm="Delete"
+        labelOnCancel="Cancel"
         onClose={() => setModuleToDelete(null)}
         setIsClosed={() => setModuleToDelete(null)}
         onConfirm={handleConfirmDelete}

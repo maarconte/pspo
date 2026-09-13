@@ -110,9 +110,14 @@
       border-color 0.2s,
       color 0.2s;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: rgba($primary-50, 0.9);
       border-color: $primary-500;
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
     }
   }
 
@@ -120,7 +125,7 @@
     color: $secondary-500;
     border-color: rgba($secondary-500, 0.25);
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: rgba($secondary-50, 0.9);
       border-color: $secondary-500;
       color: $secondary-700;
