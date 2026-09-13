@@ -100,7 +100,8 @@
   &__actions {
     display: flex;
     align-items: center;
-    gap: 0.375rem;
+    flex-wrap: wrap;
+    gap: 0.25rem;
   }
 
   &__edit-btn,
@@ -109,8 +110,8 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     border: 1.5px solid rgba($primary-500, 0.2);
     border-radius: 8px;
     background: #fafafa;

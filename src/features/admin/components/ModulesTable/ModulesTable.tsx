@@ -1,4 +1,4 @@
-import { FileText, Layers, Pencil, Trash2 } from 'lucide-react';
+import { FileText, Layers, Pencil, Plus, Trash2, Upload } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Module } from '../../types/module.types';
 import { useQuestionsStore } from '../../../../stores/useQuestionsStore';
@@ -10,6 +10,8 @@ interface ModulesTableProps {
   onEdit: (module: Module) => void;
   onToggleStatus: (module: Module) => void;
   onDelete: (module: Module, isEmpty: boolean) => void;
+  onImportCsv: (module: Module) => void;
+  onAddQuestion: (module: Module) => void;
   togglingModuleId?: string | null;
 }
 
@@ -24,6 +26,8 @@ export const ModulesTable = ({
   onEdit,
   onToggleStatus,
   onDelete,
+  onImportCsv,
+  onAddQuestion,
   togglingModuleId,
 }: ModulesTableProps) => {
   const allQuestions = useQuestionsStore((s) => s.allQuestions);
@@ -46,15 +50,15 @@ export const ModulesTable = ({
       <div className="modules-table__wrapper">
         <table className="modules-table__table">
           <colgroup>
-            <col style={{ width: '17%' }} />
+            <col style={{ width: '15%' }} />
             <col style={{ width: '11%' }} />
             <col style={{ width: '12%' }} />
             <col style={{ width: '9%' }} />
             <col style={{ width: '9%' }} />
-            <col style={{ width: '11%' }} />
             <col style={{ width: '10%' }} />
-            <col style={{ width: '12%' }} />
-            <col style={{ width: '9%' }} />
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '14%' }} />
           </colgroup>
           <thead>
             <tr>
@@ -123,6 +127,22 @@ export const ModulesTable = ({
                 </td>
                 <td>
                   <div className="modules-table__actions">
+                    <button
+                      type="button"
+                      className="modules-table__edit-btn"
+                      onClick={() => onImportCsv(module)}
+                      title={`Importer des questions CSV pour ${module.title}`}
+                    >
+                      <Upload size={16} />
+                    </button>
+                    <button
+                      type="button"
+                      className="modules-table__edit-btn"
+                      onClick={() => onAddQuestion(module)}
+                      title={`Ajouter une question à ${module.title}`}
+                    >
+                      <Plus size={16} />
+                    </button>
                     <button
                       type="button"
                       className="modules-table__edit-btn"

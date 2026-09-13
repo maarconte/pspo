@@ -19,7 +19,7 @@ const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
   const [comment, setComment] = useState<string>("");
   const { data, handleUpdate, isUpdating, error } = useUpdateDoc({
     collectionName: QUESTIONS_COLLECTION,
-    docId: question.id,
+    docId: "id" in question ? question.id : "",
   });
 
   const handleSubmitComment = async () => {

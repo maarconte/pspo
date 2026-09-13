@@ -167,6 +167,7 @@ const TableQuestions: FC = () => {
                 setSelectedQuestions={setSelectedQuestions}
                 setSelectedQuestion={setSelectedQuestion}
                 selectedQuestion={selectedQuestion}
+                importModuleType={moduleFilter}
               />
               {duplicateGroups.length > 0 && (
                 <Button

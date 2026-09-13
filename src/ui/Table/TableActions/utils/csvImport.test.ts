@@ -165,13 +165,12 @@ describe("parseCsvRow", () => {
       title: "Qui est responsable du Product Backlog ?",
       feedback: "Le Product Owner.",
       answerType: "S",
-      type: "pspo-I",
       answer1: "Le Scrum Master",
       answer2: "Le Product Owner",
       correctAnswer: "2",
     };
 
-    expect(parseCsvRow(row, 2)).toEqual({
+    expect(parseCsvRow(row, 2, "pspo-I")).toEqual({
       question: {
         title: "Qui est responsable du Product Backlog ?",
         feedback: "Le Product Owner.",
@@ -193,7 +192,7 @@ describe("parseCsvRow", () => {
       correctAnswer: "1,2",
     };
 
-    const result = parseCsvRow(row, 3);
+    const result = parseCsvRow(row, 3, "pspo-I");
     expect("question" in result && result.question.answer).toEqual([0, 1]);
   });
 
@@ -204,7 +203,7 @@ describe("parseCsvRow", () => {
       correctAnswer: "true",
     };
 
-    expect(parseCsvRow(row, 4)).toEqual({
+    expect(parseCsvRow(row, 4, "pspo-I")).toEqual({
       question: {
         title: "Le Sprint Backlog est modifiable en cours de Sprint.",
         feedback: "",
@@ -228,7 +227,7 @@ describe("parseCsvRow", () => {
       domain: "Roles and Responsibilities",
     };
 
-    const result = parseCsvRow(row, 6);
+    const result = parseCsvRow(row, 6, "pspo-I");
     expect("question" in result && result.question.answerExplanations).toEqual([
       "Incorrect : facilite mais ne décide pas.",
       "Correct : seul responsable du backlog.",
@@ -247,7 +246,7 @@ describe("parseCsvRow", () => {
       correctAnswer: "2",
     };
 
-    const result = parseCsvRow(row, 7);
+    const result = parseCsvRow(row, 7, "pspo-I");
     expect(
       "question" in result && "answerExplanations" in result.question
     ).toBe(false);
@@ -263,7 +262,7 @@ describe("parseCsvRow", () => {
       correctAnswer: "true",
     };
 
-    const result = parseCsvRow(row, 8);
+    const result = parseCsvRow(row, 8, "pspo-I");
     expect("question" in result && result.question.answers).toEqual([]);
     expect("question" in result && result.question.answerExplanations).toEqual([
       "Vrai : l'équipe ajuste le Sprint Backlog en continu.",
@@ -278,26 +277,26 @@ describe("parseCsvRow", () => {
       correctAnswer: "true",
     };
 
-    const result = parseCsvRow(row, 9);
+    const result = parseCsvRow(row, 9, "pspo-I");
     expect(
       "question" in result && "answerExplanations" in result.question
     ).toBe(false);
   });
 
-  it("defaults type to pspo-I when missing", () => {
+  it("stamps every row with the externally supplied module type", () => {
     const row: CsvQuestionRow = {
-      title: "Question sans formation",
+      title: "Question sans formation dans le CSV",
       answerType: "TF",
       correctAnswer: "false",
     };
 
-    const result = parseCsvRow(row, 5);
-    expect("question" in result && result.question.type).toBe("pspo-I");
+    const result = parseCsvRow(row, 5, "PSM-I");
+    expect("question" in result && result.question.type).toBe("PSM-I");
   });
 
   it("errors when the title is missing", () => {
     const row: CsvQuestionRow = { answerType: "TF", correctAnswer: "true" };
-    expect(parseCsvRow(row, 6)).toEqual({
+    expect(parseCsvRow(row, 6, "pspo-I")).toEqual({
       error: "Ligne 6 : titre manquant",
     });
   });
@@ -308,7 +307,7 @@ describe("parseCsvRow", () => {
       answerType: "X",
       correctAnswer: "true",
     };
-    expect(parseCsvRow(row, 7)).toEqual({
+    expect(parseCsvRow(row, 7, "pspo-I")).toEqual({
       error: 'Ligne 7 : answerType invalide "X"',
     });
   });
@@ -320,7 +319,7 @@ describe("parseCsvRow", () => {
       answer1: "A",
       correctAnswer: "5",
     };
-    expect(parseCsvRow(row, 8)).toEqual({
+    expect(parseCsvRow(row, 8, "pspo-I")).toEqual({
       error: 'Ligne 8 : correctAnswer hors limites : "5"',
     });
   });

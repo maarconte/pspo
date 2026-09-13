@@ -24,6 +24,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   question,
   setIsOpen,
   setSelectQuestion,
+  defaultType,
 }) => {
   const { handleAdd } = useAddDoc(QUESTIONS_COLLECTION);
   const { handleUpdate, error } = useUpdateDoc({
@@ -57,7 +58,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 answer: null,
                 comments: [],
                 isFlagged: false,
-                type: "pspo-I",
+                type: defaultType || "pspo-I",
               }
         }
         onSubmit={async (values) => {
