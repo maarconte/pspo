@@ -1,7 +1,18 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactElement } from "react";
 import ImportPreviewModal from "./ImportPreviewModal";
 import { QuestionDraft } from "../utils/csvImport";
+
+const renderWithQueryClient = (ui: ReactElement) => {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
+  );
+};
 
 const singleChoiceQuestion: QuestionDraft = {
   title: "Qui est responsable du Product Backlog ?",
@@ -26,7 +37,7 @@ const tfQuestion: QuestionDraft = {
 
 describe("ImportPreviewModal", () => {
   it("renders one item per question with title, badges and answers", () => {
-    render(
+    renderWithQueryClient(
       <ImportPreviewModal
         isOpen
         questions={[singleChoiceQuestion, tfQuestion]}
@@ -47,7 +58,7 @@ describe("ImportPreviewModal", () => {
   });
 
   it("highlights the correct answer for a single-choice question", () => {
-    render(
+    renderWithQueryClient(
       <ImportPreviewModal
         isOpen
         questions={[singleChoiceQuestion]}
@@ -57,14 +68,16 @@ describe("ImportPreviewModal", () => {
       />
     );
 
-    const correctOption = screen.getByText(/Le Product Owner — Correct/);
-    const wrongOption = screen.getByText(/Le Scrum Master — Incorrect/);
+    const correctOption = screen.getByText("Le Product Owner").closest("li");
+    const wrongOption = screen.getByText("Le Scrum Master").closest("li");
     expect(correctOption).toHaveClass("bg-success");
+    expect(correctOption).toHaveTextContent("Correct");
     expect(wrongOption).not.toHaveClass("bg-success");
+    expect(wrongOption).toHaveTextContent("Incorrect");
   });
 
   it("renders True/False questions without an answers list, using Vrai/Faux", () => {
-    render(
+    renderWithQueryClient(
       <ImportPreviewModal
         isOpen
         questions={[tfQuestion]}
@@ -74,15 +87,17 @@ describe("ImportPreviewModal", () => {
       />
     );
 
-    const vrai = screen.getByText(/Vrai — Vrai : /);
-    const faux = screen.getByText(/Faux — Faux : /);
+    const vrai = screen.getByText("Vrai").closest("li");
+    const faux = screen.getByText("Faux").closest("li");
     expect(vrai).toHaveClass("bg-success");
+    expect(vrai).toHaveTextContent("Vrai : ...");
     expect(faux).not.toHaveClass("bg-success");
+    expect(faux).toHaveTextContent("Faux : ...");
   });
 
   it("calls onRemove with the row index when its trash icon is clicked", () => {
     const onRemove = vi.fn();
-    render(
+    renderWithQueryClient(
       <ImportPreviewModal
         isOpen
         questions={[singleChoiceQuestion, tfQuestion]}
@@ -99,7 +114,7 @@ describe("ImportPreviewModal", () => {
   });
 
   it("shows a message and disables confirm when the batch is empty", () => {
-    render(
+    renderWithQueryClient(
       <ImportPreviewModal
         isOpen
         questions={[]}
@@ -117,7 +132,7 @@ describe("ImportPreviewModal", () => {
 
   it("calls onConfirm when the import button is clicked", () => {
     const onConfirm = vi.fn();
-    render(
+    renderWithQueryClient(
       <ImportPreviewModal
         isOpen
         questions={[singleChoiceQuestion]}
