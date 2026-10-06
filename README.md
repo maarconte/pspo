@@ -27,6 +27,7 @@ An interactive study platform designed for Professional Scrum Product Owner (PSP
 
 ### 🛠 Administrative Dashboard
 - **Question Management**: Full CRUD capabilities for the question database.
+- **Module Management**: Configure each module (question count, duration, pass threshold), attach a PDF course support and a rich-text "Useful links" section shown as a side tab to learners.
 - **User Permissions**: Role-based access control (Admin, Developer, Client).
 - **Import/Export**: Easy question management via CSV integration.
 
@@ -78,9 +79,11 @@ src/
 │   ├── admin/         # Question CRUD & Management
 │   ├── auth/          # Authentication & Role guards
 │   ├── coop/          # Multi-user study logic
+│   ├── documentation/ # Module PDF side tab
 │   ├── info-popup/    # Contextual notifications
-│   └── quiz/          # Core quiz engine & components
-├── ui/                # Shared UI Kit (Button, Input, Modal, etc.)
+│   ├── quiz/          # Core quiz engine & components
+│   └── useful-links/  # Module useful-links side tab
+├── ui/                # Shared UI Kit (Button, Input, Modal, RichTextEditor, etc.)
 ├── pages/             # Route-level views
 ├── stores/            # Global/Atomic Zustand stores
 ├── hooks/             # Shared custom React hooks
