@@ -296,3 +296,38 @@ describe('useQuestionsStore', () => {
 		});
 	});
 });
+
+describe('useQuestionsStore answer shuffling', () => {
+	const question = {
+		id: '1', title: 'Q1', type: 'pspo-I', feedback: '', answerType: 'S',
+		answers: ['A', 'B', 'C', 'D', 'E'], answer: 1,
+	} as Question;
+
+	const newSession = () => {
+		useQuestionsStore.setState({
+			questions: [], allQuestions: [], formation: 'pspo-I',
+			quizConfig: { questionCount: 80, durationMinutes: 60, minSuccessPercent: 85 },
+		});
+		useQuestionsStore.getState().loadQuestions([question]);
+		return useQuestionsStore.getState().questions[0];
+	};
+
+	it('shows the same question with a different answer order across sessions', () => {
+		const orders = new Set<string>();
+		for (let i = 0; i < 30; i++) {
+			const q = newSession();
+			expect(q.answers[q.answer as number]).toBe('B');
+			orders.add(q.answers.join(''));
+		}
+		expect(orders.size).toBeGreaterThan(1);
+	});
+
+	it('keeps the session order when data is re-synced in the background', () => {
+		const first = newSession();
+		useQuestionsStore.getState().loadQuestions([{ ...question, title: 'Edited' }]);
+		const after = useQuestionsStore.getState().questions[0];
+		expect(after.title).toBe('Edited');
+		expect(after.answers).toEqual(first.answers);
+		expect(after.answer).toBe(first.answer);
+	});
+});

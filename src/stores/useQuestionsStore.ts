@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { create } from "zustand";
+import { shuffleQuestionAnswers } from "../utils/helpers/shuffleAnswers";
 import { Question, UserAnswer } from "../utils/types";
 
 export interface QuizConfig {
@@ -97,13 +98,21 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 			if (selectedQuestionsByType.length > 0) {
 				// Shuffle and select the module's configured question count initially
 				const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
-				newQuestions = shuffled.slice(0, quizConfig.questionCount);
+				newQuestions = shuffled.slice(0, quizConfig.questionCount).map(shuffleQuestionAnswers);
 			}
 		} else {
 			// Update existing quiz questions with new values from data to avoid shuffling during background sync
 			newQuestions = questions.map((q) => {
 				const updatedQ = data.find((newQ) => newQ.id === q.id);
-				return updatedQ || q;
+				if (!updatedQ) return q;
+				// Keep this session's answer order when the answer texts haven't changed
+				const sameAnswers =
+					updatedQ.answers?.length === q.answers?.length &&
+					[...(updatedQ.answers ?? [])].sort().join("\u0000") ===
+						[...(q.answers ?? [])].sort().join("\u0000");
+				return sameAnswers
+					? { ...updatedQ, answers: q.answers, answer: q.answer, answerExplanations: q.answerExplanations }
+					: updatedQ;
 			});
 		}
 
@@ -181,7 +190,7 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 		let newQuestions: Question[] = [];
 		if (selectedQuestionsByType.length > 0) {
 			const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
-			newQuestions = shuffled.slice(0, quizConfig.questionCount);
+			newQuestions = shuffled.slice(0, quizConfig.questionCount).map(shuffleQuestionAnswers);
 		}
 
 		set({
