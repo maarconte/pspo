@@ -3,6 +3,12 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.6.0] - 2026-10-06
+
+### Modifié
+
+- L'ordre des réponses possibles est désormais mélangé aléatoirement à chaque session : une même question n'affiche plus ses réponses dans le même ordre d'une session à l'autre. Les bonnes réponses et les explications restent correctement associées.
+
 ## [2.5.1] - 2026-09-14
 
 ### Corrigé
