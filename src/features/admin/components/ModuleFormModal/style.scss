@@ -5,6 +5,12 @@
   flex-direction: column;
   gap: 1.25rem;
 
+  .module-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
   &__field {
     display: flex;
     flex-direction: column;

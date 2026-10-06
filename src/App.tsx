@@ -16,6 +16,7 @@ import { queryClient } from "./lib/react-query/queryClient";
 import { MagicLinkRedirector } from "./features/auth/components/MagicLinkRedirector/MagicLinkRedirector";
 import { CoopDrawer } from "./features/coop/components/CoopDrawer/CoopDrawer";
 import { DocumentationDrawer } from "./features/documentation/components/DocumentationDrawer/DocumentationDrawer";
+import { UsefulLinksDrawer } from "./features/useful-links/components/UsefulLinksDrawer/UsefulLinksDrawer";
 import { InfoPopup } from "./features/info-popup/components/InfoPopup/InfoPopup";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
       <Router>
         <CoopDrawer />
         <DocumentationDrawer />
+        <UsefulLinksDrawer />
         <InfoPopup />
         <QuestionsLoader>
           <MagicLinkRedirector />

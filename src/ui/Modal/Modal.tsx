@@ -23,6 +23,7 @@ type ModalProps = {
   isConfirmLoading?: boolean;
   isCancelLoading?: boolean;
   hideCancelButton?: boolean;
+  className?: string;
 };
 const Modal: FC<ModalProps> = ({
   isOpen,
@@ -41,6 +42,7 @@ const Modal: FC<ModalProps> = ({
   hideCancelButton,
   isConfirmLoading,
   isCancelLoading,
+  className,
 }) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -90,7 +92,7 @@ const Modal: FC<ModalProps> = ({
       {isOpen ? (
         <div>
           <div className="modal--backdrop" onClick={handleClose} />
-          <div className={`modal modal--${type ? type : "info"} `}>
+          <div className={`modal modal--${type ? type : "info"} ${className}`}>
             <div className="modal__header">
               <h3 className="modal__header__title">{title}</h3>
               <button onClick={handleClose}>
@@ -100,12 +102,14 @@ const Modal: FC<ModalProps> = ({
             <div className="modal__body">{children}</div>
             {!infoModal && !hideButtons && (
               <div className="modal__footer">
-              {!hideCancelButton &&  <Button
-                  label={labelOnCancel ? labelOnCancel : "Cancel"}
-                  style={Button_Style.OUTLINED}
-                  onClick={handleClose}
-                  isLoader={isCancelLoading}
-                />}
+                {!hideCancelButton && (
+                  <Button
+                    label={labelOnCancel ? labelOnCancel : "Cancel"}
+                    style={Button_Style.OUTLINED}
+                    onClick={handleClose}
+                    isLoader={isCancelLoading}
+                  />
+                )}
                 <Button
                   label={labelOnConfirm ? labelOnConfirm : "Ok"}
                   onClick={(e) => {
@@ -117,8 +121,8 @@ const Modal: FC<ModalProps> = ({
                     type === "error"
                       ? Button_Type.ERROR
                       : type === "success"
-                      ? Button_Type.SUCCESS
-                      : Button_Type.PRIMARY
+                        ? Button_Type.SUCCESS
+                        : Button_Type.PRIMARY
                   }
                 />
               </div>

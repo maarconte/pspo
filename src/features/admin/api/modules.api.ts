@@ -86,6 +86,7 @@ export const createModule = async (
     pdfUrl: pdfUrl ?? null,
     pdfPath: pdfPath ?? null,
     pdfSizeBytes: pdfSizeBytes ?? null,
+    usefulLinks: payload.usefulLinks || null,
     completedCount: 0,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -101,7 +102,7 @@ export const updateModule = async (
   payload: UpdateModulePayload,
   previousPdfPath?: string | null,
 ): Promise<void> => {
-  const { pdfFile, removePdf, ...rest } = payload;
+  const { pdfFile, removePdf, usefulLinks, ...rest } = payload;
   let pdfUrl: string | undefined;
   let pdfPath: string | undefined;
   let pdfSizeBytes: number | undefined;
@@ -132,6 +133,7 @@ export const updateModule = async (
   const moduleRef = doc(db, MODULES_COLLECTION, moduleId);
   await updateDoc(moduleRef, {
     ...rest,
+    ...(usefulLinks !== undefined ? { usefulLinks: usefulLinks || null } : {}),
     ...(pdfUrl ? { pdfUrl, pdfPath, pdfSizeBytes } : {}),
     ...(!pdfUrl && removePdf ? { pdfUrl: null, pdfPath: null, pdfSizeBytes: null } : {}),
     updatedAt: serverTimestamp(),

@@ -12,3 +12,4 @@ export { default as Loader } from './Loader/Loader';
 export { default as SegmentedControl } from './SegmentedControl/SegmentedControl';
 export { default as StatCard } from './StatCard/StatCard';
 export { default as SafeHtml } from './SafeHtml/SafeHtml';
+export { default as RichTextEditor } from './RichTextEditor/RichTextEditor';

@@ -141,6 +141,18 @@
   width: 100%;
 }
 
+.w-50 {
+  width: 50%;
+}
+
+.w-25 {
+  width: 25%;
+}
+
+.w-75 {
+  width: 75%;
+}
+
 // loop for width
 @for $i from 0 through 100 {
   .w-#{$i} {
