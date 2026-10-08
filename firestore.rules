@@ -124,6 +124,25 @@ service cloud.firestore {
       allow create, delete: if isAdmin();
     }
 
+    // Collection modules_dev (bac à sable utilisé par `npm run dev`,
+    // pour ne pas toucher aux modules publiés en prod). Mêmes règles que modules.
+    match /modules_dev/{moduleId} {
+      // Lecture : tout le monde peut lire (pour le choix du quiz)
+      allow read: if true;
+
+      // Modification : admin et dev peuvent tout faire.
+      // Un utilisateur authentifié peut seulement incrémenter le compteur
+      // de quiz terminés (+1 exactement), déclenché en fin de quiz.
+      allow update: if isAdmin() || (
+        isAuthenticated() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['completedCount']) &&
+        request.resource.data.completedCount == resource.data.completedCount + 1
+      );
+
+      // Création, suppression : admin et dev uniquement
+      allow create, delete: if isAdmin();
+    }
+
     // Collection tickets
     match /tickets/{ticketId} {
       // Les clients authentifiés peuvent lire (pour voir leurs tickets ou liste partagée)

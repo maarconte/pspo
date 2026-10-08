@@ -15,3 +15,13 @@ export const DEFAULT_QUESTION_DATE = Timestamp.fromDate(new Date(2024, 10, 12));
 export const QUESTIONS_COLLECTION =
   import.meta.env.VITE_FIREBASE_QUESTIONS_COLLECTION ||
   (import.meta.env.DEV ? "questions_dev" : "questions");
+
+/**
+ * Firestore collection used for modules. Defaults to "modules_dev" in
+ * `npm run dev` and "modules" in production builds, so modules created or
+ * edited locally never show up in production. Override with
+ * VITE_FIREBASE_MODULES_COLLECTION to point at a different collection.
+ */
+export const MODULES_COLLECTION =
+  import.meta.env.VITE_FIREBASE_MODULES_COLLECTION ||
+  (import.meta.env.DEV ? "modules_dev" : "modules");
