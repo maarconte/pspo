@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useActionState } from 'react';
-import { X, Send, MessageSquare } from 'lucide-react';
+import { X, Send, MessageSquare, ImagePlus } from 'lucide-react';
 import { useTicketMessages } from '../../hooks/useTicketMessages';
 import { sendMessage } from '../../api/messages.api';
+import { UploadTimeoutError } from '../../api/tickets.api';
 import type { Ticket } from '../../types/support.types';
 import {
   TICKET_STATUS_LABELS,
@@ -21,7 +22,9 @@ interface TicketDetailModalProps {
 
 type MessageFormState = { error: string | null };
 
-const Screenshot = ({ url }: { url: string }) => {
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+
+const Screenshot = ({ url, className = '' }: { url: string; className?: string }) => {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>(
     'loading',
   );
@@ -43,7 +46,7 @@ const Screenshot = ({ url }: { url: string }) => {
         <img
           src={url}
           alt="Capture d'écran du bug"
-          className="ticket-modal__screenshot"
+          className={`ticket-modal__screenshot ${className}`}
           hidden={status === 'loading'}
           onLoad={() => setStatus('loaded')}
           onError={() => setStatus('error')}
@@ -67,6 +70,31 @@ export const TicketDetailModal = ({
     currentUserId,
   );
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+
+  const clearImage = () => {
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > MAX_IMAGE_SIZE) {
+      setImageError('Le fichier doit faire moins de 5 Mo.');
+      e.target.value = '';
+      return;
+    }
+    setImageError(null);
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
 
   // Marque les messages comme lus à l'ouverture
   useEffect(() => {
@@ -99,17 +127,25 @@ export const TicketDetailModal = ({
   ): Promise<MessageFormState> => {
     if (!ticket) return prevState;
     const content = (formData.get('message') as string)?.trim();
-    if (!content) return { error: 'Le message ne peut pas être vide.' };
+    if (!content && !imageFile) return { error: 'Le message ne peut pas être vide.' };
 
     try {
       await sendMessage(ticket.id, {
-        content,
+        content: content ?? '',
         authorId: currentUserId,
         authorName: currentUserName,
         authorRole: currentUserRole,
+        imageFile: imageFile ?? undefined,
       });
+      clearImage();
       return { error: null };
-    } catch {
+    } catch (error) {
+      if (error instanceof UploadTimeoutError) {
+        return {
+          error:
+            "Impossible d'envoyer l'image. Vérifiez votre connexion (un VPN ou un proxy d'entreprise peut bloquer l'envoi), puis réessayez ou retirez l'image.",
+        };
+      }
       return { error: 'Erreur lors de l\'envoi du message.' };
     }
   };
@@ -201,7 +237,14 @@ export const TicketDetailModal = ({
                       <span className="ticket-modal__message-role">{msg.authorRole}</span>
                       <span className="ticket-modal__message-time">{formatTime(msg.createdAt)}</span>
                     </div>
-                    <p className="ticket-modal__message-content">{msg.content}</p>
+                    {msg.content && <p className="ticket-modal__message-content">{msg.content}</p>}
+                    {msg.imageUrl && (
+                      <Screenshot
+                        key={msg.imageUrl}
+                        url={msg.imageUrl}
+                        className="ticket-modal__message-image"
+                      />
+                    )}
                   </div>
                 </div>
               );
@@ -213,6 +256,38 @@ export const TicketDetailModal = ({
         {/* Zone de saisie */}
         {canSend ? (
           <form action={msgAction} className="ticket-modal__compose">
+            {imagePreview && (
+              <div className="ticket-modal__compose-preview">
+                <img src={imagePreview} alt="Aperçu de l'image jointe" />
+                <button
+                  type="button"
+                  className="ticket-modal__compose-preview-remove"
+                  onClick={clearImage}
+                  disabled={isSending}
+                  aria-label="Retirer l'image"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+            <button
+              type="button"
+              className="ticket-modal__compose-attach"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isSending}
+              aria-label="Joindre une image"
+              title="Joindre une image (max 5 Mo)"
+            >
+              <ImagePlus size={18} />
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              hidden
+              aria-hidden="true"
+            />
             <input
               name="message"
               type="text"
@@ -234,6 +309,9 @@ export const TicketDetailModal = ({
             >
               {isSending ? <span className="ticket-modal__spinner" /> : <Send size={18} />}
             </button>
+            {imageError && (
+              <p className="ticket-modal__compose-error">{imageError}</p>
+            )}
             {msgState.error && (
               <p className="ticket-modal__compose-error">{msgState.error}</p>
             )}

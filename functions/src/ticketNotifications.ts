@@ -154,7 +154,7 @@ export const onTicketMessageCreated = functions
 
 		const name = escapeHtml(String(ticket.name ?? ''));
 		const author = escapeHtml(String(message.authorName ?? 'Le support'));
-		const excerpt = escapeHtml(truncate(String(message.content ?? ''), MAX_EXCERPT_LENGTH)).replace(/\n/g, '<br>');
+		const excerpt = escapeHtml(truncate(String(message.content || (message.imageUrl ? '📎 Image jointe' : '')), MAX_EXCERPT_LENGTH)).replace(/\n/g, '<br>');
 
 		await sendTicketEmail(
 			email,

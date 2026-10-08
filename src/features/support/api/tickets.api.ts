@@ -3,6 +3,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  getDocs,
   doc,
   query,
   orderBy,
@@ -27,7 +28,7 @@ import type {
   UpdateTicketPayload,
 } from '../types/support.types';
 
-const storage = getStorage(app);
+export const storage = getStorage(app);
 const TICKETS_COLLECTION = 'tickets';
 const UPLOAD_TIMEOUT_MS = 30_000;
 
@@ -40,7 +41,7 @@ export class UploadTimeoutError extends Error {
 
 // Storage retries silently for minutes when the network (VPN/proxy) blocks it,
 // so cancel the upload ourselves and let the UI report the failure.
-const uploadWithTimeout = (storageRef: StorageReference, file: File): Promise<void> =>
+export const uploadWithTimeout = (storageRef: StorageReference, file: File): Promise<void> =>
   new Promise((resolve, reject) => {
     const task = uploadBytesResumable(storageRef, file);
     const timer = setTimeout(() => {
@@ -144,16 +145,34 @@ export const deleteTicket = async (
   ticketId: string,
   imagePath?: string | null,
 ): Promise<void> => {
+  // 0. Collecte des images jointes aux messages (la sous-collection n'est pas supprimée en cascade)
+  const messageImagePaths = await getMessageImagePaths(ticketId);
+
   // 1. Suppression du document Firestore
   await deleteDoc(doc(db, TICKETS_COLLECTION, ticketId));
 
-  // 2. Suppression RGPD : supprime le fichier Storage si présent
-  if (imagePath) {
-    try {
-      await deleteObject(ref(storage, imagePath));
-    } catch (err) {
-      // L'objet peut avoir déjà été supprimé — on log sans bloquer
-      console.warn('Storage cleanup warning:', err);
-    }
+  // 2. Suppression RGPD : supprime les fichiers Storage s'ils existent
+  const paths = [...(imagePath ? [imagePath] : []), ...messageImagePaths];
+  await Promise.all(
+    paths.map(async (path) => {
+      try {
+        await deleteObject(ref(storage, path));
+      } catch (err) {
+        // L'objet peut avoir déjà été supprimé — on log sans bloquer
+        console.warn('Storage cleanup warning:', err);
+      }
+    }),
+  );
+};
+
+const getMessageImagePaths = async (ticketId: string): Promise<string[]> => {
+  try {
+    const snapshot = await getDocs(collection(db, TICKETS_COLLECTION, ticketId, 'messages'));
+    return snapshot.docs
+      .map((d) => d.data().imagePath as string | null | undefined)
+      .filter((path): path is string => !!path);
+  } catch (err) {
+    console.warn('Message images lookup warning:', err);
+    return [];
   }
 };

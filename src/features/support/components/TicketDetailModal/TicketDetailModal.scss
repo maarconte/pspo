@@ -277,6 +277,64 @@
     }
   }
 
+  &__compose-attach {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 1.5px solid rgba($primary-500, 0.2);
+    background: #fff;
+    color: $primary-500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+
+    &:hover:not(:disabled) {
+      background: rgba($primary-500, 0.06);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__compose-preview {
+    position: relative;
+    width: 100%;
+
+    img {
+      display: block;
+      max-height: 120px;
+      max-width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba($primary-500, 0.15);
+    }
+  }
+
+  &__compose-preview-remove {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(#000, 0.6);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  &__message-image {
+    max-height: 240px;
+    margin-top: 0.5rem;
+  }
+
   &__compose-send {
     width: 44px;
     height: 44px;
