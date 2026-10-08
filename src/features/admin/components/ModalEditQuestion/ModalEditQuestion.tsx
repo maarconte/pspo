@@ -181,7 +181,30 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                       <div>
                         {values?.answers?.map((answer, index) => (
                           <React.Fragment key={index}>
-                            <h5 className="mb-1">Answer {index + 1}</h5>
+                            <div className="answer-heading">
+                              <h5>Answer {index + 1}</h5>
+                              <Button
+                                buttonType="button"
+                                style={Button_Style.OUTLINED}
+                                onClick={() => {
+                                  remove(index);
+                                  setFieldValue(
+                                    "answerExplanations",
+                                    (values.answerExplanations ?? []).filter(
+                                      (_, i) => i !== index,
+                                    ),
+                                  );
+                                  setExplanationsVersion((v) => v + 1);
+                                  setOpenFeedbacks((open) =>
+                                    open
+                                      .filter((i) => i !== index)
+                                      .map((i) => (i > index ? i - 1 : i)),
+                                  );
+                                }}
+                                isIconButton
+                                icon={<Trash2 size={16} />}
+                              />
+                            </div>
                             <div
                               className={`answer ${
                                 values.answer === index ||
@@ -229,28 +252,6 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                                     />
                                   </div>
                                 </label>
-
-                                <Button
-                                  style={Button_Style.OUTLINED}
-                                  onClick={() => {
-                                    remove(index);
-                                    setFieldValue(
-                                      "answerExplanations",
-                                      (values.answerExplanations ?? []).filter(
-                                        (_, i) => i !== index,
-                                      ),
-                                    );
-                                    setExplanationsVersion((v) => v + 1);
-                                    setOpenFeedbacks((open) =>
-                                      open
-                                        .filter((i) => i !== index)
-                                        .map((i) => (i > index ? i - 1 : i)),
-                                    );
-                                  }}
-                                  isIconButton
-                                  icon={<Trash2 size={16} />}
-                                  className="mb-05"
-                                />
                               </div>
 
                               <div className="answer-feedback answer-feedback--row">
@@ -319,6 +320,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                           </React.Fragment>
                         ))}
                         <Button
+                          buttonType="button"
                           style={Button_Style.OUTLINED}
                           onClick={() => push("")}
                           icon={<Plus size={16} />}
@@ -430,6 +432,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                                 )}
                               </div>
                               <Button
+                                buttonType="button"
                                 style={Button_Style.OUTLINED}
                                 onClick={() => remove(index)}
                                 isIconButton
