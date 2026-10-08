@@ -3,6 +3,12 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.10.0] - 2026-10-08
+
+### Ajouté
+
+- Pièce jointe image dans la discussion d'un ticket (THA-605) : un bouton permet de joindre une image (max 5 Mo) à un message, avec aperçu avant envoi. L'image s'affiche dans la bulle du message et peut être envoyée seule. Les images des messages sont supprimées avec le ticket, et l'email de notification indique « Image jointe » quand le message n'a pas de texte.
+
 ## [2.9.0] - 2026-10-08
 
 ### Ajouté
