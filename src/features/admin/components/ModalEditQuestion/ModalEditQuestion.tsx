@@ -1,7 +1,7 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { Field, FieldArray, Formik } from "formik";
 import { Plus, Trash2 } from "lucide-react";
 import {
@@ -14,6 +14,7 @@ import Button from "../../../../ui/Button/Button";
 import { Button_Style } from "../../../../ui/Button/Button.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
+import RichTextEditor from "../../../../ui/RichTextEditor";
 import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
 import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 import React from "react";
@@ -36,6 +37,9 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
     collectionName: QUESTIONS_COLLECTION,
   });
   const { modules } = useModules();
+  // RichTextEditor only reads its value on mount: bump this to remount the
+  // per-answer editors when answers are removed and indices shift.
+  const [explanationsVersion, setExplanationsVersion] = useState(0);
   const handleAnswerChange = (index: number, answer: any) => {
     let newAnswer = Array.isArray(answer) ? [...answer] : [];
     newAnswer?.includes(index)
@@ -61,6 +65,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 answerType: "",
                 answer: null,
                 comments: [],
+                answerExplanations: [],
                 isFlagged: false,
                 type: defaultType || "pspo-I",
               }
@@ -84,7 +89,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
           }
         }}
       >
-        {({ values, handleChange, handleSubmit }) => (
+        {({ values, handleChange, handleSubmit, setFieldValue }) => (
           <Modal
             isOpen={isOpen}
             onClose={() => {
@@ -165,10 +170,9 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     {({ push, remove }) => (
                       <div>
                         {values?.answers?.map((answer, index) => (
-                          <>
+                          <React.Fragment key={index}>
                             <h5 className="mb-1">Answer {index + 1}</h5>
                             <div
-                              key={index}
                               className={`answer ${
                                 values.answer === index ||
                                 (Array.isArray(values.answer) &&
@@ -217,13 +221,29 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
 
                               <Button
                                 style={Button_Style.OUTLINED}
-                                onClick={() => remove(index)}
+                                onClick={() => {
+                                  remove(index);
+                                  setFieldValue(
+                                    "answerExplanations",
+                                    (values.answerExplanations ?? []).filter((_, i) => i !== index)
+                                  );
+                                  setExplanationsVersion((v) => v + 1);
+                                }}
                                 isIconButton
                                 icon={<Trash2 size={16} />}
                                 className="mb-05"
                               />
                             </div>
-                          </>
+                            <div className="answer-feedback">
+                              <label className="answer-feedback__label">Feedback</label>
+                              <RichTextEditor
+                                key={`${question?.id ?? "new"}-${index}-${explanationsVersion}`}
+                                value={values.answerExplanations?.[index] ?? ""}
+                                onChange={(html) => setFieldValue(`answerExplanations.${index}`, html)}
+                                placeholder={`Feedback de la réponse ${index + 1}`}
+                              />
+                            </div>
+                          </React.Fragment>
                         ))}
                         <Button
                           style={Button_Style.OUTLINED}
@@ -281,6 +301,21 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                       </label>
                     </div>
                   </div>
+                )}
+                {values.answerType === "TF" && (
+                  <>
+                    {["True", "False"].map((label, index) => (
+                      <div className="answer-feedback" key={label}>
+                        <label className="answer-feedback__label">Feedback — {label}</label>
+                        <RichTextEditor
+                          key={`${question?.id ?? "new"}-tf-${index}`}
+                          value={values.answerExplanations?.[index] ?? ""}
+                          onChange={(html) => setFieldValue(`answerExplanations.${index}`, html)}
+                          placeholder={`Feedback — ${label}`}
+                        />
+                      </div>
+                    ))}
+                  </>
                 )}
               </div>
 

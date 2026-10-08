@@ -9,4 +9,6 @@ export interface QuestionAnswerProps {
   onChange: () => void;
   isReadOnly?: boolean;
   status?: AnswerStatus;
+  /** Per-option feedback (HTML). When set, an info icon toggles it under the option. */
+  explanation?: string;
 }

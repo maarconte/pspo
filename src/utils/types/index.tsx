@@ -26,7 +26,7 @@ export type Question = {
    * For "TF" (which has no `answers`), index 0 is the explanation for
    * True and index 1 for False, mirroring the implicit order used
    * elsewhere for TF questions (see getAnswerLabel/isUserChoice).
-   * Not surfaced in the UI yet.
+   * HTML (rich text), shown next to each option in correction mode.
    */
   answerExplanations?: string[];
   /** Free-text topic/category imported from external question banks. Not surfaced in the UI yet. */

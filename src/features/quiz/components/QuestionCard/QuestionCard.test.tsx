@@ -8,6 +8,9 @@ vi.mock("../../../../stores/useQuestionsStore", () => ({
   useQuestionsStore: vi.fn(),
 }));
 
+// The report form uses react-query, which these tests don't set up.
+vi.mock("../Feedback", () => ({ default: () => null }));
+
 describe("QuestionCard", () => {
   const mockSetAnswer = vi.fn();
   const mockToggleBookmark = vi.fn();
@@ -167,5 +170,28 @@ describe("QuestionCard", () => {
     if (bookmark) fireEvent.click(bookmark);
 
     expect(mockToggleBookmark).toHaveBeenCalledWith(0);
+  });
+
+  describe("per-option feedback", () => {
+    const withFeedback = {
+      ...standardQuestion,
+      answerExplanations: ["Right: it is a framework.", "", "Nope."],
+    };
+
+    beforeEach(() => {
+      vi.mocked(useQuestionsStore).mockImplementation((selector) =>
+        selector({ userAnswers: [], setAnswer: mockSetAnswer, toggleBookmark: mockToggleBookmark })
+      );
+    });
+
+    it("hides the info icons during the exam", () => {
+      render(<QuestionCard question={withFeedback} currentQuestion={0} showAnswer={false} />);
+      expect(screen.queryAllByRole("button", { name: /feedback/i })).toHaveLength(0);
+    });
+
+    it("shows an info icon only on options that have feedback in correction mode", () => {
+      render(<QuestionCard question={withFeedback} currentQuestion={0} showAnswer={true} />);
+      expect(screen.getAllByRole("button", { name: /feedback/i })).toHaveLength(2);
+    });
   });
 });

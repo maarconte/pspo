@@ -77,6 +77,18 @@
     }
   }
 
+  .answer-feedback {
+    margin: -0.5rem 0 1rem;
+
+    &__label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: $primary-500;
+    }
+  }
+
   .comment {
     margin-bottom: 1rem;
     padding: 1rem;
