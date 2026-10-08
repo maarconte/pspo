@@ -1,9 +1,9 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
+import { Check, MessageSquarePlus, Pencil, Plus, Trash2 } from "lucide-react";
 import { FC, useEffect, useState } from "react";
 import { Field, FieldArray, Formik } from "formik";
-import { MessageSquarePlus, Pencil, Plus, Trash2 } from "lucide-react";
 import {
   getCommentDate,
   getCommentText,
@@ -18,6 +18,7 @@ import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
 import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 import React from "react";
 import RichTextEditor from "../../../../ui/RichTextEditor";
+import SafeHtml from "../../../../ui/SafeHtml/SafeHtml";
 import Select from "../../../../ui/Select/Select";
 import SelectAnswerType from "../SelectAnswerType/SelectAnswerType";
 import { getFormationValue } from "../../../../utils/helpers/formationLabel";
@@ -47,7 +48,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   }, [question?.id]);
   const toggleFeedback = (index: number) =>
     setOpenFeedbacks((open) =>
-      open.includes(index) ? open.filter((i) => i !== index) : [...open, index]
+      open.includes(index) ? open.filter((i) => i !== index) : [...open, index],
     );
   const handleAnswerChange = (index: number, answer: any) => {
     let newAnswer = Array.isArray(answer) ? [...answer] : [];
@@ -180,29 +181,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                       <div>
                         {values?.answers?.map((answer, index) => (
                           <React.Fragment key={index}>
-                            <div className="answer-heading">
-                              <h5 className="mb-1">Answer {index + 1}</h5>
-                              <Button
-                                buttonType="button"
-                                style={Button_Style.OUTLINED}
-                                size="S"
-                                onClick={() => toggleFeedback(index)}
-                                icon={
-                                  values.answerExplanations?.[index] ? (
-                                    <Pencil size={14} />
-                                  ) : (
-                                    <MessageSquarePlus size={14} />
-                                  )
-                                }
-                                label={
-                                  openFeedbacks.includes(index)
-                                    ? "Hide feedback"
-                                    : values.answerExplanations?.[index]
-                                      ? "Edit feedback"
-                                      : "Add feedback"
-                                }
-                              />
-                            </div>
+                            <h5 className="mb-1">Answer {index + 1}</h5>
                             <div
                               className={`answer ${
                                 values.answer === index ||
@@ -212,84 +191,131 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                                   : ""
                               }`}
                             >
-                              <Field
-                                type={
-                                  values.answerType === "M"
-                                    ? "checkbox"
-                                    : "radio"
-                                }
-                                name="answer"
-                                id={`answer-${index}`}
-                                value={index}
-                                onChange={() => {
-                                  handleChange({
-                                    target: {
-                                      name: "answer",
-                                      value:
-                                        values.answerType === "M"
-                                          ? handleAnswerChange(
-                                              index,
-                                              values.answer,
-                                            )
-                                          : index,
-                                    },
-                                  });
-                                }}
-                              />
-
-                              <label htmlFor={`answer-${index}`}>
-                                <div style={{ flex: 1 }}>
-                                  <Input
-                                    type="text"
-                                    id={`answers.${index}`}
-                                    name={`answers.${index}`}
-                                    //  placeholder={`Answer ${index + 1}`}
-                                    value={answer}
-                                    onChange={handleChange}
-                                  />
-                                </div>
-                              </label>
-
-                              <Button
-                                style={Button_Style.OUTLINED}
-                                onClick={() => {
-                                  remove(index);
-                                  setFieldValue(
-                                    "answerExplanations",
-                                    (values.answerExplanations ?? []).filter(
-                                      (_, i) => i !== index,
-                                    ),
-                                  );
-                                  setExplanationsVersion((v) => v + 1);
-                                  setOpenFeedbacks((open) =>
-                                    open
-                                      .filter((i) => i !== index)
-                                      .map((i) => (i > index ? i - 1 : i))
-                                  );
-                                }}
-                                isIconButton
-                                icon={<Trash2 size={16} />}
-                                className="mb-05"
-                              />
-                            </div>
-                            {openFeedbacks.includes(index) && (
-                              <div className="answer-feedback">
-                                <label className="answer-feedback__label">
-                                  Feedback answer {index + 1}
-                                </label>
-                                <RichTextEditor
-                                  key={`${question?.id ?? "new"}-${index}-${explanationsVersion}`}
-                                  value={values.answerExplanations?.[index] ?? ""}
-                                  onChange={(html) =>
-                                    setFieldValue(
-                                      `answerExplanations.${index}`,
-                                      html,
-                                    )
+                              <div className="answer-content">
+                                <Field
+                                  type={
+                                    values.answerType === "M"
+                                      ? "checkbox"
+                                      : "radio"
                                   }
-                                  placeholder={`Feedback de la réponse ${index + 1}`}
+                                  name="answer"
+                                  id={`answer-${index}`}
+                                  value={index}
+                                  onChange={() => {
+                                    handleChange({
+                                      target: {
+                                        name: "answer",
+                                        value:
+                                          values.answerType === "M"
+                                            ? handleAnswerChange(
+                                                index,
+                                                values.answer,
+                                              )
+                                            : index,
+                                      },
+                                    });
+                                  }}
+                                />
+
+                                <label htmlFor={`answer-${index}`}>
+                                  <div style={{ flex: 1 }}>
+                                    <Input
+                                      type="text"
+                                      id={`answers.${index}`}
+                                      name={`answers.${index}`}
+                                      //  placeholder={`Answer ${index + 1}`}
+                                      value={answer}
+                                      onChange={handleChange}
+                                    />
+                                  </div>
+                                </label>
+
+                                <Button
+                                  style={Button_Style.OUTLINED}
+                                  onClick={() => {
+                                    remove(index);
+                                    setFieldValue(
+                                      "answerExplanations",
+                                      (values.answerExplanations ?? []).filter(
+                                        (_, i) => i !== index,
+                                      ),
+                                    );
+                                    setExplanationsVersion((v) => v + 1);
+                                    setOpenFeedbacks((open) =>
+                                      open
+                                        .filter((i) => i !== index)
+                                        .map((i) => (i > index ? i - 1 : i)),
+                                    );
+                                  }}
+                                  isIconButton
+                                  icon={<Trash2 size={16} />}
+                                  className="mb-05"
                                 />
                               </div>
-                            )}
+
+                              <div className="answer-feedback answer-feedback--row">
+                                <div className="answer-feedback__content">
+                                  {openFeedbacks.includes(index) ? (
+                                    <>
+                                      <label className="answer-feedback__label">
+                                        Feedback answer {index + 1}
+                                      </label>
+                                      <RichTextEditor
+                                        key={`${question?.id ?? "new"}-${index}-${explanationsVersion}`}
+                                        value={
+                                          values.answerExplanations?.[index] ??
+                                          ""
+                                        }
+                                        onChange={(html) =>
+                                          setFieldValue(
+                                            `answerExplanations.${index}`,
+                                            html,
+                                          )
+                                        }
+                                        placeholder={`Feedback de la réponse ${index + 1}`}
+                                      />
+                                    </>
+                                  ) : values.answerExplanations?.[
+                                      index
+                                    ]?.trim() ? (
+                                    <SafeHtml
+                                      className="answer-feedback__text text-muted"
+                                      html={values.answerExplanations[index]}
+                                    />
+                                  ) : (
+                                    <span className="answer-feedback__text answer-feedback__text--empty">
+                                      No feedback
+                                    </span>
+                                  )}
+                                </div>
+                                <Button
+                                  buttonType="button"
+                                  style={Button_Style.OUTLINED}
+                                  size="S"
+                                  onClick={() => toggleFeedback(index)}
+                                  icon={
+                                    openFeedbacks.includes(index) ? (
+                                      <Check size={14} />
+                                    ) : values.answerExplanations?.[
+                                        index
+                                      ]?.trim() ? (
+                                      <Pencil size={14} />
+                                    ) : (
+                                      <MessageSquarePlus size={14} />
+                                    )
+                                  }
+                                  label={
+                                    openFeedbacks.includes(index)
+                                      ? "Done"
+                                      : values.answerExplanations?.[
+                                            index
+                                          ]?.trim()
+                                        ? "Edit feedback"
+                                        : "Add feedback"
+                                  }
+                                />
+                              </div>
+                            </div>
                           </React.Fragment>
                         ))}
                         <Button
