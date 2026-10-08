@@ -3,6 +3,19 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.9.0] - 2026-10-08
+
+### Ajouté
+
+- Feedback par réponse : chaque réponse possible d'une question peut avoir sa propre explication, saisie dans l'éditeur de question (éditeur de texte riche, repliable). En mode correction, une icône d'info à côté de la réponse déplie l'explication, affichée en vert pour une bonne réponse.
+- Réordonnancement des modules par glisser-déposer dans l'administration (`@dnd-kit`), l'ordre étant conservé.
+- Les commentaires de signalement d'une question affichent leur date de création dans la carte question.
+
+### Modifié
+
+- Le feedback général d'une question est désormais saisi avec l'éditeur de texte riche et partage le composant `FeedbackBox` avec le feedback par réponse.
+- Refonte de l'interface de la modale d'édition de question (réponses, suppression d'une réponse depuis son titre) et nouvelle feuille de style de la page d'accueil.
+
 ## [2.8.1] - 2026-10-08
 
 ### Modifié

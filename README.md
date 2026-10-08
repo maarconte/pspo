@@ -8,7 +8,7 @@ An interactive study platform designed for Professional Scrum Product Owner (PSP
 
 - **Realistic Simulation**: 80 randomly selected questions per session.
 - **Time Pressure**: Built-in 60-minute timer for exam conditions.
-- **Immediate Feedback**: Optional answer disclosure with detailed feedback.
+- **Immediate Feedback**: Optional answer disclosure with a general explanation and per-answer feedback (rich text, shown in correction mode).
 - **Bookmarking**: Save difficult questions to review them later in your profile.
 
 ### 📊 Performance Analytics
