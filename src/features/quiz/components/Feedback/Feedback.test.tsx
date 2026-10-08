@@ -89,7 +89,7 @@ describe("Feedback Component", () => {
     });
 
     expect(mockHandleUpdate).toHaveBeenCalledWith({
-      comments: ["Wrong explanation"],
+      comments: [{ text: "Wrong explanation", createdAt: expect.any(String) }],
       isFlagged: true,
     });
 
@@ -123,7 +123,10 @@ describe("Feedback Component", () => {
     });
 
     expect(mockHandleUpdate).toHaveBeenCalledWith({
-      comments: ["First issue", "Second issue"],
+      comments: [
+        "First issue",
+        { text: "Second issue", createdAt: expect.any(String) },
+      ],
       isFlagged: true,
     });
   });

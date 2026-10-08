@@ -13,6 +13,7 @@ import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 import SafeHtml from "../../../../ui/SafeHtml/SafeHtml";
 import { toast } from "react-toastify";
 import { useUpdateDoc } from "../../../../utils/hooks/";
+import { createComment } from "../../../../utils/helpers/comments";
 
 const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
   const [showModal, setShowModal] = useState(false);
@@ -31,7 +32,7 @@ const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
 
     try {
       await handleUpdate({
-        comments: [...comments, comment],
+        comments: [...comments, createComment(comment)],
         isFlagged: true,
       });
       setShowModal(false);
