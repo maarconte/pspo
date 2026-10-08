@@ -3,7 +3,7 @@ import "./Home.scss";
 import { useEffect } from "react";
 import { AlertCircle, Clock, Layers, Play, Target, Undo2 } from "lucide-react";
 
-import { Button, SegmentedControl } from "../ui";
+import { Button, Select } from "../ui";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useUserStore } from "../features/auth/stores/useAuthStore";
 import { useInfoPopupStore } from "../stores/useInfoPopupStore";
@@ -89,13 +89,13 @@ export default function Home() {
       <div className="glass-card">
         <div className="selector-section">
           <h2>Module</h2>
-          <SegmentedControl
+          <Select
             name="formation"
-            value={formation}
-            onChange={(value) => {
-              setFormation(value);
-            }}
+            id="formation"
+            value={currentModule?.title}
+            placeholder="Select a module"
             options={moduleOptions}
+            handleChange={(value) => setFormation(String(value))}
           />
         </div>
 
