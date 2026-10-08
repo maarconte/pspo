@@ -3,6 +3,23 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.8.0] - 2026-10-08
+
+### Ajouté
+
+- Notifications par email pour les tickets de bug : l'auteur est prévenu quand le statut de son ticket change (sauf s'il l'a changé lui-même) et quand une réponse lui est envoyée. Nouvelles Cloud Functions `onTicketStatusChanged` et `onTicketMessageCreated`, et champ `updatedBy` enregistré à chaque modification d'un ticket.
+- Spinner d'affichage de la capture d'écran d'un ticket pendant son chargement.
+- Séparation des modules production / développement : collection `modules_dev` utilisée par `npm run dev` (surchargeable via `VITE_FIREBASE_MODULES_COLLECTION`), règles Firestore associées et script `scripts/copy-modules-to-dev.mjs` pour copier les modules de prod.
+
+### Modifié
+
+- La sélection du module sur la page d'accueil utilise désormais un menu déroulant (`Select`) au lieu d'un contrôle segmenté.
+- La session de connexion est conservée entre les onglets et à la fermeture du navigateur (persistance locale), pour qu'un lien externe, comme celui d'un email de notification, arrive sur un utilisateur déjà connecté. La déconnexion après 30 minutes d'inactivité reste active.
+
+### Corrigé
+
+- L'envoi d'une capture d'écran de ticket est annulé au bout de 30 secondes avec un message explicite (un VPN ou un proxy d'entreprise peut bloquer Firebase Storage), au lieu de rester sur « Envoi en cours… ». Un message s'affiche aussi quand une capture ne peut pas être chargée.
+
 ## [2.7.0] - 2026-10-06
 
 ### Ajouté
