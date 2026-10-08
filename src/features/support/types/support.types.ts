@@ -53,6 +53,10 @@ export interface TicketMessage {
   authorRole: string;
   createdAt: Timestamp;
   readBy: string[];
+  imageUrl?: string | null;
+  imagePath?: string | null; // Firebase Storage path pour suppression RGPD
 }
 
-export type SendMessagePayload = Pick<TicketMessage, 'content' | 'authorId' | 'authorName' | 'authorRole'>;
+export type SendMessagePayload = Pick<TicketMessage, 'content' | 'authorId' | 'authorName' | 'authorRole'> & {
+  imageFile?: File;
+};
