@@ -9,6 +9,7 @@ interface ImportMetaEnv {
 	readonly VITE_FIREBASE_APP_ID: string
 	/** Override the Firestore collection used for questions (defaults to "questions" in prod builds, "questions_dev" in `npm run dev`). */
 	readonly VITE_FIREBASE_QUESTIONS_COLLECTION?: string
+	readonly VITE_FIREBASE_MODULES_COLLECTION?: string
 }
 
 interface ImportMeta {

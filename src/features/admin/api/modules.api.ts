@@ -23,6 +23,7 @@ import {
 import { db } from '../../../lib/firebase/firestore';
 import { app } from '../../../lib/firebase/config';
 import { getFormationLabel } from '../../../utils/helpers/formationLabel';
+import { MODULES_COLLECTION } from '../../../utils/constants';
 import type {
   Module,
   CreateModulePayload,
@@ -30,7 +31,6 @@ import type {
 } from '../types/module.types';
 
 const storage = getStorage(app);
-const MODULES_COLLECTION = 'modules';
 
 // ─── Subscribe (real-time) ────────────────────────────────────────────────────
 
