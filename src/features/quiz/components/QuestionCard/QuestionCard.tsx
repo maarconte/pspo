@@ -3,17 +3,21 @@ import "./style-mobile.scss";
 
 import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
 import { FC, useState } from "react";
-import { Bookmark } from "lucide-react";
+import {
+  getCommentDate,
+  getCommentText,
+} from "../../../../utils/helpers/comments";
 
 import Alert from "../../../../ui/Alert/Alert";
+import { AnswerStatus } from "../QuestionAnswer/QuestionAnswer.types";
+import { Bookmark } from "lucide-react";
 import Button from "../../../../ui/Button/Button";
 import Feedback from "../Feedback";
 import Modal from "../../../../ui/Modal/Modal";
-import { AnswerStatus } from "../QuestionAnswer/QuestionAnswer.types";
 import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
 import { QuestionCardProps } from "./QuestionCard.types";
-import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { trackEvent } from "../../../../lib/analytics";
+import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 
 /**
  * Review Torvalds: 10/10
@@ -69,7 +73,9 @@ const QuestionCard: FC<QuestionCardProps> = ({
 
   // --- HANDLERS ---
   const handleToggleMultiple = (index: number) => {
-    const currentAnswers = Array.isArray(userAnswer?.answer) ? [...userAnswer.answer] : [];
+    const currentAnswers = Array.isArray(userAnswer?.answer)
+      ? [...userAnswer.answer]
+      : [];
     const newAnswers = currentAnswers.includes(index)
       ? currentAnswers.filter((a) => a !== index)
       : [...currentAnswers, index];
@@ -86,10 +92,13 @@ const QuestionCard: FC<QuestionCardProps> = ({
 
   const handleBookmark = () => {
     const isCurrentlyBookmarked = !!userAnswer?.isBookmarked;
-    trackEvent(isCurrentlyBookmarked ? 'question_unbookmarked' : 'question_bookmarked', {
-      question_id: question.id,
-      question_index: currentQuestion,
-    });
+    trackEvent(
+      isCurrentlyBookmarked ? "question_unbookmarked" : "question_bookmarked",
+      {
+        question_id: question.id,
+        question_index: currentQuestion,
+      },
+    );
     toggleBookmark(currentQuestion);
   };
 
@@ -121,10 +130,14 @@ const QuestionCard: FC<QuestionCardProps> = ({
         label={answer}
         checked={isSelected(index)}
         onChange={() => {
-          inputType === "radio" ? handleToggleRadio(index) : handleToggleMultiple(index);
-        } }
+          inputType === "radio"
+            ? handleToggleRadio(index)
+            : handleToggleMultiple(index);
+        }}
         isReadOnly={readOnly}
-        status={getAnswerStatus(index)} id={""}      />
+        status={getAnswerStatus(index)}
+        id={""}
+      />
     ));
   };
 
@@ -147,7 +160,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
             />
           </div>
         </Alert>
-       )}
+      )}
 
       {showComments && (
         <Modal
@@ -158,11 +171,19 @@ const QuestionCard: FC<QuestionCardProps> = ({
           isOpen={showComments}
           hideCancelButton
         >
-          {question.comments?.map((comment, index) => (
-            <p key={index} className="comment">
-              {comment}
-            </p>
-          ))}
+          {question.comments?.map((comment, index) => {
+            const date = getCommentDate(comment);
+            return (
+              <p key={index} className="comment">
+                {getCommentText(comment)}
+                {date && (
+                  <small className="comment__date d-block text-muted">
+                    {date}
+                  </small>
+                )}
+              </p>
+            );
+          })}
         </Modal>
       )}
 
@@ -178,9 +199,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
         />
       </div>
 
-      <div className="d-flex flex-column">
-        {renderAnswers()}
-      </div>
+      <div className="d-flex flex-column">{renderAnswers()}</div>
 
       {hasMissedMultipleChoice && (
         <div className="mt-2 mb-3">

@@ -6,6 +6,9 @@ export type UserAnswer = {
   isBookmarked?: boolean;
 };
 
+/** Legacy comments are plain strings (no date); new ones carry their publication date (ISO 8601). */
+export type QuestionComment = string | { text: string; createdAt: string };
+
 export type Question = {
   id: string;
   title: string;
@@ -14,7 +17,7 @@ export type Question = {
   answerType: string;
   answer: number | number[] | boolean;
   isFlagged?: boolean;
-  comments?: string[];
+  comments?: QuestionComment[];
   updatedAt?: Timestamp;
   createdAt?: Timestamp;
   type?: string;

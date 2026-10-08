@@ -2,22 +2,26 @@ import "./style.scss";
 import "./style-mobile.scss";
 
 import { FC, useEffect } from "react";
-import { Trash2, Plus } from "lucide-react";
 import { Field, FieldArray, Formik } from "formik";
-import { toast } from "react-toastify";
+import { Plus, Trash2 } from "lucide-react";
+import {
+  getCommentDate,
+  getCommentText,
+} from "../../../../utils/helpers/comments";
 import { useAddDoc, useUpdateDoc } from "../../../../utils/hooks";
-import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
-import { useModules } from "../../hooks/useModules";
-import { getFormationValue } from "../../../../utils/helpers/formationLabel";
 
 import Button from "../../../../ui/Button/Button";
 import { Button_Style } from "../../../../ui/Button/Button.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
 import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
+import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 import React from "react";
 import Select from "../../../../ui/Select/Select";
 import SelectAnswerType from "../SelectAnswerType/SelectAnswerType";
+import { getFormationValue } from "../../../../utils/helpers/formationLabel";
+import { toast } from "react-toastify";
+import { useModules } from "../../hooks/useModules";
 
 const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   isOpen,
@@ -37,8 +41,8 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
     newAnswer?.includes(index)
       ? newAnswer.splice(newAnswer.indexOf(index), 1)
       : Array.isArray(newAnswer)
-      ? newAnswer.push(index)
-      : (newAnswer = [index]);
+        ? newAnswer.push(index)
+        : (newAnswer = [index]);
 
     return newAnswer;
   };
@@ -63,13 +67,20 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
         }
         onSubmit={async (values) => {
           try {
-            question?.id ? await handleUpdate(values) : await handleAdd(values);
+            // A question is reported only while it still has comments.
+            const payload = {
+              ...values,
+              isFlagged: (values.comments?.length ?? 0) > 0,
+            };
+            question?.id
+              ? await handleUpdate(payload)
+              : await handleAdd(payload);
             toast.success("Question updated successfully");
             setSelectQuestion && setSelectQuestion(undefined);
             setIsOpen(false);
           } catch (error) {
-             console.error("Failed to update question", error);
-             toast.error("Failed to update question");
+            console.error("Failed to update question", error);
+            toast.error("Failed to update question");
           }
         }}
       >
@@ -88,7 +99,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
             <form onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-sm-3">
-                  <h6 className="mb-1">Module</h6>
+                  <h2 className="h6 mb-1">Module</h2>
                   <Field
                     as="select"
                     id="type"
@@ -98,7 +109,10 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     className="select-modal"
                   >
                     {modules.map((module) => (
-                      <option key={module.id} value={getFormationValue(module.title)}>
+                      <option
+                        key={module.id}
+                        value={getFormationValue(module.title)}
+                      >
                         {module.title}
                         {!module.isActive ? " (désactivé)" : ""}
                       </option>
@@ -106,7 +120,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                   </Field>
                 </div>
                 <div className="col-sm-9">
-                  <h6 className="mb-1">Answer Type</h6>
+                  <h2 className="h6 mb-1">Answer Type</h2>
                   <div className="d-flex gap-05 mb-2">
                     <Field
                       component={SelectAnswerType}
@@ -145,7 +159,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 onChange={handleChange}
               />
               <div className="mb-2">
-                <h4>Answers</h4>
+                <h2 className="mb-1 h4">Answers</h2>
                 {values.answerType !== "TF" ? (
                   <FieldArray name="answers">
                     {({ push, remove }) => (
@@ -180,7 +194,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                                         values.answerType === "M"
                                           ? handleAnswerChange(
                                               index,
-                                              values.answer
+                                              values.answer,
                                             )
                                           : index,
                                     },
@@ -279,43 +293,39 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 onChange={handleChange}
               />
               <small className="text-muted d-block mb-1">
-                Balises HTML supportées à l'affichage : {"<i>, <b>, <br>, <a href>"}
+                Balises HTML supportées à l'affichage :{" "}
+                {"<i>, <b>, <br>, <a href>"}
               </small>
-              {values.isFlagged && (
+              {(values.comments?.length ?? 0) > 0 && (
                 <>
-                  <h4>Comments</h4>
-                  <div
-                    className={`reportedCheckbox ${
-                      values.isFlagged ? "selected" : ""
-                    }`}
-                  >
-                    <Field
-                      label="Reported"
-                      type="checkbox"
-                      name="isFlagged"
-                      id="isFlagged"
-                      checked={values?.isFlagged}
-                      onChange={handleChange}
-                    />
-                    <label htmlFor="isFlagged">Reported</label>
-                  </div>
+                  <h2 className="mb-1 h4">Comments</h2>
                   <FieldArray name="comments">
                     {({ push, remove }) => (
                       <div>
-                        {values?.comments?.map((comment, index) => (
-                          <div
-                            key={index}
-                            className="d-flex justify-content-between comment"
-                          >
-                            {comment}
-                            <Button
-                              style={Button_Style.OUTLINED}
-                              onClick={() => remove(index)}
-                              isIconButton
-                              icon={<Trash2 size={16} />}
-                            />
-                          </div>
-                        ))}
+                        {values?.comments?.map((comment, index) => {
+                          const date = getCommentDate(comment);
+                          return (
+                            <div
+                              key={index}
+                              className="d-flex justify-content-between comment"
+                            >
+                              <div>
+                                {getCommentText(comment)}
+                                {date && (
+                                  <small className="comment__date d-block text-muted">
+                                    {date}
+                                  </small>
+                                )}
+                              </div>
+                              <Button
+                                style={Button_Style.OUTLINED}
+                                onClick={() => remove(index)}
+                                isIconButton
+                                icon={<Trash2 size={16} />}
+                              />
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </FieldArray>
