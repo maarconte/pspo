@@ -3,6 +3,13 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.8.1] - 2026-10-08
+
+### Modifié
+
+- Les onglets latéraux Co-op, Docs et Links ont tous la même hauteur (100 px), sont espacés de façon identique (16 px) et forment un groupe centré verticalement sur l'écran.
+- L'onglet « Liens utiles » est renommé « Links » dans l'interface.
+
 ## [2.8.0] - 2026-10-08
 
 ### Ajouté
