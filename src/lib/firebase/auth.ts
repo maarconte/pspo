@@ -1,7 +1,7 @@
 import {
 	getAuth,
 	setPersistence,
-	browserSessionPersistence,
+	browserLocalPersistence,
 	updateProfile,
 	verifyBeforeUpdateEmail
 } from 'firebase/auth';
@@ -9,9 +9,10 @@ import { app } from './config';
 
 export const auth = getAuth(app);
 
-// Configure session persistence (data cleared when tab closes)
-// This is more secure than localStorage as tokens are not persisted across browser sessions
-setPersistence(auth, browserSessionPersistence).catch((error) => {
+// Local persistence: the session is shared across tabs and survives closing the
+// browser, so links opened from outside the app (e.g. ticket notification emails)
+// land on a logged-in user. The 30-minute idle timeout still limits the session.
+setPersistence(auth, browserLocalPersistence).catch((error) => {
 	console.error('Failed to set auth persistence:', error);
 });
 
