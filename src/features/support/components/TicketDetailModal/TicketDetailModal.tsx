@@ -33,6 +33,12 @@ const Screenshot = ({ url }: { url: string }) => {
           <div className="ticket-modal__screenshot-spinner" />
         </div>
       )}
+      {status === 'error' && (
+        <p className="ticket-modal__screenshot-error" role="alert">
+          Impossible d'afficher la capture d'écran. Cliquez pour l'ouvrir dans un nouvel
+          onglet ; si elle ne charge pas, un VPN ou un proxy d'entreprise la bloque peut-être.
+        </p>
+      )}
       {status !== 'error' && (
         <img
           src={url}

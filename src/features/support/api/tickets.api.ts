@@ -12,9 +12,10 @@ import {
 } from 'firebase/firestore';
 import {
   ref,
-  uploadBytes,
+  uploadBytesResumable,
   getDownloadURL,
   deleteObject,
+  type StorageReference,
 } from 'firebase/storage';
 import { db } from '../../../lib/firebase/firestore';
 import { getStorage } from 'firebase/storage';
@@ -28,6 +29,38 @@ import type {
 
 const storage = getStorage(app);
 const TICKETS_COLLECTION = 'tickets';
+const UPLOAD_TIMEOUT_MS = 30_000;
+
+export class UploadTimeoutError extends Error {
+  constructor() {
+    super('Upload timed out');
+    this.name = 'UploadTimeoutError';
+  }
+}
+
+// Storage retries silently for minutes when the network (VPN/proxy) blocks it,
+// so cancel the upload ourselves and let the UI report the failure.
+const uploadWithTimeout = (storageRef: StorageReference, file: File): Promise<void> =>
+  new Promise((resolve, reject) => {
+    const task = uploadBytesResumable(storageRef, file);
+    const timer = setTimeout(() => {
+      task.cancel();
+      reject(new UploadTimeoutError());
+    }, UPLOAD_TIMEOUT_MS);
+
+    task.on(
+      'state_changed',
+      null,
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+      () => {
+        clearTimeout(timer);
+        resolve();
+      },
+    );
+  });
 
 // ─── Subscribe (real-time) ────────────────────────────────────────────────────
 
@@ -70,7 +103,7 @@ export const createTicket = async (
     const ext = payload.imageFile.name.split('.').pop();
     const path = `tickets/${Date.now()}_${authorId}.${ext}`;
     const storageRef = ref(storage, path);
-    await uploadBytes(storageRef, payload.imageFile);
+    await uploadWithTimeout(storageRef, payload.imageFile);
     imageUrl = await getDownloadURL(storageRef);
     imagePath = path;
   }

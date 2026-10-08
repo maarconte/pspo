@@ -1,6 +1,6 @@
 import { useActionState, useRef, useState } from 'react';
 import { ImagePlus, Send, X } from 'lucide-react';
-import { createTicket } from '../../api/tickets.api';
+import { createTicket, UploadTimeoutError } from '../../api/tickets.api';
 import './TicketForm.scss';
 
 interface TicketFormProps {
@@ -33,7 +33,14 @@ async function submitTicketAction(
       authorName,
     );
     return { success: true, error: null };
-  } catch {
+  } catch (error) {
+    if (error instanceof UploadTimeoutError) {
+      return {
+        success: false,
+        error:
+          "Impossible d'envoyer l'image. Vérifiez votre connexion (un VPN ou un proxy d'entreprise peut bloquer l'envoi), puis réessayez ou retirez l'image.",
+      };
+    }
     return { success: false, error: 'Une erreur est survenue. Veuillez réessayer.' };
   }
 }
