@@ -3,7 +3,7 @@ import "./style-mobile.scss";
 
 import { FC, useEffect, useState } from "react";
 import { Field, FieldArray, Formik } from "formik";
-import { Plus, Trash2 } from "lucide-react";
+import { MessageSquarePlus, Pencil, Plus, Trash2 } from "lucide-react";
 import {
   getCommentDate,
   getCommentText,
@@ -14,10 +14,10 @@ import Button from "../../../../ui/Button/Button";
 import { Button_Style } from "../../../../ui/Button/Button.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
-import RichTextEditor from "../../../../ui/RichTextEditor";
 import { ModalEditQuestionProps } from "./ModalEditQuestion.types";
 import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
 import React from "react";
+import RichTextEditor from "../../../../ui/RichTextEditor";
 import Select from "../../../../ui/Select/Select";
 import SelectAnswerType from "../SelectAnswerType/SelectAnswerType";
 import { getFormationValue } from "../../../../utils/helpers/formationLabel";
@@ -40,6 +40,15 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   // RichTextEditor only reads its value on mount: bump this to remount the
   // per-answer editors when answers are removed and indices shift.
   const [explanationsVersion, setExplanationsVersion] = useState(0);
+  // Answers whose feedback editor is expanded (collapsed by default to keep the form short).
+  const [openFeedbacks, setOpenFeedbacks] = useState<number[]>([]);
+  useEffect(() => {
+    setOpenFeedbacks([]);
+  }, [question?.id]);
+  const toggleFeedback = (index: number) =>
+    setOpenFeedbacks((open) =>
+      open.includes(index) ? open.filter((i) => i !== index) : [...open, index]
+    );
   const handleAnswerChange = (index: number, answer: any) => {
     let newAnswer = Array.isArray(answer) ? [...answer] : [];
     newAnswer?.includes(index)
@@ -171,7 +180,29 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                       <div>
                         {values?.answers?.map((answer, index) => (
                           <React.Fragment key={index}>
-                            <h5 className="mb-1">Answer {index + 1}</h5>
+                            <div className="answer-heading">
+                              <h5 className="mb-1">Answer {index + 1}</h5>
+                              <Button
+                                buttonType="button"
+                                style={Button_Style.OUTLINED}
+                                size="S"
+                                onClick={() => toggleFeedback(index)}
+                                icon={
+                                  values.answerExplanations?.[index] ? (
+                                    <Pencil size={14} />
+                                  ) : (
+                                    <MessageSquarePlus size={14} />
+                                  )
+                                }
+                                label={
+                                  openFeedbacks.includes(index)
+                                    ? "Hide feedback"
+                                    : values.answerExplanations?.[index]
+                                      ? "Edit feedback"
+                                      : "Add feedback"
+                                }
+                              />
+                            </div>
                             <div
                               className={`answer ${
                                 values.answer === index ||
@@ -225,24 +256,40 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                                   remove(index);
                                   setFieldValue(
                                     "answerExplanations",
-                                    (values.answerExplanations ?? []).filter((_, i) => i !== index)
+                                    (values.answerExplanations ?? []).filter(
+                                      (_, i) => i !== index,
+                                    ),
                                   );
                                   setExplanationsVersion((v) => v + 1);
+                                  setOpenFeedbacks((open) =>
+                                    open
+                                      .filter((i) => i !== index)
+                                      .map((i) => (i > index ? i - 1 : i))
+                                  );
                                 }}
                                 isIconButton
                                 icon={<Trash2 size={16} />}
                                 className="mb-05"
                               />
                             </div>
-                            <div className="answer-feedback">
-                              <label className="answer-feedback__label">Feedback</label>
-                              <RichTextEditor
-                                key={`${question?.id ?? "new"}-${index}-${explanationsVersion}`}
-                                value={values.answerExplanations?.[index] ?? ""}
-                                onChange={(html) => setFieldValue(`answerExplanations.${index}`, html)}
-                                placeholder={`Feedback de la réponse ${index + 1}`}
-                              />
-                            </div>
+                            {openFeedbacks.includes(index) && (
+                              <div className="answer-feedback">
+                                <label className="answer-feedback__label">
+                                  Feedback answer {index + 1}
+                                </label>
+                                <RichTextEditor
+                                  key={`${question?.id ?? "new"}-${index}-${explanationsVersion}`}
+                                  value={values.answerExplanations?.[index] ?? ""}
+                                  onChange={(html) =>
+                                    setFieldValue(
+                                      `answerExplanations.${index}`,
+                                      html,
+                                    )
+                                  }
+                                  placeholder={`Feedback de la réponse ${index + 1}`}
+                                />
+                              </div>
+                            )}
                           </React.Fragment>
                         ))}
                         <Button
@@ -306,11 +353,15 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                   <>
                     {["True", "False"].map((label, index) => (
                       <div className="answer-feedback" key={label}>
-                        <label className="answer-feedback__label">Feedback — {label}</label>
+                        <label className="answer-feedback__label">
+                          Feedback — {label}
+                        </label>
                         <RichTextEditor
                           key={`${question?.id ?? "new"}-tf-${index}`}
                           value={values.answerExplanations?.[index] ?? ""}
-                          onChange={(html) => setFieldValue(`answerExplanations.${index}`, html)}
+                          onChange={(html) =>
+                            setFieldValue(`answerExplanations.${index}`, html)
+                          }
                           placeholder={`Feedback — ${label}`}
                         />
                       </div>
@@ -319,18 +370,18 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 )}
               </div>
 
-              <Input
-                type="textarea"
-                id="feedback"
-                name={"feedback"}
-                placeholder="Feedback"
-                value={values.feedback}
-                onChange={handleChange}
-              />
-              <small className="text-muted d-block mb-1">
-                Balises HTML supportées à l'affichage :{" "}
-                {"<i>, <b>, <br>, <a href>"}
-              </small>
+              <div className="question-feedback">
+                <label className="answer-feedback__label" htmlFor="feedback">
+                  Feedback (General)
+                </label>
+                <RichTextEditor
+                  key={`${question?.id ?? "new"}-feedback`}
+                  id="feedback"
+                  value={values.feedback ?? ""}
+                  onChange={(html) => setFieldValue("feedback", html)}
+                  placeholder="Feedback"
+                />
+              </div>
               {(values.comments?.length ?? 0) > 0 && (
                 <>
                   <h2 className="mb-1 h4">Comments</h2>
