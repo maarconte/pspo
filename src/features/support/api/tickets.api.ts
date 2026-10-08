@@ -19,6 +19,7 @@ import {
 import { db } from '../../../lib/firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { app } from '../../../lib/firebase/config';
+import { auth } from '../../../lib/firebase/auth';
 import type {
   Ticket,
   CreateTicketPayload,
@@ -99,6 +100,7 @@ export const updateTicket = async (
   const ticketRef = doc(db, TICKETS_COLLECTION, ticketId);
   await updateDoc(ticketRef, {
     ...payload,
+    updatedBy: auth.currentUser?.uid ?? null,
     updatedAt: serverTimestamp(),
   });
 };

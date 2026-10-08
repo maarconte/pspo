@@ -31,6 +31,8 @@ export interface Ticket {
   priority: TicketPriority;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  /** UID de la dernière personne ayant modifié le ticket (absent sur les anciens tickets). */
+  updatedBy?: string | null;
 }
 
 export type CreateTicketPayload = Pick<Ticket, 'name' | 'description'> & {
