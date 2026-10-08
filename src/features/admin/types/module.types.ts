@@ -14,6 +14,8 @@ export interface Module {
   usefulLinks?: string | null;
   /** Number of quiz sessions completed for this module, incremented on quiz completion. */
   completedCount?: number;
+  /** Display position (ascending) in the module select and the admin table. Absent on legacy modules. */
+  order?: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }

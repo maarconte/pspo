@@ -1,4 +1,22 @@
-import { FileText, Layers, Pencil, Plus, Trash2, Upload } from 'lucide-react';
+import type { CSSProperties, ReactNode } from 'react';
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { FileText, GripVertical, Layers, Pencil, Plus, Trash2, Upload } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Module } from '../../types/module.types';
 import { useQuestionsStore } from '../../../../stores/useQuestionsStore';
@@ -12,6 +30,7 @@ interface ModulesTableProps {
   onDelete: (module: Module, isEmpty: boolean) => void;
   onImportCsv: (module: Module) => void;
   onAddQuestion: (module: Module) => void;
+  onReorder: (orderedIds: string[]) => void;
   togglingModuleId?: string | null;
 }
 
@@ -21,6 +40,45 @@ const formatPdfSize = (bytes?: number): string => {
   return `${mo.toFixed(1)} Mo`;
 };
 
+const SortableRow = ({
+  id,
+  title,
+  children,
+}: {
+  id: string;
+  title: string;
+  children: ReactNode;
+}) => {
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } =
+    useSortable({ id });
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    position: 'relative',
+    zIndex: isDragging ? 1 : undefined,
+  };
+
+  return (
+    <tr ref={setNodeRef} style={style} className={isDragging ? 'modules-table__row--dragging' : undefined}>
+      <td className="modules-table__drag-cell">
+        <button
+          type="button"
+          ref={setActivatorNodeRef}
+          className="modules-table__drag-handle"
+          title={`Déplacer ${title}`}
+          aria-label={`Déplacer ${title}`}
+          {...attributes}
+          {...listeners}
+        >
+          <GripVertical size={16} />
+        </button>
+      </td>
+      {children}
+    </tr>
+  );
+};
+
 export const ModulesTable = ({
   modules,
   onEdit,
@@ -28,8 +86,23 @@ export const ModulesTable = ({
   onDelete,
   onImportCsv,
   onAddQuestion,
+  onReorder,
   togglingModuleId,
 }: ModulesTableProps) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    if (!over || active.id === over.id) return;
+    const ids = modules.map((m) => m.id);
+    const from = ids.indexOf(String(active.id));
+    const to = ids.indexOf(String(over.id));
+    if (from === -1 || to === -1) return;
+    onReorder(arrayMove(ids, from, to));
+  };
+
   const allQuestions = useQuestionsStore((s) => s.allQuestions);
 
   const getLinkedQuestionCount = (module: Module) =>
@@ -50,6 +123,7 @@ export const ModulesTable = ({
       <div className="modules-table__wrapper">
         <table className="modules-table__table">
           <colgroup>
+            <col style={{ width: '40px' }} />
             <col style={{ width: '15%' }} />
             <col style={{ width: '11%' }} />
             <col style={{ width: '12%' }} />
@@ -62,6 +136,7 @@ export const ModulesTable = ({
           </colgroup>
           <thead>
             <tr>
+              <th aria-label="Ordre" />
               <th>Title</th>
               <th>Statut</th>
               <th>Nbr quizz terminé</th>
@@ -73,13 +148,15 @@ export const ModulesTable = ({
               <th>Actions</th>
             </tr>
           </thead>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={modules.map((m) => m.id)} strategy={verticalListSortingStrategy}>
           <tbody>
             {modules.map((module) => {
               const linkedQuestionCount = getLinkedQuestionCount(module);
               const isEmpty = linkedQuestionCount === 0;
 
               return (
-              <tr key={module.id}>
+              <SortableRow key={module.id} id={module.id} title={module.title}>
                 <td className="modules-table__title">{module.title}</td>
                 <td>
                   <button
@@ -161,10 +238,12 @@ export const ModulesTable = ({
                     </button>
                   </div>
                 </td>
-              </tr>
+              </SortableRow>
               );
             })}
           </tbody>
+          </SortableContext>
+          </DndContext>
         </table>
       </div>
     </div>

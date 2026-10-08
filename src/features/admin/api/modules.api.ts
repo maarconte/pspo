@@ -6,11 +6,11 @@ import {
   doc,
   query,
   where,
-  orderBy,
   onSnapshot,
   getDocs,
   serverTimestamp,
   increment,
+  writeBatch,
   Unsubscribe,
 } from 'firebase/firestore';
 import {
@@ -34,23 +34,31 @@ const storage = getStorage(app);
 
 // ─── Subscribe (real-time) ────────────────────────────────────────────────────
 
+// Modules without an `order` (legacy) come first, newest first, as before;
+// ordered modules follow by ascending `order`.
+const toMillis = (module: Module): number =>
+  module.createdAt?.toMillis?.() ?? Number.MAX_SAFE_INTEGER;
+
+export const sortModules = (modules: Module[]): Module[] =>
+  [...modules].sort((a, b) => {
+    const orderA = a.order ?? -Infinity;
+    const orderB = b.order ?? -Infinity;
+    if (orderA !== orderB) return orderA < orderB ? -1 : 1;
+    return toMillis(b) - toMillis(a);
+  });
+
 export const subscribeToModules = (
   onUpdate: (modules: Module[]) => void,
   onError?: (error: Error) => void,
 ): Unsubscribe => {
-  const q = query(
-    collection(db, MODULES_COLLECTION),
-    orderBy('createdAt', 'desc'),
-  );
-
   return onSnapshot(
-    q,
+    collection(db, MODULES_COLLECTION),
     (snapshot) => {
       const modules = snapshot.docs.map((d) => ({
         id: d.id,
         ...d.data(),
       })) as Module[];
-      onUpdate(modules);
+      onUpdate(sortModules(modules));
     },
     (error) => {
       console.error('subscribeToModules error:', error);
@@ -88,11 +96,23 @@ export const createModule = async (
     pdfSizeBytes: pdfSizeBytes ?? null,
     usefulLinks: payload.usefulLinks || null,
     completedCount: 0,
+    // Appended after existing modules; reordering renumbers everything from 0.
+    order: Date.now(),
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
 
   return docRef.id;
+};
+
+// ─── Reorder ──────────────────────────────────────────────────────────────────
+
+export const reorderModules = async (orderedIds: string[]): Promise<void> => {
+  const batch = writeBatch(db);
+  orderedIds.forEach((id, index) => {
+    batch.update(doc(db, MODULES_COLLECTION, id), { order: index });
+  });
+  await batch.commit();
 };
 
 // ─── Update ───────────────────────────────────────────────────────────────────
