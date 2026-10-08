@@ -92,3 +92,13 @@ $GRID_COLUMNS: 12;
 $GRID_GAP: 1rem;
 
 /*=====  End of Grid  ======*/
+
+/*=============================================
+=            Side drawer tabs            =
+=============================================*/
+// Coop, Docs and Links tabs share one height and are stacked around the
+// vertical center with the same gap, so they stay evenly spaced.
+$DRAWER_TAB_HEIGHT: 100px;
+$DRAWER_TAB_GAP: 16px;
+
+/*=====  End of Side drawer tabs  ======*/

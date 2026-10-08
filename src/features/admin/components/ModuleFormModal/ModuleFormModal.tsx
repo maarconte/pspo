@@ -341,7 +341,7 @@ export const ModuleFormModal = ({
           </div>
         </div>
         <div className="module-form__field">
-          <label htmlFor="module-useful-links">Liens utiles du module</label>
+          <label htmlFor="module-useful-links">Links du module</label>
           <RichTextEditor
             // The editor reads `value` only on mount, and `form` is re-synced in an effect after the
             // modal opens (one render late) — so seed it from the module itself and remount per open/module.
@@ -349,7 +349,7 @@ export const ModuleFormModal = ({
             id="module-useful-links"
             value={module?.usefulLinks ?? ""}
             onChange={(html) => setForm((f) => ({ ...f, usefulLinks: html }))}
-            placeholder="Liens utiles du module"
+            placeholder="Links du module"
           />
         </div>
       </div>

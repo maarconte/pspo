@@ -4,14 +4,16 @@
 .links-tab {
   position: fixed;
   right: 0;
-  top: calc(50% + 260px);
-  transform: translateX(calc(100% - 40px));
+  top: calc(50% + #{$DRAWER_TAB_HEIGHT + $DRAWER_TAB_GAP});
+  transform: translateY(-50%) translateX(calc(100% - 40px));
   background: rgba($primary-600, 0.25);
   backdrop-filter: blur(2px);
   color: $primary-300;
   display: flex;
   align-items: center;
   gap: $SPACE_2;
+  height: $DRAWER_TAB_HEIGHT;
+  box-sizing: border-box;
   padding: $SPACE_2 $SPACE_3;
   border-radius: 12px 0 0 12px;
   cursor: pointer;
@@ -20,13 +22,13 @@
   box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    transform: translateX(calc(100% - 70px));
+    transform: translateY(-50%) translateX(calc(100% - 70px));
     background: $primary-600;
     color: white;
   }
 
   &.open {
-    transform: translateX(100%);
+    transform: translateY(-50%) translateX(100%);
   }
 
   &__label {

@@ -10,7 +10,7 @@ export interface Module {
   pdfUrl?: string;
   pdfPath?: string; // Firebase Storage path, used to delete the file
   pdfSizeBytes?: number;
-  /** Admin-authored HTML (formatted text + links) shown in the "Liens utiles" side tab. Empty/absent = no tab. */
+  /** Admin-authored HTML (formatted text + links) shown in the "Links" side tab. Empty/absent = no tab. */
   usefulLinks?: string | null;
   /** Number of quiz sessions completed for this module, incremented on quiz completion. */
   completedCount?: number;

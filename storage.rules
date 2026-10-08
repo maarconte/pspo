@@ -20,7 +20,7 @@ service firebase.storage {
 
     // PDF de support de cours des modules
     match /modules/{fileName=**} {
-      // Lecture publique (le PDF est affiché dans la Documentation drawer, page publique)
+      // Lecture publique (le PDF est affiché dans la Docs drawer, page publique)
       allow read: if true;
 
       // Upload/suppression réservés aux admins et devs

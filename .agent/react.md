@@ -6,11 +6,7 @@ This JavaScript code provides a full example of defining and nesting React compo
 
 ```js
 function MyButton() {
-  return (
-    <button>
-      I'm a button
-    </button>
-  );
+  return <button>I'm a button</button>;
 }
 
 export default function MyApp() {
@@ -23,7 +19,7 @@ export default function MyApp() {
 }
 ```
 
---------------------------------
+---
 
 ### Complete Context Example with Multiple Components in React
 
@@ -32,7 +28,7 @@ Source: https://react.dev/reference/react/useContext
 Provides a full working example demonstrating context creation, provider setup, and multiple components consuming context values. Includes styled Panel and Button components that use context for theming.
 
 ```javascript
-import { createContext, useContext } from 'react';
+import { createContext, useContext } from "react";
 
 const ThemeContext = createContext(null);
 
@@ -41,7 +37,7 @@ export default function MyApp() {
     <ThemeContext value="dark">
       <Form />
     </ThemeContext>
-  )
+  );
 }
 
 function Form() {
@@ -55,23 +51,19 @@ function Form() {
 
 function Panel({ title, children }) {
   const theme = useContext(ThemeContext);
-  const className = 'panel-' + theme;
+  const className = "panel-" + theme;
   return (
     <section className={className}>
       <h1>{title}</h1>
       {children}
     </section>
-  )
+  );
 }
 
 function Button({ children }) {
   const theme = useContext(ThemeContext);
-  const className = 'button-' + theme;
-  return (
-    <button className={className}>
-      {children}
-    </button>
-  );
+  const className = "button-" + theme;
+  return <button className={className}>{children}</button>;
 }
 ```
 
@@ -110,7 +102,7 @@ function Button({ children }) {
 }
 ```
 
---------------------------------
+---
 
 ### Render a basic 'Hello, world' React application
 
@@ -121,7 +113,9 @@ This example demonstrates the minimal setup required to render a React component
 ```html
 <!DOCTYPE html>
 <html>
-  <head><title>My app</title></head>
+  <head>
+    <title>My app</title>
+  </head>
   <body>
     <!-- Your existing page content (in this example, it gets replaced) -->
     <div id="root"></div>
@@ -130,17 +124,17 @@ This example demonstrates the minimal setup required to render a React component
 ```
 
 ```javascript
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
 // Clear the existing HTML content
 document.body.innerHTML = '<div id="app"></div>';
 
 // Render your React component instead
-const root = createRoot(document.getElementById('app'));
+const root = createRoot(document.getElementById("app"));
 root.render(<h1>Hello, world</h1>);
 ```
 
---------------------------------
+---
 
 ### Install vite-plugin-babel for Vite
 
@@ -152,7 +146,7 @@ Install the vite-plugin-babel package as a development dependency when using the
 npm install -D vite-plugin-babel
 ```
 
---------------------------------
+---
 
 ### Configure React Compiler with Vite and vite-plugin-babel
 
@@ -162,23 +156,23 @@ Alternative Vite setup using a separate vite-plugin-babel plugin. This approach 
 
 ```javascript
 // vite.config.js
-import babel from 'vite-plugin-babel';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import babel from "vite-plugin-babel";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [
     react(),
     babel({
       babelConfig: {
-        plugins: ['babel-plugin-react-compiler'],
+        plugins: ["babel-plugin-react-compiler"],
       },
     }),
   ],
 });
 ```
 
---------------------------------
+---
 
 ### Server-Side Render with Asset Map and Hydration Setup (Node.js)
 
@@ -189,23 +183,23 @@ This example extends the server-side rendering to include the `assetMap` in the 
 ```js
 // You'd need to get this JSON from your build tooling.
 const assetMap = {
-  'styles.css': '/styles.123456.css',
-  'main.js': '/main.123456.js'
+  "styles.css": "/styles.123456.css",
+  "main.js": "/main.123456.js",
 };
 
 async function handler(request) {
-  const {prelude} = await prerender(<App assetMap={assetMap} />, {
+  const { prelude } = await prerender(<App assetMap={assetMap} />, {
     // Careful: It's safe to stringify() this because this data isn't user-generated.
     bootstrapScriptContent: `window.assetMap = ${JSON.stringify(assetMap)};`,
-    bootstrapScripts: [assetMap['/main.js']],
+    bootstrapScripts: [assetMap["/main.js"]],
   });
   return new Response(prelude, {
-    headers: { 'content-type': 'text/html' },
+    headers: { "content-type": "text/html" },
   });
 }
 ```
 
---------------------------------
+---
 
 ### Install React and ReactDOM packages using npm
 
@@ -217,7 +211,7 @@ This command installs the core `react` library and `react-dom` for browser rende
 npm install react react-dom
 ```
 
---------------------------------
+---
 
 ### Full React App.js Example with `<ViewTransition>` for Page Animation (JavaScript)
 
@@ -226,18 +220,18 @@ Source: https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-a
 This comprehensive React `App.js` example demonstrates integrating the `<ViewTransition>` component at the top level to enable default cross-fade animations between different pages (`Home` and `Details`). It utilizes a custom `useRouter` hook to manage the current URL and conditionally renders components, showcasing a complete setup for animated page transitions without additional CSS.
 
 ```javascript
-import {ViewTransition} from 'react'; import Details from './Details';
-import Home from './Home'; import {useRouter} from './router';
+import { ViewTransition } from "react";
+import Details from "./Details";
+import Home from "./Home";
+import { useRouter } from "./router";
 
 export default function App() {
-  const {url} = useRouter();
+  const { url } = useRouter();
 
   // Use ViewTransition to animate between pages.
   // No additional CSS needed by default.
   return (
-    <ViewTransition>
-      {url === '/' ? <Home /> : <Details />}
-    </ViewTransition>
+    <ViewTransition>{url === "/" ? <Home /> : <Details />}</ViewTransition>
   );
 }
 ```
@@ -384,7 +378,7 @@ export function ChevronLeft() {
           fillRule="nonzero"
 ```
 
---------------------------------
+---
 
 ### Complete React App with createElement and CSS (JS, CSS)
 
@@ -393,23 +387,20 @@ Source: https://react.dev/reference/react/createElement
 This comprehensive example presents a full React application built using `createElement`. It includes a `Greeting` component definition, its rendering within the `App` component, and associated CSS styling to demonstrate a complete non-JSX setup.
 
 ```js
-import { createElement } from 'react';
+import { createElement } from "react";
 
 function Greeting({ name }) {
   return createElement(
-    'h1',
-    { className: 'greeting' },
-    'Hello ',
-    createElement('i', null, name),
-    '. Welcome!'
+    "h1",
+    { className: "greeting" },
+    "Hello ",
+    createElement("i", null, name),
+    ". Welcome!",
   );
 }
 
 export default function App() {
-  return createElement(
-    Greeting,
-    { name: 'Taylor' }
-  );
+  return createElement(Greeting, { name: "Taylor" });
 }
 ```
 
@@ -420,7 +411,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Install React Compiler via npm, Yarn, or pnpm
 
@@ -440,7 +431,7 @@ yarn add -D babel-plugin-react-compiler@latest
 pnpm install -D babel-plugin-react-compiler@latest
 ```
 
---------------------------------
+---
 
 ### Complete Shared State Counter Example in React
 
@@ -449,7 +440,7 @@ Source: https://react.dev/learn
 A full working example demonstrating lifting state up with a parent MyApp component managing shared count state and passing it to multiple MyButton children. When either button is clicked, the shared count updates and both buttons display the new value. Includes basic CSS styling for button layout.
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function MyApp() {
   const [count, setCount] = useState(0);
@@ -468,11 +459,7 @@ export default function MyApp() {
 }
 
 function MyButton({ count, onClick }) {
-  return (
-    <button onClick={onClick}>
-      Clicked {count} times
-    </button>
-  );
+  return <button onClick={onClick}>Clicked {count} times</button>;
 }
 ```
 
@@ -483,7 +470,7 @@ button {
 }
 ```
 
---------------------------------
+---
 
 ### useActionState Hook Basic Setup in React
 
@@ -492,7 +479,7 @@ Source: https://react.dev/reference/react/useActionState
 Demonstrates the basic setup of useActionState hook at the component level. The hook takes an async action function and initial state value, returning an array with current state, dispatcher function, and pending flag. This example shows a simple counter component using an async addToCartAction.
 
 ```javascript
-import { useActionState } from 'react';
+import { useActionState } from "react";
 
 async function addToCartAction(prevCount) {
   // ...
@@ -504,7 +491,7 @@ function Counter() {
 }
 ```
 
---------------------------------
+---
 
 ### Example usage of `resumeAndPrerender` in a server handler
 
@@ -513,21 +500,21 @@ Source: https://react.dev/reference/react-dom/static/resumeAndPrerender
 This example demonstrates how to import `resumeAndPrerender` from `react-dom/static` and use it within an asynchronous server handler. It shows retrieving `postponedState`, passing a React component and `bootstrapScripts` option, and returning the `prelude` stream as an HTML response. The generated HTML can then be made interactive on the client using `hydrateRoot`.
 
 ```js
-import { resumeAndPrerender } from 'react-dom/static';
-import { getPostponedState } from 'storage';
+import { resumeAndPrerender } from "react-dom/static";
+import { getPostponedState } from "storage";
 
 async function handler(request, response) {
   const postponedState = getPostponedState(request);
   const { prelude } = await resumeAndPrerender(<App />, postponedState, {
-    bootstrapScripts: ['/main.js']
+    bootstrapScripts: ["/main.js"],
   });
   return new Response(prelude, {
-    headers: { 'content-type': 'text/html' },
+    headers: { "content-type": "text/html" },
   });
 }
 ```
 
---------------------------------
+---
 
 ### Basic `preload` function call in JavaScript
 
@@ -536,10 +523,10 @@ Source: https://react.dev/reference/react-dom/preload
 This example demonstrates the fundamental usage of the `preload` function to eagerly fetch a font resource. It provides a hint to the browser to start downloading the specified URL with the given resource type.
 
 ```js
-preload("https://example.com/font.woff2", {as: "font"});
+preload("https://example.com/font.woff2", { as: "font" });
 ```
 
---------------------------------
+---
 
 ### Full List Rendering Example with Keyed React Fragments (JavaScript)
 
@@ -548,24 +535,24 @@ Source: https://react.dev/reference/react/Fragment
 Provides a complete, runnable example demonstrating how to render a list of items, each wrapped in an explicit `Fragment` with a unique `key` prop. This showcases the correct pattern for handling lists of Fragments to optimize React's rendering performance.
 
 ```javascript
-import { Fragment } from 'react';
+import { Fragment } from "react";
 
 const posts = [
-  { id: 1, title: 'An update', body: "It's been a while since I posted..." },
-  { id: 2, title: 'My new blog', body: 'I am starting a new blog!' }
+  { id: 1, title: "An update", body: "It's been a while since I posted..." },
+  { id: 2, title: "My new blog", body: "I am starting a new blog!" },
 ];
 
 export default function Blog() {
-  return posts.map(post =>
+  return posts.map((post) => (
     <Fragment key={post.id}>
       <PostTitle title={post.title} />
       <PostBody body={post.body} />
     </Fragment>
-  );
+  ));
 }
 
 function PostTitle({ title }) {
-  return <h1>{title}</h1>
+  return <h1>{title}</h1>;
 }
 
 function PostBody({ body }) {
@@ -577,7 +564,7 @@ function PostBody({ body }) {
 }
 ```
 
---------------------------------
+---
 
 ### Complete example of rendering React components into non-React DOM nodes (Multi-language)
 
@@ -604,9 +591,9 @@ This comprehensive example illustrates the full integration of a React applicati
 ```
 
 ```js
-import { useRef, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { createMapWidget, addPopupToMapWidget } from './map-widget.js';
+import { useRef, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { createMapWidget, addPopupToMapWidget } from "./map-widget.js";
 
 export default function Map() {
   const containerRef = useRef(null);
@@ -624,44 +611,41 @@ export default function Map() {
 
   return (
     <div style={{ width: 250, height: 250 }} ref={containerRef}>
-      {popupContainer !== null && createPortal(
-        <p>Hello from React!</p>,
-        popupContainer
-      )}
+      {popupContainer !== null &&
+        createPortal(<p>Hello from React!</p>, popupContainer)}
     </div>
   );
 }
 ```
 
 ```js
-import 'leaflet/dist/leaflet.css';
-import * as L from 'leaflet';
+import "leaflet/dist/leaflet.css";
+import * as L from "leaflet";
 
 export function createMapWidget(containerDomNode) {
   const map = L.map(containerDomNode);
   map.setView([0, 0], 0);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    attribution: '© OpenStreetMap'
+    attribution: "© OpenStreetMap",
   }).addTo(map);
   return map;
 }
 
 export function addPopupToMapWidget(map) {
-  const popupDiv = document.createElement('div');
-  L.popup()
-    .setLatLng([0, 0])
-    .setContent(popupDiv)
-    .openOn(map);
+  const popupDiv = document.createElement("div");
+  L.popup().setLatLng([0, 0]).setContent(popupDiv).openOn(map);
   return popupDiv;
 }
 ```
 
 ```css
-button { margin: 5px; }
+button {
+  margin: 5px;
+}
 ```
 
---------------------------------
+---
 
 ### Install ESLint React Hooks Plugin
 
@@ -673,7 +657,7 @@ Install the eslint-plugin-react-hooks package as a development dependency. This 
 npm install -D eslint-plugin-react-hooks@latest
 ```
 
---------------------------------
+---
 
 ### Import and Initialize React Root
 
@@ -682,13 +666,13 @@ Source: https://react.dev/reference/react-dom/client/createRoot
 Demonstrates the basic setup for creating a React root by importing createRoot from react-dom/client, selecting a DOM node, and creating a root instance. This is the typical entry point for React applications.
 
 ```javascript
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
-const domNode = document.getElementById('root');
+const domNode = document.getElementById("root");
 const root = createRoot(domNode);
 ```
 
---------------------------------
+---
 
 ### Install React Compiler via pnpm
 
@@ -700,7 +684,7 @@ Installation command for React Compiler using pnpm package manager. Installs the
 pnpm add --save-dev --save-exact babel-plugin-react-compiler@latest
 ```
 
---------------------------------
+---
 
 ### useImperativeHandle Basic Setup
 
@@ -720,7 +704,7 @@ function MyInput({ ref }) {
   // ...
 ```
 
---------------------------------
+---
 
 ### Install React Compiler via yarn
 
@@ -732,7 +716,7 @@ Installation command for React Compiler using yarn package manager. Installs the
 yarn add --dev --exact babel-plugin-react-compiler@latest
 ```
 
---------------------------------
+---
 
 ### React Component Composition Example
 
@@ -749,12 +733,12 @@ Shows how React components can be composed and nested to build complete page lay
   <Sidebar />
   <PageContent>
     <TableOfContents />
-    <DocumentationText />
+    <DocsText />
   </PageContent>
 </PageLayout>
 ```
 
---------------------------------
+---
 
 ### Full Blog Component Example with React Fragment Shorthand (JavaScript)
 
@@ -769,7 +753,7 @@ export default function Blog() {
       <Post title="An update" body="It's been a while since I posted..." />
       <Post title="My new blog" body="I am starting a new blog!" />
     </>
-  )
+  );
 }
 
 function Post({ title, body }) {
@@ -782,7 +766,7 @@ function Post({ title, body }) {
 }
 
 function PostTitle({ title }) {
-  return <h1>{title}</h1>
+  return <h1>{title}</h1>;
 }
 
 function PostBody({ body }) {
@@ -794,7 +778,7 @@ function PostBody({ body }) {
 }
 ```
 
---------------------------------
+---
 
 ### Complete React Searchable List Animation Example
 
@@ -828,7 +812,7 @@ import { useRouter } from "./router";
 import Layout from "./Layout";
 import { ChevronLeft } from "./Icons";
 
-function VideoDetails({id}) {
+function VideoDetails({ id }) {
   // Animate from Suspense fallback to content
   return (
     <Suspense
@@ -896,9 +880,13 @@ function VideoInfo({ id }) {
 ```
 
 ```jsx
-import { useId, useState, use, useDeferredValue, ViewTransition } from "react";import { Video } from "./Videos";import Layout from "./Layout";import { fetchVideos } from "./data";import { IconSearch } from "./Icons";
+import { useId, useState, use, useDeferredValue, ViewTransition } from "react";
+import { Video } from "./Videos";
+import Layout from "./Layout";
+import { fetchVideos } from "./data";
+import { IconSearch } from "./Icons";
 
-function SearchList({searchText, videos}) {
+function SearchList({ searchText, videos }) {
   // Activate with useDeferredValue ("when")
   const deferredSearchText = useDeferredValue(searchText);
   const filteredVideos = filterVideos(videos, deferredSearchText);
@@ -922,7 +910,7 @@ function SearchList({searchText, videos}) {
 export default function Home() {
   const videos = use(fetchVideos());
   const count = videos.length;
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   return (
     <Layout heading={<div className="fit">{count} Videos</div>}>
@@ -977,7 +965,7 @@ export function ChevronLeft() {
 
 ```
 
---------------------------------
+---
 
 ### Configure React Compiler with Babel
 
@@ -988,14 +976,14 @@ Set up React Compiler in babel.config.js by adding the babel-plugin-react-compil
 ```javascript
 module.exports = {
   plugins: [
-    'babel-plugin-react-compiler', // must run first!
+    "babel-plugin-react-compiler", // must run first!
     // ... other plugins
   ],
   // ... other config
 };
 ```
 
---------------------------------
+---
 
 ### HTML Markup Structure Example
 
@@ -1014,7 +1002,7 @@ Demonstrates basic HTML structure using semantic tags like article, heading, and
 </article>
 ```
 
---------------------------------
+---
 
 ### Consolidated React Task Management Application Example
 
@@ -1023,9 +1011,9 @@ Source: https://react.dev/learn/scaling-up-with-reducer-and-context
 This comprehensive example demonstrates a complete React task management application where all context definitions, the state reducer, and the provider component are consolidated into a single `TasksContext.js` file. It showcases how `App.js` consumes the `TasksProvider`, and how `AddTask.js` and `TaskList.js` interact with the shared state via contexts for adding, editing, and deleting tasks.
 
 ```js
-import AddTask from './AddTask.js';
-import TaskList from './TaskList.js';
-import { TasksProvider } from './TasksContext.js';
+import AddTask from "./AddTask.js";
+import TaskList from "./TaskList.js";
+import { TasksProvider } from "./TasksContext.js";
 
 export default function TaskApp() {
   return (
@@ -1039,37 +1027,35 @@ export default function TaskApp() {
 ```
 
 ```js
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer } from "react";
 
 export const TasksContext = createContext(null);
 export const TasksDispatchContext = createContext(null);
 
 export function TasksProvider({ children }) {
-  const [tasks, dispatch] = useReducer(
-    tasksReducer,
-    initialTasks
-  );
+  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 
   return (
     <TasksContext value={tasks}>
-      <TasksDispatchContext value={dispatch}>
-        {children}
-      </TasksDispatchContext>
+      <TasksDispatchContext value={dispatch}>{children}</TasksDispatchContext>
     </TasksContext>
   );
 }
 
 function tasksReducer(tasks, action) {
   switch (action.type) {
-    case 'added': {
-      return [...tasks, {
-        id: action.id,
-        text: action.text,
-        done: false
-      }];
+    case "added": {
+      return [
+        ...tasks,
+        {
+          id: action.id,
+          text: action.text,
+          done: false,
+        },
+      ];
     }
-    case 'changed': {
-      return tasks.map(t => {
+    case "changed": {
+      return tasks.map((t) => {
         if (t.id === action.task.id) {
           return action.task;
         } else {
@@ -1077,44 +1063,48 @@ function tasksReducer(tasks, action) {
         }
       });
     }
-    case 'deleted': {
-      return tasks.filter(t => t.id !== action.id);
+    case "deleted": {
+      return tasks.filter((t) => t.id !== action.id);
     }
     default: {
-      throw Error('Unknown action: ' + action.type);
+      throw Error("Unknown action: " + action.type);
     }
   }
 }
 
 const initialTasks = [
-  { id: 0, text: 'Philosopher’s Path', done: true },
-  { id: 1, text: 'Visit the temple', done: false },
-  { id: 2, text: 'Drink matcha', done: false }
+  { id: 0, text: "Philosopher’s Path", done: true },
+  { id: 1, text: "Visit the temple", done: false },
+  { id: 2, text: "Drink matcha", done: false },
 ];
 ```
 
 ```js
-import { useState, useContext } from 'react';
-import { TasksDispatchContext } from './TasksContext.js';
+import { useState, useContext } from "react";
+import { TasksDispatchContext } from "./TasksContext.js";
 
 export default function AddTask() {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const dispatch = useContext(TasksDispatchContext);
   return (
     <>
       <input
         placeholder="Add task"
         value={text}
-        onChange={e => setText(e.target.value)}
+        onChange={(e) => setText(e.target.value)}
       />
-      <button onClick={() => {
-        setText('');
-        dispatch({
-          type: 'added',
-          id: nextId++,
-          text: text,
-        });
-      }}>Add</button>
+      <button
+        onClick={() => {
+          setText("");
+          dispatch({
+            type: "added",
+            id: nextId++,
+            text: text,
+          });
+        }}
+      >
+        Add
+      </button>
     </>
   );
 }
@@ -1123,14 +1113,14 @@ let nextId = 3;
 ```
 
 ```js
-import { useState, useContext } from 'react';
-import { TasksContext, TasksDispatchContext } from './TasksContext.js';
+import { useState, useContext } from "react";
+import { TasksContext, TasksDispatchContext } from "./TasksContext.js";
 
 export default function TaskList() {
   const tasks = useContext(TasksContext);
   return (
     <ul>
-      {tasks.map(task => (
+      {tasks.map((task) => (
         <li key={task.id}>
           <Task task={task} />
         </li>
@@ -1148,27 +1138,24 @@ function Task({ task }) {
       <>
         <input
           value={task.text}
-          onChange={e => {
+          onChange={(e) => {
             dispatch({
-              type: 'changed',
+              type: "changed",
               task: {
                 ...task,
-                text: e.target.value
-              }
+                text: e.target.value,
+              },
             });
-          }} />
-        <button onClick={() => setIsEditing(false)}>
-          Save
-        </button>
+          }}
+        />
+        <button onClick={() => setIsEditing(false)}>Save</button>
       </>
     );
   } else {
     taskContent = (
       <>
         {task.text}
-        <button onClick={() => setIsEditing(true)}>
-          Edit
-        </button>
+        <button onClick={() => setIsEditing(true)}>Edit</button>
       </>
     );
   }
@@ -1177,23 +1164,25 @@ function Task({ task }) {
       <input
         type="checkbox"
         checked={task.done}
-        onChange={e => {
+        onChange={(e) => {
           dispatch({
-            type: 'changed',
+            type: "changed",
             task: {
               ...task,
-              done: e.target.checked
-            }
+              done: e.target.checked,
+            },
           });
         }}
       />
       {taskContent}
-      <button onClick={() => {
-        dispatch({
-          type: 'deleted',
-          id: task.id
-        });
-      }}>
+      <button
+        onClick={() => {
+          dispatch({
+            type: "deleted",
+            id: task.id,
+          });
+        }}
+      >
         Delete
       </button>
     </label>
@@ -1202,10 +1191,12 @@ function Task({ task }) {
 ```
 
 ```css
-button { margin: 5px; }
+button {
+  margin: 5px;
+}
 ```
 
---------------------------------
+---
 
 ### Install React Compiler via npm
 
@@ -1217,7 +1208,7 @@ Installation command for React Compiler using npm package manager. Installs the 
 npm install --save-dev --save-exact babel-plugin-react-compiler@latest
 ```
 
---------------------------------
+---
 
 ### React Entry Point Setup with createRoot
 
@@ -1226,16 +1217,16 @@ Source: https://react.dev/reference/react/StrictMode
 Initializes a React application by creating a root element and rendering the App component. This is the standard setup for modern React applications using the new createRoot API.
 
 ```javascript
-import { createRoot } from 'react-dom/client';
-import './styles.css';
+import { createRoot } from "react-dom/client";
+import "./styles.css";
 
-import App from './App';
+import App from "./App";
 
 const root = createRoot(document.getElementById("root"));
 root.render(<App />);
 ```
 
---------------------------------
+---
 
 ### Preload module in event handler before state transition
 
@@ -1244,20 +1235,18 @@ Source: https://react.dev/reference/react-dom/preloadModule
 Demonstrates calling preloadModule within an event handler to start downloading a module before transitioning to a page or state where the module will be needed. This approach gets the download process started earlier than calling it during rendering of the new page, improving performance during state transitions.
 
 ```javascript
-import { preloadModule } from 'react-dom';
+import { preloadModule } from "react-dom";
 
 function CallToAction() {
   const onClick = () => {
-    preloadModule("https://example.com/module.js", {as: "script"});
+    preloadModule("https://example.com/module.js", { as: "script" });
     startWizard();
-  }
-  return (
-    <button onClick={onClick}>Start Wizard</button>
-  );
+  };
+  return <button onClick={onClick}>Start Wizard</button>;
 }
 ```
 
---------------------------------
+---
 
 ### Correctly pass options to React createRoot, not root.render
 
@@ -1267,14 +1256,14 @@ This example highlights a common mistake: passing options to `root.render` inste
 
 ```js
 // 🚩 Wrong: root.render only takes one argument.
-root.render(App, {onUncaughtError});
+root.render(App, { onUncaughtError });
 
 // ✅ Correct: pass options to createRoot.
-const root = createRoot(container, {onUncaughtError});
+const root = createRoot(container, { onUncaughtError });
 root.render(<App />);
 ```
 
---------------------------------
+---
 
 ### Verify React Compiler with Build Output
 
@@ -1297,7 +1286,7 @@ export default function MyApp() {
 }
 ```
 
---------------------------------
+---
 
 ### Configure React Compiler with Vite and vite-plugin-react
 
@@ -1307,21 +1296,21 @@ Integrate React Compiler into Vite by configuring the babel option within the re
 
 ```javascript
 // vite.config.js
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [
     react({
       babel: {
-        plugins: ['babel-plugin-react-compiler'],
+        plugins: ["babel-plugin-react-compiler"],
       },
     }),
   ],
 });
 ```
 
---------------------------------
+---
 
 ### Complete React App Entry Point with Imports
 
@@ -1330,15 +1319,15 @@ Source: https://react.dev/reference/react-dom/client/createRoot
 Full entry point file that imports createRoot, the App component, and styles, then creates and renders the root. This demonstrates the typical setup for a React application with component imports and stylesheet loading.
 
 ```javascript
-import { createRoot } from 'react-dom/client';
-import App from './App.js';
-import './styles.css';
+import { createRoot } from "react-dom/client";
+import App from "./App.js";
+import "./styles.css";
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(<App />);
 ```
 
---------------------------------
+---
 
 ### Multiple Component Instances with Separate State
 
@@ -1347,7 +1336,7 @@ Source: https://react.dev/learn
 Render the same component multiple times to demonstrate that each instance maintains its own independent state. This example shows a parent component rendering two MyButton components, each with its own count state that updates independently.
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function MyApp() {
   return (
@@ -1366,15 +1355,11 @@ function MyButton() {
     setCount(count + 1);
   }
 
-  return (
-    <button onClick={handleClick}>
-      Clicked {count} times
-    </button>
-  );
+  return <button onClick={handleClick}>Clicked {count} times</button>;
 }
 ```
 
---------------------------------
+---
 
 ### Main application component for modal examples in React
 
@@ -1383,14 +1368,14 @@ Source: https://react.dev/reference/react-dom/createPortal
 This React component serves as the entry point, importing and rendering two distinct examples: one demonstrating a modal without a portal (`NoPortalExample`) and another showcasing a modal utilizing a portal (`PortalExample`). Both are enclosed within `clipping-container` divs to illustrate the impact of parent styles on modal rendering.
 
 ```js
-import NoPortalExample from './NoPortalExample';
-import PortalExample from './PortalExample';
+import NoPortalExample from "./NoPortalExample";
+import PortalExample from "./PortalExample";
 
 export default function App() {
   return (
     <>
       <div className="clipping-container">
-        <NoPortalExample  />
+        <NoPortalExample />
       </div>
       <div className="clipping-container">
         <PortalExample />
@@ -1400,7 +1385,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Display dynamic data and inline styles in a React component
 
@@ -1410,9 +1395,9 @@ This example demonstrates displaying dynamic data from a `user` object within a 
 
 ```js
 const user = {
-  name: 'Hedy Lamarr',
-  imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
-  imageSize: 90
+  name: "Hedy Lamarr",
+  imageUrl: "https://i.imgur.com/yXOvdOSs.jpg",
+  imageSize: 90,
 };
 
 export default function Profile() {
@@ -1422,10 +1407,10 @@ export default function Profile() {
       <img
         className="avatar"
         src={user.imageUrl}
-        alt={'Photo of ' + user.name}
+        alt={"Photo of " + user.name}
         style={{
           width: user.imageSize,
-          height: user.imageSize
+          height: user.imageSize,
         }}
       />
     </>
@@ -1443,7 +1428,7 @@ export default function Profile() {
 }
 ```
 
---------------------------------
+---
 
 ### Initial React Application Structure Without View Transitions
 
@@ -1452,13 +1437,15 @@ Source: https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-a
 This multi-file snippet provides the foundational code for a React application that serves as a starting point before implementing View Transitions. It includes the main `App` component for routing, a `Details` component to display video information, and a `Home` component for listing videos and handling search, demonstrating interactions without any animation.
 
 ```javascript
-import TalkDetails from './Details'; import Home from './Home'; import {useRouter} from './router';
+import TalkDetails from "./Details";
+import Home from "./Home";
+import { useRouter } from "./router";
 
 export default function App() {
-  const {url} = useRouter();
+  const { url } = useRouter();
 
   // 🚩This version doesn't include any animations yet
-  return url === '/' ? <Home /> : <TalkDetails />;
+  return url === "/" ? <Home /> : <TalkDetails />;
 }
 ```
 
@@ -1555,7 +1542,7 @@ function filterVideos(videos, query) {
     .toLowerCase()
 ```
 
---------------------------------
+---
 
 ### Create React Component with JSX
 
@@ -1569,11 +1556,11 @@ function Greeting({ name }) {
 }
 
 export default function App() {
-  return <Greeting name="world" />
+  return <Greeting name="world" />;
 }
 ```
 
---------------------------------
+---
 
 ### Complete React useReducer initializer function example
 
@@ -1582,7 +1569,7 @@ Source: https://react.dev/reference/react/useReducer
 A comprehensive example demonstrating the use of an initializer function with `useReducer` to manage a todo list. The `createInitialState` function is passed as the third argument, ensuring it runs only once during initialization, even when the component re-renders due to user input.
 
 ```js
-import TodoList from './TodoList.js';
+import TodoList from "./TodoList.js";
 
 export default function App() {
   return <TodoList username="Taylor" />;
@@ -1590,68 +1577,69 @@ export default function App() {
 ```
 
 ```js
-import { useReducer } from 'react';
+import { useReducer } from "react";
 
 function createInitialState(username) {
   const initialTodos = [];
   for (let i = 0; i < 50; i++) {
     initialTodos.push({
       id: i,
-      text: username + "'s task #" + (i + 1)
+      text: username + "'s task #" + (i + 1),
     });
   }
   return {
-    draft: '',
+    draft: "",
     todos: initialTodos,
   };
 }
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'changed_draft': {
+    case "changed_draft": {
       return {
         draft: action.nextDraft,
         todos: state.todos,
       };
-    };
-    case 'added_todo': {
+    }
+    case "added_todo": {
       return {
-        draft: '',
-        todos: [{
-          id: state.todos.length,
-          text: state.draft
-        }, ...state.todos]
-      }
+        draft: "",
+        todos: [
+          {
+            id: state.todos.length,
+            text: state.draft,
+          },
+          ...state.todos,
+        ],
+      };
     }
   }
-  throw Error('Unknown action: ' + action.type);
+  throw Error("Unknown action: " + action.type);
 }
 
 export default function TodoList({ username }) {
-  const [state, dispatch] = useReducer(
-    reducer,
-    username,
-    createInitialState
-  );
+  const [state, dispatch] = useReducer(reducer, username, createInitialState);
   return (
     <>
       <input
         value={state.draft}
-        onChange={e => {
+        onChange={(e) => {
           dispatch({
-            type: 'changed_draft',
-            nextDraft: e.target.value
-          })
+            type: "changed_draft",
+            nextDraft: e.target.value,
+          });
         }}
       />
-      <button onClick={() => {
-        dispatch({ type: 'added_todo' });
-      }}>Add</button>
+      <button
+        onClick={() => {
+          dispatch({ type: "added_todo" });
+        }}
+      >
+        Add
+      </button>
       <ul>
-        {state.todos.map(item => (
-          <li key={item.id}>
-            {item.text}
-          </li>
+        {state.todos.map((item) => (
+          <li key={item.id}>{item.text}</li>
         ))}
       </ul>
     </>
@@ -1659,7 +1647,7 @@ export default function TodoList({ username }) {
 }
 ```
 
---------------------------------
+---
 
 ### Animating React Component Entry/Exit with ViewTransition and startTransition
 
@@ -1681,9 +1669,7 @@ function Thumbnail({ video, children }) {
 export function Video({ video }) {
   return (
     <div className="video">
-      <div
-        className="link"
-      >
+      <div className="link">
         <Thumbnail video={video}></Thumbnail>
 
         <div className="info">
@@ -1697,18 +1683,14 @@ export function Video({ video }) {
 ```
 
 ```js
-import {
-  ViewTransition,
-  useState,
-  startTransition
-} from 'react';
-import {Video} from "./Video";
-import videos from "./data"
+import { ViewTransition, useState, startTransition } from "react";
+import { Video } from "./Video";
+import videos from "./data";
 
 function Item() {
   return (
     <ViewTransition>
-      <Video video={videos[0]}/>
+      <Video video={videos[0]} />
     </ViewTransition>
   );
 }
@@ -1723,7 +1705,9 @@ export default function Component() {
             setShowItem((prev) => !prev);
           });
         }}
-      >{showItem ? '➖' : '➕'}</button>
+      >
+        {showItem ? "➖" : "➕"}
+      </button>
 
       {showItem ? <Item /> : null}
     </>
@@ -1734,15 +1718,15 @@ export default function Component() {
 ```js
 export default [
   {
-    id: '1',
-    title: 'First video',
-    description: 'Video description',
-    image: 'blue',
-  }
-]
+    id: "1",
+    title: "First video",
+    description: "Video description",
+    image: "blue",
+  },
+];
 ```
 
---------------------------------
+---
 
 ### useMemo Hook with filterTodos Example
 
@@ -1751,18 +1735,15 @@ Source: https://react.dev/reference/react/useMemo
 Practical example of useMemo filtering todos based on a tab parameter. The calculation function is only re-executed when the todos or tab dependencies change, improving performance by avoiding unnecessary recalculations.
 
 ```javascript
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
 function TodoList({ todos, tab }) {
-  const visibleTodos = useMemo(
-    () => filterTodos(todos, tab),
-    [todos, tab]
-  );
+  const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Complete Render Prop Example Application
 
@@ -1771,27 +1752,27 @@ Source: https://react.dev/reference/react/cloneElement
 Full working example combining List, Row, and data components using the render prop pattern. The App component passes products to List with a renderItem function that creates Row components, demonstrating the complete data flow and component composition.
 
 ```javascript
-import List from './List.js';
-import Row from './Row.js';
-import { products } from './data.js';
+import List from "./List.js";
+import Row from "./Row.js";
+import { products } from "./data.js";
 
 export default function App() {
   return (
     <List
       items={products}
-      renderItem={(product, isHighlighted) =>
+      renderItem={(product, isHighlighted) => (
         <Row
           key={product.id}
           title={product.title}
           isHighlighted={isHighlighted}
         />
-      }
+      )}
     />
   );
 }
 ```
 
---------------------------------
+---
 
 ### Complete React Application with Dynamic Prop Overriding
 
@@ -1800,26 +1781,23 @@ Source: https://react.dev/reference/react/cloneElement
 This comprehensive Sandpack example provides a full React application demonstrating dynamic prop overriding. It includes `App.js` for overall structure, `List.js` for managing selection and injecting `isHighlighted` props into its `Row` children, `Row.js` for displaying individual items, `data.js` for mock product data, and `style.css` for component styling. This setup allows users to interact with a list where the parent component controls the highlighting of its children.
 
 ```js
-import List from './List.js';
-import Row from './Row.js';
-import { products } from './data.js';
+import List from "./List.js";
+import Row from "./Row.js";
+import { products } from "./data.js";
 
 export default function App() {
   return (
     <List>
-      {products.map(product =>
-        <Row
-          key={product.id}
-          title={product.title}
-        />
-      )}
+      {products.map((product) => (
+        <Row key={product.id} title={product.title} />
+      ))}
     </List>
   );
 }
 ```
 
 ```js
-import { Children, cloneElement, useState } from 'react';
+import { Children, cloneElement, useState } from "react";
 
 export default function List({ children }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -1827,15 +1805,15 @@ export default function List({ children }) {
     <div className="List">
       {Children.map(children, (child, index) =>
         cloneElement(child, {
-          isHighlighted: index === selectedIndex
-        })
+          isHighlighted: index === selectedIndex,
+        }),
       )}
       <hr />
-      <button onClick={() => {
-        setSelectedIndex(i =>
-          (i + 1) % Children.count(children)
-        );
-      }}>
+      <button
+        onClick={() => {
+          setSelectedIndex((i) => (i + 1) % Children.count(children));
+        }}
+      >
         Next
       </button>
     </div>
@@ -1846,10 +1824,7 @@ export default function List({ children }) {
 ```js
 export default function Row({ title, isHighlighted }) {
   return (
-    <div className={[
-      'Row',
-      isHighlighted ? 'RowHighlighted' : ''
-    ].join(' ')}>
+    <div className={["Row", isHighlighted ? "RowHighlighted" : ""].join(" ")}>
       {title}
     </div>
   );
@@ -1858,9 +1833,9 @@ export default function Row({ title, isHighlighted }) {
 
 ```js
 export const products = [
-  { title: 'Cabbage', id: 1 },
-  { title: 'Garlic', id: 2 },
-  { title: 'Apple', id: 3 },
+  { title: "Cabbage", id: 1 },
+  { title: "Garlic", id: 2 },
+  { title: "Apple", id: 3 },
 ];
 ```
 
@@ -1888,7 +1863,7 @@ button {
 }
 ```
 
---------------------------------
+---
 
 ### Install `eslint-plugin-react-hooks` for React Compiler Linting
 
@@ -1908,7 +1883,7 @@ pnpm add --save-dev eslint-plugin-react-hooks@latest
 yarn add --dev eslint-plugin-react-hooks@latest
 ```
 
---------------------------------
+---
 
 ### Initialize a new React project with Vite
 
@@ -1920,7 +1895,7 @@ This command uses `npm create` to scaffold a new React project with Vite. It cre
 npm create vite@latest my-app -- --template react-ts
 ```
 
---------------------------------
+---
 
 ### Example Usage of resumeAndPrerenderToNodeStream in a Node.js Handler
 
@@ -1929,17 +1904,20 @@ Source: https://react.dev/reference/react-dom/static/resumeAndPrerenderToNodeStr
 Illustrates how to import and utilize `resumeAndPrerenderToNodeStream` within an asynchronous Node.js request handler. This example shows retrieving `postponedState`, passing it to the function with a React component, and then piping the resulting `prelude` stream to a writable response.
 
 ```js
-import { resumeAndPrerenderToNodeStream } from 'react-dom/static';
-import { getPostponedState } from 'storage';
+import { resumeAndPrerenderToNodeStream } from "react-dom/static";
+import { getPostponedState } from "storage";
 
 async function handler(request, writable) {
   const postponedState = getPostponedState(request);
-  const { prelude } = await resumeAndPrerenderToNodeStream(<App />, JSON.parse(postponedState));
+  const { prelude } = await resumeAndPrerenderToNodeStream(
+    <App />,
+    JSON.parse(postponedState),
+  );
   prelude.pipe(writable);
 }
 ```
 
---------------------------------
+---
 
 ### Full Example: Deferred Re-rendering with useDeferredValue
 
@@ -1948,15 +1926,15 @@ Source: https://react.dev/reference/react/useDeferredValue
 This comprehensive example demonstrates `useDeferredValue` in action, showing how an input remains responsive while a deliberately slowed-down list updates. It includes the main `App` component, a memoized `SlowList` with an artificially delayed `SlowItem` component, and accompanying CSS for presentation.
 
 ```js
-import { useState, useDeferredValue } from 'react';
-import SlowList from './SlowList.js';
+import { useState, useDeferredValue } from "react";
+import SlowList from "./SlowList.js";
 
 export default function App() {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const deferredText = useDeferredValue(text);
   return (
     <>
-      <input value={text} onChange={e => setText(e.target.value)} />
+      <input value={text} onChange={(e) => setText(e.target.value)} />
       <SlowList text={deferredText} />
     </>
   );
@@ -1964,21 +1942,17 @@ export default function App() {
 ```
 
 ```js
-import { memo } from 'react';
+import { memo } from "react";
 
 const SlowList = memo(function SlowList({ text }) {
   // Log once. The actual slowdown is inside SlowItem.
-  console.log('[ARTIFICIALLY SLOW] Rendering 250 <SlowItem />');
+  console.log("[ARTIFICIALLY SLOW] Rendering 250 <SlowItem />");
 
   let items = [];
   for (let i = 0; i < 250; i++) {
     items.push(<SlowItem key={i} text={text} />);
   }
-  return (
-    <ul className="items">
-      {items}
-    </ul>
-  );
+  return <ul className="items">{items}</ul>;
 });
 
 function SlowItem({ text }) {
@@ -1987,11 +1961,7 @@ function SlowItem({ text }) {
     // Do nothing for 1 ms per item to emulate extremely slow code
   }
 
-  return (
-    <li className="item">
-      Text: {text}
-    </li>
-  )
+  return <li className="item">Text: {text}</li>;
 }
 
 export default SlowList;
@@ -2013,7 +1983,7 @@ export default SlowList;
 }
 ```
 
---------------------------------
+---
 
 ### Create New Applications with React Compiler Enabled by Default
 
@@ -2033,7 +2003,7 @@ npm create vite@latest
 npx create-next-app@latest
 ```
 
---------------------------------
+---
 
 ### Illustrating Code Splitting Bundle Sizes
 
@@ -2051,7 +2021,7 @@ These examples visually represent the impact of code splitting on application bu
 - dashboard.js 25kb
 ```
 
---------------------------------
+---
 
 ### Implement Symmetrical Cleanup Logic in React `useEffect`
 
@@ -2060,16 +2030,16 @@ Source: https://react.dev/reference/react/useEffect
 This example demonstrates the correct pattern for `useEffect` cleanup, where the cleanup logic is symmetrical to the setup logic. It shows how to connect to a server and then disconnect in the cleanup function, ensuring resources are properly managed. The effect depends on `serverUrl` and `roomId`.
 
 ```js
-  useEffect(() => {
-    const connection = createConnection(serverUrl, roomId);
-    connection.connect();
-    return () => {
-      connection.disconnect();
-    };
-  }, [serverUrl, roomId]);
+useEffect(() => {
+  const connection = createConnection(serverUrl, roomId);
+  connection.connect();
+  return () => {
+    connection.disconnect();
+  };
+}, [serverUrl, roomId]);
 ```
 
---------------------------------
+---
 
 ### Configure React Compiler with React Router and Vite
 
@@ -2083,7 +2053,9 @@ import { defineConfig } from "vite";
 import babel from "vite-plugin-babel";
 import { reactRouter } from "@react-router/dev/vite";
 
-const ReactCompilerConfig = { /* ... */ };
+const ReactCompilerConfig = {
+  /* ... */
+};
 
 export default defineConfig({
   plugins: [
@@ -2092,16 +2064,14 @@ export default defineConfig({
       filter: /\.[jt]sx?$/,
       babelConfig: {
         presets: ["@babel/preset-typescript"], // if you use TypeScript
-        plugins: [
-          ["babel-plugin-react-compiler", ReactCompilerConfig],
-        ],
+        plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
       },
     }),
   ],
 });
 ```
 
---------------------------------
+---
 
 ### Complete React Chat Application Demo with `useEffectEvent` (JavaScript)
 
@@ -2110,54 +2080,52 @@ Source: https://react.dev/learn/reusing-logic-with-custom-hooks
 This multi-file JavaScript example provides a full demonstration of a React chat application. It includes `App.js` for room selection, `ChatRoom.js` which uses the custom `useChatRoom` hook, `useChatRoom.js` implementing the `useEffectEvent` optimization for event handlers, and a mock `chat.js` for connection logic. This setup showcases a robust and flexible way to manage chat functionality with customizable message handling.
 
 ```javascript
-import { useState } from 'react';
-import ChatRoom from './ChatRoom.js';
+import { useState } from "react";
+import ChatRoom from "./ChatRoom.js";
 
 export default function App() {
-  const [roomId, setRoomId] = useState('general');
+  const [roomId, setRoomId] = useState("general");
   return (
     <>
       <label>
-        Choose the chat room:{' '}
-        <select
-          value={roomId}
-          onChange={e => setRoomId(e.target.value)}
-        >
+        Choose the chat room:{" "}
+        <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
           <option value="general">general</option>
           <option value="travel">travel</option>
           <option value="music">music</option>
         </select>
       </label>
       <hr />
-      <ChatRoom
-        roomId={roomId}
-      />
+      <ChatRoom roomId={roomId} />
     </>
   );
 }
 ```
 
 ```javascript
-import { useState } from 'react';
-import { useChatRoom } from './useChatRoom.js';
-import { showNotification } from './notifications.js';
+import { useState } from "react";
+import { useChatRoom } from "./useChatRoom.js";
+import { showNotification } from "./notifications.js";
 
 export default function ChatRoom({ roomId }) {
-  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+  const [serverUrl, setServerUrl] = useState("https://localhost:1234");
 
   useChatRoom({
     roomId: roomId,
     serverUrl: serverUrl,
     onReceiveMessage(msg) {
-      showNotification('New message: ' + msg);
-    }
+      showNotification("New message: " + msg);
+    },
   });
 
   return (
     <>
       <label>
         Server URL:
-        <input value={serverUrl} onChange={e => setServerUrl(e.target.value)} />
+        <input
+          value={serverUrl}
+          onChange={(e) => setServerUrl(e.target.value)}
+        />
       </label>
       <h1>Welcome to the {roomId} room!</h1>
     </>
@@ -2166,9 +2134,9 @@ export default function ChatRoom({ roomId }) {
 ```
 
 ```javascript
-import { useEffect } from 'react';
-import { useEffectEvent } from 'react';
-import { createConnection } from './chat.js';
+import { useEffect } from "react";
+import { useEffectEvent } from "react";
+import { createConnection } from "./chat.js";
 
 export function useChatRoom({ serverUrl, roomId, onReceiveMessage }) {
   const onMessage = useEffectEvent(onReceiveMessage);
@@ -2176,11 +2144,11 @@ export function useChatRoom({ serverUrl, roomId, onReceiveMessage }) {
   useEffect(() => {
     const options = {
       serverUrl: serverUrl,
-      roomId: roomId
+      roomId: roomId,
     };
     const connection = createConnection(options);
     connection.connect();
-    connection.on('message', (msg) => {
+    connection.on("message", (msg) => {
       onMessage(msg);
     });
     return () => connection.disconnect();
@@ -2197,7 +2165,7 @@ export function createConnection({ serverUrl, roomId }) {
   if (typeof roomId !== 'string') {
 ```
 
---------------------------------
+---
 
 ### Install Parcel as a development dependency
 
@@ -2209,7 +2177,7 @@ This command installs Parcel, a zero-configuration web application bundler, as a
 npm install --save-dev parcel
 ```
 
---------------------------------
+---
 
 ### Implement UI Transitions with React's startTransition API
 
@@ -2218,7 +2186,7 @@ Source: https://react.dev/blog/2022/03/29/react-v18
 This JavaScript example demonstrates how to use the `startTransition` API in React to mark state updates as non-urgent 'transitions'. This allows React to prioritize urgent updates (like typing) while deferring less critical UI changes (like search results), leading to a more responsive user experience.
 
 ```js
-import { startTransition } from 'react';
+import { startTransition } from "react";
 
 // Urgent: Show what was typed
 setInputValue(input);
@@ -2230,7 +2198,7 @@ startTransition(() => {
 });
 ```
 
---------------------------------
+---
 
 ### Root Component Setup in React with State Management
 
@@ -2239,8 +2207,8 @@ Source: https://react.dev/reference/react/useCallback
 This JavaScript component serves as the main application entry point. It manages a `isDark` state to control the application's theme and renders the `ProductPage` component, passing necessary props like `referrerId`, `productId`, and the current `theme`.
 
 ```js
-import { useState } from 'react';
-import ProductPage from './ProductPage.js';
+import { useState } from "react";
+import ProductPage from "./ProductPage.js";
 
 export default function App() {
   const [isDark, setIsDark] = useState(false);
@@ -2250,7 +2218,7 @@ export default function App() {
         <input
           type="checkbox"
           checked={isDark}
-          onChange={e => setIsDark(e.target.checked)}
+          onChange={(e) => setIsDark(e.target.checked)}
         />
         Dark mode
       </label>
@@ -2258,14 +2226,14 @@ export default function App() {
       <ProductPage
         referrerId="wizard_of_oz"
         productId={123}
-        theme={isDark ? 'dark' : 'light'}
+        theme={isDark ? "dark" : "light"}
       />
     </>
   );
 }
 ```
 
---------------------------------
+---
 
 ### Install React Compiler Babel Plugin
 
@@ -2277,7 +2245,7 @@ Install the babel-plugin-react-compiler package as a development dependency to e
 npm install -D babel-plugin-react-compiler@latest
 ```
 
---------------------------------
+---
 
 ### useEffect Hook Basic Syntax and Import
 
@@ -2289,7 +2257,7 @@ Demonstrates the basic syntax for importing and calling useEffect at the top lev
 useEffect(setup, dependencies?)
 ```
 
---------------------------------
+---
 
 ### Basic `preconnect` Usage in JavaScript
 
@@ -2301,7 +2269,7 @@ Demonstrates the simplest way to use the `preconnect` function to establish an e
 preconnect("https://example.com");
 ```
 
---------------------------------
+---
 
 ### Full Example: Mixed Default and Named Exports/Imports
 
@@ -2310,24 +2278,17 @@ Source: https://react.dev/learn/importing-and-exporting-components
 A comprehensive example demonstrating how to use both default and named exports and imports within a React application. It includes an `App` component importing from a `Gallery` component, which itself exports both a named `Profile` and a default `Gallery` component, along with basic styling.
 
 ```javascript
-import Gallery from './Gallery.js';
-import { Profile } from './Gallery.js';
+import Gallery from "./Gallery.js";
+import { Profile } from "./Gallery.js";
 
 export default function App() {
-  return (
-    <Profile />
-  );
+  return <Profile />;
 }
 ```
 
 ```javascript
 export function Profile() {
-  return (
-    <img
-      src="https://i.imgur.com/QIrZWGIs.jpg"
-      alt="Alan L. Hart"
-    />
-  );
+  return <img src="https://i.imgur.com/QIrZWGIs.jpg" alt="Alan L. Hart" />;
 }
 
 export default function Gallery() {
@@ -2343,10 +2304,13 @@ export default function Gallery() {
 ```
 
 ```css
-img { margin: 0 10px 10px 0; height: 90px; }
+img {
+  margin: 0 10px 10px 0;
+  height: 90px;
+}
 ```
 
---------------------------------
+---
 
 ### Initial FilterableList Component with SearchBar
 
@@ -2355,8 +2319,8 @@ Source: https://react.dev/learn/sharing-state-between-components
 Demonstrates the starting point where SearchBar manages its own query state independently. The FilterableList component renders SearchBar and List components but doesn't coordinate between them. This setup requires refactoring to enable filtering functionality.
 
 ```javascript
-import { useState } from 'react';
-import { foods, filterItems } from './data.js';
+import { useState } from "react";
+import { foods, filterItems } from "./data.js";
 
 export default function FilterableList() {
   return (
@@ -2369,7 +2333,7 @@ export default function FilterableList() {
 }
 
 function SearchBar() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   function handleChange(e) {
     setQuery(e.target.value);
@@ -2377,11 +2341,7 @@ function SearchBar() {
 
   return (
     <label>
-      Search:{' '}
-      <input
-        value={query}
-        onChange={handleChange}
-      />
+      Search: <input value={query} onChange={handleChange} />
     </label>
   );
 }
@@ -2390,7 +2350,7 @@ function List({ items }) {
   return (
     <table>
       <tbody>
-        {items.map(food => (
+        {items.map((food) => (
           <tr key={food.id}>
             <td>{food.name}</td>
             <td>{food.description}</td>
@@ -2402,7 +2362,7 @@ function List({ items }) {
 }
 ```
 
---------------------------------
+---
 
 ### Dynamic Render and Unmount of React App with Event Listeners
 
@@ -2411,22 +2371,22 @@ Source: https://react.dev/reference/react-dom/unmountComponentAtNode
 This comprehensive example demonstrates how to dynamically control the rendering and unmounting of a React application based on user interaction. It uses event listeners to trigger `render` and `unmountComponentAtNode` functions, allowing users to start and stop the React app within a specific DOM element.
 
 ```javascript
-import './styles.css';
-import { render, unmountComponentAtNode } from 'react-dom';
-import App from './App.js';
+import "./styles.css";
+import { render, unmountComponentAtNode } from "react-dom";
+import App from "./App.js";
 
-const domNode = document.getElementById('root');
+const domNode = document.getElementById("root");
 
-document.getElementById('render').addEventListener('click', () => {
+document.getElementById("render").addEventListener("click", () => {
   render(<App />, domNode);
 });
 
-document.getElementById('unmount').addEventListener('click', () => {
+document.getElementById("unmount").addEventListener("click", () => {
   unmountComponentAtNode(domNode);
 });
 ```
 
---------------------------------
+---
 
 ### Basic React Component for Admin Tool (JavaScript)
 
@@ -2440,11 +2400,11 @@ export default function App() {
     <div>
       <h1>Welcome to the Admin Tool!</h1>
     </div>
-  )
+  );
 }
 ```
 
---------------------------------
+---
 
 ### useEffect with External System Connection and Cleanup
 
@@ -2453,11 +2413,11 @@ Source: https://react.dev/reference/react/useEffect
 Shows a practical example of using useEffect to establish a connection to an external system (chat room) with proper cleanup. Demonstrates dependency array usage with serverUrl and roomId, and includes a cleanup function that disconnects when dependencies change or component unmounts.
 
 ```javascript
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useState, useEffect } from "react";
+import { createConnection } from "./chat.js";
 
 function ChatRoom({ roomId }) {
-  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+  const [serverUrl, setServerUrl] = useState("https://localhost:1234");
 
   useEffect(() => {
     const connection = createConnection(serverUrl, roomId);
@@ -2470,7 +2430,7 @@ function ChatRoom({ roomId }) {
 }
 ```
 
---------------------------------
+---
 
 ### Patch `console.error` to capture owner stack (general example)
 
@@ -2495,7 +2455,7 @@ console.error = function patchedConsoleError(...args) {
 };
 ```
 
---------------------------------
+---
 
 ### Initialize React Application with Router - JavaScript
 
@@ -2504,25 +2464,25 @@ Source: https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-a
 Sets up the React application entry point using StrictMode for development checks, creates a root DOM element, and wraps the App component with a Router for client-side routing. Imports CSS stylesheets for styling and animations.
 
 ```javascript
-import React, {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
-import './styles.css';
-import './animations.css';
+import React, { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles.css";
+import "./animations.css";
 
-import App from './App';
-import {Router} from './router';
+import App from "./App";
+import { Router } from "./router";
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <Router>
       <App />
     </Router>
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
---------------------------------
+---
 
 ### Implementing `resume` in an Async Handler (JavaScript)
 
@@ -2531,17 +2491,17 @@ Source: https://react.dev/reference/react-dom/server/resume
 This example demonstrates how to use `resume` within an asynchronous request handler. It illustrates importing `resume`, fetching the `postponedState` from a storage mechanism, and then invoking `resume` with the application's root component and the retrieved state. The resulting `resumeStream` is then piped to a `writable` stream, typically the HTTP response stream.
 
 ```js
-import { resume } from 'react-dom/server';
-import {getPostponedState} from './storage';
+import { resume } from "react-dom/server";
+import { getPostponedState } from "./storage";
 
 async function handler(request, writable) {
   const postponed = await getPostponedState(request);
   const resumeStream = await resume(<App />, postponed);
-  return resumeStream.pipeTo(writable)
+  return resumeStream.pipeTo(writable);
 }
 ```
 
---------------------------------
+---
 
 ### Common CSS styling for animation examples
 
@@ -2550,19 +2510,30 @@ Source: https://react.dev/learn/reusing-logic-with-custom-hooks
 This CSS snippet provides foundational styling for `label`, `button`, `html`, and `body` elements, ensuring consistent layout and basic appearance across various animation examples. It also sets initial styles for the `.welcome` class, such as `color`, `padding`, `text-align`, `font-size`, and `background-image`.
 
 ```css
-label, button { display: block; margin-bottom: 20px; }
-html, body { min-height: 300px; }
+label,
+button {
+  display: block;
+  margin-bottom: 20px;
+}
+html,
+body {
+  min-height: 300px;
+}
 .welcome {
   opacity: 0;
   color: white;
   padding: 50px;
   text-align: center;
   font-size: 50px;
-  background-image: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+  background-image: radial-gradient(
+    circle,
+    rgba(63, 94, 251, 1) 0%,
+    rgba(252, 70, 107, 1) 100%
+  );
 }
 ```
 
---------------------------------
+---
 
 ### Style Button Component with CSS
 
@@ -2577,7 +2548,7 @@ button {
 }
 ```
 
---------------------------------
+---
 
 ### Complete React Application with `use` Hook for Context
 
@@ -2586,7 +2557,7 @@ Source: https://react.dev/reference/react/use
 Presents a full React application example demonstrating the lifecycle of context: creation, provision, and consumption using the `use` Hook. It includes nested components, conditional context usage, and associated styling to create a themed UI.
 
 ```js
-import { createContext, use } from 'react';
+import { createContext, use } from "react";
 
 const ThemeContext = createContext(null);
 
@@ -2595,7 +2566,7 @@ export default function MyApp() {
     <ThemeContext value="dark">
       <Form />
     </ThemeContext>
-  )
+  );
 }
 
 function Form() {
@@ -2609,26 +2580,22 @@ function Form() {
 
 function Panel({ title, children }) {
   const theme = use(ThemeContext);
-  const className = 'panel-' + theme;
+  const className = "panel-" + theme;
   return (
     <section className={className}>
       <h1>{title}</h1>
       {children}
     </section>
-  )
+  );
 }
 
 function Button({ show, children }) {
   if (show) {
     const theme = use(ThemeContext);
-    const className = 'button-' + theme;
-    return (
-      <button className={className}>
-        {children}
-      </button>
-    );
+    const className = "button-" + theme;
+    return <button className={className}>{children}</button>;
   }
-  return false
+  return false;
 }
 ```
 
@@ -2668,7 +2635,7 @@ function Button({ show, children }) {
 }
 ```
 
---------------------------------
+---
 
 ### Complete `createPortal` Example with DOM Output Inspection
 
@@ -2677,15 +2644,15 @@ Source: https://react.dev/reference/react-dom/createPortal
 This comprehensive example showcases a React component utilizing `createPortal` to render a specific paragraph into `document.body`, while another paragraph remains within its parent `div`. It includes both the React component's JavaScript code and the resulting HTML DOM structure, illustrating how `createPortal` physically relocates elements in the DOM while preserving React's logical component tree and event bubbling.
 
 ```js
-import { createPortal } from 'react-dom';
+import { createPortal } from "react-dom";
 
 function MyComponent() {
   return (
-    <div style={{ border: '2px solid black' }}>
+    <div style={{ border: "2px solid black" }}>
       <p>This child is placed in the parent div.</p>
       {createPortal(
         <p>This child is placed in the document body.</p>,
-        document.body
+        document.body,
       )}
     </div>
   );
@@ -2696,16 +2663,16 @@ function MyComponent() {
 <body>
   <div id="root">
     ...
-      <div style="border: 2px solid black">
-        <p>This child is placed inside the parent div.</p>
-      </div>
+    <div style="border: 2px solid black">
+      <p>This child is placed inside the parent div.</p>
+    </div>
     ...
   </div>
   <p>This child is placed in the document body.</p>
 </body>
 ```
 
---------------------------------
+---
 
 ### Imperative Form Setup with Event Listener Registration
 
@@ -2724,7 +2691,7 @@ form.onsubmit = handleFormSubmit;
 textarea.oninput = handleTextareaChange;
 ```
 
---------------------------------
+---
 
 ### Import React and ReactDOM in index.js
 
@@ -2733,14 +2700,14 @@ Source: https://react.dev/learn/tutorial-tic-tac-toe
 Sets up the entry point for a React application by importing React, ReactDOM, styles, and the main App component. This file bridges the React component to the web browser and injects the application into the HTML document.
 
 ```jsx
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import './styles.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles.css";
 
-import App from './App';
+import App from "./App";
 ```
 
---------------------------------
+---
 
 ### Create and Export Basic React Component
 
@@ -2750,13 +2717,11 @@ Shows a simple React component that returns basic JSX markup. This example demon
 
 ```javascript
 export default function Congratulations() {
-  return (
-    <h1>Good job!</h1>
-  );
+  return <h1>Good job!</h1>;
 }
 ```
 
---------------------------------
+---
 
 ### Complete React App with JSX and CSS (JS, CSS)
 
@@ -2785,7 +2750,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Install React Compiler Runtime Package
 
@@ -2797,7 +2762,7 @@ Install react-compiler-runtime as a direct dependency to support backwards compa
 npm install react-compiler-runtime@latest
 ```
 
---------------------------------
+---
 
 ### useInsertionEffect Hook Signature and Basic Usage
 
@@ -2806,7 +2771,7 @@ Source: https://react.dev/reference/react/useInsertionEffect
 Demonstrates the basic syntax and usage of useInsertionEffect for injecting styles in a CSS-in-JS library. The hook accepts a setup function and optional dependencies array, similar to useEffect. The setup function runs before any layout Effects fire and can optionally return a cleanup function.
 
 ```javascript
-import { useInsertionEffect } from 'react';
+import { useInsertionEffect } from "react";
 
 // Inside your CSS-in-JS library
 function useCSS(rule) {
@@ -2817,7 +2782,7 @@ function useCSS(rule) {
 }
 ```
 
---------------------------------
+---
 
 ### Configure a global identifier prefix for multiple React applications on a single page
 
@@ -2828,7 +2793,9 @@ This set of examples illustrates how to prevent ID clashes when rendering multip
 ```html
 <!DOCTYPE html>
 <html>
-  <head><title>My app</title></head>
+  <head>
+    <title>My app</title>
+  </head>
   <body>
     <div id="root1"></div>
     <div id="root2"></div>
@@ -2837,19 +2804,16 @@ This set of examples illustrates how to prevent ID clashes when rendering multip
 ```
 
 ```javascript
-import { useId } from 'react';
+import { useId } from "react";
 
 function PasswordField() {
   const passwordHintId = useId();
-  console.log('Generated identifier:', passwordHintId)
+  console.log("Generated identifier:", passwordHintId);
   return (
     <>
       <label>
         Password:
-        <input
-          type="password"
-          aria-describedby={passwordHintId}
-        />
+        <input type="password" aria-describedby={passwordHintId} />
       </label>
       <p id={passwordHintId}>
         The password should contain at least 18 characters
@@ -2869,17 +2833,17 @@ export default function App() {
 ```
 
 ```javascript
-import { createRoot } from 'react-dom/client';
-import App from './App.js';
-import './styles.css';
+import { createRoot } from "react-dom/client";
+import App from "./App.js";
+import "./styles.css";
 
-const root1 = createRoot(document.getElementById('root1'), {
-  identifierPrefix: 'my-first-app-'
+const root1 = createRoot(document.getElementById("root1"), {
+  identifierPrefix: "my-first-app-",
 });
 root1.render(<App />);
 
-const root2 = createRoot(document.getElementById('root2'), {
-  identifierPrefix: 'my-second-app-'
+const root2 = createRoot(document.getElementById("root2"), {
+  identifierPrefix: "my-second-app-",
 });
 root2.render(<App />);
 ```
@@ -2897,10 +2861,12 @@ root2.render(<App />);
   margin: 5px;
 }
 
-input { margin: 5px; }
+input {
+  margin: 5px;
+}
 ```
 
---------------------------------
+---
 
 ### Complete Example: Chat Room Component with Optimized Effects
 
@@ -2909,19 +2875,19 @@ Source: https://react.dev/reference/react/useEffect
 Full working example of a chat room application demonstrating the optimized pattern. Includes the main ChatRoom component with the function declared inside the Effect, a helper module for creating connections, and styling. The component allows users to select different chat rooms without unnecessary reconnections.
 
 ```javascript
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useState, useEffect } from "react";
+import { createConnection } from "./chat.js";
 
-const serverUrl = 'https://localhost:1234';
+const serverUrl = "https://localhost:1234";
 
 function ChatRoom({ roomId }) {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     function createOptions() {
       return {
         serverUrl: serverUrl,
-        roomId: roomId
+        roomId: roomId,
       };
     }
 
@@ -2934,21 +2900,18 @@ function ChatRoom({ roomId }) {
   return (
     <>
       <h1>Welcome to the {roomId} room!</h1>
-      <input value={message} onChange={e => setMessage(e.target.value)} />
+      <input value={message} onChange={(e) => setMessage(e.target.value)} />
     </>
   );
 }
 
 export default function App() {
-  const [roomId, setRoomId] = useState('general');
+  const [roomId, setRoomId] = useState("general");
   return (
     <>
       <label>
-        Choose the chat room:{' '}
-        <select
-          value={roomId}
-          onChange={e => setRoomId(e.target.value)}
-        >
+        Choose the chat room:{" "}
+        <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
           <option value="general">general</option>
           <option value="travel">travel</option>
           <option value="music">music</option>
@@ -2961,7 +2924,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Opt Out Component from React Compiler Optimization
 
@@ -2976,7 +2939,7 @@ function ProblematicComponent() {
 }
 ```
 
---------------------------------
+---
 
 ### Basic Search with Suspense and `useState` in React
 
@@ -2985,16 +2948,16 @@ Source: https://react.dev/reference/react/useDeferredValue
 This example illustrates a search interface where results are fetched using React Suspense. It highlights a common issue: without deferred values, typing rapidly causes the UI to flicker as the `Suspense` fallback is repeatedly shown while new results load. This setup uses `useState` for the query and a `SearchResults` component that suspends during data fetching.
 
 ```js
-import { Suspense, useState } from 'react';
-import SearchResults from './SearchResults.js';
+import { Suspense, useState } from "react";
+import SearchResults from "./SearchResults.js";
 
 export default function App() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   return (
     <>
       <label>
         Search albums:
-        <input value={query} onChange={e => setQuery(e.target.value)} />
+        <input value={query} onChange={(e) => setQuery(e.target.value)} />
       </label>
       <Suspense fallback={<h2>Loading...</h2>}>
         <SearchResults query={query} />
@@ -3005,20 +2968,24 @@ export default function App() {
 ```
 
 ```js
-import {use} from 'react';
-import { fetchData } from './data.js';
+import { use } from "react";
+import { fetchData } from "./data.js";
 
 export default function SearchResults({ query }) {
-  if (query === '') {
+  if (query === "") {
     return null;
   }
   const albums = use(fetchData(`/search?q=${query}`));
   if (albums.length === 0) {
-    return <p>No matches for <i>"{query}"</i></p>;
+    return (
+      <p>
+        No matches for <i>"{query}"</i>
+      </p>
+    );
   }
   return (
     <ul>
-      {albums.map(album => (
+      {albums.map((album) => (
         <li key={album.id}>
           {album.title} ({album.year})
         </li>
@@ -3043,89 +3010,105 @@ export function fetchData(url) {
 }
 
 async function getData(url) {
-  if (url.startsWith('/search?q=')) {
-    return await getSearchResults(url.slice('/search?q='.length));
+  if (url.startsWith("/search?q=")) {
+    return await getSearchResults(url.slice("/search?q=".length));
   } else {
-    throw Error('Not implemented');
+    throw Error("Not implemented");
   }
 }
 
 async function getSearchResults(query) {
   // Add a fake delay to make waiting noticeable.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
 
-  const allAlbums = [{
-    id: 13,
-    title: 'Let It Be',
-    year: 1970
-  }, {
-    id: 12,
-    title: 'Abbey Road',
-    year: 1969
-  }, {
-    id: 11,
-    title: 'Yellow Submarine',
-    year: 1969
-  }, {
-    id: 10,
-    title: 'The Beatles',
-    year: 1968
-  }, {
-    id: 9,
-    title: 'Magical Mystery Tour',
-    year: 1967
-  }, {
-    id: 8,
-    title: 'Sgt. Pepper\'s Lonely Hearts Club Band',
-    year: 1967
-  }, {
-    id: 7,
-    title: 'Revolver',
-    year: 1966
-  }, {
-    id: 6,
-    title: 'Rubber Soul',
-    year: 1965
-  }, {
-    id: 5,
-    title: 'Help!',
-    year: 1965
-  }, {
-    id: 4,
-    title: 'Beatles For Sale',
-    year: 1964
-  }, {
-    id: 3,
-    title: 'A Hard Day\'s Night',
-    year: 1964
-  }, {
-    id: 2,
-    title: 'With The Beatles',
-    year: 1963
-  }, {
-    id: 1,
-    title: 'Please Please Me',
-    year: 1963
-  }];
+  const allAlbums = [
+    {
+      id: 13,
+      title: "Let It Be",
+      year: 1970,
+    },
+    {
+      id: 12,
+      title: "Abbey Road",
+      year: 1969,
+    },
+    {
+      id: 11,
+      title: "Yellow Submarine",
+      year: 1969,
+    },
+    {
+      id: 10,
+      title: "The Beatles",
+      year: 1968,
+    },
+    {
+      id: 9,
+      title: "Magical Mystery Tour",
+      year: 1967,
+    },
+    {
+      id: 8,
+      title: "Sgt. Pepper's Lonely Hearts Club Band",
+      year: 1967,
+    },
+    {
+      id: 7,
+      title: "Revolver",
+      year: 1966,
+    },
+    {
+      id: 6,
+      title: "Rubber Soul",
+      year: 1965,
+    },
+    {
+      id: 5,
+      title: "Help!",
+      year: 1965,
+    },
+    {
+      id: 4,
+      title: "Beatles For Sale",
+      year: 1964,
+    },
+    {
+      id: 3,
+      title: "A Hard Day's Night",
+      year: 1964,
+    },
+    {
+      id: 2,
+      title: "With The Beatles",
+      year: 1963,
+    },
+    {
+      id: 1,
+      title: "Please Please Me",
+      year: 1963,
+    },
+  ];
 
   const lowerQuery = query.trim().toLowerCase();
-  return allAlbums.filter(album => {
+  return allAlbums.filter((album) => {
     const lowerTitle = album.title.toLowerCase();
     return (
       lowerTitle.startsWith(lowerQuery) ||
-      lowerTitle.indexOf(' ' + lowerQuery) !== -1
-    )
+      lowerTitle.indexOf(" " + lowerQuery) !== -1
+    );
   });
 }
 ```
 
 ```css
-input { margin: 10px; }
+input {
+  margin: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Initialize Application Outside Components
 
@@ -3134,7 +3117,8 @@ Source: https://react.dev/learn/synchronizing-with-effects
 Shows how to run initialization logic once when the application starts by placing it outside component definitions. Uses a browser environment check to ensure code only runs in the browser, not during server-side rendering. This guarantees the logic executes exactly once after the page loads.
 
 ```javascript
-if (typeof window !== 'undefined') { // Check if we're running in the browser.
+if (typeof window !== "undefined") {
+  // Check if we're running in the browser.
   checkAuthToken();
   loadDataFromLocalStorage();
 }
@@ -3144,7 +3128,7 @@ function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Install React 18 with npm and yarn
 
@@ -3160,7 +3144,7 @@ npm install react react-dom
 yarn add react react-dom
 ```
 
---------------------------------
+---
 
 ### Check Installed React Version
 
@@ -3172,7 +3156,7 @@ Verifies the installed React version in the project to ensure the compiler targe
 npm why react
 ```
 
---------------------------------
+---
 
 ### Full Example: Interacting with a DOM Element using createRef in a React Class Component
 
@@ -3181,29 +3165,27 @@ Source: https://react.dev/reference/react/createRef
 Provides a comprehensive example of using `createRef` in a React class component to reference an input element. It includes importing `Component` and `createRef`, declaring the ref, attaching it to a JSX element, and using a button click handler to programmatically focus the input field via the ref's `current` property.
 
 ```js
-import { Component, createRef } from 'react';
+import { Component, createRef } from "react";
 
 export default class Form extends Component {
   inputRef = createRef();
 
   handleClick = () => {
     this.inputRef.current.focus();
-  }
+  };
 
   render() {
     return (
       <>
         <input ref={this.inputRef} />
-        <button onClick={this.handleClick}>
-          Focus the input
-        </button>
+        <button onClick={this.handleClick}>Focus the input</button>
       </>
     );
   }
 }
 ```
 
---------------------------------
+---
 
 ### React Form Component with Repetitive Manual State and Styling
 
@@ -3212,11 +3194,11 @@ Source: https://react.dev/learn/reusing-logic-with-custom-hooks
 This example presents an initial React `Form` component implemented with manual state management for `firstName` and `lastName` input fields, including their respective `useState` hooks and change handlers. It also includes basic CSS for layout. This setup highlights the repetitive logic that can be refactored using custom hooks.
 
 ```js
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function Form() {
-  const [firstName, setFirstName] = useState('Mary');
-  const [lastName, setLastName] = useState('Poppins');
+  const [firstName, setFirstName] = useState("Mary");
+  const [lastName, setLastName] = useState("Poppins");
 
   function handleFirstNameChange(e) {
     setFirstName(e.target.value);
@@ -3236,18 +3218,26 @@ export default function Form() {
         Last name:
         <input value={lastName} onChange={handleLastNameChange} />
       </label>
-      <p><b>Good morning, {firstName} {lastName}.</b></p>
+      <p>
+        <b>
+          Good morning, {firstName} {lastName}.
+        </b>
+      </p>
     </>
   );
 }
 ```
 
 ```css
-label { display: block; }
-input { margin-left: 10px; }
+label {
+  display: block;
+}
+input {
+  margin-left: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Install React type definitions for TypeScript projects
 
@@ -3259,7 +3249,7 @@ This command installs the necessary TypeScript type definitions for React and Re
 npm install --save-dev @types/react @types/react-dom
 ```
 
---------------------------------
+---
 
 ### Video Player App with State and useEffect
 
@@ -3268,7 +3258,7 @@ Source: https://react.dev/learn/synchronizing-with-effects
 Complete example of a video player application using useState to manage the isPlaying state and useEffect to synchronize playback. Includes a button to toggle play/pause and demonstrates how the Effect keeps the video player synchronized with the component state.
 
 ```javascript
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 
 function VideoPlayer({ src, isPlaying }) {
   const ref = useRef(null);
@@ -3289,7 +3279,7 @@ export default function App() {
   return (
     <>
       <button onClick={() => setIsPlaying(!isPlaying)}>
-        {isPlaying ? 'Pause' : 'Play'}
+        {isPlaying ? "Pause" : "Play"}
       </button>
       <VideoPlayer
         isPlaying={isPlaying}
@@ -3300,7 +3290,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Complete Context Pattern Implementation
 
@@ -3309,8 +3299,8 @@ Source: https://react.dev/reference/react/cloneElement
 Full working example demonstrating the complete context pattern with a List component managing highlight state and Row components consuming that state. Includes state management, conditional styling, and event handling for cycling through highlighted items.
 
 ```javascript
-import { useState } from 'react';
-import { HighlightContext } from './HighlightContext.js';
+import { useState } from "react";
+import { HighlightContext } from "./HighlightContext.js";
 
 export default function List({ items, renderItem }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -3319,20 +3309,17 @@ export default function List({ items, renderItem }) {
       {items.map((item, index) => {
         const isHighlighted = index === selectedIndex;
         return (
-          <HighlightContext
-            key={item.id}
-            value={isHighlighted}
-          >
+          <HighlightContext key={item.id} value={isHighlighted}>
             {renderItem(item)}
           </HighlightContext>
         );
       })}
       <hr />
-      <button onClick={() => {
-        setSelectedIndex(i =>
-          (i + 1) % items.length
-        );
-      }}>
+      <button
+        onClick={() => {
+          setSelectedIndex((i) => (i + 1) % items.length);
+        }}
+      >
         Next
       </button>
     </div>
@@ -3341,23 +3328,20 @@ export default function List({ items, renderItem }) {
 ```
 
 ```javascript
-import { useContext } from 'react';
-import { HighlightContext } from './HighlightContext.js';
+import { useContext } from "react";
+import { HighlightContext } from "./HighlightContext.js";
 
 export default function Row({ title }) {
   const isHighlighted = useContext(HighlightContext);
   return (
-    <div className={[
-      'Row',
-      isHighlighted ? 'RowHighlighted' : ''
-    ].join(' ')}>
+    <div className={["Row", isHighlighted ? "RowHighlighted" : ""].join(" ")}>
       {title}
     </div>
   );
 }
 ```
 
---------------------------------
+---
 
 ### JavaScript Full Name Derivation Example
 
@@ -3366,10 +3350,10 @@ Source: https://react.dev/learn/choosing-the-state-structure
 This concise JavaScript snippet illustrates how a `fullName` can be derived by concatenating `firstName` and `lastName`. It serves as a fundamental example of calculating a value on the fly rather than storing it in state, promoting cleaner and more efficient component logic.
 
 ```javascript
-const fullName = firstName + ' ' + lastName;
+const fullName = firstName + " " + lastName;
 ```
 
---------------------------------
+---
 
 ### Implement React Context for Dynamic Heading Levels
 
@@ -3378,17 +3362,14 @@ Source: https://react.dev/learn/passing-data-deeply-with-context
 This example demonstrates how React Context is used to manage and pass a 'level' value down the component tree. The 'Section' component increments the context level for its children, while the 'Heading' component consumes this context to render the appropriate HTML heading tag (h1-h6). This setup allows headings to automatically adjust their size based on their nesting depth within 'Section' components, showcasing context's ability to flow through arbitrary intermediate components.
 
 ```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+import Heading from "./Heading.js";
+import Section from "./Section.js";
 
 export default function ProfilePage() {
   return (
     <Section>
       <Heading>My Profile</Heading>
-      <Post
-        title="Hello traveller!"
-        body="Read about my adventures."
-      />
+      <Post title="Hello traveller!" body="Read about my adventures." />
       <AllPosts />
     </Section>
   );
@@ -3407,14 +3388,8 @@ function RecentPosts() {
   return (
     <Section>
       <Heading>Recent Posts</Heading>
-      <Post
-        title="Flavors of Lisbon"
-        body="...those pastéis de nata!"
-      />
-      <Post
-        title="Buenos Aires in the rhythm of tango"
-        body="I loved it!"
-      />
+      <Post title="Flavors of Lisbon" body="...those pastéis de nata!" />
+      <Post title="Buenos Aires in the rhythm of tango" body="I loved it!" />
     </Section>
   );
 }
@@ -3422,43 +3397,38 @@ function RecentPosts() {
 function Post({ title, body }) {
   return (
     <Section isFancy={true}>
-      <Heading>
-        {title}
-      </Heading>
-      <p><i>{body}</i></p>
+      <Heading>{title}</Heading>
+      <p>
+        <i>{body}</i>
+      </p>
     </Section>
   );
 }
 ```
 
 ```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
 
 export default function Section({ children, isFancy }) {
   const level = useContext(LevelContext);
   return (
-    <section className={
-      'section ' +
-      (isFancy ? 'fancy' : '')
-    }>
-      <LevelContext value={level + 1}>
-        {children}
-      </LevelContext>
+    <section className={"section " + (isFancy ? "fancy" : "")}>
+      <LevelContext value={level + 1}>{children}</LevelContext>
     </section>
   );
 }
 ```
 
 ```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
 
 export default function Heading({ children }) {
   const level = useContext(LevelContext);
   switch (level) {
     case 0:
-      throw Error('Heading must be inside a Section!');
+      throw Error("Heading must be inside a Section!");
     case 1:
       return <h1>{children}</h1>;
     case 2:
@@ -3472,13 +3442,13 @@ export default function Heading({ children }) {
     case 6:
       return <h6>{children}</h6>;
     default:
-      throw Error('Unknown level: ' + level);
+      throw Error("Unknown level: " + level);
   }
 }
 ```
 
 ```js
-import { createContext } from 'react';
+import { createContext } from "react";
 
 export const LevelContext = createContext(0);
 ```
@@ -3496,7 +3466,7 @@ export const LevelContext = createContext(0);
 }
 ```
 
---------------------------------
+---
 
 ### Display multiple React form states simultaneously in a styleguide
 
@@ -3505,20 +3475,14 @@ Source: https://react.dev/learn/reacting-to-input-with-state
 This example demonstrates how to render multiple instances of the `Form` component, each set to a different visual state (empty, typing, submitting, success, error). This technique is useful for creating 'living styleguides' or 'storybooks' to visualize all component states at once.
 
 ```js
-import Form from './Form.js';
+import Form from "./Form.js";
 
-let statuses = [
-  'empty',
-  'typing',
-  'submitting',
-  'success',
-  'error',
-];
+let statuses = ["empty", "typing", "submitting", "success", "error"];
 
 export default function App() {
   return (
     <>
-      {statuses.map(status => (
+      {statuses.map((status) => (
         <section key={status}>
           <h4>Form ({status}):</h4>
           <Form status={status} />
@@ -3531,39 +3495,41 @@ export default function App() {
 
 ```js
 export default function Form({ status }) {
-  if (status === 'success') {
-    return <h1>That's right!</h1>
+  if (status === "success") {
+    return <h1>That's right!</h1>;
   }
   return (
     <form>
-      <textarea disabled={
-        status === 'submitting'
-      } />
+      <textarea disabled={status === "submitting"} />
       <br />
-      <button disabled={
-        status === 'empty' ||
-        status === 'submitting'
-      }>
+      <button disabled={status === "empty" || status === "submitting"}>
         Submit
       </button>
-      {status === 'error' &&
-        <p className="Error">
-          Good guess but a wrong answer. Try again!
-        </p>
-      }
+      {status === "error" && (
+        <p className="Error">Good guess but a wrong answer. Try again!</p>
+      )}
     </form>
   );
 }
 ```
 
 ```css
-section { border-bottom: 1px solid #aaa; padding: 20px; }
-h4 { color: #222; }
-body { margin: 0; }
-.Error { color: red; }
+section {
+  border-bottom: 1px solid #aaa;
+  padding: 20px;
+}
+h4 {
+  color: #222;
+}
+body {
+  margin: 0;
+}
+.Error {
+  color: red;
+}
 ```
 
---------------------------------
+---
 
 ### Initial Render with createRoot and render in React
 
@@ -3572,14 +3538,14 @@ Source: https://react.dev/learn/render-and-commit
 Demonstrates how to trigger an initial render by calling createRoot with a target DOM node and then calling the render method with a component. This is the entry point for React applications and must be called once to mount the root component to the DOM.
 
 ```javascript
-import Image from './Image.js';
-import { createRoot } from 'react-dom/client';
+import Image from "./Image.js";
+import { createRoot } from "react-dom/client";
 
-const root = createRoot(document.getElementById('root'))
+const root = createRoot(document.getElementById("root"));
 root.render(<Image />);
 ```
 
---------------------------------
+---
 
 ### Basic `prefetchDNS` call in JavaScript
 
@@ -3591,7 +3557,7 @@ Demonstrates the fundamental usage of `prefetchDNS` by passing a URL string to e
 prefetchDNS("https://example.com");
 ```
 
---------------------------------
+---
 
 ### Initial React Messenger Application Setup (JavaScript & CSS)
 
@@ -3600,10 +3566,10 @@ Source: https://react.dev/learn/extracting-state-logic-into-a-reducer
 This set of code files represents the initial implementation of a React messenger application using `useReducer`. It includes the main `App` component, the `messengerReducer` with the problematic message-clearing logic, and separate `ContactList` and `Chat` components, along with basic CSS styling. This setup demonstrates the issue of message drafts not being preserved when switching contacts.
 
 ```js
-import { useReducer } from 'react';
-import Chat from './Chat.js';
-import ContactList from './ContactList.js';
-import { initialState, messengerReducer } from './messengerReducer';
+import { useReducer } from "react";
+import Chat from "./Chat.js";
+import ContactList from "./ContactList.js";
+import { initialState, messengerReducer } from "./messengerReducer";
 
 export default function Messenger() {
   const [state, dispatch] = useReducer(messengerReducer, initialState);
@@ -3627,48 +3593,48 @@ export default function Messenger() {
 }
 
 const contacts = [
-  {id: 0, name: 'Taylor', email: 'taylor@mail.com'},
-  {id: 1, name: 'Alice', email: 'alice@mail.com'},
-  {id: 2, name: 'Bob', email: 'bob@mail.com'},
+  { id: 0, name: "Taylor", email: "taylor@mail.com" },
+  { id: 1, name: "Alice", email: "alice@mail.com" },
+  { id: 2, name: "Bob", email: "bob@mail.com" },
 ];
 ```
 
 ```js
 export const initialState = {
   selectedId: 0,
-  message: 'Hello'
+  message: "Hello",
 };
 
 export function messengerReducer(state, action) {
   switch (action.type) {
-    case 'changed_selection': {
+    case "changed_selection": {
       return {
         ...state,
         selectedId: action.contactId,
-        message: ''
+        message: "",
       };
     }
-    case 'edited_message': {
+    case "edited_message": {
       return {
         ...state,
-        message: action.message
+        message: action.message,
       };
     }
-    case 'sent_message': {
+    case "sent_message": {
       return {
         ...state,
-        message: ''
+        message: "",
       };
     }
     default: {
-      throw Error('Unknown action: ' + action.type);
+      throw Error("Unknown action: " + action.type);
     }
   }
 }
 ```
 
 ```js
-export default function ContactList({contacts, selectedId, dispatch}) {
+export default function ContactList({ contacts, selectedId, dispatch }) {
   return (
     <section className="contact-list">
       <ul>
@@ -3677,10 +3643,11 @@ export default function ContactList({contacts, selectedId, dispatch}) {
             <button
               onClick={() => {
                 dispatch({
-                  type: 'changed_selection',
-                  contactId: contact.id
+                  type: "changed_selection",
+                  contactId: contact.id,
                 });
-              }}>
+              }}
+            >
               {selectedId === contact.id ? <b>{contact.name}</b> : contact.name}
             </button>
           </li>
@@ -3692,18 +3659,18 @@ export default function ContactList({contacts, selectedId, dispatch}) {
 ```
 
 ```js
-import { useState } from 'react';
+import { useState } from "react";
 
-export default function Chat({contact, message, dispatch}) {
+export default function Chat({ contact, message, dispatch }) {
   return (
     <section className="chat">
       <textarea
         value={message}
-        placeholder={'Chat to ' + contact.name}
+        placeholder={"Chat to " + contact.name}
         onChange={(e) => {
           dispatch({
-            type: 'edited_message',
-            message: e.target.value
+            type: "edited_message",
+            message: e.target.value,
           });
         }}
       />
@@ -3712,9 +3679,10 @@ export default function Chat({contact, message, dispatch}) {
         onClick={() => {
           alert(`Sending "${message}" to ${contact.email}`);
           dispatch({
-            type: 'sent_message'
+            type: "sent_message",
           });
-        }}>
+        }}
+      >
         Send to {contact.email}
       </button>
     </section>
@@ -3744,7 +3712,7 @@ textarea {
 }
 ```
 
---------------------------------
+---
 
 ### Basic CSS Styling for Example Elements
 
@@ -3760,7 +3728,7 @@ button {
 }
 ```
 
---------------------------------
+---
 
 ### ChatRoom Component with Connection Lifecycle
 
@@ -3769,8 +3737,8 @@ Source: https://react.dev/learn/synchronizing-with-effects
 A complete React ChatRoom component demonstrating proper useEffect setup with connection initialization and cleanup. Shows the full lifecycle of connecting on mount and disconnecting on unmount, with the createConnection() helper function that simulates server connection behavior.
 
 ```javascript
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useState, useEffect } from "react";
+import { createConnection } from "./chat.js";
 
 export default function ChatRoom() {
   useEffect(() => {
@@ -3782,7 +3750,7 @@ export default function ChatRoom() {
 }
 ```
 
---------------------------------
+---
 
 ### Full example of `useImperativeHandle` with parent component and styling in React
 
@@ -3791,8 +3759,8 @@ Source: https://react.dev/reference/react/forwardRef
 This comprehensive example demonstrates the complete usage of `useImperativeHandle`. It includes a parent `Form` component that interacts with `MyInput` via a ref, the `MyInput` component exposing custom methods, and associated CSS for styling. The parent component can call `focus()` on the ref, but cannot directly manipulate the DOM node's style, showcasing the controlled API.
 
 ```js
-import { useRef } from 'react';
-import MyInput from './MyInput.js';
+import { useRef } from "react";
+import MyInput from "./MyInput.js";
 
 export default function Form() {
   const ref = useRef(null);
@@ -3815,7 +3783,7 @@ export default function Form() {
 ```
 
 ```js
-import { forwardRef, useRef, useImperativeHandle } from 'react';
+import { forwardRef, useRef, useImperativeHandle } from "react";
 
 const MyInput = forwardRef(function MyInput(props, ref) {
   const inputRef = useRef(null);
@@ -3827,7 +3795,7 @@ const MyInput = forwardRef(function MyInput(props, ref) {
       },
       scrollIntoView() {
         inputRef.current.scrollIntoView();
-      }
+      },
     };
   }, []);
 
@@ -3843,7 +3811,7 @@ input {
 }
 ```
 
---------------------------------
+---
 
 ### Avoid Cleanup Logic Without Corresponding Setup in React `useEffect`
 
@@ -3860,7 +3828,7 @@ useEffect(() => {
 }, []);
 ```
 
---------------------------------
+---
 
 ### Expand Babel Overrides Coverage for Multiple Directories
 
@@ -3876,22 +3844,23 @@ module.exports = {
   ],
   overrides: [
     {
-      test: ['./src/modern/**/*.{js,jsx,ts,tsx}', './src/features/**/*.{js,jsx,ts,tsx}'],
-      plugins: [
-        'babel-plugin-react-compiler'
-      ]
+      test: [
+        "./src/modern/**/*.{js,jsx,ts,tsx}",
+        "./src/features/**/*.{js,jsx,ts,tsx}",
+      ],
+      plugins: ["babel-plugin-react-compiler"],
     },
     {
-      test: './src/legacy/**/*.{js,jsx,ts,tsx}',
+      test: "./src/legacy/**/*.{js,jsx,ts,tsx}",
       plugins: [
         // Different plugins for legacy code
-      ]
-    }
-  ]
+      ],
+    },
+  ],
 };
 ```
 
---------------------------------
+---
 
 ### React Context Overriding Example with Nested Providers
 
@@ -3900,7 +3869,7 @@ Source: https://react.dev/reference/react/useContext
 This example showcases the practical application of overriding context values using nested `ThemeContext.Provider` components. It sets a default theme of 'dark' for most components, but then explicitly overrides it to 'light' for the `Footer` component. This allows for fine-grained control over context values in different sections of the UI.
 
 ```javascript
-import { createContext, useContext } from 'react';
+import { createContext, useContext } from "react";
 
 const ThemeContext = createContext(null);
 
@@ -3909,7 +3878,7 @@ export default function MyApp() {
     <ThemeContext value="dark">
       <Form />
     </ThemeContext>
-  )
+  );
 }
 
 function Form() {
@@ -3934,23 +3903,19 @@ function Footer() {
 
 function Panel({ title, children }) {
   const theme = useContext(ThemeContext);
-  const className = 'panel-' + theme;
+  const className = "panel-" + theme;
   return (
     <section className={className}>
       {title && <h1>{title}</h1>}
       {children}
     </section>
-  )
+  );
 }
 
 function Button({ children }) {
   const theme = useContext(ThemeContext);
-  const className = 'button-' + theme;
-  return (
-    <button className={className}>
-      {children}
-    </button>
-  );
+  const className = "button-" + theme;
+  return <button className={className}>{children}</button>;
 }
 ```
 
@@ -3995,7 +3960,7 @@ footer {
 }
 ```
 
---------------------------------
+---
 
 ### Implement Data Fetching and Caching Utility (JavaScript)
 
@@ -4018,85 +3983,99 @@ export function fetchData(url) {
 }
 
 async function getData(url) {
-  if (url.startsWith('/search?q=')) {
-    return await getSearchResults(url.slice('/search?q='.length));
+  if (url.startsWith("/search?q=")) {
+    return await getSearchResults(url.slice("/search?q=".length));
   } else {
-    throw Error('Not implemented');
+    throw Error("Not implemented");
   }
 }
 
 async function getSearchResults(query) {
   // Add a fake delay to make waiting noticeable.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 500);
   });
 
-  const allAlbums = [{
-    id: 13,
-    title: 'Let It Be',
-    year: 1970
-  }, {
-    id: 12,
-    title: 'Abbey Road',
-    year: 1969
-  }, {
-    id: 11,
-    title: 'Yellow Submarine',
-    year: 1969
-  }, {
-    id: 10,
-    title: 'The Beatles',
-    year: 1968
-  }, {
-    id: 9,
-    title: 'Magical Mystery Tour',
-    year: 1967
-  }, {
-    id: 8,
-    title: 'Sgt. Pepper\'s Lonely Hearts Club Band',
-    year: 1967
-  }, {
-    id: 7,
-    title: 'Revolver',
-    year: 1966
-  }, {
-    id: 6,
-    title: 'Rubber Soul',
-    year: 1965
-  }, {
-    id: 5,
-    title: 'Help!',
-    year: 1965
-  }, {
-    id: 4,
-    title: 'Beatles For Sale',
-    year: 1964
-  }, {
-    id: 3,
-    title: 'A Hard Day\'s Night',
-    year: 1964
-  }, {
-    id: 2,
-    title: 'With The Beatles',
-    year: 1963
-  }, {
-    id: 1,
-    title: 'Please Please Me',
-    year: 1963
-  }];
+  const allAlbums = [
+    {
+      id: 13,
+      title: "Let It Be",
+      year: 1970,
+    },
+    {
+      id: 12,
+      title: "Abbey Road",
+      year: 1969,
+    },
+    {
+      id: 11,
+      title: "Yellow Submarine",
+      year: 1969,
+    },
+    {
+      id: 10,
+      title: "The Beatles",
+      year: 1968,
+    },
+    {
+      id: 9,
+      title: "Magical Mystery Tour",
+      year: 1967,
+    },
+    {
+      id: 8,
+      title: "Sgt. Pepper's Lonely Hearts Club Band",
+      year: 1967,
+    },
+    {
+      id: 7,
+      title: "Revolver",
+      year: 1966,
+    },
+    {
+      id: 6,
+      title: "Rubber Soul",
+      year: 1965,
+    },
+    {
+      id: 5,
+      title: "Help!",
+      year: 1965,
+    },
+    {
+      id: 4,
+      title: "Beatles For Sale",
+      year: 1964,
+    },
+    {
+      id: 3,
+      title: "A Hard Day's Night",
+      year: 1964,
+    },
+    {
+      id: 2,
+      title: "With The Beatles",
+      year: 1963,
+    },
+    {
+      id: 1,
+      title: "Please Please Me",
+      year: 1963,
+    },
+  ];
 
   const lowerQuery = query.trim().toLowerCase();
-  return allAlbums.filter(album => {
+  return allAlbums.filter((album) => {
     const lowerTitle = album.title.toLowerCase();
     return (
       lowerTitle.startsWith(lowerQuery) ||
-      lowerTitle.indexOf(' ' + lowerQuery) !== -1
-    )
+      lowerTitle.indexOf(" " + lowerQuery) !== -1
+    );
   });
 }
 ```
 
---------------------------------
+---
 
 ### React useLayoutEffect Hook Signature
 
@@ -4108,7 +4087,7 @@ Defines the signature for the `useLayoutEffect` Hook in React, showing its param
 useLayoutEffect(setup, dependencies?)
 ```
 
---------------------------------
+---
 
 ### preinit
 
@@ -4116,7 +4095,7 @@ Source: https://react.dev/reference/react-dom
 
 Fetches and evaluates an external script or fetches and inserts a stylesheet. This resource preloading API combines downloading and initialization for scripts and stylesheets.
 
-```APIDOC
+````APIDOC
 ## preinit
 
 ### Description
@@ -4128,22 +4107,26 @@ Use `preinit` to download and initialize scripts or stylesheets that you expect 
 ### Syntax
 ```javascript
 preinit(href, options)
-```
+````
 
 ### Parameters
+
 - **href** (string) - Required - The URL of the resource you want to fetch and initialize
 - **options** (object) - Required - An object specifying the type of resource:
   - **as** (string) - Required - Either `"style"` for stylesheets or `"script"` for scripts
   - **crossOrigin** (string) - Optional - The CORS policy to use
 
 ### Returns
+
 Void
 
 ### Notes
+
 - For scripts: fetches and executes the script
 - For stylesheets: fetches and inserts the stylesheet into the document
 - More aggressive than `preload` as it initializes the resource
-```
+
+````
 
 --------------------------------
 
@@ -4162,9 +4145,9 @@ export default function MyApp() {
     </div>
   );
 }
-```
+````
 
---------------------------------
+---
 
 ### useEffect Hook Reference
 
@@ -4172,7 +4155,7 @@ Source: https://react.dev/reference/react/useEffect
 
 The useEffect Hook allows you to declare side effects in functional components. It accepts a setup function and optional dependencies array, running the setup after component commits and cleanup before re-runs or unmounting.
 
-```APIDOC
+````APIDOC
 ## useEffect Hook
 
 ### Description
@@ -4181,18 +4164,22 @@ A React Hook that synchronizes a component with an external system by running si
 ### Syntax
 ```js
 useEffect(setup, dependencies?)
-```
+````
 
 ### Parameters
 
 #### setup (Function) - Required
+
 The function containing your Effect's logic. May optionally return a cleanup function.
+
 - Runs after component commits to DOM
 - Cleanup function runs before re-runs with new dependencies or before component unmounts
 - Receives no parameters
 
 #### dependencies (Array) - Optional
+
 List of all reactive values referenced in setup code (props, state, variables, functions declared in component body).
+
 - If omitted: Effect re-runs after every commit
 - If empty array `[]`: Effect runs once after initial mount
 - If array with values `[dep1, dep2]`: Effect re-runs when dependencies change
@@ -4200,15 +4187,17 @@ List of all reactive values referenced in setup code (props, state, variables, f
 - Must have constant number of items and be written inline
 
 ### Returns
+
 `undefined`
 
 ### Basic Example
+
 ```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useState, useEffect } from "react";
+import { createConnection } from "./chat.js";
 
 function ChatRoom({ roomId }) {
-  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+  const [serverUrl, setServerUrl] = useState("https://localhost:1234");
 
   useEffect(() => {
     const connection = createConnection(serverUrl, roomId);
@@ -4227,26 +4216,31 @@ function ChatRoom({ roomId }) {
 ### Important Rules
 
 #### Placement
+
 - Call at top level of component or custom Hook
 - Cannot call inside loops or conditions
 - Extract to new component if conditional Effect needed
 
 #### When to Use
+
 - Synchronizing with external systems
 - Do not use if not synchronizing with external system
 
 #### Development Behavior
+
 - Strict Mode runs extra setup+cleanup cycle before first real setup
 - Stress-tests that cleanup mirrors setup logic
 - Only in development, not in production
 
 #### Performance Considerations
+
 - Object/function dependencies can cause unnecessary re-runs
 - Remove unnecessary object and function dependencies
 - Extract state updates outside Effect when possible
 - Extract non-reactive logic outside Effect
 
 #### Rendering Behavior
+
 - Effects run on client only, not during server rendering
 - Non-interaction Effects: browser paints before Effect runs
 - Interaction Effects: Effect may run before browser paints
@@ -4254,12 +4248,14 @@ function ChatRoom({ roomId }) {
 - Use `setTimeout` to defer work until after paint if needed
 
 ### Caveats
+
 - Effects only run on client, not during server rendering
 - Strict Mode adds extra setup+cleanup cycle in development
 - Object/function dependencies may cause excessive re-runs
 - Visual Effects may need `useLayoutEffect` instead
 - Browser repaint timing depends on Effect cause (interaction vs non-interaction)
-```
+
+````
 
 --------------------------------
 
@@ -4271,9 +4267,9 @@ This command installs the release candidate versions of `react` and `react-dom` 
 
 ```bash
 npm install react@rc react-dom@rc
-```
+````
 
---------------------------------
+---
 
 ### Full Example of useDebugValue in a Custom Hook
 
@@ -4282,11 +4278,11 @@ Source: https://react.dev/reference/react/useDebugValue
 Provides a complete example of integrating `useDebugValue` into a `useOnlineStatus` custom hook, which uses `useSyncExternalStore` to track online status. It also shows how a component (`StatusBar`) consumes this custom hook and how the debug value appears in React DevTools.
 
 ```js
-import { useOnlineStatus } from './useOnlineStatus.js';
+import { useOnlineStatus } from "./useOnlineStatus.js";
 
 function StatusBar() {
   const isOnline = useOnlineStatus();
-  return <h1>{isOnline ? '✅ Online' : '❌ Disconnected'}</h1>;
+  return <h1>{isOnline ? "✅ Online" : "❌ Disconnected"}</h1>;
 }
 
 export default function App() {
@@ -4295,25 +4291,29 @@ export default function App() {
 ```
 
 ```js
-import { useSyncExternalStore, useDebugValue } from 'react';
+import { useSyncExternalStore, useDebugValue } from "react";
 
 export function useOnlineStatus() {
-  const isOnline = useSyncExternalStore(subscribe, () => navigator.onLine, () => true);
-  useDebugValue(isOnline ? 'Online' : 'Offline');
+  const isOnline = useSyncExternalStore(
+    subscribe,
+    () => navigator.onLine,
+    () => true,
+  );
+  useDebugValue(isOnline ? "Online" : "Offline");
   return isOnline;
 }
 
 function subscribe(callback) {
-  window.addEventListener('online', callback);
-  window.addEventListener('offline', callback);
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
   return () => {
-    window.removeEventListener('online', callback);
-    window.removeEventListener('offline', callback);
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
   };
 }
 ```
 
---------------------------------
+---
 
 ### Install react-devtools npm package globally
 
@@ -4329,7 +4329,7 @@ yarn global add react-devtools
 npm install -g react-devtools
 ```
 
---------------------------------
+---
 
 ### react-dom/server Entry Point
 
@@ -4337,7 +4337,7 @@ Source: https://react.dev/reference/react-dom
 
 Contains APIs to render React components on the server. This entry point provides methods for server-side rendering of React applications.
 
-```APIDOC
+````APIDOC
 ## react-dom/server
 
 ### Description
@@ -4349,17 +4349,20 @@ Import server-side rendering APIs from this entry point.
 ### Syntax
 ```javascript
 import { renderToString, renderToStaticMarkup } from 'react-dom/server'
-```
+````
 
 ### Key APIs
+
 - **renderToString** - Renders a React component to an HTML string on the server
 - **renderToStaticMarkup** - Renders a React component to static HTML without React attributes
 
 ### Notes
+
 - Use this entry point for server-side rendering of React applications
 - Replaces deprecated `renderToNodeStream()` and `renderToStaticNodeStream()` APIs
 - Useful for generating HTML on the server for initial page load
-```
+
+````
 
 --------------------------------
 
@@ -4384,9 +4387,9 @@ This `package.json` snippet outlines the necessary dependencies and scripts for 
     "eject": "react-scripts eject"
   }
 }
-```
+````
 
---------------------------------
+---
 
 ### Example: Using useState initializer for expensive initial state
 
@@ -4395,14 +4398,14 @@ Source: https://react.dev/reference/react/useState
 This complete React component example illustrates how to use an initializer function with `useState` to generate an initial list of 50 todo items. The `createInitialTodos` function runs only once on mount, ensuring that re-renders triggered by typing in the input field do not re-execute the expensive initial state calculation.
 
 ```js
-import { useState } from 'react';
+import { useState } from "react";
 
 function createInitialTodos() {
   const initialTodos = [];
   for (let i = 0; i < 50; i++) {
     initialTodos.push({
       id: i,
-      text: 'Item ' + (i + 1)
+      text: "Item " + (i + 1),
     });
   }
   return initialTodos;
@@ -4410,26 +4413,28 @@ function createInitialTodos() {
 
 export default function TodoList() {
   const [todos, setTodos] = useState(createInitialTodos);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   return (
     <>
-      <input
-        value={text}
-        onChange={e => setText(e.target.value)}
-      />
-      <button onClick={() => {
-        setText('');
-        setTodos([{
-          id: todos.length,
-          text: text
-        }, ...todos]);
-      }}>Add</button>
+      <input value={text} onChange={(e) => setText(e.target.value)} />
+      <button
+        onClick={() => {
+          setText("");
+          setTodos([
+            {
+              id: todos.length,
+              text: text,
+            },
+            ...todos,
+          ]);
+        }}
+      >
+        Add
+      </button>
       <ul>
-        {todos.map(item => (
-          <li key={item.id}>
-            {item.text}
-          </li>
+        {todos.map((item) => (
+          <li key={item.id}>{item.text}</li>
         ))}
       </ul>
     </>
@@ -4437,7 +4442,7 @@ export default function TodoList() {
 }
 ```
 
---------------------------------
+---
 
 ### Render React Component with JSX (JS)
 
@@ -4451,7 +4456,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Correct Module Resolution Paths for Gating Source
 
@@ -4473,7 +4478,7 @@ Provides examples of correct module resolution paths for the gating source confi
 }
 ```
 
---------------------------------
+---
 
 ### CSS Styles for Unoptimized List Example
 
@@ -4497,7 +4502,7 @@ This CSS provides basic styling for the list container (`.items`) and individual
 }
 ```
 
---------------------------------
+---
 
 ### Manual Memoization Before React Compiler
 
@@ -4506,20 +4511,23 @@ Source: https://react.dev/learn/react-compiler/introduction
 Example showing traditional manual memoization pattern using memo, useMemo, and useCallback hooks. This approach requires developers to manually optimize re-renders and is prone to subtle bugs like creating new function references in render callbacks.
 
 ```javascript
-import { useMemo, useCallback, memo } from 'react';
+import { useMemo, useCallback, memo } from "react";
 
 const ExpensiveComponent = memo(function ExpensiveComponent({ data, onClick }) {
   const processedData = useMemo(() => {
     return expensiveProcessing(data);
   }, [data]);
 
-  const handleClick = useCallback((item) => {
-    onClick(item.id);
-  }, [onClick]);
+  const handleClick = useCallback(
+    (item) => {
+      onClick(item.id);
+    },
+    [onClick],
+  );
 
   return (
     <div>
-      {processedData.map(item => (
+      {processedData.map((item) => (
         <Item key={item.id} onClick={() => handleClick(item)} />
       ))}
     </div>
@@ -4527,7 +4535,7 @@ const ExpensiveComponent = memo(function ExpensiveComponent({ data, onClick }) {
 });
 ```
 
---------------------------------
+---
 
 ### Initialize React Application Entry Point with Router
 
@@ -4536,24 +4544,24 @@ Source: https://react.dev/blog/2025/04/23/react-labs-view-transitions-activity-a
 This JavaScript code serves as the main entry point for a React application. It imports essential React libraries, a global stylesheet, the root `App` component, and a `Router` for navigation. The application is rendered into the DOM, wrapped in React's `StrictMode` and the `Router` component to enable strict development checks and client-side routing.
 
 ```js
-import React, {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
-import './styles.css';
+import React, { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles.css";
 
-import App from './App';
-import {Router} from './router';
+import App from "./App";
+import { Router } from "./router";
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <Router>
       <App />
     </Router>
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
---------------------------------
+---
 
 ### Implementing an idempotent React Clock component using useEffect
 
@@ -4562,7 +4570,7 @@ Source: https://react.dev/reference/rules/components-and-hooks-must-be-pure
 This example demonstrates the correct way to handle non-idempotent operations, such as getting the current date, in a React component. It introduces a custom hook `useTime` that leverages `useState` for initial state and `useEffect` to manage a `setInterval` for updating the time. By moving the `new Date()` call into `useEffect`, the component's render function remains idempotent, ensuring predictable behavior and proper synchronization of external state.
 
 ```js
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 function useTime() {
   // 1. Keep track of the current date's state. `useState` receives an initializer function as its
@@ -4588,7 +4596,7 @@ export default function Clock() {
 }
 ```
 
---------------------------------
+---
 
 ### useEffect with Interval Setup and Logging
 
@@ -4598,16 +4606,16 @@ Demonstrates how to set up an interval with console logging to debug re-synchron
 
 ```javascript
 useEffect(() => {
-  console.log('✅ Setting up an interval with delay ', delay)
+  console.log("✅ Setting up an interval with delay ", delay);
   const id = setInterval(onTick, delay);
   return () => {
-    console.log('❌ Clearing an interval with delay ', delay)
+    console.log("❌ Clearing an interval with delay ", delay);
     clearInterval(id);
   };
 }, [onTick, delay]);
 ```
 
---------------------------------
+---
 
 ### App Component with Multiple Tooltip Buttons
 
@@ -4653,7 +4661,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Remove Unused React Imports Example
 
@@ -4662,7 +4670,7 @@ Source: https://react.dev/link/new-jsx-transform
 Before and after example showing how unused React imports are removed when no React methods or components are used in the file. The codemod automatically detects and removes the unnecessary import statement.
 
 ```javascript
-import React from 'react';
+import React from "react";
 
 function App() {
   return <h1>Hello World</h1>;
@@ -4675,7 +4683,7 @@ function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Configure React Project Dependencies and Scripts in package.json
 
@@ -4699,7 +4707,7 @@ This `package.json` snippet outlines the core dependencies and build scripts for
 }
 ```
 
---------------------------------
+---
 
 ### React Application Illustrating Component Composition and Render Tree
 
@@ -4708,9 +4716,9 @@ Source: https://react.dev/learn/understanding-your-ui-as-a-tree
 This comprehensive example demonstrates a React application built with multiple functional components to showcase component composition and the resulting render tree. It includes the main `App` component, reusable UI components like `FancyText` and `Copyright`, a stateful `InspirationGenerator`, a data file for quotes, and associated CSS styling. The application dynamically displays inspirational quotes and highlights how parent-child relationships form the UI hierarchy.
 
 ```javascript
-import FancyText from './FancyText';
-import InspirationGenerator from './InspirationGenerator';
-import Copyright from './Copyright';
+import FancyText from "./FancyText";
+import InspirationGenerator from "./InspirationGenerator";
+import Copyright from "./Copyright";
 
 export default function App() {
   return (
@@ -4725,19 +4733,21 @@ export default function App() {
 ```
 
 ```javascript
-export default function FancyText({title, text}) {
-  return title
-    ? <h1 className='fancy title'>{text}</h1>
-    : <h3 className='fancy cursive'>{text}</h3>
+export default function FancyText({ title, text }) {
+  return title ? (
+    <h1 className="fancy title">{text}</h1>
+  ) : (
+    <h3 className="fancy cursive">{text}</h3>
+  );
 }
 ```
 
 ```javascript
-import * as React from 'react';
-import quotes from './quotes';
-import FancyText from './FancyText';
+import * as React from "react";
+import quotes from "./quotes";
+import FancyText from "./FancyText";
 
-export default function InspirationGenerator({children}) {
+export default function InspirationGenerator({ children }) {
   const [index, setIndex] = React.useState(0);
   const quote = quotes[index];
   const next = () => setIndex((index + 1) % quotes.length);
@@ -4754,8 +4764,8 @@ export default function InspirationGenerator({children}) {
 ```
 
 ```javascript
-export default function Copyright({year}) {
-  return <p className='small'>©️ {year}</p>;
+export default function Copyright({ year }) {
+  return <p className="small">©️ {year}</p>;
 }
 ```
 
@@ -4769,10 +4779,10 @@ export default [
 
 ```css
 .fancy {
-  font-family: 'Georgia';
+  font-family: "Georgia";
 }
 .title {
-  color: #007AA3;
+  color: #007aa3;
   text-decoration: underline;
 }
 .cursive {
@@ -4783,7 +4793,7 @@ export default [
 }
 ```
 
---------------------------------
+---
 
 ### Create a new React project with Rsbuild
 
@@ -4795,7 +4805,7 @@ This command utilizes `npx` to execute `create-rsbuild` and set up a new React a
 npx create-rsbuild --template react
 ```
 
---------------------------------
+---
 
 ### Recommended React component integration into specific HTML element
 
@@ -4806,7 +4816,9 @@ This example showcases the recommended approach for embedding a React component 
 ```html
 <!DOCTYPE html>
 <html>
-  <head><title>My app</title></head>
+  <head>
+    <title>My app</title>
+  </head>
   <body>
     <p>This paragraph is a part of HTML.</p>
     <nav id="navigation"></nav>
@@ -4816,19 +4828,19 @@ This example showcases the recommended approach for embedding a React component 
 ```
 
 ```js
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
 function NavigationBar() {
   // TODO: Actually implement a navigation bar
   return <h1>Hello from React!</h1>;
 }
 
-const domNode = document.getElementById('navigation');
+const domNode = document.getElementById("navigation");
 const root = createRoot(domNode);
 root.render(<NavigationBar />);
 ```
 
---------------------------------
+---
 
 ### Importing and calling `useTransition` in a React component
 
@@ -4837,7 +4849,7 @@ Source: https://react.dev/reference/react/useTransition
 This example demonstrates the standard practice of importing `useTransition` from the 'react' library and calling it at the top level of a functional component. It sets up the necessary variables for managing UI transitions within the component.
 
 ```js
-import { useTransition } from 'react';
+import { useTransition } from "react";
 
 function TabContainer() {
   const [isPending, startTransition] = useTransition();
@@ -4845,7 +4857,7 @@ function TabContainer() {
 }
 ```
 
---------------------------------
+---
 
 ### Resume and prerender app to static HTML for SSG
 
@@ -4860,7 +4872,7 @@ const { prelude } = await resumeAndPrerender(<App />, postponedState);
 // Send complete HTML prelude to CDN.
 ```
 
---------------------------------
+---
 
 ### preload
 
@@ -4868,7 +4880,7 @@ Source: https://react.dev/reference/react-dom
 
 Fetches a stylesheet, font, image, or external script that you expect to use. This resource preloading API allows you to start downloading resources early for better performance.
 
-```APIDOC
+````APIDOC
 ## preload
 
 ### Description
@@ -4880,9 +4892,10 @@ Use `preload` to start downloading resources early before they are needed.
 ### Syntax
 ```javascript
 preload(href, options)
-```
+````
 
 ### Parameters
+
 - **href** (string) - Required - The URL of the resource you want to download
 - **options** (object) - Required - An object with properties specifying the type of resource:
   - **as** (string) - Required - The type of resource: `"style"`, `"font"`, `"image"`, `"script"`, etc.
@@ -4890,13 +4903,16 @@ preload(href, options)
   - **type** (string) - Optional - The MIME type of the resource
 
 ### Returns
+
 Void
 
 ### Notes
+
 - Does not execute or apply the resource, only downloads it
 - Browser will use the preloaded resource when needed
 - Useful for fonts, images, and scripts needed soon
-```
+
+````
 
 --------------------------------
 
@@ -4943,20 +4959,20 @@ export default function Page() {
     </>
   );
 }
-```
+````
 
 ```js
 export async function fetchBio(person) {
-  const delay = person === 'Bob' ? 2000 : 200;
-  return new Promise(resolve => {
+  const delay = person === "Bob" ? 2000 : 200;
+  return new Promise((resolve) => {
     setTimeout(() => {
-      resolve('This is ' + person + '’s bio.');
+      resolve("This is " + person + "’s bio.");
     }, delay);
-  })
+  });
 }
 ```
 
---------------------------------
+---
 
 ### Measure and Optimize Expensive Calculations with useMemo and console.time
 
@@ -4965,14 +4981,14 @@ Source: https://react.dev/reference/react/useMemo
 This example combines `console.time` with `useMemo` to measure the performance impact of memoization on an expensive calculation. By wrapping the calculation in `useMemo`, subsequent re-renders will skip the `filterTodos` execution if dependencies haven't changed, which will be reflected in a significantly lower time reported by `console.timeEnd`. This helps verify the effectiveness of `useMemo` as a performance optimization.
 
 ```javascript
-console.time('filter array');
+console.time("filter array");
 const visibleTodos = useMemo(() => {
   return filterTodos(todos, tab); // Skipped if todos and tab haven't changed
 }, [todos, tab]);
-console.timeEnd('filter array');
+console.timeEnd("filter array");
 ```
 
---------------------------------
+---
 
 ### Conceptual Flow of Optimistic State Updates with `useOptimistic` and `startTransition`
 
@@ -4981,17 +4997,17 @@ Source: https://react.dev/reference/react/useOptimistic
 This example demonstrates the underlying mechanism of optimistic state updates, showing how `setOptimistic` provides an immediate UI update while an asynchronous action (e.g., `saveChanges`) completes. It highlights the eventual reconciliation of the optimistic state with the actual state.
 
 ```js
-const [value, setValue] = useState('a');
+const [value, setValue] = useState("a");
 const [optimistic, setOptimistic] = useOptimistic(value);
 
 startTransition(async () => {
-  setOptimistic('b');
-  const newValue = await saveChanges('b');
+  setOptimistic("b");
+  const newValue = await saveChanges("b");
   setValue(newValue);
 });
 ```
 
---------------------------------
+---
 
 ### Complete Controlled Form Example (React, JavaScript, CSS)
 
@@ -5000,11 +5016,11 @@ Source: https://react.dev/reference/react-dom/components/input
 This comprehensive example demonstrates a form with multiple controlled inputs, including a text input and a number input with a programmatic update button. It showcases how to manage multiple state variables for different inputs and display their values dynamically in the UI, along with basic styling.
 
 ```js
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function Form() {
-  const [firstName, setFirstName] = useState('');
-  const [age, setAge] = useState('20');
+  const [firstName, setFirstName] = useState("");
+  const [age, setAge] = useState("20");
   const ageAsNumber = Number(age);
   return (
     <>
@@ -5012,38 +5028,38 @@ export default function Form() {
         First name:
         <input
           value={firstName}
-          onChange={e => setFirstName(e.target.value)}
+          onChange={(e) => setFirstName(e.target.value)}
         />
       </label>
       <label>
         Age:
         <input
           value={age}
-          onChange={e => setAge(e.target.value)}
+          onChange={(e) => setAge(e.target.value)}
           type="number"
         />
-        <button onClick={() => setAge(ageAsNumber + 10)}>
-          Add 10 years
-        </button>
+        <button onClick={() => setAge(ageAsNumber + 10)}>Add 10 years</button>
       </label>
-      {firstName !== '' &&
-        <p>Your name is {firstName}.</p>
-      }
-      {ageAsNumber > 0 &&
-        <p>Your age is {ageAsNumber}.</p>
-      }
+      {firstName !== "" && <p>Your name is {firstName}.</p>}
+      {ageAsNumber > 0 && <p>Your age is {ageAsNumber}.</p>}
     </>
   );
 }
 ```
 
 ```css
-label { display: block; }
-input { margin: 5px; }
-p { font-weight: bold; }
+label {
+  display: block;
+}
+input {
+  margin: 5px;
+}
+p {
+  font-weight: bold;
+}
 ```
 
---------------------------------
+---
 
 ### Optimized React Tabbed Navigation with Activity Pre-rendering
 
@@ -5052,25 +5068,25 @@ Source: https://react.dev/reference/react/Activity
 This example enhances the tabbed interface by using React `Activity` components to pre-render content. `Home` and `Posts` components are wrapped in `Activity` with `mode` set dynamically based on the active tab. This allows the `Posts` component to initiate data fetching even when hidden, significantly reducing the perceived loading time when the 'Posts' tab is clicked. It includes the modified `App.js` and the same helper components as the previous example.
 
 ```javascript
-import { Activity, useState, Suspense } from 'react';
-import TabButton from './TabButton.js';
-import Home from './Home.js';
-import Posts from './Posts.js';
+import { Activity, useState, Suspense } from "react";
+import TabButton from "./TabButton.js";
+import Home from "./Home.js";
+import Posts from "./Posts.js";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState("home");
 
   return (
     <>
       <TabButton
-        isActive={activeTab === 'home'}
-        onClick={() => setActiveTab('home')}
+        isActive={activeTab === "home"}
+        onClick={() => setActiveTab("home")}
       >
         Home
       </TabButton>
       <TabButton
-        isActive={activeTab === 'posts'}
-        onClick={() => setActiveTab('posts')}
+        isActive={activeTab === "posts"}
+        onClick={() => setActiveTab("posts")}
       >
         Posts
       </TabButton>
@@ -5078,10 +5094,10 @@ export default function App() {
       <hr />
 
       <Suspense fallback={<h1>🌀 Loading...</h1>}>
-        <Activity mode={activeTab === 'home' ? 'visible' : 'hidden'}>
+        <Activity mode={activeTab === "home" ? "visible" : "hidden"}>
           <Home />
         </Activity>
-        <Activity mode={activeTab === 'posts' ? 'visible' : 'hidden'}>
+        <Activity mode={activeTab === "posts" ? "visible" : "hidden"}>
           <Posts />
         </Activity>
       </Suspense>
@@ -5093,39 +5109,33 @@ export default function App() {
 ```javascript
 export default function TabButton({ onClick, children, isActive }) {
   if (isActive) {
-    return <b>{children}</b>
+    return <b>{children}</b>;
   }
 
-  return (
-    <button onClick={onClick}>
-      {children}
-    </button>
-  );
+  return <button onClick={onClick}>{children}</button>;
 }
 ```
 
 ```javascript
 export default function Home() {
-  return (
-    <p>Welcome to my profile!</p>
-  );
+  return <p>Welcome to my profile!</p>;
 }
 ```
 
 ```javascript
-import { use } from 'react';
-import { fetchData } from './data.js';
+import { use } from "react";
+import { fetchData } from "./data.js";
 
 export default function Posts() {
-  const posts = use(fetchData('/posts'));
+  const posts = use(fetchData("/posts"));
 
   return (
     <ul className="items">
-      {posts.map(post =>
+      {posts.map((post) => (
         <li className="item" key={post.id}>
           {post.title}
         </li>
-      )}
+      ))}
     </ul>
   );
 }
@@ -5146,23 +5156,23 @@ export function fetchData(url) {
 }
 
 async function getData(url) {
-  if (url.startsWith('/posts')) {
+  if (url.startsWith("/posts")) {
     return await getPosts();
   } else {
-    throw Error('Not implemented');
+    throw Error("Not implemented");
   }
 }
 
 async function getPosts() {
   // Add a fake delay to make waiting noticeable.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
   let posts = [];
   for (let i = 0; i < 10; i++) {
     posts.push({
       id: i,
-      title: 'Post #' + (i + 1)
+      title: "Post #" + (i + 1),
     });
   }
   return posts;
@@ -5170,14 +5180,27 @@ async function getPosts() {
 ```
 
 ```css
-body { height: 275px; }
-button { margin-right: 10px }
-b { display: inline-block; margin-right: 10px; }
-.pending { color: #777; }
-video { width: 300px; margin-top: 10px; aspect-ratio: 16/9; }
+body {
+  height: 275px;
+}
+button {
+  margin-right: 10px;
+}
+b {
+  display: inline-block;
+  margin-right: 10px;
+}
+.pending {
+  color: #777;
+}
+video {
+  width: 300px;
+  margin-top: 10px;
+  aspect-ratio: 16/9;
+}
 ```
 
---------------------------------
+---
 
 ### Gradual Adoption of React Compiler with use memo
 
@@ -5199,7 +5222,7 @@ function ButtonGroup({ buttons }) {
 }
 ```
 
---------------------------------
+---
 
 ### Execute Asynchronous Actions with React startTransition
 
@@ -5208,8 +5231,8 @@ Source: https://react.dev/reference/react/useTransition
 This example illustrates how to use the `startTransition` function to wrap an asynchronous operation, such as updating data via an API. It shows how to update state (`setQuantity`) within the transition, ensuring that the UI remains responsive while the background work completes. The `isPending` flag can be used to provide visual feedback.
 
 ```js
-import {useState, useTransition} from 'react';
-import {updateQuantity} from './api';
+import { useState, useTransition } from "react";
+import { updateQuantity } from "./api";
 
 function CheckoutForm() {
   const [isPending, startTransition] = useTransition();
@@ -5227,7 +5250,7 @@ function CheckoutForm() {
 }
 ```
 
---------------------------------
+---
 
 ### Handling asynchronous actions with `startTransition` in React
 
@@ -5254,7 +5277,7 @@ function SubmitButton({ submitAction }) {
 }
 ```
 
---------------------------------
+---
 
 ### react-dom/client Entry Point
 
@@ -5262,7 +5285,7 @@ Source: https://react.dev/reference/react-dom
 
 Contains APIs to render React components on the client side in the browser. This entry point provides methods for creating and managing root React applications.
 
-```APIDOC
+````APIDOC
 ## react-dom/client
 
 ### Description
@@ -5274,17 +5297,20 @@ Import client-side rendering APIs from this entry point.
 ### Syntax
 ```javascript
 import { createRoot, hydrateRoot } from 'react-dom/client'
-```
+````
 
 ### Key APIs
+
 - **createRoot** - Creates a root to render React components in the browser
 - **hydrateRoot** - Hydrates a server-rendered HTML document with React components
 
 ### Notes
+
 - Use this entry point for browser-based React applications
 - Replaces deprecated `render()` and `hydrate()` APIs from React 18
 - Provides concurrent rendering capabilities
-```
+
+````
 
 --------------------------------
 
@@ -5302,10 +5328,10 @@ export default function App() {
     <Gallery />
   );
 }
-```
+````
 
 ```js
-import Profile from './Profile.js';
+import Profile from "./Profile.js";
 
 export default function Gallery() {
   return (
@@ -5321,20 +5347,17 @@ export default function Gallery() {
 
 ```js
 export default function Profile() {
-  return (
-    <img
-      src="https://i.imgur.com/QIrZWGIs.jpg"
-      alt="Alan L. Hart"
-    />
-  );
+  return <img src="https://i.imgur.com/QIrZWGIs.jpg" alt="Alan L. Hart" />;
 }
 ```
 
 ```css
-img { margin: 0 10px 10px 0; }
+img {
+  margin: 0 10px 10px 0;
+}
 ```
 
---------------------------------
+---
 
 ### Basic StrictMode Wrapper Setup
 
@@ -5348,7 +5371,7 @@ Demonstrates the simplest usage of StrictMode by wrapping a component to enable 
 </StrictMode>
 ```
 
---------------------------------
+---
 
 ### Illustrate Impure React Component with Global State Modification
 
@@ -5376,7 +5399,7 @@ export default function TeaSet() {
 }
 ```
 
---------------------------------
+---
 
 ### Comparing React Component State Management with and without Custom Hooks
 
@@ -5414,7 +5437,7 @@ function SaveButton() {
 }
 ```
 
---------------------------------
+---
 
 ### Setup PopState Event Listener and Router Context in React
 
@@ -5448,7 +5471,7 @@ return (
 );
 ```
 
---------------------------------
+---
 
 ### React Hook: useLayoutEffect
 
@@ -5456,7 +5479,7 @@ Source: https://react.dev/reference/react/useLayoutEffect
 
 Detailed reference for the `useLayoutEffect` React Hook, including its signature, parameters, return value, and usage example.
 
-```APIDOC
+````APIDOC
 ## React Hook: useLayoutEffect(setup, dependencies?)
 
 ### Description
@@ -5486,16 +5509,18 @@ function Tooltip() {
   }, []);
   // ...
 }
-```
+````
 
 ### Caveats
+
 - `useLayoutEffect` is a Hook; call it only at the top level of a component or custom Hook.
 - In Strict Mode, React runs an extra development-only setup+cleanup cycle.
 - Object or function dependencies defined inside the component can cause re-runs.
 - Effects only run on the client, not during server rendering.
 - Code inside `useLayoutEffect` blocks browser repainting, potentially hurting performance. Prefer `useEffect` when possible.
 - State updates triggered inside `useLayoutEffect` execute all remaining Effects immediately, including `useEffect`.
-```
+
+````
 
 --------------------------------
 
@@ -5518,9 +5543,9 @@ This `package.json` snippet outlines the project's runtime dependencies, includi
     "test": "react-scripts test --env=jsdom"
   }
 }
-```
+````
 
---------------------------------
+---
 
 ### Render Component in Test with act
 
@@ -5529,12 +5554,12 @@ Source: https://react.dev/reference/react/act
 Complete test example showing how to render a React component using act() with ReactDOMClient. Demonstrates creating a container, rendering the component inside act(), and making assertions about the rendered output and side effects.
 
 ```javascript
-import {act} from 'react';
-import ReactDOMClient from 'react-dom/client';
-import Counter from './Counter';
+import { act } from "react";
+import ReactDOMClient from "react-dom/client";
+import Counter from "./Counter";
 
-it('can render and update a counter', async () => {
-  container = document.createElement('div');
+it("can render and update a counter", async () => {
+  container = document.createElement("div");
   document.body.appendChild(container);
 
   // ✅ Render the component inside act().
@@ -5542,14 +5567,14 @@ it('can render and update a counter', async () => {
     ReactDOMClient.createRoot(container).render(<Counter />);
   });
 
-  const button = container.querySelector('button');
-  const label = container.querySelector('p');
-  expect(label.textContent).toBe('You clicked 0 times');
-  expect(document.title).toBe('You clicked 0 times');
+  const button = container.querySelector("button");
+  const label = container.querySelector("p");
+  expect(label.textContent).toBe("You clicked 0 times");
+  expect(document.title).toBe("You clicked 0 times");
 });
 ```
 
---------------------------------
+---
 
 ### Build Video Display Component with Navigation
 
@@ -5598,7 +5623,7 @@ export function Video({ video }) {
 }
 ```
 
---------------------------------
+---
 
 ### Full React Component Data Fetching with useEffect and Promises
 
@@ -5607,36 +5632,41 @@ Source: https://react.dev/reference/react/useEffect
 This comprehensive example demonstrates a React component fetching data using `useEffect` and Promises. It showcases state management for user selection and fetched data, includes a UI for changing the `person` prop, and uses a cleanup function to prevent race conditions. A mock `api.js` is provided to simulate asynchronous data fetching.
 
 ```js
-import { useState, useEffect } from 'react';
-import { fetchBio } from './api.js';
+import { useState, useEffect } from "react";
+import { fetchBio } from "./api.js";
 
 export default function Page() {
-  const [person, setPerson] = useState('Alice');
+  const [person, setPerson] = useState("Alice");
   const [bio, setBio] = useState(null);
   useEffect(() => {
     let ignore = false;
     setBio(null);
-    fetchBio(person).then(result => {
+    fetchBio(person).then((result) => {
       if (!ignore) {
         setBio(result);
       }
     });
     return () => {
       ignore = true;
-    }
+    };
   }, [person]);
 
   return (
     <>
-      <select value={person} onChange={e => {
-        setPerson(e.target.value);
-      }}>
+      <select
+        value={person}
+        onChange={(e) => {
+          setPerson(e.target.value);
+        }}
+      >
         <option value="Alice">Alice</option>
         <option value="Bob">Bob</option>
         <option value="Taylor">Taylor</option>
       </select>
       <hr />
-      <p><i>{bio ?? 'Loading...'}</i></p>
+      <p>
+        <i>{bio ?? "Loading..."}</i>
+      </p>
     </>
   );
 }
@@ -5644,16 +5674,16 @@ export default function Page() {
 
 ```js
 export async function fetchBio(person) {
-  const delay = person === 'Bob' ? 2000 : 200;
-  return new Promise(resolve => {
+  const delay = person === "Bob" ? 2000 : 200;
+  return new Promise((resolve) => {
     setTimeout(() => {
-      resolve('This is ' + person + '’s bio.');
+      resolve("This is " + person + "’s bio.");
     }, delay);
-  })
+  });
 }
 ```
 
---------------------------------
+---
 
 ### XSS Vulnerability Example with dangerouslySetInnerHTML
 
@@ -5664,7 +5694,7 @@ Demonstrates an unsafe usage of dangerouslySetInnerHTML that creates a security 
 ```javascript
 const post = {
   // Imagine this content is stored in the database.
-  content: `<img src="" onerror='alert("you were hacked")'>`
+  content: `<img src="" onerror='alert("you were hacked")'>`,
 };
 
 export default function MarkdownPreview() {
@@ -5674,7 +5704,7 @@ export default function MarkdownPreview() {
 }
 ```
 
---------------------------------
+---
 
 ### React StrictMode Setup with Root Render
 
@@ -5683,21 +5713,21 @@ Source: https://react.dev/reference/react/StrictMode
 Demonstrates how to wrap a React application with StrictMode to enable strict checking during development. StrictMode intentionally double-invokes render functions to help identify side effects and impure components. This setup uses createRoot from react-dom/client and wraps the App component with StrictMode.
 
 ```javascript
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import './styles.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles.css";
 
-import App from './App';
+import App from "./App";
 
 const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <App />
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
---------------------------------
+---
 
 ### React Item Component with Quantity Input
 
@@ -5743,7 +5773,7 @@ export default function Item({isPending, onUpdateQuantity}) {
 }
 ```
 
---------------------------------
+---
 
 ### Memoized Greeting Component with Props in React
 
@@ -5759,7 +5789,7 @@ const Greeting = memo(function Greeting({ name }) {
 export default Greeting;
 ```
 
---------------------------------
+---
 
 ### Configure `eslint-plugin-react-hooks` in ESLint
 
@@ -5769,23 +5799,21 @@ These examples show how to enable the recommended rules from `eslint-plugin-reac
 
 ```javascript
 // eslint.config.js (Flat Config)
-import reactHooks from 'eslint-plugin-react-hooks';
-import { defineConfig } from 'eslint/config';
+import reactHooks from "eslint-plugin-react-hooks";
+import { defineConfig } from "eslint/config";
 
-export default defineConfig([
-  reactHooks.configs.flat.recommended,
-]);
+export default defineConfig([reactHooks.configs.flat.recommended]);
 ```
 
 ```json
 // eslintrc.json (Legacy Config)
 {
-  "extends": ["plugin:react-hooks/recommended"],
+  "extends": ["plugin:react-hooks/recommended"]
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Gated Compiler Output Example
 
@@ -5800,14 +5828,18 @@ function Button(props) {
 }
 
 // Output (simplified)
-import { shouldUseCompiler } from './src/utils/feature-flags';
+import { shouldUseCompiler } from "./src/utils/feature-flags";
 
 const Button = shouldUseCompiler()
-  ? function Button_optimized(props) { /* compiled version */ }
-  : function Button_original(props) { /* original version */ };
+  ? function Button_optimized(props) {
+      /* compiled version */
+    }
+  : function Button_original(props) {
+      /* original version */
+    };
 ```
 
---------------------------------
+---
 
 ### Complete React App with Custom ViewTransition 'slow-fade'
 
@@ -5828,7 +5860,7 @@ export default function App() {
   // See animations.css for the animation definition.
   return (
     <ViewTransition default="slow-fade">
-      {url === '/' ? <Home /> : <Details />}
+      {url === "/" ? <Home /> : <Details />}
     </ViewTransition>
   );
 }
@@ -5976,7 +6008,7 @@ export function ChevronLeft() {
           fillRule="nonzero"
 ```
 
---------------------------------
+---
 
 ### Implementing useReducer Hook in a React Component
 
@@ -5996,7 +6028,7 @@ function MyComponent() {
   // ...
 ```
 
---------------------------------
+---
 
 ### Initial React rendering with full HTML replacement (deprecated)
 
@@ -6005,17 +6037,17 @@ Source: https://react.dev/learn/add-react-to-an-existing-project
 This JavaScript snippet demonstrates an early, but discouraged, method for rendering a React component. It uses `createRoot` to mount a React application, but critically, it first clears the entire `document.body.innerHTML`, effectively replacing all existing HTML content. This approach is not suitable for integrating React into an existing page incrementally.
 
 ```js
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
 // Clear the existing HTML content
 document.body.innerHTML = '<div id="app"></div>';
 
 // Render your React component instead
-const root = createRoot(document.getElementById('app'));
+const root = createRoot(document.getElementById("app"));
 root.render(<h1>Hello, world</h1>);
 ```
 
---------------------------------
+---
 
 ### Complete React Gallery Component with State
 
@@ -6024,8 +6056,8 @@ Source: https://react.dev/learn/state-a-components-memory
 Full example of a React functional component using useState to manage gallery index state. Demonstrates importing useState, initializing state, updating state in event handlers, and rendering based on state values. Includes a data file with sculpture information.
 
 ```javascript
-import { useState } from 'react';
-import { sculptureList } from './data.js';
+import { useState } from "react";
+import { sculptureList } from "./data.js";
 
 export default function Gallery() {
   const [index, setIndex] = useState(0);
@@ -6037,9 +6069,7 @@ export default function Gallery() {
   let sculpture = sculptureList[index];
   return (
     <>
-      <button onClick={handleClick}>
-        Next
-      </button>
+      <button onClick={handleClick}>Next</button>
       <h2>
         <i>{sculpture.name} </i>
         by {sculpture.artist}
@@ -6047,77 +6077,91 @@ export default function Gallery() {
       <h3>
         ({index + 1} of {sculptureList.length})
       </h3>
-      <img
-        src={sculpture.url}
-        alt={sculpture.alt}
-      />
-      <p>
-        {sculpture.description}
-      </p>
+      <img src={sculpture.url} alt={sculpture.alt} />
+      <p>{sculpture.description}</p>
     </>
   );
 }
 ```
 
 ```javascript
-export const sculptureList = [{
-  name: 'Homenaje a la Neurocirugía',
-  artist: 'Marta Colvin Andrade',
-  description: 'Although Colvin is predominantly known for abstract themes that allude to pre-Hispanic symbols, this gigantic sculpture, an homage to neurosurgery, is one of her most recognizable public art pieces.',
-  url: 'https://i.imgur.com/Mx7dA2Y.jpg',
-  alt: 'A bronze statue of two crossed hands delicately holding a human brain in their fingertips.'
-}, {
-  name: 'Floralis Genérica',
-  artist: 'Eduardo Catalano',
-  description: 'This enormous (75 ft. or 23m) silver flower is located in Buenos Aires. It is designed to move, closing its petals in the evening or when strong winds blow and opening them in the morning.',
-  url: 'https://i.imgur.com/ZF6s192m.jpg',
-  alt: 'A gigantic metallic flower sculpture with reflective mirror-like petals and strong stamens.'
-}, {
-  name: 'Eternal Presence',
-  artist: 'John Woodrow Wilson',
-  description: 'Wilson was known for his preoccupation with equality, social justice, as well as the essential and spiritual qualities of humankind. This massive (7ft. or 2,13m) bronze represents what he described as "a symbolic Black presence infused with a sense of universal humanity."',
-  url: 'https://i.imgur.com/aTtVpES.jpg',
-  alt: 'The sculpture depicting a human head seems ever-present and solemn. It radiates calm and serenity.'
-}, {
-  name: 'Moai',
-  artist: 'Unknown Artist',
-  description: 'Located on the Easter Island, there are 1,000 moai, or extant monumental statues, created by the early Rapa Nui people, which some believe represented deified ancestors.',
-  url: 'https://i.imgur.com/RCwLEoQm.jpg',
-  alt: 'Three monumental stone busts with the heads that are disproportionately large with somber faces.'
-}, {
-  name: 'Blue Nana',
-  artist: 'Niki de Saint Phalle',
-  description: 'The Nanas are triumphant creatures, symbols of femininity and maternity. Initially, Saint Phalle used fabric and found objects for the Nanas, and later on introduced polyester to achieve a more vibrant effect.',
-  url: 'https://i.imgur.com/Sd1AgUOm.jpg',
-  alt: 'A large mosaic sculpture of a whimsical dancing female figure in a colorful costume emanating joy.'
-}, {
-  name: 'Ultimate Form',
-  artist: 'Barbara Hepworth',
-  description: 'This abstract bronze sculpture is a part of The Family of Man series located at Yorkshire Sculpture Park. Hepworth chose not to create literal representations of the world but developed abstract forms inspired by people and landscapes.',
-  url: 'https://i.imgur.com/2heNQDcm.jpg',
-  alt: 'A tall sculpture made of three elements stacked on each other reminding of a human figure.'
-}, {
-  name: 'Cavaliere',
-  artist: 'Lamidi Olonade Fakeye',
-  description: 'Descended from four generations of woodcarvers, Fakeye\'s work blended traditional and contemporary Yoruba themes.',
-  url: 'https://i.imgur.com/wIdGuZwm.png',
-  alt: 'An intricate wood sculpture of a warrior with a focused face on a horse adorned with patterns.'
-}, {
-  name: 'Big Bellies',
-  artist: 'Alina Szapocznikow',
-  description: 'Szapocznikow is known for her sculptures of the fragmented body as a metaphor for the fragility and impermanence of youth and beauty. This sculpture depicts two very realistic large bellies stacked on top of each other, each around five feet (1,5m) tall.',
-  url: 'https://i.imgur.com/AlHTAdDm.jpg',
-  alt: 'The sculpture reminds a cascade of folds, quite different from bellies in classical sculptures.'
-}, {
-  name: 'Terracotta Army',
-  artist: 'Unknown Artist',
-  description: 'The Terracotta Army is a collection of terracotta sculptures depicting the armies of Qin Shi Huang, the first Emperor of China.',
-  url: 'https://i.imgur.com/6LvnuQ8m.jpg',
-  alt: 'Twelve terracotta sculptures of soldiers, each with a unique facial expression and armor.'
-}];
+export const sculptureList = [
+  {
+    name: "Homenaje a la Neurocirugía",
+    artist: "Marta Colvin Andrade",
+    description:
+      "Although Colvin is predominantly known for abstract themes that allude to pre-Hispanic symbols, this gigantic sculpture, an homage to neurosurgery, is one of her most recognizable public art pieces.",
+    url: "https://i.imgur.com/Mx7dA2Y.jpg",
+    alt: "A bronze statue of two crossed hands delicately holding a human brain in their fingertips.",
+  },
+  {
+    name: "Floralis Genérica",
+    artist: "Eduardo Catalano",
+    description:
+      "This enormous (75 ft. or 23m) silver flower is located in Buenos Aires. It is designed to move, closing its petals in the evening or when strong winds blow and opening them in the morning.",
+    url: "https://i.imgur.com/ZF6s192m.jpg",
+    alt: "A gigantic metallic flower sculpture with reflective mirror-like petals and strong stamens.",
+  },
+  {
+    name: "Eternal Presence",
+    artist: "John Woodrow Wilson",
+    description:
+      'Wilson was known for his preoccupation with equality, social justice, as well as the essential and spiritual qualities of humankind. This massive (7ft. or 2,13m) bronze represents what he described as "a symbolic Black presence infused with a sense of universal humanity."',
+    url: "https://i.imgur.com/aTtVpES.jpg",
+    alt: "The sculpture depicting a human head seems ever-present and solemn. It radiates calm and serenity.",
+  },
+  {
+    name: "Moai",
+    artist: "Unknown Artist",
+    description:
+      "Located on the Easter Island, there are 1,000 moai, or extant monumental statues, created by the early Rapa Nui people, which some believe represented deified ancestors.",
+    url: "https://i.imgur.com/RCwLEoQm.jpg",
+    alt: "Three monumental stone busts with the heads that are disproportionately large with somber faces.",
+  },
+  {
+    name: "Blue Nana",
+    artist: "Niki de Saint Phalle",
+    description:
+      "The Nanas are triumphant creatures, symbols of femininity and maternity. Initially, Saint Phalle used fabric and found objects for the Nanas, and later on introduced polyester to achieve a more vibrant effect.",
+    url: "https://i.imgur.com/Sd1AgUOm.jpg",
+    alt: "A large mosaic sculpture of a whimsical dancing female figure in a colorful costume emanating joy.",
+  },
+  {
+    name: "Ultimate Form",
+    artist: "Barbara Hepworth",
+    description:
+      "This abstract bronze sculpture is a part of The Family of Man series located at Yorkshire Sculpture Park. Hepworth chose not to create literal representations of the world but developed abstract forms inspired by people and landscapes.",
+    url: "https://i.imgur.com/2heNQDcm.jpg",
+    alt: "A tall sculpture made of three elements stacked on each other reminding of a human figure.",
+  },
+  {
+    name: "Cavaliere",
+    artist: "Lamidi Olonade Fakeye",
+    description:
+      "Descended from four generations of woodcarvers, Fakeye's work blended traditional and contemporary Yoruba themes.",
+    url: "https://i.imgur.com/wIdGuZwm.png",
+    alt: "An intricate wood sculpture of a warrior with a focused face on a horse adorned with patterns.",
+  },
+  {
+    name: "Big Bellies",
+    artist: "Alina Szapocznikow",
+    description:
+      "Szapocznikow is known for her sculptures of the fragmented body as a metaphor for the fragility and impermanence of youth and beauty. This sculpture depicts two very realistic large bellies stacked on top of each other, each around five feet (1,5m) tall.",
+    url: "https://i.imgur.com/AlHTAdDm.jpg",
+    alt: "The sculpture reminds a cascade of folds, quite different from bellies in classical sculptures.",
+  },
+  {
+    name: "Terracotta Army",
+    artist: "Unknown Artist",
+    description:
+      "The Terracotta Army is a collection of terracotta sculptures depicting the armies of Qin Shi Huang, the first Emperor of China.",
+    url: "https://i.imgur.com/6LvnuQ8m.jpg",
+    alt: "Twelve terracotta sculptures of soldiers, each with a unique facial expression and armor.",
+  },
+];
 ```
 
---------------------------------
+---
 
 ### Implement Asynchronous Quantity Updates with React Actions and Transitions
 
@@ -6150,7 +6194,7 @@ export default function App({}) {
   const [quantity, setQuantity] = useState(1);
   const [isPending, startTransition] = useTransition();
 
-  const updateQuantityAction = async newQuantity => {
+  const updateQuantityAction = async (newQuantity) => {
     // To access the pending state of a transition,
     // call startTransition again.
     startTransition(async () => {
@@ -6164,7 +6208,7 @@ export default function App({}) {
   return (
     <div>
       <h1>Checkout</h1>
-      <Item action={updateQuantityAction}/>
+      <Item action={updateQuantityAction} />
       <hr />
       <Total quantity={quantity} isPending={isPending} />
     </div>
@@ -6175,35 +6219,30 @@ export default function App({}) {
 ```js
 import { startTransition } from "react";
 
-export default function Item({action}) {
+export default function Item({ action }) {
   function handleChange(event) {
     // To expose an action prop, await the callback in startTransition.
     startTransition(async () => {
       await action(event.target.value);
-    })
+    });
   }
   return (
     <div className="item">
       <span>Eras Tour Tickets</span>
       <label htmlFor="name">Quantity: </label>
-      <input
-        type="number"
-        onChange={handleChange}
-        defaultValue={1}
-        min={1}
-      />
+      <input type="number" onChange={handleChange} defaultValue={1} min={1} />
     </div>
-  )
+  );
 }
 ```
 
 ```js
 const intl = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "USD"
+  currency: "USD",
 });
 
-export default function Total({quantity, isPending}) {
+export default function Total({ quantity, isPending }) {
   return (
     <div className="total">
       <span>Total:</span>
@@ -6211,7 +6250,7 @@ export default function Total({quantity, isPending}) {
         {isPending ? "🌀 Updating..." : `${intl.format(quantity * 9999)}`}
       </span>
     </div>
-  )
+  );
 }
 ```
 
@@ -6253,7 +6292,7 @@ export async function updateQuantity(newQuantity) {
 }
 ```
 
---------------------------------
+---
 
 ### Displaying a static HTML list structure
 
@@ -6271,7 +6310,7 @@ Presents a basic HTML unordered list as a conceptual example of the structure th
 </ul>
 ```
 
---------------------------------
+---
 
 ### React DOM: preinitModule Function
 
@@ -6317,7 +6356,7 @@ N/A
 {}
 ```
 
---------------------------------
+---
 
 ### Export React Component with export default
 
@@ -6327,16 +6366,11 @@ Demonstrates the correct way to export a React component using the export defaul
 
 ```javascript
 export default function Profile() {
-  return (
-    <img
-      src="https://i.imgur.com/lICfvbD.jpg"
-      alt="Aklilu Lemma"
-    />
-  );
+  return <img src="https://i.imgur.com/lICfvbD.jpg" alt="Aklilu Lemma" />;
 }
 ```
 
---------------------------------
+---
 
 ### ColorSwitch Component - Initial Implementation
 
@@ -6356,7 +6390,7 @@ export default function ColorSwitch({
 }
 ```
 
---------------------------------
+---
 
 ### Importing a Named Component from a Module in JavaScript
 
@@ -6365,10 +6399,10 @@ Source: https://react.dev/learn/importing-and-exporting-components
 Code example for importing the `Profile` component using a named import. This syntax requires curly braces and the exact name of the exported component from the specified module.
 
 ```javascript
-import { Profile } from './Gallery.js';
+import { Profile } from "./Gallery.js";
 ```
 
---------------------------------
+---
 
 ### SomeContext Provider
 
@@ -6376,7 +6410,7 @@ Source: https://react.dev/reference/react/createContext
 
 Wraps components into a context provider to specify the value of the context for all components inside. Starting in React 19, you can render the context directly as a provider.
 
-```APIDOC
+````APIDOC
 ## SomeContext Provider
 
 ### Description
@@ -6387,15 +6421,17 @@ Wraps your components into a context provider to specify the value of the contex
 <ThemeContext value={theme}>
   <Page />
 </ThemeContext>
-```
+````
 
 ### Props
+
 - **value** (any) - Required - The value that you want to pass to all components reading this context inside this provider. The context value can be of any type. A component calling `useContext(SomeContext)` inside the provider receives the `value` of the innermost corresponding context provider above it.
 
 ### Usage Example
+
 ```js
 function App() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
   return (
     <ThemeContext value={theme}>
       <Page />
@@ -6405,9 +6441,11 @@ function App() {
 ```
 
 ### Version Notes
+
 - **React 19+**: You can render `<SomeContext>` directly as a provider
 - **Older versions**: Use `<SomeContext.Provider>` instead
-```
+
+````
 
 --------------------------------
 
@@ -6429,9 +6467,9 @@ import { createPortal } from 'react-dom';
     document.body
   )}
 </div>
-```
+````
 
---------------------------------
+---
 
 ### preinit(href, options)
 
@@ -6439,7 +6477,7 @@ Source: https://react.dev/reference/react-dom/preinit
 
 Eagerly fetches and evaluates a stylesheet or external script. Scripts are executed when downloaded, while stylesheets are inserted into the document immediately. This function provides the browser with a hint to start downloading resources early.
 
-```APIDOC
+````APIDOC
 ## preinit(href, options)
 
 ### Description
@@ -6474,14 +6512,16 @@ function AppRoot() {
   preinit("https://example.com/script.js", {as: "script"});
   return ...;
 }
-```
+````
 
 ### Response Example
+
 No return value. The function triggers browser resource loading as a side effect.
 
 ### Usage Examples
 
 #### Preiniting an External Script
+
 ```js
 import { preinit } from 'react-dom';
 
@@ -6492,6 +6532,7 @@ function AppRoot() {
 ```
 
 #### Preiniting a Stylesheet
+
 ```js
 import { preinit } from 'react-dom';
 
@@ -6502,30 +6543,32 @@ function AppRoot() {
 ```
 
 #### Preiniting in an Event Handler
+
 ```js
-import { preinit } from 'react-dom';
+import { preinit } from "react-dom";
 
 function CallToAction() {
   const onClick = () => {
-    preinit("https://example.com/wizardStyles.css", {as: "style"});
+    preinit("https://example.com/wizardStyles.css", { as: "style" });
     startWizard();
-  }
-  return (
-    <button onClick={onClick}>Start Wizard</button>
-  );
+  };
+  return <button onClick={onClick}>Start Wizard</button>;
 }
 ```
 
 ### Caveats
+
 - Multiple calls to preinit with the same href have the same effect as a single call
 - In the browser, you can call preinit in any situation: while rendering a component, in an Effect, in an event handler, etc.
 - In server-side rendering or when rendering Server Components, preinit only has an effect if called while rendering a component or in an async context originating from rendering a component. Other calls are ignored.
 
 ### Notes
+
 - Use `preload` instead if you want the browser to download the script but not execute it immediately
 - Use `preinitModule` if you want to load an ESM module
 - The `precedence` option is required when preiniting stylesheets to control stylesheet order in the document
-```
+
+````
 
 --------------------------------
 
@@ -6537,9 +6580,9 @@ Start the standalone React DevTools application from the command line. This open
 
 ```bash
 react-devtools
-```
+````
 
---------------------------------
+---
 
 ### Render React Component with createElement (JS)
 
@@ -6549,11 +6592,11 @@ This JavaScript example demonstrates how to render a custom React component (`Gr
 
 ```js
 export default function App() {
-  return createElement(Greeting, { name: 'Taylor' });
+  return createElement(Greeting, { name: "Taylor" });
 }
 ```
 
---------------------------------
+---
 
 ### Full Example: Implementing Slow-Fade Animation with React ViewTransition and CSS
 
@@ -6562,18 +6605,14 @@ Source: https://react.dev/reference/react/ViewTransition
 This comprehensive example shows a React component using `<ViewTransition default="slow-fade">` to apply a custom slow-fade animation. It includes the React component logic for toggling content and the corresponding CSS definitions for `::view-transition-old` and `::view-transition-new` pseudo-elements to control the animation speed.
 
 ```javascript
-import {
-  ViewTransition,
-  useState,
-  startTransition
-} from 'react';
-import {Video} from "./Video";
-import videos from "./data"
+import { ViewTransition, useState, startTransition } from "react";
+import { Video } from "./Video";
+import videos from "./data";
 
 function Item() {
   return (
     <ViewTransition default="slow-fade">
-      <Video video={videos[0]}/>
+      <Video video={videos[0]} />
     </ViewTransition>
   );
 }
@@ -6588,7 +6627,9 @@ export default function Component() {
             setShowItem((prev) => !prev);
           });
         }}
-      >{showItem ? '➖' : '➕'}</button>
+      >
+        {showItem ? "➖" : "➕"}
+      </button>
 
       {showItem ? <Item /> : null}
     </>
@@ -6598,11 +6639,11 @@ export default function Component() {
 
 ```css
 ::view-transition-old(.slow-fade) {
-    animation-duration: 500ms;
+  animation-duration: 500ms;
 }
 
 ::view-transition-new(.slow-fade) {
-    animation-duration: 500ms;
+  animation-duration: 500ms;
 }
 
 #root {
@@ -6623,7 +6664,9 @@ button {
   color: white;
   font-size: 20px;
   cursor: pointer;
-  transition: background-color 0.3s, border 0.3s;
+  transition:
+    background-color 0.3s,
+    border 0.3s;
 }
 button:hover {
   border: 2px solid #ccc;
@@ -6685,7 +6728,7 @@ button:hover {
 }
 ```
 
---------------------------------
+---
 
 ### Complete React component displaying `navigator.onLine` status
 
@@ -6694,11 +6737,11 @@ Source: https://react.dev/reference/react/useSyncExternalStore
 A self-contained React component example that fully integrates `useSyncExternalStore` with `subscribe` and `getSnapshot` functions to dynamically display the browser's online or disconnected status. This demonstrates a working implementation.
 
 ```js
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from "react";
 
 export default function ChatIndicator() {
   const isOnline = useSyncExternalStore(subscribe, getSnapshot);
-  return <h1>{isOnline ? '✅ Online' : '❌ Disconnected'}</h1>;
+  return <h1>{isOnline ? "✅ Online" : "❌ Disconnected"}</h1>;
 }
 
 function getSnapshot() {
@@ -6706,16 +6749,16 @@ function getSnapshot() {
 }
 
 function subscribe(callback) {
-  window.addEventListener('online', callback);
-  window.addEventListener('offline', callback);
+  window.addEventListener("online", callback);
+  window.addEventListener("offline", callback);
   return () => {
-    window.removeEventListener('online', callback);
-    window.removeEventListener('offline', callback);
+    window.removeEventListener("online", callback);
+    window.removeEventListener("offline", callback);
   };
 }
 ```
 
---------------------------------
+---
 
 ### Sample Video Data Structure
 
@@ -6764,7 +6807,7 @@ const videos = [
 ];
 ```
 
---------------------------------
+---
 
 ### Using Props in a React Class Component
 
@@ -6779,10 +6822,10 @@ class Greeting extends Component {
   }
 }
 
-<Greeting name="Taylor" />
+<Greeting name="Taylor" />;
 ```
 
---------------------------------
+---
 
 ### Define and Export React Component
 
@@ -6792,16 +6835,11 @@ Basic React component that exports a function returning JSX markup. This example
 
 ```jsx
 export default function Profile() {
-  return (
-    <img
-      src="https://i.imgur.com/MK3eW3Am.jpg"
-      alt="Katherine Johnson"
-    />
-  )
+  return <img src="https://i.imgur.com/MK3eW3Am.jpg" alt="Katherine Johnson" />;
 }
 ```
 
---------------------------------
+---
 
 ### Render Multiple React Components into Specific DOM Nodes using createRoot and render
 
@@ -6812,11 +6850,15 @@ This example demonstrates how to integrate React into a page that isn't fully bu
 ```html
 <!DOCTYPE html>
 <html>
-  <head><title>My app</title></head>
+  <head>
+    <title>My app</title>
+  </head>
   <body>
     <nav id="navigation"></nav>
     <main>
-      <p>This paragraph is not rendered by React (open index.html to verify).</p>
+      <p>
+        This paragraph is not rendered by React (open index.html to verify).
+      </p>
       <section id="comments"></section>
     </main>
   </body>
@@ -6824,15 +6866,15 @@ This example demonstrates how to integrate React into a page that isn't fully bu
 ```
 
 ```js
-import './styles.css';
-import { createRoot } from 'react-dom/client';
-import { Comments, Navigation } from './Components.js';
+import "./styles.css";
+import { createRoot } from "react-dom/client";
+import { Comments, Navigation } from "./Components.js";
 
-const navDomNode = document.getElementById('navigation');
+const navDomNode = document.getElementById("navigation");
 const navRoot = createRoot(navDomNode);
 navRoot.render(<Navigation />);
 
-const commentDomNode = document.getElementById('comments');
+const commentDomNode = document.getElementById("comments");
 const commentRoot = createRoot(commentDomNode);
 commentRoot.render(<Comments />);
 ```
@@ -6867,17 +6909,25 @@ export function Comments() {
 
 function Comment({ text, author }) {
   return (
-    <p>{text} — <i>{author}</i></p>
+    <p>
+      {text} — <i>{author}</i>
+    </p>
   );
 }
 ```
 
 ```css
-nav ul { padding: 0; margin: 0; }
-nav ul li { display: inline-block; margin-right: 20px; }
+nav ul {
+  padding: 0;
+  margin: 0;
+}
+nav ul li {
+  display: inline-block;
+  margin-right: 20px;
+}
 ```
 
---------------------------------
+---
 
 ### React cloneElement Basic Usage Example
 
@@ -6886,21 +6936,19 @@ Source: https://react.dev/reference/react/cloneElement
 Demonstrates how to use `cloneElement` to create a new React element. It takes an existing `<Row>` element, overrides its `isHighlighted` prop, and replaces its children with 'Goodbye', then logs the resulting element.
 
 ```javascript
-import { cloneElement } from 'react';
+import { cloneElement } from "react";
 
 // ...
 const clonedElement = cloneElement(
-  <Row title="Cabbage">
-    Hello
-  </Row>,
+  <Row title="Cabbage">Hello</Row>,
   { isHighlighted: true },
-  'Goodbye'
+  "Goodbye",
 );
 
 console.log(clonedElement); // <Row title="Cabbage" isHighlighted={true}>Goodbye</Row>
 ```
 
---------------------------------
+---
 
 ### Traditional React Component Styling with CSS
 
@@ -6916,7 +6964,7 @@ Basic example of styling React components using className and external CSS files
 .success { color: green; }
 ```
 
---------------------------------
+---
 
 ### React Example: Exposing Custom Imperative Methods with useImperativeHandle
 
@@ -6925,8 +6973,8 @@ Source: https://react.dev/reference/react/useImperativeHandle
 This example demonstrates how a parent `Page` component can trigger a custom method `scrollAndFocusAddComment` on its `Post` child. The `Post` component, in turn, uses `useImperativeHandle` to define this method, which orchestrates scrolling a `CommentList` to the bottom and focusing an `AddComment` input field. This pattern allows for imperative control over child components' internal DOM elements or behaviors that cannot be easily managed via props alone.
 
 ```js
-import { useRef } from 'react';
-import Post from './Post.js';
+import { useRef } from "react";
+import Post from "./Post.js";
 
 export default function Page() {
   const postRef = useRef(null);
@@ -6937,9 +6985,7 @@ export default function Page() {
 
   return (
     <>
-      <button onClick={handleClick}>
-        Write a comment
-      </button>
+      <button onClick={handleClick}>Write a comment</button>
       <Post ref={postRef} />
     </>
   );
@@ -6947,9 +6993,9 @@ export default function Page() {
 ```
 
 ```js
-import { useRef, useImperativeHandle } from 'react';
-import CommentList from './CommentList.js';
-import AddComment from './AddComment.js';
+import { useRef, useImperativeHandle } from "react";
+import CommentList from "./CommentList.js";
+import AddComment from "./AddComment.js";
 
 function Post({ ref }) {
   const commentsRef = useRef(null);
@@ -6960,7 +7006,7 @@ function Post({ ref }) {
       scrollAndFocusAddComment() {
         commentsRef.current.scrollToBottom();
         addCommentRef.current.focus();
-      }
+      },
     };
   }, []);
 
@@ -6973,13 +7019,13 @@ function Post({ ref }) {
       <AddComment ref={addCommentRef} />
     </>
   );
-};
+}
 
 export default Post;
 ```
 
 ```js
-import { useRef, useImperativeHandle } from 'react';
+import { useRef, useImperativeHandle } from "react";
 
 function CommentList({ ref }) {
   const divRef = useRef(null);
@@ -6989,7 +7035,7 @@ function CommentList({ ref }) {
       scrollToBottom() {
         const node = divRef.current;
         node.scrollTop = node.scrollHeight;
-      }
+      },
     };
   }, []);
 
@@ -7009,7 +7055,7 @@ export default CommentList;
 ```
 
 ```js
-import { useRef, useImperativeHandle } from 'react';
+import { useRef, useImperativeHandle } from "react";
 
 function AddComment({ ref }) {
   return <input placeholder="Add comment..." ref={ref} />;
@@ -7028,7 +7074,7 @@ export default AddComment;
 }
 ```
 
---------------------------------
+---
 
 ### Initialize React useTransition Hook
 
@@ -7037,7 +7083,7 @@ Source: https://react.dev/reference/react/useTransition
 This snippet demonstrates the basic setup for `useTransition` in a React functional component. It imports `useState` and `useTransition`, then calls `useTransition` to destructure `isPending` (a boolean indicating a pending transition) and `startTransition` (a function to initiate a transition).
 
 ```js
-import {useState, useTransition} from 'react';
+import { useState, useTransition } from "react";
 
 function CheckoutForm() {
   const [isPending, startTransition] = useTransition();
@@ -7045,7 +7091,7 @@ function CheckoutForm() {
 }
 ```
 
---------------------------------
+---
 
 ### React Component with CSS Styling
 
@@ -7054,10 +7100,12 @@ Source: https://react.dev/learn/your-first-component
 Demonstrates CSS styling applied to a React component. The CSS file shows how to style JSX elements using standard CSS selectors.
 
 ```css
-img { height: 200px; }
+img {
+  height: 200px;
+}
 ```
 
---------------------------------
+---
 
 ### Explicitly Returning Object from useMemo in JavaScript for Clarity
 
@@ -7066,16 +7114,16 @@ Source: https://react.dev/reference/react/useMemo
 This example demonstrates the recommended and most explicit way to return an object literal from `useMemo` by using a clear `return` statement. This approach enhances code readability, prevents common syntax errors associated with implicit returns, and makes the intent of the function unambiguous.
 
 ```js
-  // ✅ This works and is explicit
-  const searchOptions = useMemo(() => {
-    return {
-      matchMode: 'whole-word',
-      text: text
-    };
-  }, [text]);
+// ✅ This works and is explicit
+const searchOptions = useMemo(() => {
+  return {
+    matchMode: "whole-word",
+    text: text,
+  };
+}, [text]);
 ```
 
---------------------------------
+---
 
 ### Deprecated APIs - React 19 Migration
 
@@ -7119,7 +7167,7 @@ Reference guide for APIs removed in React 19 and their recommended replacements.
 - **Migration** - Use modern server rendering APIs from `react-dom/server`
 ```
 
---------------------------------
+---
 
 ### PointerEvent Handler Function
 
@@ -7127,7 +7175,7 @@ Source: https://react.dev/reference/react-dom/components/common
 
 Describes the 'PointerEvent' handler type in React and provides a usage example.
 
-```APIDOC
+````APIDOC
 ## PointerEvent Handler Function
 
 ### Description
@@ -7151,11 +7199,13 @@ N/A (Parameters for PointerEvent are not explicitly listed in the provided text.
   onPointerUp={e => console.log('onPointerUp')}
   onPointerLeave={e => console.log('onPointerLeave')}
 />
-```
+````
 
 ### Response
+
 N/A
-```
+
+````
 
 --------------------------------
 
@@ -7175,9 +7225,9 @@ This `package.json` snippet lists the core dependencies required for the React a
   },
   "main": "/index.js"
 }
-```
+````
 
---------------------------------
+---
 
 ### Initialize React Context with Null Default
 
@@ -7189,7 +7239,7 @@ This snippet demonstrates initializing a React Context with a `null` default val
 const ThemeContext = createContext(null);
 ```
 
---------------------------------
+---
 
 ### Troubleshooting: Second Argument Error
 
@@ -7202,8 +7252,10 @@ Common error when passing options to root.render() instead of hydrateRoot(). Thi
 
 ### Error Message
 ```
+
 Warning: You passed a second argument to root.render(…) but it only accepts one argument.
-```
+
+````
 
 ### Problem Description
 This error occurs when developers attempt to pass configuration options as a second argument to `root.render()`. The `root.render()` method only accepts a single argument (the React node), and does not support options.
@@ -7213,24 +7265,28 @@ This error occurs when developers attempt to pass configuration options as a sec
 // 🚩 WRONG: Passing options to root.render()
 const root = hydrateRoot(container, <App />);
 root.render(App, {onUncaughtError});
-```
+````
 
 ### Correct Implementation
+
 ```javascript
 // ✅ CORRECT: Pass options to hydrateRoot() during initialization
-const root = hydrateRoot(container, <App />, {onUncaughtError});
+const root = hydrateRoot(container, <App />, { onUncaughtError });
 ```
 
 ### Solution Steps
+
 1. Identify where options are being passed to `root.render()`
 2. Move the options object to the `hydrateRoot()` call
 3. Pass only the React node to `root.render()`
 4. Verify the warning is resolved
 
 ### Key Differences
+
 - **hydrateRoot()**: Accepts three parameters (domNode, reactNode, options)
 - **root.render()**: Accepts only one parameter (reactNode)
-```
+
+````
 
 --------------------------------
 
@@ -7259,11 +7315,12 @@ const MyInput = forwardRef(function MyInput(props, ref) {
     </label>
   );
 });
-```
+````
 
 ### Parent Component Example
+
 ```js
-import { useRef } from 'react';
+import { useRef } from "react";
 
 function Form() {
   const ref = useRef(null);
@@ -7284,6 +7341,7 @@ function Form() {
 ```
 
 ### How It Works
+
 1. Parent creates a ref using useRef()
 2. Parent passes ref to child component as a prop
 3. Child component (wrapped in forwardRef) receives ref as second parameter
@@ -7291,11 +7349,13 @@ function Form() {
 5. Parent can now access DOM node via ref.current and call methods like focus()
 
 ### Important Considerations
+
 - Exposing refs makes it harder to change component internals later
 - Only expose refs from low-level reusable components (buttons, inputs)
 - Avoid exposing refs from application-level components (avatars, comments)
 - Consider using useImperativeHandle for more controlled API exposure
-```
+
+````
 
 --------------------------------
 
@@ -7318,14 +7378,18 @@ export default function KeyboardExample() {
     </label>
   );
 }
-```
+````
 
 ```css
-label { display: block; }
-input { margin-left: 10px; }
+label {
+  display: block;
+}
+input {
+  margin-left: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Rendering and Unmounting a React App with `unmountComponentAtNode`
 
@@ -7334,17 +7398,17 @@ Source: https://react.dev/reference/react-dom/unmountComponentAtNode
 This example illustrates the typical lifecycle of a React application within a DOM element, showing both the initial rendering of an `App` component and its subsequent unmounting using `unmountComponentAtNode`. This pattern is common when integrating React into existing non-React pages.
 
 ```javascript
-import { render, unmountComponentAtNode } from 'react-dom';
-import App from './App.js';
+import { render, unmountComponentAtNode } from "react-dom";
+import App from "./App.js";
 
-const rootNode = document.getElementById('root');
+const rootNode = document.getElementById("root");
 render(<App />, rootNode);
 
 // ...
 unmountComponentAtNode(rootNode);
 ```
 
---------------------------------
+---
 
 ### Verify Compiler Target Matches React Version
 
@@ -7354,11 +7418,11 @@ Ensures the configured target version matches the installed React major version 
 
 ```javascript
 {
-  target: '18' // Must match your React major version
+  target: "18"; // Must match your React major version
 }
 ```
 
---------------------------------
+---
 
 ### React App Component with State Management
 
@@ -7367,7 +7431,7 @@ Source: https://react.dev/reference/react-dom/client/createRoot
 Example App component that demonstrates component composition and state management using the useState hook. Includes a Counter sub-component that manages click count state and updates the UI on user interaction.
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function App() {
   return (
@@ -7388,7 +7452,7 @@ function Counter() {
 }
 ```
 
---------------------------------
+---
 
 ### Traditional Constructor Usage in React Class Components
 
@@ -7409,7 +7473,7 @@ class Counter extends Component {
   }
 ```
 
---------------------------------
+---
 
 ### Valid useEffect with complete dependencies
 
@@ -7429,7 +7493,7 @@ useEffect(() => {
 }, [userId]);
 ```
 
---------------------------------
+---
 
 ### Initialize React `cache` for a function
 
@@ -7441,7 +7505,7 @@ This snippet demonstrates the basic syntax for initializing React's `cache` util
 const cachedFn = cache(fn);
 ```
 
---------------------------------
+---
 
 ### Basic Stopwatch with State and setInterval
 
@@ -7450,7 +7514,7 @@ Source: https://react.dev/learn/referencing-values-with-refs
 A React stopwatch component that uses useState to track start time and current time, updating every 10ms with setInterval. The component displays elapsed time and includes a Start button to begin the timer. This demonstrates using state for data needed in rendering.
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function Stopwatch() {
   const [startTime, setStartTime] = useState(null);
@@ -7475,15 +7539,13 @@ export default function Stopwatch() {
   return (
     <>
       <h1>Time passed: {secondsPassed.toFixed(3)}</h1>
-      <button onClick={handleStart}>
-        Start
-      </button>
+      <button onClick={handleStart}>Start</button>
     </>
   );
 }
 ```
 
---------------------------------
+---
 
 ### MouseEvent Handler Function
 
@@ -7491,7 +7553,7 @@ Source: https://react.dev/reference/react-dom/components/common
 
 Explains the 'MouseEvent' handler type in React, provides a usage example, and details the 'e' parameter's properties.
 
-```APIDOC
+````APIDOC
 ## MouseEvent Handler Function
 
 ### Description
@@ -7535,11 +7597,13 @@ N/A (Event Handler Description)
   onMouseUp={e => console.log('onMouseUp')}
   onMouseLeave={e => console.log('onMouseLeave')}
 />
-```
+````
 
 ### Response
+
 N/A
-```
+
+````
 
 --------------------------------
 
@@ -7552,9 +7616,9 @@ Example of using separate state variables for x and y coordinates. This approach
 ```javascript
 const [x, setX] = useState(0);
 const [y, setY] = useState(0);
-```
+````
 
---------------------------------
+---
 
 ### Client-side Static Content Fetching with React and Express
 
@@ -7564,11 +7628,11 @@ This example illustrates a common client-side pattern for fetching and rendering
 
 ```javascript
 // bundle.js
-import marked from 'marked'; // 35.9K (11.2K gzipped)
-import sanitizeHtml from 'sanitize-html'; // 206K (63.3K gzipped)
+import marked from "marked"; // 35.9K (11.2K gzipped)
+import sanitizeHtml from "sanitize-html"; // 206K (63.3K gzipped)
 
-function Page({page}) {
-  const [content, setContent] = useState('');
+function Page({ page }) {
+  const [content, setContent] = useState("");
   // NOTE: loads *after* first page render.
   useEffect(() => {
     fetch(`/api/content/${page}`).then((data) => {
@@ -7585,11 +7649,11 @@ function Page({page}) {
 app.get(`/api/content/:page`, async (req, res) => {
   const page = req.params.page;
   const content = await file.readFile(`${page}.md`);
-  res.send({content});
+  res.send({ content });
 });
 ```
 
---------------------------------
+---
 
 ### Complete React Context Implementation for Nested Components
 
@@ -7598,8 +7662,8 @@ Source: https://react.dev/learn/passing-data-deeply-with-context
 This comprehensive example showcases a full React application using the Context API to manage heading levels automatically. It includes the main `Page` component structuring the layout, the `Section` component providing incremented context, the `Heading` component consuming context to render appropriate HTML heading tags, the `LevelContext` definition, and basic styling for visual clarity.
 
 ```js
-import Heading from './Heading.js';
-import Section from './Section.js';
+import Heading from "./Heading.js";
+import Section from "./Section.js";
 
 export default function Page() {
   return (
@@ -7626,30 +7690,28 @@ export default function Page() {
 ```
 
 ```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
 
 export default function Section({ children }) {
   const level = useContext(LevelContext);
   return (
     <section className="section">
-      <LevelContext value={level + 1}>
-        {children}
-      </LevelContext>
+      <LevelContext value={level + 1}>{children}</LevelContext>
     </section>
   );
 }
 ```
 
 ```js
-import { useContext } from 'react';
-import { LevelContext } from './LevelContext.js';
+import { useContext } from "react";
+import { LevelContext } from "./LevelContext.js";
 
 export default function Heading({ children }) {
   const level = useContext(LevelContext);
   switch (level) {
     case 0:
-      throw Error('Heading must be inside a Section!');
+      throw Error("Heading must be inside a Section!");
     case 1:
       return <h1>{children}</h1>;
     case 2:
@@ -7663,16 +7725,15 @@ export default function Heading({ children }) {
     case 6:
       return <h6>{children}</h6>;
     default:
-      throw Error('Unknown level: ' + level);
+      throw Error("Unknown level: " + level);
   }
 }
 ```
 
 ```js
-import { createContext } from 'react';
+import { createContext } from "react";
 
 export const LevelContext = createContext(0);
-
 ```
 
 ```css
@@ -7684,7 +7745,7 @@ export const LevelContext = createContext(0);
 }
 ```
 
---------------------------------
+---
 
 ### Example HTML Markup for Conversion
 
@@ -7694,19 +7755,15 @@ This snippet presents a standard HTML structure, including a main heading, an im
 
 ```html
 <h1>Hedy Lamarr's Todos</h1>
-<img
-  src="https://i.imgur.com/yXOvdOSs.jpg"
-  alt="Hedy Lamarr"
-  class="photo"
->
+<img src="https://i.imgur.com/yXOvdOSs.jpg" alt="Hedy Lamarr" class="photo" />
 <ul>
-    <li>Invent new traffic lights
-    <li>Rehearse a movie scene
-    <li>Improve the spectrum technology
+  <li>Invent new traffic lights</li>
+  <li>Rehearse a movie scene</li>
+  <li>Improve the spectrum technology</li>
 </ul>
 ```
 
---------------------------------
+---
 
 ### Using findDOMNode to Access DOM in React Class Component
 
@@ -7718,34 +7775,34 @@ This example demonstrates how to use `findDOMNode` within a React class componen
 class AutoselectingInput extends Component {
   componentDidMount() {
     const input = findDOMNode(this);
-    input.select()
+    input.select();
   }
 
   render() {
-    return <input defaultValue="Hello" />
+    return <input defaultValue="Hello" />;
   }
 }
 ```
 
 ```javascript
-import { Component } from 'react';
-import { findDOMNode } from 'react-dom';
+import { Component } from "react";
+import { findDOMNode } from "react-dom";
 
 class AutoselectingInput extends Component {
   componentDidMount() {
     const input = findDOMNode(this);
-    input.select()
+    input.select();
   }
 
   render() {
-    return <input defaultValue="Hello" />
+    return <input defaultValue="Hello" />;
   }
 }
 
 export default AutoselectingInput;
 ```
 
---------------------------------
+---
 
 ### resume(node, postponedState, options?)
 
@@ -7753,7 +7810,7 @@ Source: https://react.dev/reference/react-dom/server/resume
 
 Call `resume` to resume rendering a pre-rendered React tree as HTML into a Readable Web Stream.
 
-```APIDOC
+````APIDOC
 ## FUNCTION `resume`
 
 ### Description
@@ -7780,22 +7837,27 @@ async function handler(request, writable) {
   const resumeStream = await resume(<App />, postponed);
   return resumeStream.pipeTo(writable)
 }
-```
+````
 
 ### Returns
+
 `resume` returns a Promise.
+
 - If successful, the Promise resolves to a [Readable Web Stream](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream) that can be piped to a [Writable Web Stream](https://developer.mozilla.org/en-US/docs/Web/API/WritableStream).
 - If an error occurs in the shell, the Promise will reject with that error.
 
 The returned `ReadableStream` object also has an additional property:
+
 - **`stream.allReady`** (Promise) - A Promise that resolves when all rendering is complete. This can be awaited before returning a response for crawlers and static generation to ensure all content is loaded.
 
 ### Caveats
+
 - `resume` does not accept options for `bootstrapScripts`, `bootstrapScriptContent`, or `bootstrapModules`. These should be passed to the `prerender` call.
 - `resume` does not accept `identifierPrefix` as it must be the same as in `prerender`.
 - `nonce` should only be provided to `resume` if not provided to `prerender` (e.g., if no scripts were provided to `prerender`).
 - `resume` re-renders from the root until it finds a component that was not fully pre-rendered. Only fully prerendered components are skipped entirely.
-```
+
+````
 
 --------------------------------
 
@@ -7809,9 +7871,9 @@ Code example for exporting a `Profile` function component as a named export. Thi
 export function Profile() {
   // ...
 }
-```
+````
 
---------------------------------
+---
 
 ### Recommended: One-Time React App Initialization at Module Level
 
@@ -7820,8 +7882,9 @@ Source: https://react.dev/learn/you-might-not-need-an-effect
 This approach performs application-wide initialization logic once when the module is imported, before the app even renders. It includes a check for `window` to ensure the code only runs in a browser environment. This is suitable for truly global, one-time setup that doesn't depend on component rendering.
 
 ```js
-if (typeof window !== 'undefined') { // Check if we're running in the browser.
-   // ✅ Only runs once per app load
+if (typeof window !== "undefined") {
+  // Check if we're running in the browser.
+  // ✅ Only runs once per app load
   checkAuthToken();
   loadDataFromLocalStorage();
 }
@@ -7831,7 +7894,7 @@ function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Video Data Fetching with Caching
 
@@ -7842,11 +7905,11 @@ Implements three data fetching functions with Map-based caching to optimize perf
 ```javascript
 const videos = [
   {
-    id: '1',
-    title: 'First video',
-    description: 'Video description',
-    image: 'blue',
-  }
+    id: "1",
+    title: "First video",
+    description: "Video description",
+    image: "blue",
+  },
 ];
 
 let videosCache = new Map();
@@ -7895,7 +7958,7 @@ export function fetchVideoDetails(id) {
 }
 ```
 
---------------------------------
+---
 
 ### Preconnecting in Event Handlers
 
@@ -7903,7 +7966,7 @@ Source: https://react.dev/reference/react-dom/preconnect
 
 Call preconnect in event handlers before transitioning to a page or state where external resources will be needed. This starts the connection process earlier than waiting for the new page to render.
 
-```APIDOC
+````APIDOC
 ## Preconnecting in Event Handlers
 
 ### Description
@@ -7922,14 +7985,16 @@ function CallToAction() {
     <button onClick={onClick}>Start Wizard</button>
   );
 }
-```
+````
 
 ### When to Use
+
 - In click handlers before navigation
 - Before state transitions that require external resources
 - In response to user interactions that will trigger resource loading
 - To establish connections proactively before rendering changes
-```
+
+````
 
 --------------------------------
 
@@ -7949,9 +8014,9 @@ function Dropdown({ allItems, text }) {
     return searchItems(allItems, searchOptions);
   }, [allItems, searchOptions]); // ✅ Only changes when allItems or searchOptions changes
   // ...
-```
+````
 
---------------------------------
+---
 
 ### Import useState Hook from React
 
@@ -7960,10 +8025,10 @@ Source: https://react.dev/learn
 Import the useState Hook from the React library to enable state management in functional components. This is the first step required before using state in any React component.
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 ```
 
---------------------------------
+---
 
 ### DOM Element References and Event Listener Setup
 
@@ -7972,19 +8037,19 @@ Source: https://react.dev/learn/reacting-to-input-with-state
 Retrieves references to all form elements by their IDs and attaches event listeners for form submission and input changes. This initialization connects the JavaScript logic to the HTML form elements.
 
 ```javascript
-let form = document.getElementById('form');
-let editButton = document.getElementById('editButton');
-let firstNameInput = document.getElementById('firstNameInput');
-let firstNameText = document.getElementById('firstNameText');
-let lastNameInput = document.getElementById('lastNameInput');
-let lastNameText = document.getElementById('lastNameText');
-let helloText = document.getElementById('helloText');
+let form = document.getElementById("form");
+let editButton = document.getElementById("editButton");
+let firstNameInput = document.getElementById("firstNameInput");
+let firstNameText = document.getElementById("firstNameText");
+let lastNameInput = document.getElementById("lastNameInput");
+let lastNameText = document.getElementById("lastNameText");
+let helloText = document.getElementById("helloText");
 form.onsubmit = handleFormSubmit;
 firstNameInput.oninput = handleFirstNameChange;
 lastNameInput.oninput = handleLastNameChange;
 ```
 
---------------------------------
+---
 
 ### React Tab Container with Global Suspense Fallback
 
@@ -7993,38 +8058,29 @@ Source: https://react.dev/reference/react/useTransition
 This example sets up a React application with a tabbed interface where content for the 'Posts' tab fetches data using `use` and `Suspense`. When the 'Posts' tab is clicked, the `Suspense` boundary causes the entire tab container to show a loading indicator, demonstrating a common pattern that can lead to a jarring user experience. It includes components for tab navigation, content display, and a simulated data fetching utility.
 
 ```javascript
-import { Suspense, useState } from 'react';
-import TabButton from './TabButton.js';
-import AboutTab from './AboutTab.js';
-import PostsTab from './PostsTab.js';
-import ContactTab from './ContactTab.js';
+import { Suspense, useState } from "react";
+import TabButton from "./TabButton.js";
+import AboutTab from "./AboutTab.js";
+import PostsTab from "./PostsTab.js";
+import ContactTab from "./ContactTab.js";
 
 export default function TabContainer() {
-  const [tab, setTab] = useState('about');
+  const [tab, setTab] = useState("about");
   return (
     <Suspense fallback={<h1>🌀 Loading...</h1>}>
-      <TabButton
-        isActive={tab === 'about'}
-        action={() => setTab('about')}
-      >
+      <TabButton isActive={tab === "about"} action={() => setTab("about")}>
         About
       </TabButton>
-      <TabButton
-        isActive={tab === 'posts'}
-        action={() => setTab('posts')}
-      >
+      <TabButton isActive={tab === "posts"} action={() => setTab("posts")}>
         Posts
       </TabButton>
-      <TabButton
-        isActive={tab === 'contact'}
-        action={() => setTab('contact')}
-      >
+      <TabButton isActive={tab === "contact"} action={() => setTab("contact")}>
         Contact
       </TabButton>
       <hr />
-      {tab === 'about' && <AboutTab />}
-      {tab === 'posts' && <PostsTab />}
-      {tab === 'contact' && <ContactTab />}
+      {tab === "about" && <AboutTab />}
+      {tab === "posts" && <PostsTab />}
+      {tab === "contact" && <ContactTab />}
     </Suspense>
   );
 }
@@ -8033,12 +8089,14 @@ export default function TabContainer() {
 ```javascript
 export default function TabButton({ action, children, isActive }) {
   if (isActive) {
-    return <b>{children}</b>
+    return <b>{children}</b>;
   }
   return (
-    <button onClick={() => {
-      action();
-    }}>
+    <button
+      onClick={() => {
+        action();
+      }}
+    >
       {children}
     </button>
   );
@@ -8047,33 +8105,27 @@ export default function TabButton({ action, children, isActive }) {
 
 ```javascript
 export default function AboutTab() {
-  return (
-    <p>Welcome to my profile!</p>
-  );
+  return <p>Welcome to my profile!</p>;
 }
 ```
 
 ```javascript
-import {use} from 'react';
-import { fetchData } from './data.js';
+import { use } from "react";
+import { fetchData } from "./data.js";
 
 function PostsTab() {
-  const posts = use(fetchData('/posts'));
+  const posts = use(fetchData("/posts"));
   return (
     <ul className="items">
-      {posts.map(post =>
+      {posts.map((post) => (
         <Post key={post.id} title={post.title} />
-      )}
+      ))}
     </ul>
   );
 }
 
 function Post({ title }) {
-  return (
-    <li className="item">
-      {title}
-    </li>
-  );
+  return <li className="item">{title}</li>;
 }
 
 export default PostsTab;
@@ -8083,9 +8135,7 @@ export default PostsTab;
 export default function ContactTab() {
   return (
     <>
-      <p>
-        You can find me online here:
-      </p>
+      <p>You can find me online here:</p>
       <ul>
         <li>admin@mysite.com</li>
         <li>+123456789</li>
@@ -8110,23 +8160,23 @@ export function fetchData(url) {
 }
 
 async function getData(url) {
-  if (url.startsWith('/posts')) {
+  if (url.startsWith("/posts")) {
     return await getPosts();
   } else {
-    throw Error('Not implemented');
+    throw Error("Not implemented");
   }
 }
 
 async function getPosts() {
   // Add a fake delay to make waiting noticeable.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
   let posts = [];
   for (let i = 0; i < 500; i++) {
     posts.push({
       id: i,
-      title: 'Post #' + (i + 1)
+      title: "Post #" + (i + 1),
     });
   }
   return posts;
@@ -8134,12 +8184,19 @@ async function getPosts() {
 ```
 
 ```css
-button { margin-right: 10px }
-b { display: inline-block; margin-right: 10px; }
-.pending { color: #777; }
+button {
+  margin-right: 10px;
+}
+b {
+  display: inline-block;
+  margin-right: 10px;
+}
+.pending {
+  color: #777;
+}
 ```
 
---------------------------------
+---
 
 ### use memo with ProductCard Component
 
@@ -8160,7 +8217,7 @@ function ProductList({ products }) {
 }
 ```
 
---------------------------------
+---
 
 ### Complete React Application Demonstrating `useList` Custom Hook
 
@@ -8169,40 +8226,36 @@ Source: https://react.dev/reference/react/cloneElement
 This comprehensive example provides a full React application structure, including the `useList` custom hook, an `App` component that utilizes it, a `Row` presentational component, sample `data`, and associated `CSS` styling. It illustrates how to integrate a custom hook into a larger application to manage state and logic for list interactions. The `App` component renders a list of products, highlights the selected one, and allows navigation using the `onNext` function from `useList`.
 
 ```js
-import Row from './Row.js';
-import useList from './useList.js';
-import { products } from './data.js';
+import Row from "./Row.js";
+import useList from "./useList.js";
+import { products } from "./data.js";
 
 export default function App() {
   const [selected, onNext] = useList(products);
   return (
     <div className="List">
-      {products.map(product =>
+      {products.map((product) => (
         <Row
           key={product.id}
           title={product.title}
           isHighlighted={selected === product}
         />
-      )}
+      ))}
       <hr />
-      <button onClick={onNext}>
-        Next
-      </button>
+      <button onClick={onNext}>Next</button>
     </div>
   );
 }
 ```
 
 ```js
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function useList(items) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   function onNext() {
-    setSelectedIndex(i =>
-      (i + 1) % items.length
-    );
+    setSelectedIndex((i) => (i + 1) % items.length);
   }
 
   const selected = items[selectedIndex];
@@ -8213,10 +8266,7 @@ export default function useList(items) {
 ```js
 export default function Row({ title, isHighlighted }) {
   return (
-    <div className={[
-      'Row',
-      isHighlighted ? 'RowHighlighted' : ''
-    ].join(' ')}>
+    <div className={["Row", isHighlighted ? "RowHighlighted" : ""].join(" ")}>
       {title}
     </div>
   );
@@ -8225,9 +8275,9 @@ export default function Row({ title, isHighlighted }) {
 
 ```js
 export const products = [
-  { title: 'Cabbage', id: 1 },
-  { title: 'Garlic', id: 2 },
-  { title: 'Apple', id: 3 },
+  { title: "Cabbage", id: 1 },
+  { title: "Garlic", id: 2 },
+  { title: "Apple", id: 3 },
 ];
 ```
 
@@ -8255,7 +8305,7 @@ button {
 }
 ```
 
---------------------------------
+---
 
 ### Preload Resources in Event Handler
 
@@ -8264,20 +8314,18 @@ Source: https://react.dev/reference/react-dom/preload
 Demonstrates calling preload within an event handler to initiate resource loading before navigating to a new page or state. This approach starts the download process earlier than preloading during render, improving perceived performance and user experience.
 
 ```javascript
-import { preload } from 'react-dom';
+import { preload } from "react-dom";
 
 function CallToAction() {
   const onClick = () => {
-    preload("https://example.com/wizardStyles.css", {as: "style"});
+    preload("https://example.com/wizardStyles.css", { as: "style" });
     startWizard();
-  }
-  return (
-    <button onClick={onClick}>Start Wizard</button>
-  );
+  };
+  return <button onClick={onClick}>Start Wizard</button>;
 }
 ```
 
---------------------------------
+---
 
 ### Inline Script with Alert
 
@@ -8289,7 +8337,7 @@ Demonstrates how to render an inline script that executes JavaScript code direct
 <script> alert("hi!") </script>
 ```
 
---------------------------------
+---
 
 ### Client-side Simulation of Data Streaming with React Suspense
 
@@ -8341,24 +8389,24 @@ export default function App() {
 ```
 
 ```jsx
-import React, { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import './styles.css';
+import React, { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles.css";
 
 // TODO: update this example to use
 // the Codesandbox Server Component
 // demo environment once it is created
-import App from './App';
+import App from "./App";
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <App />
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
---------------------------------
+---
 
 ### Basic `resumeAndPrerender` function signature and return values
 
@@ -8370,7 +8418,7 @@ This snippet illustrates the basic function signature of `resumeAndPrerender`, h
 const { prelude,postpone } = await resumeAndPrerender(reactNode, postponedState, options?)
 ```
 
---------------------------------
+---
 
 ### Wrap Components with Context Provider
 
@@ -8396,7 +8444,7 @@ export default function List({ items, renderItem }) {
 }
 ```
 
---------------------------------
+---
 
 ### Implement a counter with `useState` in React
 
@@ -8405,7 +8453,7 @@ Source: https://react.dev/blog/2023/03/16/introducing-react-dev
 This example demonstrates how to use the `useState` Hook in React to manage a numerical state variable. Clicking the button increments the `count` state, showcasing basic state management for numbers.
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function Counter() {
   const [count, setCount] = useState(0);
@@ -8414,15 +8462,11 @@ export default function Counter() {
     setCount(count + 1);
   }
 
-  return (
-    <button onClick={handleClick}>
-      You pressed me {count} times
-    </button>
-  );
+  return <button onClick={handleClick}>You pressed me {count} times</button>;
 }
 ```
 
---------------------------------
+---
 
 ### Create and Export Default React Component
 
@@ -8432,12 +8476,7 @@ Demonstrates how to define a React component and export it as a default export. 
 
 ```javascript
 function Profile() {
-  return (
-    <img
-      src="https://i.imgur.com/MK3eW3As.jpg"
-      alt="Katherine Johnson"
-    />
-  );
+  return <img src="https://i.imgur.com/MK3eW3As.jpg" alt="Katherine Johnson" />;
 }
 
 export default function Gallery() {
@@ -8452,7 +8491,7 @@ export default function Gallery() {
 }
 ```
 
---------------------------------
+---
 
 ### Implement useSyncExternalStore in a React Component (JavaScript)
 
@@ -8461,16 +8500,19 @@ Source: https://react.dev/reference/react/useSyncExternalStore
 This example demonstrates how to integrate `useSyncExternalStore` within a React functional component. It imports the hook and a custom store, then uses the hook to subscribe to `todosStore` changes and retrieve the latest `todos` snapshot, ensuring the component re-renders when the external store updates.
 
 ```js
-import { useSyncExternalStore } from 'react';
-import { todosStore } from './todoStore.js';
+import { useSyncExternalStore } from "react";
+import { todosStore } from "./todoStore.js";
 
 function TodosApp() {
-  const todos = useSyncExternalStore(todosStore.subscribe, todosStore.getSnapshot);
+  const todos = useSyncExternalStore(
+    todosStore.subscribe,
+    todosStore.getSnapshot,
+  );
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Integrating `renderToString` with a backend framework for server response in JavaScript
 
@@ -8479,16 +8521,16 @@ Source: https://react.dev/reference/react-dom/server/renderToString
 Shows an example of using `renderToString` within a server-side route handler (e.g., using an Express-like framework) to generate HTML from a React application. The resulting HTML string is then sent as a response to the client, forming the initial non-interactive page content.
 
 ```js
-import { renderToString } from 'react-dom/server';
+import { renderToString } from "react-dom/server";
 
 // The route handler syntax depends on your backend framework
-app.use('/', (request, response) => {
+app.use("/", (request, response) => {
   const html = renderToString(<App />);
   response.send(html);
 });
 ```
 
---------------------------------
+---
 
 ### Render React Components into Non-React Server Markup with Portals
 
@@ -8499,7 +8541,9 @@ This example demonstrates how to integrate React components into a page partiall
 ```html
 <!DOCTYPE html>
 <html>
-  <head><title>My app</title></head>
+  <head>
+    <title>My app</title>
+  </head>
   <body>
     <h1>Welcome to my hybrid app</h1>
     <div class="parent">
@@ -8514,32 +8558,29 @@ This example demonstrates how to integrate React components into a page partiall
 ```
 
 ```javascript
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App.js';
-import './styles.css';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.js";
+import "./styles.css";
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <App />
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
 ```javascript
-import { createPortal } from 'react-dom';
+import { createPortal } from "react-dom";
 
-const sidebarContentEl = document.getElementById('sidebar-content');
+const sidebarContentEl = document.getElementById("sidebar-content");
 
 export default function App() {
   return (
     <>
       <MainContent />
-      {createPortal(
-        <SidebarContent />,
-        sidebarContentEl
-      )}
+      {createPortal(<SidebarContent />, sidebarContentEl)}
     </>
   );
 }
@@ -8564,7 +8605,7 @@ function SidebarContent() {
 }
 
 .sidebar {
-  padding:  12px;
+  padding: 12px;
   background-color: #eee;
   width: 200px;
   height: 200px;
@@ -8582,7 +8623,7 @@ p {
 }
 ```
 
---------------------------------
+---
 
 ### Simulate Asynchronous Video Data Fetching in JavaScript
 
@@ -8593,40 +8634,40 @@ This `data.js` module provides mock asynchronous functions (`fetchVideos`, `fetc
 ```javascript
 const videos = [
   {
-    id: '1',
-    title: 'First video',
-    description: 'Video description',
-    image: 'blue',
+    id: "1",
+    title: "First video",
+    description: "Video description",
+    image: "blue",
   },
   {
-    id: '2',
-    title: 'Second video',
-    description: 'Video description',
-    image: 'red',
+    id: "2",
+    title: "Second video",
+    description: "Video description",
+    image: "red",
   },
   {
-    id: '3',
-    title: 'Third video',
-    description: 'Video description',
-    image: 'green',
+    id: "3",
+    title: "Third video",
+    description: "Video description",
+    image: "green",
   },
   {
-    id: '4',
-    title: 'Fourth video',
-    description: 'Video description',
-    image: 'purple',
+    id: "4",
+    title: "Fourth video",
+    description: "Video description",
+    image: "purple",
   },
   {
-    id: '5',
-    title: 'Fifth video',
-    description: 'Video description',
-    image: 'yellow',
+    id: "5",
+    title: "Fifth video",
+    description: "Video description",
+    image: "yellow",
   },
   {
-    id: '6',
-    title: 'Sixth video',
-    description: 'Video description',
-    image: 'gray',
+    id: "6",
+    title: "Sixth video",
+    description: "Video description",
+    image: "gray",
   },
 ];
 
@@ -8675,7 +8716,7 @@ export function fetchVideoDetails(id) {
 }
 ```
 
---------------------------------
+---
 
 ### Initialize State with useState Hook
 
@@ -8687,7 +8728,7 @@ Basic example of initializing state with primitive values using the useState hoo
 const [x, setX] = useState(0);
 ```
 
---------------------------------
+---
 
 ### React Render Substitution Method Example
 
@@ -8707,7 +8748,7 @@ This JavaScript code block demonstrates the 'substitution method' for understand
 </h1>
 ```
 
---------------------------------
+---
 
 ### Browser Event Listener Component Styling
 
@@ -8721,7 +8762,7 @@ body {
 }
 ```
 
---------------------------------
+---
 
 ### React DOM Rendering with createRoot API
 
@@ -8730,14 +8771,14 @@ Source: https://react.dev/learn/render-and-commit
 Demonstrates how to initialize React rendering using the createRoot API from react-dom/client. This code shows the entry point for rendering a root component into a DOM element, which triggers React's initial render phase where all DOM nodes are created.
 
 ```javascript
-import Gallery from './Gallery.js';
-import { createRoot } from 'react-dom/client';
+import Gallery from "./Gallery.js";
+import { createRoot } from "react-dom/client";
 
-const root = createRoot(document.getElementById('root'))
+const root = createRoot(document.getElementById("root"));
 root.render(<Gallery />);
 ```
 
---------------------------------
+---
 
 ### Basic React Tabbed Navigation with Suspense and On-Demand Data Fetching
 
@@ -8746,25 +8787,25 @@ Source: https://react.dev/reference/react/Activity
 This example demonstrates a standard React tabbed interface where content for each tab is rendered conditionally. The `Posts` tab fetches data using `use` and `Suspense` only when it becomes active, resulting in a visible loading state. It includes `App.js` for state management, `TabButton.js` for UI, `Home.js` for static content, `Posts.js` for data display, `data.js` for simulated API calls, and `style.css` for basic styling.
 
 ```javascript
-import { useState, Suspense } from 'react';
-import TabButton from './TabButton.js';
-import Home from './Home.js';
-import Posts from './Posts.js';
+import { useState, Suspense } from "react";
+import TabButton from "./TabButton.js";
+import Home from "./Home.js";
+import Posts from "./Posts.js";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState("home");
 
   return (
     <>
       <TabButton
-        isActive={activeTab === 'home'}
-        onClick={() => setActiveTab('home')}
+        isActive={activeTab === "home"}
+        onClick={() => setActiveTab("home")}
       >
         Home
       </TabButton>
       <TabButton
-        isActive={activeTab === 'posts'}
-        onClick={() => setActiveTab('posts')}
+        isActive={activeTab === "posts"}
+        onClick={() => setActiveTab("posts")}
       >
         Posts
       </TabButton>
@@ -8772,8 +8813,8 @@ export default function App() {
       <hr />
 
       <Suspense fallback={<h1>🌀 Loading...</h1>}>
-        {activeTab === 'home' && <Home />}
-        {activeTab === 'posts' && <Posts />}
+        {activeTab === "home" && <Home />}
+        {activeTab === "posts" && <Posts />}
       </Suspense>
     </>
   );
@@ -8783,39 +8824,33 @@ export default function App() {
 ```javascript
 export default function TabButton({ onClick, children, isActive }) {
   if (isActive) {
-    return <b>{children}</b>
+    return <b>{children}</b>;
   }
 
-  return (
-    <button onClick={onClick}>
-      {children}
-    </button>
-  );
+  return <button onClick={onClick}>{children}</button>;
 }
 ```
 
 ```javascript
 export default function Home() {
-  return (
-    <p>Welcome to my profile!</p>
-  );
+  return <p>Welcome to my profile!</p>;
 }
 ```
 
 ```javascript
-import { use } from 'react';
-import { fetchData } from './data.js';
+import { use } from "react";
+import { fetchData } from "./data.js";
 
 export default function Posts() {
-  const posts = use(fetchData('/posts'));
+  const posts = use(fetchData("/posts"));
 
   return (
     <ul className="items">
-      {posts.map(post =>
+      {posts.map((post) => (
         <li className="item" key={post.id}>
           {post.title}
         </li>
-      )}
+      ))}
     </ul>
   );
 }
@@ -8836,23 +8871,23 @@ export function fetchData(url) {
 }
 
 async function getData(url) {
-  if (url.startsWith('/posts')) {
+  if (url.startsWith("/posts")) {
     return await getPosts();
   } else {
-    throw Error('Not implemented');
+    throw Error("Not implemented");
   }
 }
 
 async function getPosts() {
   // Add a fake delay to make waiting noticeable.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 1000);
   });
   let posts = [];
   for (let i = 0; i < 10; i++) {
     posts.push({
       id: i,
-      title: 'Post #' + (i + 1)
+      title: "Post #" + (i + 1),
     });
   }
   return posts;
@@ -8860,14 +8895,27 @@ async function getPosts() {
 ```
 
 ```css
-body { height: 275px; }
-button { margin-right: 10px }
-b { display: inline-block; margin-right: 10px; }
-.pending { color: #777; }
-video { width: 300px; margin-top: 10px; aspect-ratio: 16/9; }
+body {
+  height: 275px;
+}
+button {
+  margin-right: 10px;
+}
+b {
+  display: inline-block;
+  margin-right: 10px;
+}
+.pending {
+  color: #777;
+}
+video {
+  width: 300px;
+  margin-top: 10px;
+  aspect-ratio: 16/9;
+}
 ```
 
---------------------------------
+---
 
 ### useInsertionEffect Hook Signature
 
@@ -8879,7 +8927,7 @@ Shows the function signature of useInsertionEffect with its parameters and retur
 useInsertionEffect(setup, dependencies?)
 ```
 
---------------------------------
+---
 
 ### Nested Section Components with Context Levels
 
@@ -8888,8 +8936,8 @@ Source: https://react.dev/learn/passing-data-deeply-with-context
 Complete example showing nested Section components with different level values passed through the component tree. Each Section receives a level prop that should be provided to its nested Heading components via context, creating a hierarchical heading structure.
 
 ```jsx
-import Heading from './Heading.js';
-import Section from './Section.js';
+import Heading from "./Heading.js";
+import Section from "./Section.js";
 
 export default function Page() {
   return (
@@ -8915,7 +8963,7 @@ export default function Page() {
 }
 ```
 
---------------------------------
+---
 
 ### Verifying useMemo Effectiveness by Measuring Performance
 
@@ -8924,14 +8972,14 @@ Source: https://react.dev/learn/you-might-not-need-an-effect
 This example combines `console.time` with `useMemo` to verify if memoization effectively reduces the execution time of a calculation on subsequent renders. By wrapping the memoized calculation within `console.time` calls, you can observe whether `useMemo` is successfully skipping unnecessary work.
 
 ```js
-console.time('filter array');
+console.time("filter array");
 const visibleTodos = useMemo(() => {
   return getFilteredTodos(todos, filter); // Skipped if todos and filter haven't changed
 }, [todos, filter]);
-console.timeEnd('filter array');
+console.timeEnd("filter array");
 ```
 
---------------------------------
+---
 
 ### Implement componentWillUnmount cleanup in React class component
 
@@ -8942,7 +8990,7 @@ Demonstrates proper cleanup implementation in componentWillUnmount lifecycle met
 ```javascript
 class ChatRoom extends Component {
   state = {
-    serverUrl: 'https://localhost:1234'
+    serverUrl: "https://localhost:1234",
   };
 
   componentDidMount() {
@@ -8965,7 +9013,7 @@ class ChatRoom extends Component {
 }
 ```
 
---------------------------------
+---
 
 ### Button Styling with CSS
 
@@ -8974,10 +9022,12 @@ Source: https://react.dev/learn/responding-to-events
 Provides basic CSS styling for button elements used in React event handler examples. Adds right margin spacing to buttons for improved layout and visual separation.
 
 ```css
-button { margin-right: 10px; }
+button {
+  margin-right: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Initial React App with Prop Drilling for Image Sizing
 
@@ -8986,9 +9036,9 @@ Source: https://react.dev/learn/passing-data-deeply-with-context
 This React application demonstrates prop drilling. The `imageSize` state, controlled by a checkbox in the `App` component, is passed down as a prop through `List` and `Place` components to the `PlaceImage` component, which ultimately uses it to set image dimensions. It includes data and utility functions for image URLs, along with basic CSS styling.
 
 ```javascript
-import { useState } from 'react';
-import { places } from './data.js';
-import { getImageUrl } from './utils.js';
+import { useState } from "react";
+import { places } from "./data.js";
+import { getImageUrl } from "./utils.js";
 
 export default function App() {
   const [isLarge, setIsLarge] = useState(false);
@@ -8999,7 +9049,7 @@ export default function App() {
         <input
           type="checkbox"
           checked={isLarge}
-          onChange={e => {
+          onChange={(e) => {
             setIsLarge(e.target.checked);
           }}
         />
@@ -9008,31 +9058,25 @@ export default function App() {
       <hr />
       <List imageSize={imageSize} />
     </>
-  )
+  );
 }
 
 function List({ imageSize }) {
-  const listItems = places.map(place =>
+  const listItems = places.map((place) => (
     <li key={place.id}>
-      <Place
-        place={place}
-        imageSize={imageSize}
-      />
+      <Place place={place} imageSize={imageSize} />
     </li>
-  );
+  ));
   return <ul>{listItems}</ul>;
 }
 
 function Place({ place, imageSize }) {
   return (
     <>
-      <PlaceImage
-        place={place}
-        imageSize={imageSize}
-      />
+      <PlaceImage place={place} imageSize={imageSize} />
       <p>
         <b>{place.name}</b>
-        {': ' + place.description}
+        {": " + place.description}
       </p>
     </>
   );
@@ -9055,56 +9099,70 @@ function PlaceImage({ place, imageSize }) {
 ```
 
 ```javascript
-export const places = [{
-  id: 0,
-  name: 'Bo-Kaap in Cape Town, South Africa',
-  description: 'The tradition of choosing bright colors for houses began in the late 20th century.',
-  imageId: 'K9HVAGH'
-}, {
-  id: 1,
-  name: 'Rainbow Village in Taichung, Taiwan',
-  description: 'To save the houses from demolition, Huang Yung-Fu, a local resident, painted all 1,200 of them in 1924.',
-  imageId: '9EAYZrt'
-}, {
-  id: 2,
-  name: 'Macromural de Pachuca, Mexico',
-  description: 'One of the largest murals in the world covering homes in a hillside neighborhood.',
-  imageId: 'DgXHVwu'
-}, {
-  id: 3,
-  name: 'Selarón Staircase in Rio de Janeiro, Brazil',
-  description: 'This landmark was created by Jorge Selarón, a Chilean-born artist, as a "tribute to the Brazilian people."',
-  imageId: 'aeO3rpI'
-}, {
-  id: 4,
-  name: 'Burano, Italy',
-  description: 'The houses are painted following a specific color system dating back to 16th century.',
-  imageId: 'kxsph5C'
-}, {
-  id: 5,
-  name: 'Chefchaouen, Marocco',
-  description: 'There are a few theories on why the houses are painted blue, including that the color repels mosquitos or that it symbolizes sky and heaven.',
-  imageId: 'rTqKo46'
-}, {
-  id: 6,
-  name: 'Gamcheon Culture Village in Busan, South Korea',
-  description: 'In 2009, the village was converted into a cultural hub by painting the houses and featuring exhibitions and art installations.',
-  imageId: 'ZfQOOzf'
-}];
+export const places = [
+  {
+    id: 0,
+    name: "Bo-Kaap in Cape Town, South Africa",
+    description:
+      "The tradition of choosing bright colors for houses began in the late 20th century.",
+    imageId: "K9HVAGH",
+  },
+  {
+    id: 1,
+    name: "Rainbow Village in Taichung, Taiwan",
+    description:
+      "To save the houses from demolition, Huang Yung-Fu, a local resident, painted all 1,200 of them in 1924.",
+    imageId: "9EAYZrt",
+  },
+  {
+    id: 2,
+    name: "Macromural de Pachuca, Mexico",
+    description:
+      "One of the largest murals in the world covering homes in a hillside neighborhood.",
+    imageId: "DgXHVwu",
+  },
+  {
+    id: 3,
+    name: "Selarón Staircase in Rio de Janeiro, Brazil",
+    description:
+      'This landmark was created by Jorge Selarón, a Chilean-born artist, as a "tribute to the Brazilian people."',
+    imageId: "aeO3rpI",
+  },
+  {
+    id: 4,
+    name: "Burano, Italy",
+    description:
+      "The houses are painted following a specific color system dating back to 16th century.",
+    imageId: "kxsph5C",
+  },
+  {
+    id: 5,
+    name: "Chefchaouen, Marocco",
+    description:
+      "There are a few theories on why the houses are painted blue, including that the color repels mosquitos or that it symbolizes sky and heaven.",
+    imageId: "rTqKo46",
+  },
+  {
+    id: 6,
+    name: "Gamcheon Culture Village in Busan, South Korea",
+    description:
+      "In 2009, the village was converted into a cultural hub by painting the houses and featuring exhibitions and art installations.",
+    imageId: "ZfQOOzf",
+  },
+];
 ```
 
 ```javascript
 export function getImageUrl(place) {
-  return (
-    'https://i.imgur.com/' +
-    place.imageId +
-    'l.jpg'
-  );
+  return "https://i.imgur.com/" + place.imageId + "l.jpg";
 }
 ```
 
 ```css
-ul { list-style-type: none; padding: 0px 10px; }
+ul {
+  list-style-type: none;
+  padding: 0px 10px;
+}
 li {
   margin-bottom: 10px;
   display: grid;
@@ -9114,7 +9172,7 @@ li {
 }
 ```
 
---------------------------------
+---
 
 ### Focusing a Text Input with React Refs
 
@@ -9123,8 +9181,8 @@ Source: https://react.dev/reference/react/forwardRef
 This example demonstrates how to focus a text input using `useRef` and `forwardRef` in React. The `Form` component creates a ref and passes it to `MyInput`, which then forwards it to the native `<input>` element, allowing programmatic focus control.
 
 ```js
-import { useRef } from 'react';
-import MyInput from './MyInput.js';
+import { useRef } from "react";
+import MyInput from "./MyInput.js";
 
 export default function Form() {
   const ref = useRef(null);
@@ -9145,7 +9203,7 @@ export default function Form() {
 ```
 
 ```js
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 
 const MyInput = forwardRef(function MyInput(props, ref) {
   const { label, ...otherProps } = props;
@@ -9166,7 +9224,7 @@ input {
 }
 ```
 
---------------------------------
+---
 
 ### Using `prerender` to generate static HTML in a server handler (JavaScript)
 
@@ -9175,19 +9233,19 @@ Source: https://react.dev/reference/react-dom/static/prerender
 This example demonstrates how to integrate `prerender` into an asynchronous server handler to generate static HTML. It imports `prerender` from `react-dom/static`, renders a React component (`<App />`) with `bootstrapScripts`, and returns the resulting `prelude` Web Stream as an HTTP response with the 'text/html' content type. The generated HTML can then be hydrated on the client.
 
 ```js
-import { prerender } from 'react-dom/static';
+import { prerender } from "react-dom/static";
 
 async function handler(request, response) {
-  const {prelude} = await prerender(<App />, {
-    bootstrapScripts: ['/main.js']
+  const { prelude } = await prerender(<App />, {
+    bootstrapScripts: ["/main.js"],
   });
   return new Response(prelude, {
-    headers: { 'content-type': 'text/html' },
+    headers: { "content-type": "text/html" },
   });
 }
 ```
 
---------------------------------
+---
 
 ### Access DOM node and call browser APIs
 
@@ -9200,7 +9258,7 @@ Access the DOM node through the ref.current property and call built-in browser A
 myRef.current.scrollIntoView();
 ```
 
---------------------------------
+---
 
 ### Memoizing a Function with `useMemo` in React
 
@@ -9212,9 +9270,9 @@ To prevent unnecessary re-renders of memoized child components, functions can be
 export default function Page({ productId, referrer }) {
   const handleSubmit = useMemo(() => {
     return (orderDetails) => {
-      post('/product/' + productId + '/buy', {
+      post("/product/" + productId + "/buy", {
         referrer,
-        orderDetails
+        orderDetails,
       });
     };
   }, [productId, referrer]);
@@ -9223,7 +9281,7 @@ export default function Page({ productId, referrer }) {
 }
 ```
 
---------------------------------
+---
 
 ### Grouped State Object for Coordinates
 
@@ -9235,7 +9293,7 @@ Example of grouping related state variables into a single object. This approach 
 const [position, setPosition] = useState({ x: 0, y: 0 });
 ```
 
---------------------------------
+---
 
 ### Update Babel @babel/preset-react package
 
@@ -9251,7 +9309,7 @@ npm update @babel/core @babel/preset-react
 yarn upgrade @babel/core @babel/preset-react
 ```
 
---------------------------------
+---
 
 ### Integrate React `cache` with `import` in a component
 
@@ -9260,18 +9318,18 @@ Source: https://react.dev/reference/react/cache
 This example illustrates how to import `cache` from 'react' and apply it to an external utility function, `calculateMetrics`. The resulting `getMetrics` function is then used within a `Chart` component, ensuring that `calculateMetrics` is only executed once for a given `data` input, improving performance.
 
 ```js
-import {cache} from 'react';
-import calculateMetrics from 'lib/metrics';
+import { cache } from "react";
+import calculateMetrics from "lib/metrics";
 
 const getMetrics = cache(calculateMetrics);
 
-function Chart({data}) {
+function Chart({ data }) {
   const report = getMetrics(data);
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### React Context with Fallback Default and State Management
 
@@ -9280,24 +9338,26 @@ Source: https://react.dev/reference/react/useContext
 This comprehensive example illustrates how to use `createContext` with a default value (`'light'`) and manage context updates using React's `useState` hook. It demonstrates a theme-switching application where components outside the `ThemeContext.Provider` automatically use the default theme, while components within the provider react to state changes.
 
 ```javascript
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from "react";
 
-const ThemeContext = createContext('light');
+const ThemeContext = createContext("light");
 
 export default function MyApp() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
   return (
     <>
       <ThemeContext value={theme}>
         <Form />
       </ThemeContext>
-      <Button onClick={() => {
-        setTheme(theme === 'dark' ? 'light' : 'dark');
-      }}>
+      <Button
+        onClick={() => {
+          setTheme(theme === "dark" ? "light" : "dark");
+        }}
+      >
         Toggle theme
       </Button>
     </>
-  )
+  );
 }
 
 function Form({ children }) {
@@ -9311,18 +9371,18 @@ function Form({ children }) {
 
 function Panel({ title, children }) {
   const theme = useContext(ThemeContext);
-  const className = 'panel-' + theme;
+  const className = "panel-" + theme;
   return (
     <section className={className}>
       <h1>{title}</h1>
       {children}
     </section>
-  )
+  );
 }
 
 function Button({ children, onClick }) {
   const theme = useContext(ThemeContext);
-  const className = 'button-' + theme;
+  const className = "button-" + theme;
   return (
     <button className={className} onClick={onClick}>
       {children}
@@ -9368,7 +9428,7 @@ function Button({ children, onClick }) {
 }
 ```
 
---------------------------------
+---
 
 ### Type Inference for useContext in React (TypeScript)
 
@@ -9377,7 +9437,7 @@ Source: https://react.dev/learn/typescript
 Demonstrates how `useContext` infers its type directly from the default value provided to `createContext`. This example sets up a typed theme context, a custom hook to consume it, and a component that displays the current theme.
 
 ```tsx
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from "react";
 
 type Theme = "light" | "dark" | "system";
 const ThemeContext = createContext<Theme>("system");
@@ -9385,13 +9445,13 @@ const ThemeContext = createContext<Theme>("system");
 const useGetTheme = () => useContext(ThemeContext);
 
 export default function MyApp() {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>("light");
 
   return (
     <ThemeContext.Provider value={theme}>
       <MyComponent />
     </ThemeContext.Provider>
-  )
+  );
 }
 
 function MyComponent() {
@@ -9401,11 +9461,11 @@ function MyComponent() {
     <div>
       <p>Current theme: {theme}</p>
     </div>
-  )
+  );
 }
 ```
 
---------------------------------
+---
 
 ### Render List Items with map in React
 
@@ -9416,26 +9476,24 @@ Basic React component that renders poem lines using the map function. This initi
 ```javascript
 const poem = {
   lines: [
-    'I write, erase, rewrite',
-    'Erase again, and then',
-    'A poppy blooms.'
-  ]
+    "I write, erase, rewrite",
+    "Erase again, and then",
+    "A poppy blooms.",
+  ],
 };
 
 export default function Poem() {
   return (
     <article>
-      {poem.lines.map((line, index) =>
-        <p key={index}>
-          {line}
-        </p>
-      )}
+      {poem.lines.map((line, index) => (
+        <p key={index}>{line}</p>
+      ))}
     </article>
   );
 }
 ```
 
---------------------------------
+---
 
 ### Serialize asset map for client-side hydration during server rendering (JS)
 
@@ -9446,24 +9504,24 @@ This JavaScript example extends the server-side rendering process to serialize t
 ```js
 // You'd need to get this JSON from your build tooling.
 const assetMap = {
-  'styles.css': '/styles.123456.css',
-  'main.js': '/main.123456.js'
+  "styles.css": "/styles.123456.css",
+  "main.js": "/main.123456.js",
 };
 
-app.use('/', (request, response) => {
+app.use("/", (request, response) => {
   const { pipe } = renderToPipeableStream(<App assetMap={assetMap} />, {
     // Careful: It's safe to stringify() this because this data isn't user-generated.
     bootstrapScriptContent: `window.assetMap = ${JSON.stringify(assetMap)};`,
-    bootstrapScripts: [assetMap['main.js']],
+    bootstrapScripts: [assetMap["main.js"]],
     onShellReady() {
-      response.setHeader('content-type', 'text/html');
+      response.setHeader("content-type", "text/html");
       pipe(response);
-    }
+    },
   });
 });
 ```
 
---------------------------------
+---
 
 ### Prerender app with AbortController for Partial Pre-rendering
 
@@ -9472,7 +9530,7 @@ Source: https://react.dev/blog/2025/10/01/react-19-2
 Shows how to pre-render static parts of an app ahead of time using the prerender API with an AbortController. The prelude shell can be served from a CDN while the postponed state is saved for later resumption with dynamic content.
 
 ```javascript
-const {prelude, postponed} = await prerender(<App />, {
+const { prelude, postponed } = await prerender(<App />, {
   signal: controller.signal,
 });
 
@@ -9482,7 +9540,7 @@ await savePostponedState(postponed);
 // Send prelude to client or CDN.
 ```
 
---------------------------------
+---
 
 ### Style Form Inputs and Image Display with CSS
 
@@ -9491,12 +9549,20 @@ Source: https://react.dev/learn/adding-interactivity
 CSS styling for form labels, input fields, and image display. Provides layout and spacing for the form components used in both spread syntax and Immer examples.
 
 ```css
-label { display: block; }
-input { margin-left: 5px; margin-bottom: 5px; }
-img { width: 200px; height: 200px; }
+label {
+  display: block;
+}
+input {
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+img {
+  width: 200px;
+  height: 200px;
+}
 ```
 
---------------------------------
+---
 
 ### Render React app into a root after creation
 
@@ -9505,14 +9571,14 @@ Source: https://react.dev/reference/react-dom/client/createRoot
 This snippet illustrates the crucial step of rendering a React application into a created root. It emphasizes that after calling `createRoot`, `root.render(<App />)` must be explicitly invoked to display the application, preventing a blank page.
 
 ```js
-import { createRoot } from 'react-dom/client';
-import App from './App.js';
+import { createRoot } from "react-dom/client";
+import App from "./App.js";
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(<App />);
 ```
 
---------------------------------
+---
 
 ### Package Configuration for React Markdown Editor
 
@@ -9537,7 +9603,7 @@ Defines npm dependencies and scripts for a React project with markdown support. 
 }
 ```
 
---------------------------------
+---
 
 ### Simulate Asynchronous Video Data Fetching with Caching in JavaScript
 
@@ -9548,41 +9614,41 @@ This JavaScript module provides functions (`fetchVideos`, `fetchVideo`, `fetchVi
 ```javascript
 const videos = [
   {
-    id: '1',
-    title: 'First video',
-    description: 'Video description',
-    image: 'blue',
+    id: "1",
+    title: "First video",
+    description: "Video description",
+    image: "blue",
   },
   {
-    id: '2',
-    title: 'Second video',
-    description: 'Video description',
-    image: 'red',
+    id: "2",
+    title: "Second video",
+    description: "Video description",
+    image: "red",
   },
   {
-    id: '3',
-    title: 'Third video',
-    description: 'Video description',
-    image: 'green',
+    id: "3",
+    title: "Third video",
+    description: "Video description",
+    image: "green",
   },
   {
-    id: '4',
-    title: 'Fourth video',
-    description: 'Video description',
-    image: 'purple',
+    id: "4",
+    title: "Fourth video",
+    description: "Video description",
+    image: "purple",
   },
   {
-    id: '5',
-    title: 'Fifth video',
-    description: 'Video description',
-    image: 'yellow',
+    id: "5",
+    title: "Fifth video",
+    description: "Video description",
+    image: "yellow",
   },
   {
-    id: '6',
-    title: 'Sixth video',
-    description: 'Video description',
-    image: 'gray',
-  }
+    id: "6",
+    title: "Sixth video",
+    description: "Video description",
+    image: "gray",
+  },
 ];
 
 let videosCache = new Map();
@@ -9630,7 +9696,7 @@ export function fetchVideoDetails(id) {
 }
 ```
 
---------------------------------
+---
 
 ### Upgrade Next.js to Latest Patched Version
 
@@ -9652,7 +9718,7 @@ npm install next@15.6.0-canary.60   # for 15.x canary releases
 npm install next@16.1.0-canary.19   # for 16.x canary releases
 ```
 
---------------------------------
+---
 
 ### Serializing Asset Map for Client-Side Hydration in Server Render
 
@@ -9663,23 +9729,23 @@ This example shows how to serialize the `assetMap` from the server to the client
 ```js
 // You'd need to get this JSON from your build tooling.
 const assetMap = {
-  'styles.css': '/styles.123456.css',
-  'main.js': '/main.123456.js'
+  "styles.css": "/styles.123456.css",
+  "main.js": "/main.123456.js",
 };
 
-app.use('/', async (request, response) => {
+app.use("/", async (request, response) => {
   const { prelude } = await prerenderToNodeStream(<App />, {
     // Careful: It's safe to stringify() this because this data isn't user-generated.
     bootstrapScriptContent: `window.assetMap = ${JSON.stringify(assetMap)};`,
-    bootstrapScripts: [assetMap['/main.js']]
+    bootstrapScripts: [assetMap["/main.js"]],
   });
 
-  response.setHeader('Content-Type', 'text/html');
+  response.setHeader("Content-Type", "text/html");
   prelude.pipe(response);
 });
 ```
 
---------------------------------
+---
 
 ### React 19 Default Configuration
 
@@ -9693,7 +9759,7 @@ Default configuration for React 19 projects. No additional runtime package insta
 }
 ```
 
---------------------------------
+---
 
 ### Server-side rendering a React app with renderToPipeableStream (Node.js)
 
@@ -9702,18 +9768,18 @@ Source: https://react.dev/reference/react-dom/server/renderToPipeableStream
 This example demonstrates how to use `renderToPipeableStream` within a Node.js server to render a React application. It imports the function, passes the root React component (`<App />`), and configures `bootstrapScripts` to include client-side JavaScript for hydration. The `onShellReady` callback is used to set the HTTP content type header and initiate piping the HTML stream to the response once the initial shell is ready.
 
 ```javascript
-import { renderToPipeableStream } from 'react-dom/server';
+import { renderToPipeableStream } from "react-dom/server";
 
 const { pipe } = renderToPipeableStream(<App />, {
-  bootstrapScripts: ['/main.js'],
+  bootstrapScripts: ["/main.js"],
   onShellReady() {
-    response.setHeader('content-type', 'text/html');
+    response.setHeader("content-type", "text/html");
     pipe(response);
-  }
+  },
 });
 ```
 
---------------------------------
+---
 
 ### PureComponent with conditional rendering and state management
 
@@ -9722,27 +9788,32 @@ Source: https://react.dev/reference/react/PureComponent
 Shows a complete example with PureComponent that demonstrates conditional rendering based on props, state management with useState hook in a parent component, and how PureComponent only re-renders when its specific props change. The Greeting component re-renders when name prop changes but not when address changes.
 
 ```javascript
-import { PureComponent, useState } from 'react';
+import { PureComponent, useState } from "react";
 
 class Greeting extends PureComponent {
   render() {
     console.log("Greeting was rendered at", new Date().toLocaleTimeString());
-    return <h3>Hello{this.props.name && ', '}{this.props.name}!</h3>;
+    return (
+      <h3>
+        Hello{this.props.name && ", "}
+        {this.props.name}!
+      </h3>
+    );
   }
 }
 
 export default function MyApp() {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
   return (
     <>
       <label>
-        Name{': '}
-        <input value={name} onChange={e => setName(e.target.value)} />
+        Name{": "}
+        <input value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label>
-        Address{': '}
-        <input value={address} onChange={e => setAddress(e.target.value)} />
+        Address{": "}
+        <input value={address} onChange={(e) => setAddress(e.target.value)} />
       </label>
       <Greeting name={name} />
     </>
@@ -9750,7 +9821,7 @@ export default function MyApp() {
 }
 ```
 
---------------------------------
+---
 
 ### Hydrating Server-Rendered HTML with `hydrateRoot`
 
@@ -9759,13 +9830,13 @@ Source: https://react.dev/link/hydration-mismatch
 This example demonstrates how to import and use `hydrateRoot` from `react-dom/client` to attach React to existing server-rendered HTML. It shows initializing a root with a DOM element and a React node, allowing React to take over DOM management.
 
 ```javascript
-import { hydrateRoot } from 'react-dom/client';
+import { hydrateRoot } from "react-dom/client";
 
-const domNode = document.getElementById('root');
+const domNode = document.getElementById("root");
 const root = hydrateRoot(domNode, reactNode);
 ```
 
---------------------------------
+---
 
 ### Handle Pointer Events in React
 
@@ -9777,27 +9848,27 @@ This example demonstrates how to handle various pointer events (`onPointerEnter`
 export default function PointerExample() {
   return (
     <div
-      onPointerEnter={e => console.log('onPointerEnter (parent)')}
-      onPointerLeave={e => console.log('onPointerLeave (parent)')}
-      style={{ padding: 20, backgroundColor: '#ddd' }}
+      onPointerEnter={(e) => console.log("onPointerEnter (parent)")}
+      onPointerLeave={(e) => console.log("onPointerLeave (parent)")}
+      style={{ padding: 20, backgroundColor: "#ddd" }}
     >
       <div
-        onPointerDown={e => console.log('onPointerDown (first child)')}
-        onPointerEnter={e => console.log('onPointerEnter (first child)')}
-        onPointerLeave={e => console.log('onPointerLeave (first child)')}
-        onPointerMove={e => console.log('onPointerMove (first child)')}
-        onPointerUp={e => console.log('onPointerUp (first child)')}
-        style={{ padding: 20, backgroundColor: 'lightyellow' }}
+        onPointerDown={(e) => console.log("onPointerDown (first child)")}
+        onPointerEnter={(e) => console.log("onPointerEnter (first child)")}
+        onPointerLeave={(e) => console.log("onPointerLeave (first child)")}
+        onPointerMove={(e) => console.log("onPointerMove (first child)")}
+        onPointerUp={(e) => console.log("onPointerUp (first child)")}
+        style={{ padding: 20, backgroundColor: "lightyellow" }}
       >
         First child
       </div>
       <div
-        onPointerDown={e => console.log('onPointerDown (second child)')}
-        onPointerEnter={e => console.log('onPointerEnter (second child)')}
-        onPointerLeave={e => console.log('onPointerLeave (second child)')}
-        onPointerMove={e => console.log('onPointerMove (second child)')}
-        onPointerUp={e => console.log('onPointerUp (second child)')}
-        style={{ padding: 20, backgroundColor: 'lightblue' }}
+        onPointerDown={(e) => console.log("onPointerDown (second child)")}
+        onPointerEnter={(e) => console.log("onPointerEnter (second child)")}
+        onPointerLeave={(e) => console.log("onPointerLeave (second child)")}
+        onPointerMove={(e) => console.log("onPointerMove (second child)")}
+        onPointerUp={(e) => console.log("onPointerUp (second child)")}
+        style={{ padding: 20, backgroundColor: "lightblue" }}
       >
         Second child
       </div>
@@ -9807,11 +9878,15 @@ export default function PointerExample() {
 ```
 
 ```css
-label { display: block; }
-input { margin-left: 10px; }
+label {
+  display: block;
+}
+input {
+  margin-left: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Update Babel @babel/plugin-transform-react-jsx package
 
@@ -9827,7 +9902,7 @@ npm update @babel/core @babel/plugin-transform-react-jsx
 yarn upgrade @babel/core @babel/plugin-transform-react-jsx
 ```
 
---------------------------------
+---
 
 ### Importing and using `prefetchDNS` in React components
 
@@ -9836,7 +9911,7 @@ Source: https://react.dev/reference/react-dom/prefetchDNS
 Shows how to import `prefetchDNS` from `react-dom` and invoke it within a React function component. This pattern is used to pre-resolve DNS during initial component rendering or setup, anticipating external resource needs.
 
 ```js
-import { prefetchDNS } from 'react-dom';
+import { prefetchDNS } from "react-dom";
 
 function AppRoot() {
   prefetchDNS("https://example.com");
@@ -9844,7 +9919,7 @@ function AppRoot() {
 }
 ```
 
---------------------------------
+---
 
 ### constructor(props) Method
 
@@ -9852,7 +9927,7 @@ Source: https://react.dev/reference/react/Component
 
 Initialize state and bind methods in the constructor. Runs before the component mounts. Modern syntax often eliminates the need for constructors.
 
-```APIDOC
+````APIDOC
 ## constructor(props)
 
 ### Description
@@ -9871,31 +9946,37 @@ class Counter extends Component {
     // ...
   }
 }
-```
+````
 
 ### Parameters
+
 - **props** (object) - The component's initial props. Must call super(props) first.
 
 ### Returns
+
 - Should not return anything
 
 ### Modern Alternative
+
 Using public class field syntax (supported by modern browsers and Babel):
+
 ```js
 class Counter extends Component {
   state = { counter: 0 };
 
   handleClick = () => {
     // ...
-  }
+  };
 }
 ```
 
 ### Rules
+
 - Must call super(props) first
 - Should not contain side effects or subscriptions
 - Modern syntax often eliminates the need for constructors
-```
+
+````
 
 --------------------------------
 
@@ -9925,9 +10006,9 @@ export default function MyInput() {
     </>
   );
 }
-```
+````
 
---------------------------------
+---
 
 ### Configure React 17 Compiler Target
 
@@ -9937,11 +10018,11 @@ Sets the compiler target to React 17. Requires `react-compiler-runtime` package 
 
 ```javascript
 {
-  target: '17'
+  target: "17";
 }
 ```
 
---------------------------------
+---
 
 ### Configure React 18 Compiler Target
 
@@ -9951,11 +10032,11 @@ Sets the compiler target to React 18. Requires `react-compiler-runtime` package 
 
 ```javascript
 {
-  target: '18'
+  target: "18";
 }
 ```
 
---------------------------------
+---
 
 ### Call Function to Return Component Before Rendering
 
@@ -9971,7 +10052,7 @@ root.render(createApp);
 root.render(createApp());
 ```
 
---------------------------------
+---
 
 ### Implement useSyncExternalStore with getServerSnapshot for server rendering
 
@@ -9980,10 +10061,14 @@ Source: https://react.dev/reference/react/useSyncExternalStore
 Demonstrates how to use useSyncExternalStore with a getServerSnapshot function to support server-side rendering. The getServerSnapshot function runs on the server during HTML generation and on the client during hydration, ensuring consistent initial state between server and client environments.
 
 ```javascript
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from "react";
 
 export function useOnlineStatus() {
-  const isOnline = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const isOnline = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
   return isOnline;
 }
 
@@ -10000,7 +10085,7 @@ function subscribe(callback) {
 }
 ```
 
---------------------------------
+---
 
 ### React useActionState Hook Basic Implementation
 
@@ -10009,19 +10094,22 @@ Source: https://react.dev/reference/react/useActionState
 This example demonstrates the basic usage of the `useActionState` Hook within a React functional component. It includes importing the hook, defining a `reducerAction` function, and integrating `useActionState` to manage component state based on an `initialState`.
 
 ```js
-import { useActionState } from 'react';
+import { useActionState } from "react";
 
 function reducerAction(previousState, actionPayload) {
   // ...
 }
 
-function MyCart({initialState}) {
-  const [state, dispatchAction, isPending] = useActionState(reducerAction, initialState);
+function MyCart({ initialState }) {
+  const [state, dispatchAction, isPending] = useActionState(
+    reducerAction,
+    initialState,
+  );
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Complete React application demonstrating Children.map for child transformation
 
@@ -10030,7 +10118,7 @@ Source: https://react.dev/reference/react/Children
 This comprehensive example provides a full React application (`App.js`), the `RowList` component (`RowList.js`) using `Children.map` to wrap children, and associated CSS styling. It showcases how to set up a component that transforms its children and how it's consumed in a parent component, providing a runnable demonstration.
 
 ```javascript
-import RowList from './RowList.js';
+import RowList from "./RowList.js";
 
 export default function App() {
   return (
@@ -10044,16 +10132,14 @@ export default function App() {
 ```
 
 ```javascript
-import { Children } from 'react';
+import { Children } from "react";
 
 export default function RowList({ children }) {
   return (
     <div className="RowList">
-      {Children.map(children, child =>
-        <div className="Row">
-          {child}
-        </div>
-      )}
+      {Children.map(children, (child) => (
+        <div className="Row">{child}</div>
+      ))}
     </div>
   );
 }
@@ -10074,7 +10160,7 @@ export default function RowList({ children }) {
 }
 ```
 
---------------------------------
+---
 
 ### Render Dynamic Lists of React Components with `map` and `key`
 
@@ -10083,23 +10169,20 @@ Source: https://react.dev/learn/describing-the-ui
 This snippet demonstrates how to render a dynamic list of React components from an array of data using JavaScript's `map()` method. It highlights the crucial role of the `key` prop for efficient list reconciliation in React, ensuring proper component identification and updates. The example includes data definition and a utility function for image URLs.
 
 ```javascript
-import { people } from './data.js';
-import { getImageUrl } from './utils.js';
+import { people } from "./data.js";
+import { getImageUrl } from "./utils.js";
 
 export default function List() {
-  const listItems = people.map(person =>
+  const listItems = people.map((person) => (
     <li key={person.id}>
-      <img
-        src={getImageUrl(person)}
-        alt={person.name}
-      />
+      <img src={getImageUrl(person)} alt={person.name} />
       <p>
         <b>{person.name}:</b>
-        {' ' + person.profession + ' '}
+        {" " + person.profession + " "}
         known for {person.accomplishment}
       </p>
     </li>
-  );
+  ));
   return (
     <article>
       <h1>Scientists</h1>
@@ -10110,63 +10193,77 @@ export default function List() {
 ```
 
 ```javascript
-export const people = [{
-  id: 0,
-  name: 'Creola Katherine Johnson',
-  profession: 'mathematician',
-  accomplishment: 'spaceflight calculations',
-  imageId: 'MK3eW3A'
-}, {
-  id: 1,
-  name: 'Mario José Molina-Pasquel Henríquez',
-  profession: 'chemist',
-  accomplishment: 'discovery of Arctic ozone hole',
-  imageId: 'mynHUSa'
-}, {
-  id: 2,
-  name: 'Mohammad Abdus Salam',
-  profession: 'physicist',
-  accomplishment: 'electromagnetism theory',
-  imageId: 'bE7W1ji'
-}, {
-  id: 3,
-  name: 'Percy Lavon Julian',
-  profession: 'chemist',
-  accomplishment: 'pioneering cortisone drugs, steroids and birth control pills',
-  imageId: 'IOjWm71'
-}, {
-  id: 4,
-  name: 'Subrahmanyan Chandrasekhar',
-  profession: 'astrophysicist',
-  accomplishment: 'white dwarf star mass calculations',
-  imageId: 'lrWQx8l'
-}];
+export const people = [
+  {
+    id: 0,
+    name: "Creola Katherine Johnson",
+    profession: "mathematician",
+    accomplishment: "spaceflight calculations",
+    imageId: "MK3eW3A",
+  },
+  {
+    id: 1,
+    name: "Mario José Molina-Pasquel Henríquez",
+    profession: "chemist",
+    accomplishment: "discovery of Arctic ozone hole",
+    imageId: "mynHUSa",
+  },
+  {
+    id: 2,
+    name: "Mohammad Abdus Salam",
+    profession: "physicist",
+    accomplishment: "electromagnetism theory",
+    imageId: "bE7W1ji",
+  },
+  {
+    id: 3,
+    name: "Percy Lavon Julian",
+    profession: "chemist",
+    accomplishment:
+      "pioneering cortisone drugs, steroids and birth control pills",
+    imageId: "IOjWm71",
+  },
+  {
+    id: 4,
+    name: "Subrahmanyan Chandrasekhar",
+    profession: "astrophysicist",
+    accomplishment: "white dwarf star mass calculations",
+    imageId: "lrWQx8l",
+  },
+];
 ```
 
 ```javascript
 export function getImageUrl(person) {
-  return (
-    'https://i.imgur.com/' +
-    person.imageId +
-    's.jpg'
-  );
+  return "https://i.imgur.com/" + person.imageId + "s.jpg";
 }
 ```
 
 ```css
-ul { list-style-type: none; padding: 0px 10px; }
+ul {
+  list-style-type: none;
+  padding: 0px 10px;
+}
 li {
   margin-bottom: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
 }
-img { width: 100px; height: 100px; border-radius: 50%; }
-h1 { font-size: 22px; }
-h2 { font-size: 20px; }
+img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+h1 {
+  font-size: 22px;
+}
+h2 {
+  font-size: 20px;
+}
 ```
 
---------------------------------
+---
 
 ### Import and Use a React Component (JavaScript)
 
@@ -10175,7 +10272,7 @@ Source: https://react.dev/reference/rsc/use-client
 This code illustrates how to import a previously defined React component and use it within another component, typically an `App` component. It demonstrates the process of importing a component from a separate file and then rendering it as a JSX element, showcasing component composition in React.
 
 ```js
-import MyComponent from './MyComponent';
+import MyComponent from "./MyComponent";
 
 function App() {
   // This is a usage of a component
@@ -10183,7 +10280,7 @@ function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Return multiple JSX elements using a React Fragment
 
@@ -10196,13 +10293,17 @@ function AboutPage() {
   return (
     <>
       <h1>About</h1>
-      <p>Hello there.<br />How do you do?</p>
+      <p>
+        Hello there.
+        <br />
+        How do you do?
+      </p>
     </>
   );
 }
 ```
 
---------------------------------
+---
 
 ### Complete Lazy-loading Markdown Editor with Suspense in React
 
@@ -10211,19 +10312,28 @@ Source: https://react.dev/reference/react/lazy
 Full working example demonstrating lazy-loading a MarkdownPreview component with conditional rendering and Suspense. Includes state management for toggling preview visibility, markdown content editing, and a simulated loading delay to showcase the loading state.
 
 ```javascript
-import { useState, Suspense, lazy } from 'react';
-import Loading from './Loading.js';
+import { useState, Suspense, lazy } from "react";
+import Loading from "./Loading.js";
 
-const MarkdownPreview = lazy(() => delayForDemo(import('./MarkdownPreview.js')));
+const MarkdownPreview = lazy(() =>
+  delayForDemo(import("./MarkdownPreview.js")),
+);
 
 export default function MarkdownEditor() {
   const [showPreview, setShowPreview] = useState(false);
-  const [markdown, setMarkdown] = useState('Hello, **world**!');
+  const [markdown, setMarkdown] = useState("Hello, **world**!");
   return (
     <>
-      <textarea value={markdown} onChange={e => setMarkdown(e.target.value)} />
+      <textarea
+        value={markdown}
+        onChange={(e) => setMarkdown(e.target.value)}
+      />
       <label>
-        <input type="checkbox" checked={showPreview} onChange={e => setShowPreview(e.target.checked)} />
+        <input
+          type="checkbox"
+          checked={showPreview}
+          onChange={(e) => setShowPreview(e.target.checked)}
+        />
         Show preview
       </label>
       <hr />
@@ -10238,13 +10348,13 @@ export default function MarkdownEditor() {
 }
 
 function delayForDemo(promise) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, 2000);
   }).then(() => promise);
 }
 ```
 
---------------------------------
+---
 
 ### Implement Basic Data Fetching with React Suspense
 
@@ -10253,16 +10363,16 @@ Source: https://react.dev/reference/react/Suspense
 This example demonstrates how to use React's `Suspense` component for data fetching. The `App` component renders a search input and wraps `SearchResults` in `Suspense`, showing a fallback while data loads. `SearchResults` uses the `use` hook to consume data from `data.js`, which simulates an asynchronous API call with a cache for search results.
 
 ```js
-import { Suspense, useState } from 'react';
-import SearchResults from './SearchResults.js';
+import { Suspense, useState } from "react";
+import SearchResults from "./SearchResults.js";
 
 export default function App() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   return (
     <>
       <label>
         Search albums:
-        <input value={query} onChange={e => setQuery(e.target.value)} />
+        <input value={query} onChange={(e) => setQuery(e.target.value)} />
       </label>
       <Suspense fallback={<h2>Loading...</h2>}>
         <SearchResults query={query} />
@@ -10273,20 +10383,24 @@ export default function App() {
 ```
 
 ```js
-import {use} from 'react';
-import { fetchData } from './data.js';
+import { use } from "react";
+import { fetchData } from "./data.js";
 
 export default function SearchResults({ query }) {
-  if (query === '') {
+  if (query === "") {
     return null;
   }
   const albums = use(fetchData(`/search?q=${query}`));
   if (albums.length === 0) {
-    return <p>No matches for <i>"{query}"</i></p>;
+    return (
+      <p>
+        No matches for <i>"{query}"</i>
+      </p>
+    );
   }
   return (
     <ul>
-      {albums.map(album => (
+      {albums.map((album) => (
         <li key={album.id}>
           {album.title} ({album.year})
         </li>
@@ -10311,89 +10425,105 @@ export function fetchData(url) {
 }
 
 async function getData(url) {
-  if (url.startsWith('/search?q=')) {
-    return await getSearchResults(url.slice('/search?q='.length));
+  if (url.startsWith("/search?q=")) {
+    return await getSearchResults(url.slice("/search?q=".length));
   } else {
-    throw Error('Not implemented');
+    throw Error("Not implemented");
   }
 }
 
 async function getSearchResults(query) {
   // Add a fake delay to make waiting noticeable.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 500);
   });
 
-  const allAlbums = [{
-    id: 13,
-    title: 'Let It Be',
-    year: 1970
-  }, {
-    id: 12,
-    title: 'Abbey Road',
-    year: 1969
-  }, {
-    id: 11,
-    title: 'Yellow Submarine',
-    year: 1969
-  }, {
-    id: 10,
-    title: 'The Beatles',
-    year: 1968
-  }, {
-    id: 9,
-    title: 'Magical Mystery Tour',
-    year: 1967
-  }, {
-    id: 8,
-    title: 'Sgt. Pepper\'s Lonely Hearts Club Band',
-    year: 1967
-  }, {
-    id: 7,
-    title: 'Revolver',
-    year: 1966
-  }, {
-    id: 6,
-    title: 'Rubber Soul',
-    year: 1965
-  }, {
-    id: 5,
-    title: 'Help!',
-    year: 1965
-  }, {
-    id: 4,
-    title: 'Beatles For Sale',
-    year: 1964
-  }, {
-    id: 3,
-    title: 'A Hard Day\'s Night',
-    year: 1964
-  }, {
-    id: 2,
-    title: 'With The Beatles',
-    year: 1963
-  }, {
-    id: 1,
-    title: 'Please Please Me',
-    year: 1963
-  }];
+  const allAlbums = [
+    {
+      id: 13,
+      title: "Let It Be",
+      year: 1970,
+    },
+    {
+      id: 12,
+      title: "Abbey Road",
+      year: 1969,
+    },
+    {
+      id: 11,
+      title: "Yellow Submarine",
+      year: 1969,
+    },
+    {
+      id: 10,
+      title: "The Beatles",
+      year: 1968,
+    },
+    {
+      id: 9,
+      title: "Magical Mystery Tour",
+      year: 1967,
+    },
+    {
+      id: 8,
+      title: "Sgt. Pepper's Lonely Hearts Club Band",
+      year: 1967,
+    },
+    {
+      id: 7,
+      title: "Revolver",
+      year: 1966,
+    },
+    {
+      id: 6,
+      title: "Rubber Soul",
+      year: 1965,
+    },
+    {
+      id: 5,
+      title: "Help!",
+      year: 1965,
+    },
+    {
+      id: 4,
+      title: "Beatles For Sale",
+      year: 1964,
+    },
+    {
+      id: 3,
+      title: "A Hard Day's Night",
+      year: 1964,
+    },
+    {
+      id: 2,
+      title: "With The Beatles",
+      year: 1963,
+    },
+    {
+      id: 1,
+      title: "Please Please Me",
+      year: 1963,
+    },
+  ];
 
   const lowerQuery = query.trim().toLowerCase();
-  return allAlbums.filter(album => {
+  return allAlbums.filter((album) => {
     const lowerTitle = album.title.toLowerCase();
     return (
       lowerTitle.startsWith(lowerQuery) ||
-      lowerTitle.indexOf(' ' + lowerQuery) !== -1
-    )
+      lowerTitle.indexOf(" " + lowerQuery) !== -1
+    );
   });
 }
 ```
 
 ```css
-input { margin: 10px; }
+input {
+  margin: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Demonstrate uncaught and caught errors in React components
 
@@ -10446,7 +10576,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### React Item Component with Importance Props
 
@@ -10456,11 +10586,7 @@ Basic React component structure that receives name and importance props and rend
 
 ```javascript
 function Item({ name, importance }) {
-  return (
-    <li className="item">
-      {name}
-    </li>
-  );
+  return <li className="item">{name}</li>;
 }
 
 export default function PackingList() {
@@ -10468,25 +10594,16 @@ export default function PackingList() {
     <section>
       <h1>Sally Ride's Packing List</h1>
       <ul>
-        <Item
-          importance={9}
-          name="Space suit"
-        />
-        <Item
-          importance={0}
-          name="Helmet with a golden leaf"
-        />
-        <Item
-          importance={6}
-          name="Photo of Tam"
-        />
+        <Item importance={9} name="Space suit" />
+        <Item importance={0} name="Helmet with a golden leaf" />
+        <Item importance={6} name="Photo of Tam" />
       </ul>
     </section>
   );
 }
 ```
 
---------------------------------
+---
 
 ### Define a basic React functional component
 
@@ -10496,13 +10613,11 @@ This JavaScript code defines a simple React functional component named `MyButton
 
 ```js
 function MyButton() {
-  return (
-    <button>I'm a button</button>
-  );
+  return <button>I'm a button</button>;
 }
 ```
 
---------------------------------
+---
 
 ### Concise Memoization of Expensive Calculations using React useMemo
 
@@ -10511,17 +10626,20 @@ Source: https://react.dev/learn/you-might-not-need-an-effect
 This example presents a more compact, single-line syntax for using the `useMemo` hook to memoize an expensive calculation. It achieves the same caching behavior as the multi-line version, ensuring the calculation only re-runs when its dependencies (`todos` or `filter`) change.
 
 ```js
-import { useMemo, useState } from 'react';
+import { useMemo, useState } from "react";
 
 function TodoList({ todos, filter }) {
-  const [newTodo, setNewTodo] = useState('');
+  const [newTodo, setNewTodo] = useState("");
   // ✅ Does not re-run getFilteredTodos() unless todos or filter change
-  const visibleTodos = useMemo(() => getFilteredTodos(todos, filter), [todos, filter]);
+  const visibleTodos = useMemo(
+    () => getFilteredTodos(todos, filter),
+    [todos, filter],
+  );
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Basic React `AboutTab` Content Component
 
@@ -10531,13 +10649,11 @@ A straightforward React component designed to display static content for an 'Abo
 
 ```js
 export default function AboutTab() {
-  return (
-    <p>Welcome to my profile!</p>
-  );
+  return <p>Welcome to my profile!</p>;
 }
 ```
 
---------------------------------
+---
 
 ### Define Global Application Styles and Custom Fonts with CSS
 
@@ -10760,7 +10876,7 @@ ul {
     -2em 2em 0 -1em, -3em 0 0 -1em,
 ```
 
---------------------------------
+---
 
 ### Define a React component with `forwardRef` and internal `useRef`
 
@@ -10778,7 +10894,7 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 });
 ```
 
---------------------------------
+---
 
 ### Declaring Optimistic State with `useOptimistic` in React Components
 
@@ -10787,17 +10903,20 @@ Source: https://react.dev/reference/react/useOptimistic
 This example demonstrates how to declare and initialize multiple optimistic state variables within a React functional component using `useOptimistic`. It showcases scenarios with a simple initial value and with a custom reducer function for more complex state transitions.
 
 ```js
-import { useOptimistic } from 'react';
+import { useOptimistic } from "react";
 
-function MyComponent({name, todos}) {
+function MyComponent({ name, todos }) {
   const [optimisticAge, setOptimisticAge] = useOptimistic(28);
   const [optimisticName, setOptimisticName] = useOptimistic(name);
-  const [optimisticTodos, setOptimisticTodos] = useOptimistic(todos, todoReducer);
+  const [optimisticTodos, setOptimisticTodos] = useOptimistic(
+    todos,
+    todoReducer,
+  );
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Basic React useEffect with Empty Dependency Array
 
@@ -10811,7 +10930,7 @@ useEffect(() => {
 }, []); // Does not run again (except once in development)
 ```
 
---------------------------------
+---
 
 ### Handle Pointer Down Event - React
 
@@ -10828,7 +10947,7 @@ function handlePointerDown(e) {
 }
 ```
 
---------------------------------
+---
 
 ### Passing Data with Props in React Components
 
@@ -10837,7 +10956,7 @@ Source: https://react.dev/learn/describing-the-ui
 This example illustrates how to pass properties (props) from a parent component to child components in React. It includes passing objects and numbers, and demonstrates how child components receive and utilize these props for rendering dynamic content. It uses a utility function to construct image URLs.
 
 ```js
-import { getImageUrl } from './utils.js'
+import { getImageUrl } from "./utils.js";
 
 export default function Profile() {
   return (
@@ -10845,8 +10964,8 @@ export default function Profile() {
       <Avatar
         size={100}
         person={{
-          name: 'Katsuko Saruhashi',
-          imageId: 'YfeOqp2'
+          name: "Katsuko Saruhashi",
+          imageId: "YfeOqp2",
         }}
       />
     </Card>
@@ -10866,22 +10985,13 @@ function Avatar({ person, size }) {
 }
 
 function Card({ children }) {
-  return (
-    <div className="card">
-      {children}
-    </div>
-  );
+  return <div className="card">{children}</div>;
 }
 ```
 
 ```js
-export function getImageUrl(person, size = 's') {
-  return (
-    'https://i.imgur.com/' +
-    person.imageId +
-    size +
-    '.jpg'
-  );
+export function getImageUrl(person, size = "s") {
+  return "https://i.imgur.com/" + person.imageId + size + ".jpg";
 }
 ```
 
@@ -10902,7 +11012,7 @@ export function getImageUrl(person, size = 's') {
 }
 ```
 
---------------------------------
+---
 
 ### Render Component to HTML Using createRoot and flushSync
 
@@ -10911,10 +11021,10 @@ Source: https://react.dev/reference/react-dom/server/renderToString
 Shows the recommended approach for rendering a component to HTML on the client side using createRoot and flushSync. This method creates a temporary DOM element, renders the component into it, and reads the HTML from the DOM. The flushSync call ensures the DOM is updated before reading innerHTML, avoiding the need to import server-side rendering utilities.
 
 ```javascript
-import { createRoot } from 'react-dom/client';
-import { flushSync } from 'react-dom';
+import { createRoot } from "react-dom/client";
+import { flushSync } from "react-dom";
 
-const div = document.createElement('div');
+const div = document.createElement("div");
 const root = createRoot(div);
 flushSync(() => {
   root.render(<MyIcon />);
@@ -10922,7 +11032,7 @@ flushSync(() => {
 console.log(div.innerHTML); // For example, "<svg>...</svg>"
 ```
 
---------------------------------
+---
 
 ### Initialize React app and patch `console.error` globally (entry point)
 
@@ -10933,9 +11043,9 @@ This JavaScript file serves as the entry point for the React application, respon
 ```js
 import { captureOwnerStack } from "react";
 import { createRoot } from "react-dom/client";
-import App from './App';
+import App from "./App";
 import { onConsoleError } from "./errorOverlay";
-import './styles.css';
+import "./styles.css";
 
 const originalConsoleError = console.error;
 console.error = function patchedConsoleError(...args) {
@@ -10953,7 +11063,7 @@ const container = document.getElementById("root");
 createRoot(container).render(<App />);
 ```
 
---------------------------------
+---
 
 ### Basic use API syntax - React
 
@@ -10965,7 +11075,7 @@ Demonstrates the fundamental syntax for calling the `use` API to read a value fr
 const value = use(resource);
 ```
 
---------------------------------
+---
 
 ### Enable Progressive Enhancement for Server Functions with useActionState permalink
 
@@ -10976,20 +11086,16 @@ This example shows how to leverage the third argument of `useActionState` to sup
 ```jsx
 "use client";
 
-import {updateName} from './actions';
+import { updateName } from "./actions";
 
 function UpdateName() {
   const [, submitAction] = useActionState(updateName, null, `/name/update`);
 
-  return (
-    <form action={submitAction}>
-      ...
-    </form>
-  );
+  return <form action={submitAction}>...</form>;
 }
 ```
 
---------------------------------
+---
 
 ### Replacing useState with useReducer in React (JavaScript)
 
@@ -11005,7 +11111,7 @@ const [tasks, setTasks] = useState(initialTasks);
 const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
 ```
 
---------------------------------
+---
 
 ### Messenger App Setup with useReducer
 
@@ -11014,10 +11120,10 @@ Source: https://react.dev/learn/extracting-state-logic-into-a-reducer
 Main Messenger component that initializes the reducer with useReducer hook and passes the dispatch function to both ContactList and Chat components as props. Manages the global messenger state including selectedId and message.
 
 ```javascript
-import { useReducer } from 'react';
-import Chat from './Chat.js';
-import ContactList from './ContactList.js';
-import { initialState, messengerReducer } from './messengerReducer';
+import { useReducer } from "react";
+import Chat from "./Chat.js";
+import ContactList from "./ContactList.js";
+import { initialState, messengerReducer } from "./messengerReducer";
 
 export default function Messenger() {
   const [state, dispatch] = useReducer(messengerReducer, initialState);
@@ -11041,7 +11147,7 @@ export default function Messenger() {
 }
 ```
 
---------------------------------
+---
 
 ### Loading Spinner Animation - CSS
 
@@ -11067,54 +11173,97 @@ Implements an animated loading spinner using CSS keyframes with rotating box-sha
 @keyframes loading-spinner {
   0%,
   100% {
-    box-shadow: 0 -3em 0 0.2em,
-    2em -2em 0 0em, 3em 0 0 -1em,
-    2em 2em 0 -1em, 0 3em 0 -1em,
-    -2em 2em 0 -1em, -3em 0 0 -1em,
-    -2em -2em 0 0;
+    box-shadow:
+      0 -3em 0 0.2em,
+      2em -2em 0 0em,
+      3em 0 0 -1em,
+      2em 2em 0 -1em,
+      0 3em 0 -1em,
+      -2em 2em 0 -1em,
+      -3em 0 0 -1em,
+      -2em -2em 0 0;
   }
   12.5% {
-    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em,
-    3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em,
-    -2em 2em 0 -1em, -3em 0 0 -1em,
-    -2em -2em 0 -1em;
+    box-shadow:
+      0 -3em 0 0,
+      2em -2em 0 0.2em,
+      3em 0 0 0,
+      2em 2em 0 -1em,
+      0 3em 0 -1em,
+      -2em 2em 0 -1em,
+      -3em 0 0 -1em,
+      -2em -2em 0 -1em;
   }
   25% {
-    box-shadow: 0 -3em 0 -0.5em,
-    2em -2em 0 0, 3em 0 0 0.2em,
-    2em 2em 0 0, 0 3em 0 -1em,
-    -2em 2em 0 -1em, -3em 0 0 -1em,
-    -2em -2em 0 -1em;
+    box-shadow:
+      0 -3em 0 -0.5em,
+      2em -2em 0 0,
+      3em 0 0 0.2em,
+      2em 2em 0 0,
+      0 3em 0 -1em,
+      -2em 2em 0 -1em,
+      -3em 0 0 -1em,
+      -2em -2em 0 -1em;
   }
   37.5% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
-    3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em,
-    -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    box-shadow:
+      0 -3em 0 -1em,
+      2em -2em 0 -1em,
+      3em 0em 0 0,
+      2em 2em 0 0.2em,
+      0 3em 0 0em,
+      -2em 2em 0 -1em,
+      -3em 0em 0 -1em,
+      -2em -2em 0 -1em;
   }
   50% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
-    3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em,
-    -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    box-shadow:
+      0 -3em 0 -1em,
+      2em -2em 0 -1em,
+      3em 0 0 -1em,
+      2em 2em 0 0em,
+      0 3em 0 0.2em,
+      -2em 2em 0 0,
+      -3em 0em 0 -1em,
+      -2em -2em 0 -1em;
   }
   62.5% {
-    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
-    3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0,
-    -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+    box-shadow:
+      0 -3em 0 -1em,
+      2em -2em 0 -1em,
+      3em 0 0 -1em,
+      2em 2em 0 -1em,
+      0 3em 0 0,
+      -2em 2em 0 0.2em,
+      -3em 0 0 0,
+      -2em -2em 0 -1em;
   }
   75% {
-    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em,
-    3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em,
-    -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+    box-shadow:
+      0em -3em 0 -1em,
+      2em -2em 0 -1em,
+      3em 0em 0 -1em,
+      2em 2em 0 -1em,
+      0 3em 0 -1em,
+      -2em 2em 0 0,
+      -3em 0em 0 0.2em,
+      -2em -2em 0 0;
   }
   87.5% {
-    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em,
-    3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em,
-    -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+    box-shadow:
+      0em -3em 0 0,
+      2em -2em 0 -1em,
+      3em 0 0 -1em,
+      2em 2em 0 -1em,
+      0 3em 0 -1em,
+      -2em 2em 0 0,
+      -3em 0em 0 0,
+      -2em -2em 0 0.2em;
   }
 }
 ```
 
---------------------------------
+---
 
 ### Complete React Application for Filtering and Displaying Data
 
@@ -11123,76 +11272,77 @@ Source: https://react.dev/learn/rendering-lists
 This comprehensive example provides a full React application demonstrating data filtering and mapping. It includes the main `List` component, the `people` data array, a utility function `getImageUrl`, and associated CSS, showcasing how to integrate these concepts into a functional React UI.
 
 ```javascript
-import { people } from './data.js';
-import { getImageUrl } from './utils.js';
+import { people } from "./data.js";
+import { getImageUrl } from "./utils.js";
 
 export default function List() {
-  const chemists = people.filter(person =>
-    person.profession === 'chemist'
-  );
-  const listItems = chemists.map(person =>
+  const chemists = people.filter((person) => person.profession === "chemist");
+  const listItems = chemists.map((person) => (
     <li>
-      <img
-        src={getImageUrl(person)}
-        alt={person.name}
-      />
+      <img src={getImageUrl(person)} alt={person.name} />
       <p>
         <b>{person.name}:</b>
-        {' ' + person.profession + ' '}
+        {" " + person.profession + " "}
         known for {person.accomplishment}
       </p>
     </li>
-  );
+  ));
   return <ul>{listItems}</ul>;
 }
 ```
 
 ```javascript
-export const people = [{
-  id: 0,
-  name: 'Creola Katherine Johnson',
-  profession: 'mathematician',
-  accomplishment: 'spaceflight calculations',
-  imageId: 'MK3eW3A'
-}, {
-  id: 1,
-  name: 'Mario José Molina-Pasquel Henríquez',
-  profession: 'chemist',
-  accomplishment: 'discovery of Arctic ozone hole',
-  imageId: 'mynHUSa'
-}, {
-  id: 2,
-  name: 'Mohammad Abdus Salam',
-  profession: 'physicist',
-  accomplishment: 'electromagnetism theory',
-  imageId: 'bE7W1ji'
-}, {
-  id: 3,
-  name: 'Percy Lavon Julian',
-  profession: 'chemist',
-  accomplishment: 'pioneering cortisone drugs, steroids and birth control pills',
-  imageId: 'IOjWm71'
-}, {
-  id: 4,
-  name: 'Subrahmanyan Chandrasekhar',
-  profession: 'astrophysicist',
-  accomplishment: 'white dwarf star mass calculations',
-  imageId: 'lrWQx8l'
-}];
+export const people = [
+  {
+    id: 0,
+    name: "Creola Katherine Johnson",
+    profession: "mathematician",
+    accomplishment: "spaceflight calculations",
+    imageId: "MK3eW3A",
+  },
+  {
+    id: 1,
+    name: "Mario José Molina-Pasquel Henríquez",
+    profession: "chemist",
+    accomplishment: "discovery of Arctic ozone hole",
+    imageId: "mynHUSa",
+  },
+  {
+    id: 2,
+    name: "Mohammad Abdus Salam",
+    profession: "physicist",
+    accomplishment: "electromagnetism theory",
+    imageId: "bE7W1ji",
+  },
+  {
+    id: 3,
+    name: "Percy Lavon Julian",
+    profession: "chemist",
+    accomplishment:
+      "pioneering cortisone drugs, steroids and birth control pills",
+    imageId: "IOjWm71",
+  },
+  {
+    id: 4,
+    name: "Subrahmanyan Chandrasekhar",
+    profession: "astrophysicist",
+    accomplishment: "white dwarf star mass calculations",
+    imageId: "lrWQx8l",
+  },
+];
 ```
 
 ```javascript
 export function getImageUrl(person) {
-  return (
-    'https://i.imgur.com/' +
-    person.imageId +
-    's.jpg'
-  );
+  return "https://i.imgur.com/" + person.imageId + "s.jpg";
 }
 ```
 
 ```css
-ul { list-style-type: none; padding: 0px 10px; }
+ul {
+  list-style-type: none;
+  padding: 0px 10px;
+}
 li {
   margin-bottom: 10px;
   display: grid;
@@ -11200,10 +11350,14 @@ li {
   gap: 20px;
   align-items: center;
 }
-img { width: 100px; height: 100px; border-radius: 50%; }
+img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
 ```
 
---------------------------------
+---
 
 ### Example JavaScript Data Structure: Album List Fragment
 
@@ -11266,7 +11420,7 @@ This JavaScript snippet represents a fragment of an array of album objects, each
   }];
 ```
 
---------------------------------
+---
 
 ### Correct usage of react-hook-form useWatch for memoization
 
@@ -11277,22 +11431,22 @@ This example illustrates the correct and memoization-compatible way to watch for
 ```javascript
 // ✅ For react-hook-form, use `useWatch`:
 function Component() {
-  const {register, control} = useForm();
+  const { register, control } = useForm();
   const watchedValue = useWatch({
     control,
-    name: 'field'
+    name: "field",
   });
 
   return (
     <>
-      <input {...register('field')} />
+      <input {...register("field")} />
       <div>Current value: {watchedValue}</div>
     </>
   );
 }
 ```
 
---------------------------------
+---
 
 ### Optimistically Update Form Data with useOptimistic Hook
 
@@ -11357,7 +11511,7 @@ export async function deliverMessage(message) {
 }
 ```
 
---------------------------------
+---
 
 ### Rendering a React list with unique `key` props from data
 
@@ -11366,73 +11520,76 @@ Source: https://react.dev/learn/rendering-lists
 This example showcases a complete React component that renders a list of people, each assigned a unique `key` prop derived from their `id` from a separate data file. It demonstrates mapping over an array to create list items, ensuring React can efficiently track changes and updates. Dependencies include `data.js` for list items and `utils.js` for image URLs, with styling provided by `style.css`.
 
 ```js
-import { people } from './data.js';
-import { getImageUrl } from './utils.js';
+import { people } from "./data.js";
+import { getImageUrl } from "./utils.js";
 
 export default function List() {
-  const listItems = people.map(person =>
+  const listItems = people.map((person) => (
     <li key={person.id}>
-      <img
-        src={getImageUrl(person)}
-        alt={person.name}
-      />
+      <img src={getImageUrl(person)} alt={person.name} />
       <p>
         <b>{person.name}</b>
-          {' ' + person.profession + ' '}
-          known for {person.accomplishment}
+        {" " + person.profession + " "}
+        known for {person.accomplishment}
       </p>
     </li>
-  );
+  ));
   return <ul>{listItems}</ul>;
 }
 ```
 
 ```js
-export const people = [{
-  id: 0, // Used in JSX as a key
-  name: 'Creola Katherine Johnson',
-  profession: 'mathematician',
-  accomplishment: 'spaceflight calculations',
-  imageId: 'MK3eW3A'
-}, {
-  id: 1, // Used in JSX as a key
-  name: 'Mario José Molina-Pasquel Henríquez',
-  profession: 'chemist',
-  accomplishment: 'discovery of Arctic ozone hole',
-  imageId: 'mynHUSa'
-}, {
-  id: 2, // Used in JSX as a key
-  name: 'Mohammad Abdus Salam',
-  profession: 'physicist',
-  accomplishment: 'electromagnetism theory',
-  imageId: 'bE7W1ji'
-}, {
-  id: 3, // Used in JSX as a key
-  name: 'Percy Lavon Julian',
-  profession: 'chemist',
-  accomplishment: 'pioneering cortisone drugs, steroids and birth control pills',
-  imageId: 'IOjWm71'
-}, {
-  id: 4, // Used in JSX as a key
-  name: 'Subrahmanyan Chandrasekhar',
-  profession: 'astrophysicist',
-  accomplishment: 'white dwarf star mass calculations',
-  imageId: 'lrWQx8l'
-}];
+export const people = [
+  {
+    id: 0, // Used in JSX as a key
+    name: "Creola Katherine Johnson",
+    profession: "mathematician",
+    accomplishment: "spaceflight calculations",
+    imageId: "MK3eW3A",
+  },
+  {
+    id: 1, // Used in JSX as a key
+    name: "Mario José Molina-Pasquel Henríquez",
+    profession: "chemist",
+    accomplishment: "discovery of Arctic ozone hole",
+    imageId: "mynHUSa",
+  },
+  {
+    id: 2, // Used in JSX as a key
+    name: "Mohammad Abdus Salam",
+    profession: "physicist",
+    accomplishment: "electromagnetism theory",
+    imageId: "bE7W1ji",
+  },
+  {
+    id: 3, // Used in JSX as a key
+    name: "Percy Lavon Julian",
+    profession: "chemist",
+    accomplishment:
+      "pioneering cortisone drugs, steroids and birth control pills",
+    imageId: "IOjWm71",
+  },
+  {
+    id: 4, // Used in JSX as a key
+    name: "Subrahmanyan Chandrasekhar",
+    profession: "astrophysicist",
+    accomplishment: "white dwarf star mass calculations",
+    imageId: "lrWQx8l",
+  },
+];
 ```
 
 ```js
 export function getImageUrl(person) {
-  return (
-    'https://i.imgur.com/' +
-    person.imageId +
-    's.jpg'
-  );
+  return "https://i.imgur.com/" + person.imageId + "s.jpg";
 }
 ```
 
 ```css
-ul { list-style-type: none; padding: 0px 10px; }
+ul {
+  list-style-type: none;
+  padding: 0px 10px;
+}
 li {
   margin-bottom: 10px;
   display: grid;
@@ -11440,10 +11597,14 @@ li {
   gap: 20px;
   align-items: center;
 }
-img { width: 100px; height: 100px; border-radius: 50%; }
+img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
 ```
 
---------------------------------
+---
 
 ### Full React Application Demonstrating Nested Suspense for Artist Page Loading
 
@@ -11452,8 +11613,8 @@ Source: https://react.dev/reference/react/Suspense
 This comprehensive React application showcases the practical implementation of nested `Suspense` for an artist's profile page. It includes `App.js` for initial rendering, `ArtistPage.js` which orchestrates the nested `Suspense` boundaries for `Biography` and `Albums`, and helper components like `Panel.js`, `Biography.js`, `Albums.js`, and `data.js` for simulated data fetching. This example demonstrates how different parts of a complex UI can load progressively with distinct loading indicators, improving the user experience.
 
 ```js
-import { useState } from 'react';
-import ArtistPage from './ArtistPage.js';
+import { useState } from "react";
+import ArtistPage from "./ArtistPage.js";
 
 export default function App() {
   const [show, setShow] = useState(false);
@@ -11461,8 +11622,8 @@ export default function App() {
     return (
       <ArtistPage
         artist={{
-          id: 'the-beatles',
-          name: 'The Beatles',
+          id: "the-beatles",
+          name: "The Beatles",
         }}
       />
     );
@@ -11477,10 +11638,10 @@ export default function App() {
 ```
 
 ```js
-import { Suspense } from 'react';
-import Albums from './Albums.js';
-import Biography from './Biography.js';
-import Panel from './Panel.js';
+import { Suspense } from "react";
+import Albums from "./Albums.js";
+import Biography from "./Biography.js";
+import Panel from "./Panel.js";
 
 export default function ArtistPage({ artist }) {
   return (
@@ -11515,17 +11676,13 @@ function AlbumsGlimmer() {
 
 ```js
 export default function Panel({ children }) {
-  return (
-    <section className="panel">
-      {children}
-    </section>
-  );
+  return <section className="panel">{children}</section>;
 }
 ```
 
 ```js
-import {use} from 'react';
-import { fetchData } from './data.js';
+import { use } from "react";
+import { fetchData } from "./data.js";
 
 export default function Biography({ artistId }) {
   const bio = use(fetchData(`/${artistId}/bio`));
@@ -11538,14 +11695,14 @@ export default function Biography({ artistId }) {
 ```
 
 ```js
-import {use} from 'react';
-import { fetchData } from './data.js';
+import { use } from "react";
+import { fetchData } from "./data.js";
 
 export default function Albums({ artistId }) {
   const albums = use(fetchData(`/${artistId}/albums`));
   return (
     <ul>
-      {albums.map(album => (
+      {albums.map((album) => (
         <li key={album.id}>
           {album.title} ({album.year})
         </li>
@@ -11570,18 +11727,18 @@ export function fetchData(url) {
 }
 
 async function getData(url) {
-  if (url === '/the-beatles/albums') {
+  if (url === "/the-beatles/albums") {
     return await getAlbums();
-  } else if (url === '/the-beatles/bio') {
+  } else if (url === "/the-beatles/bio") {
     return await getBio();
   } else {
-    throw Error('Not implemented');
+    throw Error("Not implemented");
   }
 }
 
 async function getBio() {
   // Add a fake delay to make waiting noticeable.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 500);
   });
 
@@ -11593,67 +11750,81 @@ async function getBio() {
 
 async function getAlbums() {
   // Add a fake delay to make waiting noticeable.
-  await new Promise(resolve => {
+  await new Promise((resolve) => {
     setTimeout(resolve, 3000);
   });
 
-  return [{
-    id: 13,
-    title: 'Let It Be',
-    year: 1970
-  }, {
-    id: 12,
-    title: 'Abbey Road',
-    year: 1969
-  }, {
-    id: 11,
-    title: 'Yellow Submarine',
-    year: 1969
-  }, {
-    id: 10,
-    title: 'The Beatles',
-    year: 1968
-  }, {
-    id: 9,
-    title: 'Magical Mystery Tour',
-    year: 1967
-  }, {
-    id: 8,
-    title: 'Sgt. Pepper\'s Lonely Hearts Club Band',
-    year: 1967
-  }, {
-    id: 7,
-    title: 'Revolver',
-    year: 1966
-  }, {
-    id: 6,
-    title: 'Rubber Soul',
-    year: 1965
-  }, {
-    id: 5,
-    title: 'Help!',
-    year: 1965
-  }, {
-    id: 4,
-    title: 'Beatles For Sale',
-    year: 1964
-  }, {
-    id: 3,
-    title: 'A Hard Day\'s Night',
-    year: 1964
-  }, {
-    id: 2,
-    title: 'With The Beatles',
-    year: 1963
-  }, {
-    id: 1,
-    title: 'Please Please Me',
-    year: 1963
-  }];
+  return [
+    {
+      id: 13,
+      title: "Let It Be",
+      year: 1970,
+    },
+    {
+      id: 12,
+      title: "Abbey Road",
+      year: 1969,
+    },
+    {
+      id: 11,
+      title: "Yellow Submarine",
+      year: 1969,
+    },
+    {
+      id: 10,
+      title: "The Beatles",
+      year: 1968,
+    },
+    {
+      id: 9,
+      title: "Magical Mystery Tour",
+      year: 1967,
+    },
+    {
+      id: 8,
+      title: "Sgt. Pepper's Lonely Hearts Club Band",
+      year: 1967,
+    },
+    {
+      id: 7,
+      title: "Revolver",
+      year: 1966,
+    },
+    {
+      id: 6,
+      title: "Rubber Soul",
+      year: 1965,
+    },
+    {
+      id: 5,
+      title: "Help!",
+      year: 1965,
+    },
+    {
+      id: 4,
+      title: "Beatles For Sale",
+      year: 1964,
+    },
+    {
+      id: 3,
+      title: "A Hard Day's Night",
+      year: 1964,
+    },
+    {
+      id: 2,
+      title: "With The Beatles",
+      year: 1963,
+    },
+    {
+      id: 1,
+      title: "Please Please Me",
+      year: 1963,
+    },
+  ];
 }
 ```
 
---------------------------------
+---
 
 ### Basic Call Signature for resumeAndPrerenderToNodeStream (Node.js)
 
@@ -11665,7 +11836,7 @@ Demonstrates the fundamental asynchronous call signature of `resumeAndPrerenderT
 const {prelude, postponed} = await resumeAndPrerenderToNodeStream(reactNode, postponedState, options?)
 ```
 
---------------------------------
+---
 
 ### Form Submit Event Handler in React JSX
 
@@ -11676,7 +11847,7 @@ Demonstrates a basic form with an onSubmit event handler that displays an alert 
 ```javascript
 export default function Signup() {
   return (
-    <form onSubmit={() => alert('Submitting!')}>
+    <form onSubmit={() => alert("Submitting!")}>
       <input />
       <button>Send</button>
     </form>
@@ -11684,7 +11855,7 @@ export default function Signup() {
 }
 ```
 
---------------------------------
+---
 
 ### Complete React Tic-Tac-Toe Game with History Navigation Setup
 
@@ -11803,7 +11974,7 @@ function calculateWinner(squares) {
 
 ```
 
---------------------------------
+---
 
 ### Incorrect Pointer Movement Handler with State Mutation
 
@@ -11812,40 +11983,43 @@ Source: https://react.dev/learn/updating-objects-in-state
 Complete example showing incorrect implementation of a pointer movement handler that mutates state directly. The red dot does not follow the pointer because mutations do not trigger re-renders.
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function MovingDot() {
   const [position, setPosition] = useState({
     x: 0,
-    y: 0
+    y: 0,
   });
   return (
     <div
-      onPointerMove={e => {
+      onPointerMove={(e) => {
         position.x = e.clientX;
         position.y = e.clientY;
       }}
       style={{
-        position: 'relative',
-        width: '100vw',
-        height: '100vh',
-      }}>
-      <div style={{
-        position: 'absolute',
-        backgroundColor: 'red',
-        borderRadius: '50%',
-        transform: `translate(${position.x}px, ${position.y}px)`,
-        left: -10,
-        top: -10,
-        width: 20,
-        height: 20,
-      }} />
+        position: "relative",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          backgroundColor: "red",
+          borderRadius: "50%",
+          transform: `translate(${position.x}px, ${position.y}px)`,
+          left: -10,
+          top: -10,
+          width: 20,
+          height: 20,
+        }}
+      />
     </div>
   );
 }
 ```
 
---------------------------------
+---
 
 ### React Server Components App Demonstrating 'use client' Directive
 
@@ -11854,9 +12028,9 @@ Source: https://react.dev/reference/rsc/use-client
 This comprehensive example illustrates a React Server Components application where the `'use client'` directive is used to designate client-side modules. It includes the main `App` component, a client-side `InspirationGenerator` with state, reusable `FancyText` and `Copyright` components, a data module, and associated CSS for styling the application.
 
 ```javascript
-import FancyText from './FancyText';
-import InspirationGenerator from './InspirationGenerator';
-import Copyright from './Copyright';
+import FancyText from "./FancyText";
+import InspirationGenerator from "./InspirationGenerator";
+import Copyright from "./Copyright";
 
 export default function App() {
   return (
@@ -11871,21 +12045,23 @@ export default function App() {
 ```
 
 ```javascript
-export default function FancyText({title, text}) {
-  return title
-    ? <h1 className='fancy title'>{text}</h1>
-    : <h3 className='fancy cursive'>{text}</h3>
+export default function FancyText({ title, text }) {
+  return title ? (
+    <h1 className="fancy title">{text}</h1>
+  ) : (
+    <h3 className="fancy cursive">{text}</h3>
+  );
 }
 ```
 
 ```javascript
-'use client';
+"use client";
 
-import { useState } from 'react';
-import inspirations from './inspirations';
-import FancyText from './FancyText';
+import { useState } from "react";
+import inspirations from "./inspirations";
+import FancyText from "./FancyText";
 
-export default function InspirationGenerator({children}) {
+export default function InspirationGenerator({ children }) {
   const [index, setIndex] = useState(0);
   const quote = inspirations[index];
   const next = () => setIndex((index + 1) % inspirations.length);
@@ -11902,8 +12078,8 @@ export default function InspirationGenerator({children}) {
 ```
 
 ```javascript
-export default function Copyright({year}) {
-  return <p className='small'>©️ {year}</p>;
+export default function Copyright({ year }) {
+  return <p className="small">©️ {year}</p>;
 }
 ```
 
@@ -11917,10 +12093,10 @@ export default [
 
 ```css
 .fancy {
-  font-family: 'Georgia';
+  font-family: "Georgia";
 }
 .title {
-  color: #007AA3;
+  color: #007aa3;
   text-decoration: underline;
 }
 .cursive {
@@ -11931,7 +12107,7 @@ export default [
 }
 ```
 
---------------------------------
+---
 
 ### Preinit resource in event handler
 
@@ -11940,20 +12116,18 @@ Source: https://react.dev/reference/react-dom/preinit
 Shows how to call preinit within an event handler before transitioning to a page or state that requires external resources. This approach starts the resource loading process earlier than calling preinit during component rendering of the new page.
 
 ```javascript
-import { preinit } from 'react-dom';
+import { preinit } from "react-dom";
 
 function CallToAction() {
   const onClick = () => {
-    preinit("https://example.com/wizardStyles.css", {as: "style"});
+    preinit("https://example.com/wizardStyles.css", { as: "style" });
     startWizard();
-  }
-  return (
-    <button onClick={onClick}>Start Wizard</button>
-  );
+  };
+  return <button onClick={onClick}>Start Wizard</button>;
 }
 ```
 
---------------------------------
+---
 
 ### useEffect Hook with Chat Connection Setup
 
@@ -11968,7 +12142,7 @@ useEffect(() => {
 }, []);
 ```
 
---------------------------------
+---
 
 ### useReducer Hook with TypeScript Type Definitions
 
@@ -12019,7 +12193,7 @@ export default function App() {
 ```
 
 ```typescript
-import { stateReducer, State } from './your-reducer-implementation';
+import { stateReducer, State } from "./your-reducer-implementation";
 
 const initialState = { count: 0 };
 
@@ -12028,7 +12202,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Invalid React Compiler Configuration with Wrong Value
 
@@ -12040,14 +12214,17 @@ Shows an example of invalid configuration where 'compilationMode' is set to 'eve
 // ❌ Invalid option value
 module.exports = {
   plugins: [
-    ['babel-plugin-react-compiler', {
-      compilationMode: 'everything' // Invalid: use 'all' or 'infer'
-    }]
-  ]
+    [
+      "babel-plugin-react-compiler",
+      {
+        compilationMode: "everything", // Invalid: use 'all' or 'infer'
+      },
+    ],
+  ],
 };
 ```
 
---------------------------------
+---
 
 ### Define Sample Data Array of Objects in JavaScript
 
@@ -12056,30 +12233,36 @@ Source: https://react.dev/learn/rendering-lists
 This snippet initializes a JavaScript array named `people`, where each item is an object representing a person. Each person object contains properties such as `id`, `name`, and `profession`, serving as the foundational dataset for subsequent data manipulation examples.
 
 ```javascript
-const people = [{
-  id: 0,
-  name: 'Creola Katherine Johnson',
-  profession: 'mathematician',
-}, {
-  id: 1,
-  name: 'Mario José Molina-Pasquel Henríquez',
-  profession: 'chemist',
-}, {
-  id: 2,
-  name: 'Mohammad Abdus Salam',
-  profession: 'physicist',
-}, {
-  id: 3,
-  name: 'Percy Lavon Julian',
-  profession: 'chemist',
-}, {
-  id: 4,
-  name: 'Subrahmanyan Chandrasekhar',
-  profession: 'astrophysicist',
-}];
+const people = [
+  {
+    id: 0,
+    name: "Creola Katherine Johnson",
+    profession: "mathematician",
+  },
+  {
+    id: 1,
+    name: "Mario José Molina-Pasquel Henríquez",
+    profession: "chemist",
+  },
+  {
+    id: 2,
+    name: "Mohammad Abdus Salam",
+    profession: "physicist",
+  },
+  {
+    id: 3,
+    name: "Percy Lavon Julian",
+    profession: "chemist",
+  },
+  {
+    id: 4,
+    name: "Subrahmanyan Chandrasekhar",
+    profession: "astrophysicist",
+  },
+];
 ```
 
---------------------------------
+---
 
 ### Correct: Static Component Definition in React (JavaScript)
 
@@ -12092,16 +12275,17 @@ This example illustrates the recommended approach for defining React components 
 const ButtonComponent = () => <button>Click</button>;
 const TextComponent = () => <div>Text</div>;
 
-function Parent({type}) {
-  const Component = type === 'button'
-    ? ButtonComponent  // Reference existing component
-    : TextComponent;
+function Parent({ type }) {
+  const Component =
+    type === "button"
+      ? ButtonComponent // Reference existing component
+      : TextComponent;
 
   return <Component />;
 }
 ```
 
---------------------------------
+---
 
 ### Defining React Project Dependencies for ViewTransition (package.json)
 
@@ -12119,7 +12303,7 @@ This `package.json` snippet outlines the essential dependencies required to run 
 }
 ```
 
---------------------------------
+---
 
 ### Initial React App Component with Slow List
 
@@ -12129,17 +12313,17 @@ This React component demonstrates a common performance issue: an input field and
 
 ```js
 function App() {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   return (
     <>
-      <input value={text} onChange={e => setText(e.target.value)} />
+      <input value={text} onChange={(e) => setText(e.target.value)} />
       <SlowList text={text} />
     </>
   );
 }
 ```
 
---------------------------------
+---
 
 ### Incorrect Object Mutation in React State
 
@@ -12151,7 +12335,7 @@ Example of incorrect pattern that mutates object state directly. This does not t
 position.x = 5;
 ```
 
---------------------------------
+---
 
 ### Accessing Context in a React Class Component
 
@@ -12165,17 +12349,13 @@ class Button extends Component {
 
   render() {
     const theme = this.context;
-    const className = 'button-' + theme;
-    return (
-      <button className={className}>
-        {this.props.children}
-      </button>
-    );
+    const className = "button-" + theme;
+    return <button className={className}>{this.props.children}</button>;
   }
 }
 ```
 
---------------------------------
+---
 
 ### ThemeProvider with Conditional Memoization in React
 
@@ -12184,7 +12364,7 @@ Source: https://react.dev/blog/2025/10/07/react-compiler-1
 Demonstrates a ThemeProvider component that uses React's `use` hook with context. The React Compiler automatically memoizes the theme value even after a conditional return statement, which is not possible with manual memoization techniques. This example shows how the compiler understands data-flow to optimize rendering performance.
 
 ```javascript
-import { use } from 'react';
+import { use } from "react";
 
 export default function ThemeProvider(props) {
   if (!props.children) {
@@ -12192,15 +12372,11 @@ export default function ThemeProvider(props) {
   }
   // The compiler can still memoize code after a conditional return
   const theme = mergeTheme(props.theme, use(ThemeContext));
-  return (
-    <ThemeContext value={theme}>
-      {props.children}
-    </ThemeContext>
-  );
+  return <ThemeContext value={theme}>{props.children}</ThemeContext>;
 }
 ```
 
---------------------------------
+---
 
 ### Initial Profile component with duplicate Card markup
 
@@ -12227,7 +12403,10 @@ export default function Profile() {
       <div className="card">
         <div className="card-content">
           <h1>About</h1>
-          <p>Aklilu Lemma was a distinguished Ethiopian scientist who discovered a natural treatment to schistosomiasis.</p>
+          <p>
+            Aklilu Lemma was a distinguished Ethiopian scientist who discovered
+            a natural treatment to schistosomiasis.
+          </p>
         </div>
       </div>
     </div>
@@ -12258,7 +12437,7 @@ h1 {
 }
 ```
 
---------------------------------
+---
 
 ### Define and Render a Basic React Component in JavaScript
 
@@ -12268,12 +12447,7 @@ This snippet demonstrates how to define a simple React functional component (`Pr
 
 ```js
 function Profile() {
-  return (
-    <img
-      src="https://i.imgur.com/MK3eW3As.jpg"
-      alt="Katherine Johnson"
-    />
-  );
+  return <img src="https://i.imgur.com/MK3eW3As.jpg" alt="Katherine Johnson" />;
 }
 
 export default function Gallery() {
@@ -12289,10 +12463,13 @@ export default function Gallery() {
 ```
 
 ```css
-img { margin: 0 10px 10px 0; height: 90px; }
+img {
+  margin: 0 10px 10px 0;
+  height: 90px;
+}
 ```
 
---------------------------------
+---
 
 ### Input Component Styling with CSS
 
@@ -12301,11 +12478,15 @@ Source: https://react.dev/learn/sharing-state-between-components
 CSS styling for input elements and labels used in React controlled component examples. Provides basic margin spacing for inputs and block display for labels to ensure proper layout.
 
 ```css
-input { margin: 5px; }
-label { display: block; }
+input {
+  margin: 5px;
+}
+label {
+  display: block;
+}
 ```
 
---------------------------------
+---
 
 ### Setup and Cleanup Server Connection with useEffect
 
@@ -12314,8 +12495,8 @@ Source: https://react.dev/learn/escape-hatches
 A React component demonstrating useEffect with a cleanup function for managing external system connections. The effect establishes a chat server connection on mount and returns a cleanup function that disconnects on unmount. This pattern ensures proper resource management and prevents memory leaks.
 
 ```javascript
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useState, useEffect } from "react";
+import { createConnection } from "./chat.js";
 
 export default function ChatRoom() {
   useEffect(() => {
@@ -12332,16 +12513,16 @@ export function createConnection() {
   // A real implementation would actually connect to the server
   return {
     connect() {
-      console.log('✅ Connecting...');
+      console.log("✅ Connecting...");
     },
     disconnect() {
-      console.log('❌ Disconnected.');
-    }
+      console.log("❌ Disconnected.");
+    },
   };
 }
 ```
 
---------------------------------
+---
 
 ### Style React Components with CSS
 
@@ -12350,18 +12531,25 @@ Source: https://react.dev/learn/your-first-component
 Demonstrates how to apply CSS styling to React components. CSS rules target HTML elements rendered by the component and can control properties like height, margin, and other visual styles.
 
 ```css
-img { height: 181px; }
+img {
+  height: 181px;
+}
 ```
 
 ```css
-img { height: 180px; }
+img {
+  height: 180px;
+}
 ```
 
 ```css
-img { margin: 0 10px 10px 0; height: 90px; }
+img {
+  margin: 0 10px 10px 0;
+  height: 90px;
+}
 ```
 
---------------------------------
+---
 
 ### Designing React APIs with immutable state for memoization
 
@@ -12380,7 +12568,7 @@ function Component() {
     <div>
       <input
         value={field.name}
-        onChange={(e) => updateField('name', e.target.value)}
+        onChange={(e) => updateField("name", e.target.value)}
       />
       <p>{greeting}</p>
     </div>
@@ -12388,7 +12576,7 @@ function Component() {
 }
 ```
 
---------------------------------
+---
 
 ### React Package Configuration for Development
 
@@ -12411,7 +12599,7 @@ Package.json configuration specifying React beta dependencies and npm scripts fo
 }
 ```
 
---------------------------------
+---
 
 ### Basic preloadModule usage with React-DOM
 
@@ -12420,10 +12608,10 @@ Source: https://react.dev/reference/react-dom/preloadModule
 Demonstrates the fundamental usage of preloadModule to eagerly fetch an ESM module. The function accepts a module URL string and an options object with 'as' property set to 'script'. This provides the browser with a hint to start downloading the specified module, which can save time during subsequent module execution.
 
 ```javascript
-preloadModule("https://example.com/module.js", {as: "script"});
+preloadModule("https://example.com/module.js", { as: "script" });
 ```
 
---------------------------------
+---
 
 ### preconnect
 
@@ -12431,7 +12619,7 @@ Source: https://react.dev/reference/react-dom
 
 Connects to a server you expect to request resources from, even if you don't know what resources you'll need yet. This preloading API establishes early connections to improve resource loading performance.
 
-```APIDOC
+````APIDOC
 ## preconnect
 
 ### Description
@@ -12443,20 +12631,24 @@ Use `preconnect` to establish connections to servers before requesting resources
 ### Syntax
 ```javascript
 preconnect(href, options?)
-```
+````
 
 ### Parameters
+
 - **href** (string) - Required - The URL of the server you want to connect to
 - **options** (object) - Optional - Configuration object with optional properties like `crossOrigin`
 
 ### Returns
+
 Void
 
 ### Notes
+
 - Establishes DNS lookup, TCP connection, and TLS negotiation
 - Useful for third-party resources and CDNs
 - React-based frameworks often handle this automatically
-```
+
+````
 
 --------------------------------
 
@@ -12486,9 +12678,9 @@ function Counter() {
     </div>
   )
 }
-```
+````
 
---------------------------------
+---
 
 ### Exposing DOM Node to Parent Component
 
@@ -12497,7 +12689,7 @@ Source: https://react.dev/reference/react/forwardRef
 Complete example showing how to use forwardRef to expose a DOM node from a child component to a parent component. The MyInput component forwards the ref to an input element, allowing the parent Form component to access and manipulate it.
 
 ```javascript
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 
 const MyInput = forwardRef(function MyInput(props, ref) {
   const { label, ...otherProps } = props;
@@ -12510,7 +12702,7 @@ const MyInput = forwardRef(function MyInput(props, ref) {
 });
 ```
 
---------------------------------
+---
 
 ### TodoList Without useMemo - Inefficient Re-rendering
 
@@ -12531,7 +12723,7 @@ export default function TodoList({ todos, tab, theme }) {
 }
 ```
 
---------------------------------
+---
 
 ### Implementing a Reactive Chat Connection Effect in React
 
@@ -12557,36 +12749,33 @@ This example demonstrates a React `useEffect` hook that establishes and manages 
 ```
 
 ```javascript
-import { useState, useEffect } from 'react';
-import { createConnection, sendMessage } from './chat.js';
-import { showNotification } from './notifications.js';
+import { useState, useEffect } from "react";
+import { createConnection, sendMessage } from "./chat.js";
+import { showNotification } from "./notifications.js";
 
-const serverUrl = 'https://localhost:1234';
+const serverUrl = "https://localhost:1234";
 
 function ChatRoom({ roomId, theme }) {
   useEffect(() => {
     const connection = createConnection(serverUrl, roomId);
-    connection.on('connected', () => {
-      showNotification('Connected!', theme);
+    connection.on("connected", () => {
+      showNotification("Connected!", theme);
     });
     connection.connect();
     return () => connection.disconnect();
   }, [roomId, theme]);
 
-  return <h1>Welcome to the {roomId} room!</h1>
+  return <h1>Welcome to the {roomId} room!</h1>;
 }
 
 export default function App() {
-  const [roomId, setRoomId] = useState('general');
+  const [roomId, setRoomId] = useState("general");
   const [isDark, setIsDark] = useState(false);
   return (
     <>
       <label>
-        Choose the chat room:{' '}
-        <select
-          value={roomId}
-          onChange={e => setRoomId(e.target.value)}
-        >
+        Choose the chat room:{" "}
+        <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
           <option value="general">general</option>
           <option value="travel">travel</option>
           <option value="music">music</option>
@@ -12596,15 +12785,12 @@ export default function App() {
         <input
           type="checkbox"
           checked={isDark}
-          onChange={e => setIsDark(e.target.checked)}
+          onChange={(e) => setIsDark(e.target.checked)}
         />
         Use dark theme
       </label>
       <hr />
-      <ChatRoom
-        roomId={roomId}
-        theme={isDark ? 'dark' : 'light'}
-      />
+      <ChatRoom roomId={roomId} theme={isDark ? "dark" : "light"} />
     </>
   );
 }
@@ -12625,43 +12811,46 @@ export function createConnection(serverUrl, roomId) {
     },
     on(event, callback) {
       if (connectedCallback) {
-        throw Error('Cannot add the handler twice.');
+        throw Error("Cannot add the handler twice.");
       }
-      if (event !== 'connected') {
+      if (event !== "connected") {
         throw Error('Only "connected" event is supported.');
       }
       connectedCallback = callback;
     },
     disconnect() {
       clearTimeout(timeout);
-    }
+    },
   };
 }
 ```
 
 ```javascript
-import Toastify from 'toastify-js';
-import 'toastify-js/src/toastify.css';
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
 export function showNotification(message, theme) {
   Toastify({
     text: message,
     duration: 2000,
-    gravity: 'top',
-    position: 'right',
+    gravity: "top",
+    position: "right",
     style: {
-      background: theme === 'dark' ? 'black' : 'white',
-      color: theme === 'dark' ? 'white' : 'black'
-    }
+      background: theme === "dark" ? "black" : "white",
+      color: theme === "dark" ? "white" : "black",
+    },
   }).showToast();
 }
 ```
 
 ```css
-label { display: block; margin-top: 10px; }
+label {
+  display: block;
+  margin-top: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Forcing Immediate React State Updates with `flushSync`
 
@@ -12670,14 +12859,14 @@ Source: https://react.dev/reference/react-dom/flushSync
 This example demonstrates how to use `flushSync` from `react-dom` to ensure that a state update, such as `setSomething(123)`, is processed and reflected in the DOM immediately. This synchronous update guarantees that subsequent code execution operates on an up-to-date DOM, which is essential for certain integration patterns.
 
 ```js
-import { flushSync } from 'react-dom';
+import { flushSync } from "react-dom";
 
 flushSync(() => {
   setSomething(123);
 });
 ```
 
---------------------------------
+---
 
 ### Create React Root and Render App Component
 
@@ -12686,13 +12875,13 @@ Source: https://react.dev/reference/react-dom/client/createRoot
 Initialize a React application by creating a root from a DOM element and rendering the App component. This code runs once at startup and finds the browser DOM node defined in HTML, then displays the React component inside it. Uses React 18's createRoot API from 'react-dom/client'.
 
 ```javascript
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(<App />);
 ```
 
---------------------------------
+---
 
 ### Invalid useEffect with missing dependencies
 
@@ -12717,7 +12906,7 @@ useMemo(() => {
 }, [items]); // Missing 'sortOrder'
 ```
 
---------------------------------
+---
 
 ### Play and pause video using ref with useRef and useState
 
@@ -12726,7 +12915,7 @@ Source: https://react.dev/reference/react/useRef
 Complete example showing how to control video playback using refs to call play() and pause() methods on a video element. Combines useRef for DOM access with useState to track playing state.
 
 ```javascript
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
 
 export default function VideoPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -12745,9 +12934,7 @@ export default function VideoPlayer() {
 
   return (
     <>
-      <button onClick={handleClick}>
-        {isPlaying ? 'Pause' : 'Play'}
-      </button>
+      <button onClick={handleClick}>{isPlaying ? "Pause" : "Play"}</button>
       <video
         width="250"
         ref={ref}
@@ -12765,10 +12952,13 @@ export default function VideoPlayer() {
 ```
 
 ```css
-button { display: block; margin-bottom: 20px; }
+button {
+  display: block;
+  margin-bottom: 20px;
+}
 ```
 
---------------------------------
+---
 
 ### Basic Data Fetching with useEffect in React
 
@@ -12783,7 +12973,7 @@ function SearchResults({ query }) {
 
   useEffect(() => {
     // 🔴 Avoid: Fetching without cleanup logic
-    fetchResults(query, page).then(json => {
+    fetchResults(query, page).then((json) => {
       setResults(json);
     });
   }, [query, page]);
@@ -12795,7 +12985,7 @@ function SearchResults({ query }) {
 }
 ```
 
---------------------------------
+---
 
 ### Manage Video Data Fetching with Caching (JavaScript)
 
@@ -12806,40 +12996,40 @@ This JavaScript module provides functions to simulate fetching video data, inclu
 ```javascript
 const videos = [
   {
-    id: '1',
-    title: 'First video',
-    description: 'Video description',
-    image: 'red',
+    id: "1",
+    title: "First video",
+    description: "Video description",
+    image: "red",
   },
   {
-    id: '2',
-    title: 'Second video',
-    description: 'Video description',
-    image: 'blue',
+    id: "2",
+    title: "Second video",
+    description: "Video description",
+    image: "blue",
   },
   {
-    id: '3',
-    title: 'Third video',
-    description: 'Video description',
-    image: 'green',
+    id: "3",
+    title: "Third video",
+    description: "Video description",
+    image: "green",
   },
   {
-    id: '4',
-    title: 'Fourth video',
-    description: 'Video description',
-    image: 'purple',
+    id: "4",
+    title: "Fourth video",
+    description: "Video description",
+    image: "purple",
   },
   {
-    id: '5',
-    title: 'Fifth video',
-    description: 'Video description',
-    image: 'yellow',
+    id: "5",
+    title: "Fifth video",
+    description: "Video description",
+    image: "yellow",
   },
   {
-    id: '6',
-    title: 'Sixth video',
-    description: 'Video description',
-    image: 'gray',
+    id: "6",
+    title: "Sixth video",
+    description: "Video description",
+    image: "gray",
   },
 ];
 
@@ -12888,7 +13078,7 @@ export function fetchVideoDetails(id) {
 }
 ```
 
---------------------------------
+---
 
 ### Removing a React App from a DOM Element
 
@@ -12896,7 +13086,7 @@ Source: https://react.dev/reference/react-dom/unmountComponentAtNode
 
 Practical example demonstrating how to render and unmount a React app from a DOM element using event listeners. This pattern is useful when sprinkling React onto existing pages or managing React component lifecycle in mixed environments.
 
-```APIDOC
+````APIDOC
 ## Removing a React App from a DOM Element
 
 ### Description
@@ -12919,9 +13109,10 @@ document.getElementById('render').addEventListener('click', () => {
 document.getElementById('unmount').addEventListener('click', () => {
   unmountComponentAtNode(domNode);
 });
-```
+````
 
 ### HTML Structure
+
 ```html
 <div id="root"></div>
 <button id="render">Render React App</button>
@@ -12929,13 +13120,16 @@ document.getElementById('unmount').addEventListener('click', () => {
 ```
 
 ### Behavior
+
 - Clicking "Render React App" mounts the React component to the DOM
 - Clicking "Unmount React App" removes the React component and cleans up all event handlers and state
 - The DOM node can be reused for rendering new components after unmounting
 
 ### Use Case
+
 This pattern is useful when you want to "sprinkle" React on an existing page or integrate React with non-React code, allowing you to control when React components are mounted and unmounted.
-```
+
+````
 
 --------------------------------
 
@@ -12963,9 +13157,9 @@ body {
   display: flex;
   justify-content: center;
 }
-```
+````
 
---------------------------------
+---
 
 ### Integrating `prerenderToNodeStream` in a Node.js Server Route Handler
 
@@ -12974,20 +13168,20 @@ Source: https://react.dev/reference/react-dom/static/prerenderToNodeStream
 This example demonstrates how to use `prerenderToNodeStream` within a Node.js server's route handler (e.g., Express). It shows importing the function, calling it with a React component and `bootstrapScripts` option, setting the content type, and piping the resulting `prelude` stream directly to the HTTP response. Client-side hydration with `hydrateRoot` is mentioned as the next step.
 
 ```js
-import { prerenderToNodeStream } from 'react-dom/static';
+import { prerenderToNodeStream } from "react-dom/static";
 
 // The route handler syntax depends on your backend framework
-app.use('/', async (request, response) => {
+app.use("/", async (request, response) => {
   const { prelude } = await prerenderToNodeStream(<App />, {
-    bootstrapScripts: ['/main.js'],
+    bootstrapScripts: ["/main.js"],
   });
 
-  response.setHeader('Content-Type', 'text/plain');
+  response.setHeader("Content-Type", "text/plain");
   prelude.pipe(response);
 });
 ```
 
---------------------------------
+---
 
 ### Render initial React component with items
 
@@ -13005,25 +13199,16 @@ export default function PackingList() {
     <section>
       <h1>Sally Ride's Packing List</h1>
       <ul>
-        <Item
-          isPacked={true}
-          name="Space suit"
-        />
-        <Item
-          isPacked={true}
-          name="Helmet with a golden leaf"
-        />
-        <Item
-          isPacked={false}
-          name="Photo of Tam"
-        />
+        <Item isPacked={true} name="Space suit" />
+        <Item isPacked={true} name="Helmet with a golden leaf" />
+        <Item isPacked={false} name="Photo of Tam" />
       </ul>
     </section>
   );
 }
 ```
 
---------------------------------
+---
 
 ### CSS Styling for Theme Toggle
 
@@ -13048,7 +13233,7 @@ label {
 }
 ```
 
---------------------------------
+---
 
 ### useDeferredValue Hook Reference
 
@@ -13056,7 +13241,7 @@ Source: https://react.dev/reference/react/useDeferredValue
 
 The useDeferredValue hook is called at the top level of a component to get a deferred version of a value. It accepts a value to defer and an optional initial value, returning a deferred version that React updates in the background.
 
-```APIDOC
+````APIDOC
 ## useDeferredValue Hook
 
 ### Description
@@ -13065,21 +13250,24 @@ A React Hook that lets you defer updating a part of the UI. It returns a deferre
 ### Signature
 ```js
 const deferredValue = useDeferredValue(value, initialValue?)
-```
+````
 
 ### Parameters
+
 - **value** (any) - Required - The value you want to defer. It can have any type.
 - **initialValue** (any) - Optional - A value to use during the initial render of a component. If omitted, useDeferredValue will not defer during the initial render.
 
 ### Returns
+
 - **deferredValue** (any) - During the initial render, returns the initialValue or the same value provided. During updates, React first re-renders with the old value, then re-renders in the background with the new value.
 
 ### Usage Example
+
 ```js
-import { useState, useDeferredValue } from 'react';
+import { useState, useDeferredValue } from "react";
 
 function SearchPage() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
   // Use deferredQuery for rendering search results
   return (
@@ -13096,6 +13284,7 @@ function SearchPage() {
 ```
 
 ### Important Caveats
+
 - When an update is inside a Transition, useDeferredValue always returns the new value and does not spawn a deferred render.
 - Pass primitive values or objects created outside rendering. Creating new objects during rendering causes unnecessary background re-renders.
 - useDeferredValue receives different values using Object.is comparison and schedules background re-renders accordingly.
@@ -13104,7 +13293,8 @@ function SearchPage() {
 - No fixed delay - React starts background re-renders immediately after the original render completes.
 - Background re-renders do not fire Effects until committed to the screen.
 - Updates from events (like typing) interrupt background re-renders and get prioritized.
-```
+
+````
 
 --------------------------------
 
@@ -13119,9 +13309,9 @@ import {cacheSignal} from 'react';
 async function Component() {
   await fetch(url, { signal: cacheSignal() });
 }
-```
+````
 
---------------------------------
+---
 
 ### Mark module as client code with 'use client' directive
 
@@ -13130,11 +13320,11 @@ Source: https://react.dev/reference/rsc/use-client
 Demonstrates how to use the 'use client' directive at the top of a file to mark a module and its dependencies as client code. The directive must be placed before any imports or code (comments are allowed). When this file is imported from a Server Component, it establishes a boundary between server and client execution contexts.
 
 ```javascript
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { formatDate } from './formatters';
-import Button from './button';
+import { useState } from "react";
+import { formatDate } from "./formatters";
+import Button from "./button";
 
 export default function RichTextEditor({ timestamp, text }) {
   const date = formatDate(timestamp);
@@ -13144,7 +13334,7 @@ export default function RichTextEditor({ timestamp, text }) {
 }
 ```
 
---------------------------------
+---
 
 ### Example JSX Input for List Component
 
@@ -13160,7 +13350,7 @@ This snippet shows a typical JSX structure passed as children to the `List` comp
 </List>
 ```
 
---------------------------------
+---
 
 ### Upgrade React Router RSC Dependencies
 
@@ -13176,7 +13366,7 @@ npm install react-server-dom-webpack@latest
 npm install @vitejs/plugin-rsc@latest
 ```
 
---------------------------------
+---
 
 ### Three-Layer Prerender, Resume, and Hydrate Workflow
 
@@ -13218,7 +13408,7 @@ async function main(frame) {
 main(document.getElementById("container"));
 ```
 
---------------------------------
+---
 
 ### Playing and Pausing a Video with React Refs
 
@@ -13227,19 +13417,15 @@ Source: https://react.dev/reference/react/forwardRef
 This snippet illustrates how to control a `<video>` element using React refs. The `App` component uses `useRef` to get a reference to the `MyVideoPlayer` component, which forwards it to the underlying `<video>` DOM node, enabling play and pause functionality.
 
 ```js
-import { useRef } from 'react';
-import MyVideoPlayer from './MyVideoPlayer.js';
+import { useRef } from "react";
+import MyVideoPlayer from "./MyVideoPlayer.js";
 
 export default function App() {
   const ref = useRef(null);
   return (
     <>
-      <button onClick={() => ref.current.play()}>
-        Play
-      </button>
-      <button onClick={() => ref.current.pause()}>
-        Pause
-      </button>
+      <button onClick={() => ref.current.play()}>Play</button>
+      <button onClick={() => ref.current.pause()}>Pause</button>
       <br />
       <MyVideoPlayer
         ref={ref}
@@ -13253,15 +13439,12 @@ export default function App() {
 ```
 
 ```js
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 
 const VideoPlayer = forwardRef(function VideoPlayer({ src, type, width }, ref) {
   return (
     <video width={width} ref={ref}>
-      <source
-        src={src}
-        type={type}
-      />
+      <source src={src} type={type} />
     </video>
   );
 });
@@ -13270,10 +13453,13 @@ export default VideoPlayer;
 ```
 
 ```css
-button { margin-bottom: 10px; margin-right: 10px; }
+button {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Fix component not compiled in infer mode
 
@@ -13294,17 +13480,17 @@ function Button(props) {
 
 // ❌ Won't be compiled: doesn't create JSX or call hooks
 function useData() {
-  return window.localStorage.getItem('data');
+  return window.localStorage.getItem("data");
 }
 
 // ✅ Will be compiled: calls a hook
 function useData() {
-  const [data] = useState(() => window.localStorage.getItem('data'));
+  const [data] = useState(() => window.localStorage.getItem("data"));
   return data;
 }
 ```
 
---------------------------------
+---
 
 ### Incorrect `useMemo` Dependency in React (Object Creation)
 
@@ -13322,7 +13508,7 @@ function Dropdown({ allItems, text }) {
   // ...
 ```
 
---------------------------------
+---
 
 ### preinitModule
 
@@ -13330,7 +13516,7 @@ Source: https://react.dev/reference/react-dom
 
 Fetches and evaluates an ESM module. This resource preloading API downloads and executes JavaScript modules in advance for improved performance.
 
-```APIDOC
+````APIDOC
 ## preinitModule
 
 ### Description
@@ -13342,20 +13528,24 @@ Use `preinitModule` to download and execute JavaScript modules early before they
 ### Syntax
 ```javascript
 preinitModule(href, options?)
-```
+````
 
 ### Parameters
+
 - **href** (string) - Required - The URL of the ESM module you want to fetch and evaluate
 - **options** (object) - Optional - Configuration object with optional properties
 
 ### Returns
+
 Void
 
 ### Notes
+
 - Specifically for ES modules
 - Both downloads and executes the module
 - More aggressive than `preloadModule` as it initializes the module
-```
+
+````
 
 --------------------------------
 
@@ -13384,9 +13574,9 @@ const root = createRoot(container, {
   onUncaughtError: onUncaughtErrorProd,
 });
 root.render(<App />);
-```
+````
 
---------------------------------
+---
 
 ### Demonstrating memoization failure with useForm().watch() in React
 
@@ -13400,13 +13590,13 @@ function Form() {
   const { watch } = useForm();
 
   // ❌ This value will never update, even when 'name' field changes
-  const name = useMemo(() => watch('name'), [watch]);
+  const name = useMemo(() => watch("name"), [watch]);
 
   return <div>Name: {name}</div>; // UI appears "frozen"
 }
 ```
 
---------------------------------
+---
 
 ### Initialize UI with JavaScript `updateDOM()`
 
@@ -13419,7 +13609,7 @@ This JavaScript call, `updateDOM()`, is used to initialize or refresh the user i
 updateDOM();
 ```
 
---------------------------------
+---
 
 ### Demonstrate Automatic Batching in React 18 with setTimeout
 
@@ -13430,21 +13620,21 @@ This JavaScript example illustrates the automatic batching behavior in React 18.
 ```js
 // Before: only React events were batched.
 setTimeout(() => {
-  setCount(c => c + 1);
-  setFlag(f => !f);
+  setCount((c) => c + 1);
+  setFlag((f) => !f);
   // React will render twice, once for each state update (no batching)
 }, 1000);
 
 // After: updates inside of timeouts, promises,
 // native event handlers or any other event are batched.
 setTimeout(() => {
-  setCount(c => c + 1);
-  setFlag(f => !f);
+  setCount((c) => c + 1);
+  setFlag((f) => !f);
   // React will only re-render once at the end (that's batching!)
 }, 1000);
 ```
 
---------------------------------
+---
 
 ### Create root component returning full HTML document
 
@@ -13470,7 +13660,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Sample Product Data JSON API Response
 
@@ -13480,16 +13670,36 @@ Example JSON data structure returned by an API containing product information wi
 
 ```json
 [
-  { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
-  { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
-  { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
-  { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
-  { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
-  { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
+  { "category": "Fruits", "price": "$1", "stocked": true, "name": "Apple" },
+  {
+    "category": "Fruits",
+    "price": "$1",
+    "stocked": true,
+    "name": "Dragonfruit"
+  },
+  {
+    "category": "Fruits",
+    "price": "$2",
+    "stocked": false,
+    "name": "Passionfruit"
+  },
+  {
+    "category": "Vegetables",
+    "price": "$2",
+    "stocked": true,
+    "name": "Spinach"
+  },
+  {
+    "category": "Vegetables",
+    "price": "$4",
+    "stocked": false,
+    "name": "Pumpkin"
+  },
+  { "category": "Vegetables", "price": "$1", "stocked": true, "name": "Peas" }
 ]
 ```
 
---------------------------------
+---
 
 ### Connect React Component to External System using useEffect
 
@@ -13498,24 +13708,24 @@ Source: https://react.dev/reference/react/useEffect
 This React snippet demonstrates how to use the `useEffect` hook to manage a connection to an external chat system. It defines a setup function to create and connect to the chat, and a cleanup function to disconnect. The effect re-runs when `serverUrl` or `roomId` dependencies change, ensuring the component stays synchronized with the correct external state.
 
 ```javascript
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useState, useEffect } from "react";
+import { createConnection } from "./chat.js";
 
 function ChatRoom({ roomId }) {
-  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+  const [serverUrl, setServerUrl] = useState("https://localhost:1234");
 
   useEffect(() => {
-  	const connection = createConnection(serverUrl, roomId);
+    const connection = createConnection(serverUrl, roomId);
     connection.connect();
-  	return () => {
+    return () => {
       connection.disconnect();
-  	};
+    };
   }, [serverUrl, roomId]);
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Inefficient Data Fetching in React with useEffect
 
@@ -13529,20 +13739,22 @@ export default function Dashboard() {
 
   // ❌ Fetching data in a component causes network waterfalls
   useEffect(() => {
-    fetch('/api/data')
-      .then(response => response.json())
-      .then(data => setData(data));
+    fetch("/api/data")
+      .then((response) => response.json())
+      .then((data) => setData(data));
   }, []);
 
   return (
     <div>
-      {data.map(item => <div key={item.id}>{item.name}</div>)}
+      {data.map((item) => (
+        <div key={item.id}>{item.name}</div>
+      ))}
     </div>
-  )
+  );
 }
 ```
 
---------------------------------
+---
 
 ### createRoot(domNode, options?)
 
@@ -13550,7 +13762,7 @@ Source: https://react.dev/reference/react-dom/client/createRoot
 
 Creates a React root for displaying content inside a browser DOM element. This is the entry point for rendering React components in the DOM. After creating a root, you must call root.render() to display React components.
 
-```APIDOC
+````APIDOC
 ## createRoot(domNode, options?)
 
 ### Description
@@ -13559,50 +13771,58 @@ Creates a React root for displaying React components inside a browser DOM elemen
 ### Syntax
 ```js
 const root = createRoot(domNode, options?)
-```
+````
 
 ### Parameters
 
 #### domNode (Required)
+
 - **Type**: DOM Element
 - **Description**: A DOM element where React will create a root and manage the DOM content inside it.
 
 #### options (Optional)
+
 - **Type**: Object
 - **Description**: Configuration object for the React root.
 
 ##### Options Properties
+
 - **onCaughtError** (function) - Optional - Callback invoked when React catches an error in an Error Boundary. Called with the error and errorInfo object containing componentStack.
 - **onUncaughtError** (function) - Optional - Callback invoked when an error is thrown and not caught by an Error Boundary. Called with the error and errorInfo object containing componentStack.
 - **onRecoverableError** (function) - Optional - Callback invoked when React automatically recovers from errors. Called with the error and errorInfo object containing componentStack. May include original error cause as error.cause.
 - **identifierPrefix** (string) - Optional - String prefix React uses for IDs generated by useId. Useful to avoid conflicts when using multiple roots on the same page.
 
 ### Returns
+
 - **Type**: Object
 - **Description**: Returns an object with two methods: render() and unmount().
 
 ### Request Example
-```js
-import { createRoot } from 'react-dom/client';
 
-const domNode = document.getElementById('root');
+```js
+import { createRoot } from "react-dom/client";
+
+const domNode = document.getElementById("root");
 const root = createRoot(domNode, {
   onCaughtError: (error, errorInfo) => {
-    console.log('Error caught:', error, errorInfo);
+    console.log("Error caught:", error, errorInfo);
   },
-  identifierPrefix: 'my-app'
+  identifierPrefix: "my-app",
 });
 ```
 
 ### Caveats
+
 - Not supported for server-rendered apps. Use hydrateRoot() instead.
 - Typically only one createRoot call per app. Frameworks may handle this automatically.
 - For rendering JSX in different DOM tree parts (modals, tooltips), use createPortal() instead.
 
 ### Related Methods
+
 - root.render(reactNode) - Display React components in the root
 - root.unmount() - Remove the root and its content
-```
+
+````
 
 --------------------------------
 
@@ -13629,9 +13849,9 @@ function ProblematicComponent() {
   "use no memo"; // Fix issues before removing
   // ...
 }
-```
+````
 
---------------------------------
+---
 
 ### React Component Gallery with Multiple Image Renders
 
@@ -13661,7 +13881,7 @@ function Image() {
 }
 ```
 
---------------------------------
+---
 
 ### Basic `preinitModule` Call for ESM Modules
 
@@ -13670,10 +13890,10 @@ Source: https://react.dev/reference/react-dom/preinitModule
 Illustrates the fundamental syntax for using `preinitModule` to eagerly fetch and evaluate an ECMAScript module (ESM) by providing its URL and specifying `as: 'script'`.
 
 ```javascript
-preinitModule("https://example.com/module.js", {as: "script"});
+preinitModule("https://example.com/module.js", { as: "script" });
 ```
 
---------------------------------
+---
 
 ### Implement Tabbed Navigation with Conditional Rendering (Unmounting)
 
@@ -13682,33 +13902,33 @@ Source: https://react.dev/reference/react/Activity
 This React example demonstrates a basic tabbed navigation system where inactive tabs are conditionally rendered, effectively unmounting them from the DOM. It showcases how a `<video>` element, when unmounted, naturally stops playing, serving as a baseline for comparison with `Activity` boundaries.
 
 ```js
-import { useState } from 'react';
-import TabButton from './TabButton.js';
-import Home from './Home.js';
-import Video from './Video.js';
+import { useState } from "react";
+import TabButton from "./TabButton.js";
+import Home from "./Home.js";
+import Video from "./Video.js";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('video');
+  const [activeTab, setActiveTab] = useState("video");
 
   return (
     <>
       <TabButton
-        isActive={activeTab === 'home'}
-        onClick={() => setActiveTab('home')}
+        isActive={activeTab === "home"}
+        onClick={() => setActiveTab("home")}
       >
         Home
       </TabButton>
       <TabButton
-        isActive={activeTab === 'video'}
-        onClick={() => setActiveTab('video')}
+        isActive={activeTab === "video"}
+        onClick={() => setActiveTab("video")}
       >
         Video
       </TabButton>
 
       <hr />
 
-      {activeTab === 'home' && <Home />}
-      {activeTab === 'video' && <Video />}
+      {activeTab === "home" && <Home />}
+      {activeTab === "video" && <Video />}
     </>
   );
 }
@@ -13717,22 +13937,16 @@ export default function App() {
 ```js
 export default function TabButton({ onClick, children, isActive }) {
   if (isActive) {
-    return <b>{children}</b>
+    return <b>{children}</b>;
   }
 
-  return (
-    <button onClick={onClick}>
-      {children}
-    </button>
-  );
+  return <button onClick={onClick}>{children}</button>;
 }
 ```
 
 ```js
 export default function Home() {
-  return (
-    <p>Welcome to my profile!</p>
-  );
+  return <p>Welcome to my profile!</p>;
 }
 ```
 
@@ -13745,20 +13959,32 @@ export default function Video() {
       controls
       playsInline
     />
-
   );
 }
 ```
 
 ```css
-body { height: 275px; }
-button { margin-right: 10px }
-b { display: inline-block; margin-right: 10px; }
-.pending { color: #777; }
-video { width: 300px; margin-top: 10px; aspect-ratio: 16/9; }
+body {
+  height: 275px;
+}
+button {
+  margin-right: 10px;
+}
+b {
+  display: inline-block;
+  margin-right: 10px;
+}
+.pending {
+  color: #777;
+}
+video {
+  width: 300px;
+  margin-top: 10px;
+  aspect-ratio: 16/9;
+}
 ```
 
---------------------------------
+---
 
 ### React List Reordering with ViewTransition Animation
 
@@ -13767,12 +13993,8 @@ Source: https://react.dev/reference/react/ViewTransition
 Complete example of a video list component that reorders items with animations using ViewTransition. Uses startTransition to batch state updates and wraps each video item with ViewTransition to animate position changes when the shuffle button is clicked.
 
 ```javascript
-import {
-  ViewTransition,
-  useState,
-  startTransition
-} from "react";
-import {Video} from "./Video";
+import { ViewTransition, useState, startTransition } from "react";
+import { Video } from "./Video";
 import videos from "./data";
 
 export default function Component() {
@@ -13801,7 +14023,7 @@ export default function Component() {
 }
 ```
 
---------------------------------
+---
 
 ### JavaScript: Compare String Primitives for Equality
 
@@ -13811,16 +14033,16 @@ This example illustrates how JavaScript compares primitive string values. It sho
 
 ```js
 // During the first render
-const roomId1 = 'music';
+const roomId1 = "music";
 
 // During the next render
-const roomId2 = 'music';
+const roomId2 = "music";
 
 // These two strings are the same!
 console.log(Object.is(roomId1, roomId2)); // true
 ```
 
---------------------------------
+---
 
 ### Incorrect Video Player Implementation - Calling Methods During Render
 
@@ -13829,13 +14051,13 @@ Source: https://react.dev/learn/synchronizing-with-effects
 Example demonstrating the incorrect approach of calling play() and pause() methods during rendering. This code will fail because the DOM node doesn't exist during the initial render and calling DOM methods during rendering violates React's pure rendering principle.
 
 ```javascript
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 
 function VideoPlayer({ src, isPlaying }) {
   const ref = useRef(null);
 
   if (isPlaying) {
-    ref.current.play();  // Calling these while rendering isn't allowed.
+    ref.current.play(); // Calling these while rendering isn't allowed.
   } else {
     ref.current.pause(); // Also, this crashes.
   }
@@ -13848,7 +14070,7 @@ export default function App() {
   return (
     <>
       <button onClick={() => setIsPlaying(!isPlaying)}>
-        {isPlaying ? 'Pause' : 'Play'}
+        {isPlaying ? "Pause" : "Play"}
       </button>
       <VideoPlayer
         isPlaying={isPlaying}
@@ -13859,7 +14081,7 @@ export default function App() {
 }
 ```
 
---------------------------------
+---
 
 ### Correctly Specifying useEffect Dependencies in React
 
@@ -13869,7 +14091,7 @@ This example demonstrates the correct way to declare dependencies for a `useEffe
 
 ```js
 function ChatRoom({ roomId }) {
-  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
+  const [serverUrl, setServerUrl] = useState("https://localhost:1234");
 
   useEffect(() => {
     const connection = createConnection(serverUrl, roomId);
@@ -13880,7 +14102,7 @@ function ChatRoom({ roomId }) {
 }
 ```
 
---------------------------------
+---
 
 ### Configure React Compiler runtime gating in Babel (JavaScript)
 
@@ -13892,17 +14114,20 @@ Illustrates how to configure the 'babel-plugin-react-compiler' in 'babel.config.
 // babel.config.js
 module.exports = {
   plugins: [
-    ['babel-plugin-react-compiler', {
-      gating: {
-        source: 'ReactCompilerFeatureFlags',
-        importSpecifierName: 'isCompilerEnabled'
-      }
-    }]
-  ]
+    [
+      "babel-plugin-react-compiler",
+      {
+        gating: {
+          source: "ReactCompilerFeatureFlags",
+          importSpecifierName: "isCompilerEnabled",
+        },
+      },
+    ],
+  ],
 };
 ```
 
---------------------------------
+---
 
 ### App Component with Counter and Input
 
@@ -13911,7 +14136,7 @@ Source: https://react.dev/reference/react-dom/client/hydrateRoot
 A simple React functional component that accepts a counter prop and renders a heading displaying the counter value along with an input field. This component is used in the hydration example to demonstrate state preservation during updates.
 
 ```javascript
-export default function App({counter}) {
+export default function App({ counter }) {
   return (
     <>
       <h1>Hello, world! {counter}</h1>
@@ -13921,7 +14146,7 @@ export default function App({counter}) {
 }
 ```
 
---------------------------------
+---
 
 ### Incorrect: Dynamic Component Creation in React (JavaScript)
 
@@ -13932,7 +14157,8 @@ This example demonstrates common anti-patterns in React where components are def
 ```js
 // ❌ Component defined inside component
 function Parent() {
-  const ChildComponent = () => { // New component every render!
+  const ChildComponent = () => {
+    // New component every render!
     const [count, setCount] = useState(0);
     return <button onClick={() => setCount(count + 1)}>{count}</button>;
   };
@@ -13941,16 +14167,15 @@ function Parent() {
 }
 
 // ❌ Dynamic component creation
-function Parent({type}) {
-  const Component = type === 'button'
-    ? () => <button>Click</button>
-    : () => <div>Text</div>;
+function Parent({ type }) {
+  const Component =
+    type === "button" ? () => <button>Click</button> : () => <div>Text</div>;
 
   return <Component />;
 }
 ```
 
---------------------------------
+---
 
 ### Utility Functions for Todo Creation and Filtering
 
@@ -13965,32 +14190,38 @@ export function createTodos() {
     todos.push({
       id: i,
       text: "Todo " + (i + 1),
-      completed: Math.random() > 0.5
+      completed: Math.random() > 0.5,
     });
   }
   return todos;
 }
 
 export function filterTodos(todos, tab) {
-  console.log('[ARTIFICIALLY SLOW] Filtering ' + todos.length + ' todos for "' + tab + '" tab.');
+  console.log(
+    "[ARTIFICIALLY SLOW] Filtering " +
+      todos.length +
+      ' todos for "' +
+      tab +
+      '" tab.',
+  );
   let startTime = performance.now();
   while (performance.now() - startTime < 500) {
     // Do nothing for 500 ms to emulate extremely slow code
   }
 
-  return todos.filter(todo => {
-    if (tab === 'all') {
+  return todos.filter((todo) => {
+    if (tab === "all") {
       return true;
-    } else if (tab === 'active') {
+    } else if (tab === "active") {
       return !todo.completed;
-    } else if (tab === 'completed') {
+    } else if (tab === "completed") {
       return todo.completed;
     }
   });
 }
 ```
 
---------------------------------
+---
 
 ### Forwarding React Refs Through Multiple Components
 
@@ -13999,8 +14230,8 @@ Source: https://react.dev/reference/react/forwardRef
 This example demonstrates how to forward a ref through an intermediate custom component (`FormField`) to a final DOM node (`<input>`). The `Form` component passes a ref to `FormField`, which then passes it to `MyInput`, ultimately allowing `Form` to interact with the native input element.
 
 ```js
-import { useRef } from 'react';
-import FormField from './FormField.js';
+import { useRef } from "react";
+import FormField from "./FormField.js";
 
 export default function Form() {
   const ref = useRef(null);
@@ -14021,22 +14252,20 @@ export default function Form() {
 ```
 
 ```js
-import { forwardRef, useState } from 'react';
-import MyInput from './MyInput.js';
+import { forwardRef, useState } from "react";
+import MyInput from "./MyInput.js";
 
 const FormField = forwardRef(function FormField({ label, isRequired }, ref) {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   return (
     <>
       <MyInput
         ref={ref}
         label={label}
         value={value}
-        onChange={e => setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
       />
-      {(isRequired && value === '') &&
-        <i>Required</i>
-      }
+      {isRequired && value === "" && <i>Required</i>}
     </>
   );
 });
@@ -14045,7 +14274,7 @@ export default FormField;
 ```
 
 ```js
-import { forwardRef } from 'react';
+import { forwardRef } from "react";
 
 const MyInput = forwardRef((props, ref) => {
   const { label, ...otherProps } = props;
@@ -14061,12 +14290,13 @@ export default MyInput;
 ```
 
 ```css
-input, button {
+input,
+button {
   margin: 5px;
 }
 ```
 
---------------------------------
+---
 
 ### Import and Use createElement in React Component
 
@@ -14075,18 +14305,14 @@ Source: https://react.dev/reference/react/createElement
 Complete example showing how to import createElement from React and use it within a functional component. The Greeting component demonstrates creating an h1 element with className prop and text content as children. This pattern is useful when you prefer programmatic element creation over JSX syntax.
 
 ```javascript
-import { createElement } from 'react';
+import { createElement } from "react";
 
 function Greeting({ name }) {
-  return createElement(
-    'h1',
-    { className: 'greeting' },
-    'Hello'
-  );
+  return createElement("h1", { className: "greeting" }, "Hello");
 }
 ```
 
---------------------------------
+---
 
 ### createConnection API Mock Implementation
 
@@ -14099,16 +14325,16 @@ export function createConnection() {
   // A real implementation would actually connect to the server
   return {
     connect() {
-      console.log('✅ Connecting...');
+      console.log("✅ Connecting...");
     },
     disconnect() {
-      console.log('❌ Disconnected.');
-    }
+      console.log("❌ Disconnected.");
+    },
   };
 }
 ```
 
---------------------------------
+---
 
 ### CSS Styling for Reset Button - CSS
 
@@ -14117,10 +14343,13 @@ Source: https://react.dev/reference/react/useState
 Basic CSS styling for the reset button component, setting display to block and adding bottom margin for spacing. This stylesheet accompanies the React component example for visual layout.
 
 ```css
-button { display: block; margin-bottom: 20px; }
+button {
+  display: block;
+  margin-bottom: 20px;
+}
 ```
 
---------------------------------
+---
 
 ### Understand Default Component Re-rendering Behavior in React
 
@@ -14135,7 +14364,7 @@ function TodoList({ todos, tab, theme }) {
 }
 ```
 
---------------------------------
+---
 
 ### Complete React Tic-Tac-Toe Board Component with Turn Logic
 
@@ -14144,9 +14373,9 @@ Source: https://react.dev/learn/tutorial-tic-tac-toe
 Full implementation of the Board component with turn-based gameplay, including the Square child component, state management for tracking player turns and board state, click handling with validation, and the 3x3 grid rendering. This complete example demonstrates proper React patterns for game state management and event handling.
 
 ```javascript
-import { useState } from 'react';
+import { useState } from "react";
 
-function Square({value, onSquareClick}) {
+function Square({ value, onSquareClick }) {
   return (
     <button className="square" onClick={onSquareClick}>
       {value}
@@ -14164,9 +14393,9 @@ export default function Board() {
     }
     const nextSquares = squares.slice();
     if (xIsNext) {
-      nextSquares[i] = 'X';
+      nextSquares[i] = "X";
     } else {
-      nextSquares[i] = 'O';
+      nextSquares[i] = "O";
     }
     setSquares(nextSquares);
     setXIsNext(!xIsNext);
@@ -14194,7 +14423,7 @@ export default function Board() {
 }
 ```
 
---------------------------------
+---
 
 ### Basic `renderToString` function signature in JavaScript
 
@@ -14206,7 +14435,7 @@ Illustrates the basic function signature for `renderToString`, showing it takes 
 const html = renderToString(reactNode, options?)
 ```
 
---------------------------------
+---
 
 ### Updating the Current Value of a Ref in React
 
@@ -14223,7 +14452,7 @@ function handleStartClick() {
 }
 ```
 
---------------------------------
+---
 
 ### Implement Cached Asynchronous Video List Fetching in JavaScript
 
@@ -14234,40 +14463,40 @@ This JavaScript snippet defines a mock video dataset and implements a `fetchVide
 ```javascript
 const videos = [
   {
-    id: '1',
-    title: 'First video',
-    description: 'Video description',
-    image: 'blue',
+    id: "1",
+    title: "First video",
+    description: "Video description",
+    image: "blue",
   },
   {
-    id: '2',
-    title: 'Second video',
-    description: 'Video description',
-    image: 'red',
+    id: "2",
+    title: "Second video",
+    description: "Video description",
+    image: "red",
   },
   {
-    id: '3',
-    title: 'Third video',
-    description: 'Video description',
-    image: 'green',
+    id: "3",
+    title: "Third video",
+    description: "Video description",
+    image: "green",
   },
   {
-    id: '4',
-    title: 'Fourth video',
-    description: 'Video description',
-    image: 'purple',
+    id: "4",
+    title: "Fourth video",
+    description: "Video description",
+    image: "purple",
   },
   {
-    id: '5',
-    title: 'Fifth video',
-    description: 'Video description',
-    image: 'yellow',
+    id: "5",
+    title: "Fifth video",
+    description: "Video description",
+    image: "yellow",
   },
   {
-    id: '6',
-    title: 'Sixth video',
-    description: 'Video description',
-    image: 'gray',
+    id: "6",
+    title: "Sixth video",
+    description: "Video description",
+    image: "gray",
   },
 ];
 
@@ -14290,7 +14519,7 @@ export function fetchVideos() {
 }
 ```
 
---------------------------------
+---
 
 ### Complete React component for dynamic list rendering with CSS
 
@@ -14300,26 +14529,26 @@ A comprehensive example showcasing a React component that defines an array of da
 
 ```js
 const people = [
-  'Creola Katherine Johnson: mathematician',
-  'Mario José Molina-Pasquel Henríquez: chemist',
-  'Mohammad Abdus Salam: physicist',
-  'Percy Lavon Julian: chemist',
-  'Subrahmanyan Chandrasekhar: astrophysicist'
+  "Creola Katherine Johnson: mathematician",
+  "Mario José Molina-Pasquel Henríquez: chemist",
+  "Mohammad Abdus Salam: physicist",
+  "Percy Lavon Julian: chemist",
+  "Subrahmanyan Chandrasekhar: astrophysicist",
 ];
 
 export default function List() {
-  const listItems = people.map(person =>
-    <li>{person}</li>
-  );
+  const listItems = people.map((person) => <li>{person}</li>);
   return <ul>{listItems}</ul>;
 }
 ```
 
 ```css
-li { margin-bottom: 10px; }
+li {
+  margin-bottom: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Using Render Prop to Render Row Component
 
@@ -14330,17 +14559,13 @@ Example of passing a renderItem implementation to the List component. The render
 ```javascript
 <List
   items={products}
-  renderItem={(product, isHighlighted) =>
-    <Row
-      key={product.id}
-      title={product.title}
-      isHighlighted={isHighlighted}
-    />
-  }
+  renderItem={(product, isHighlighted) => (
+    <Row key={product.id} title={product.title} isHighlighted={isHighlighted} />
+  )}
 />
 ```
 
---------------------------------
+---
 
 ### Iterate children with Children.forEach in React
 
@@ -14362,7 +14587,7 @@ export default function SeparatorList({ children }) {
 }
 ```
 
---------------------------------
+---
 
 ### Handle Focus Events in React with Bubbling
 
@@ -14377,24 +14602,24 @@ export default function FocusExample() {
       tabIndex={1}
       onFocus={(e) => {
         if (e.currentTarget === e.target) {
-          console.log('focused parent');
+          console.log("focused parent");
         } else {
-          console.log('focused child', e.target.name);
+          console.log("focused child", e.target.name);
         }
         if (!e.currentTarget.contains(e.relatedTarget)) {
           // Not triggered when swapping focus between children
-          console.log('focus entered parent');
+          console.log("focus entered parent");
         }
       }}
       onBlur={(e) => {
         if (e.currentTarget === e.target) {
-          console.log('unfocused parent');
+          console.log("unfocused parent");
         } else {
-          console.log('unfocused child', e.target.name);
+          console.log("unfocused child", e.target.name);
         }
         if (!e.currentTarget.contains(e.relatedTarget)) {
           // Not triggered when swapping focus between children
-          console.log('focus left parent');
+          console.log("focus left parent");
         }
       }}
     >
@@ -14412,11 +14637,15 @@ export default function FocusExample() {
 ```
 
 ```css
-label { display: block; }
-input { margin-left: 10px; }
+label {
+  display: block;
+}
+input {
+  margin-left: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### Detecting Refs: JSX `ref` prop usage in React
 
@@ -14428,7 +14657,7 @@ This example shows how the lint rule infers a value as a ref when it is passed t
 <input ref={inputRef} />
 ```
 
---------------------------------
+---
 
 ### Define Basic HTML Structure for Art Gallery UI
 
@@ -14437,22 +14666,29 @@ Source: https://react.dev/learn/state-a-components-memory
 This HTML snippet provides the foundational user interface elements for an art gallery display. It includes buttons for navigation, a header for the art piece name, a paragraph for its description, and an image tag to display the artwork, all within a basic page structure.
 
 ```html
-<button id="nextButton">
-  Next
-</button>
+<button id="nextButton">Next</button>
 <h3 id="header"></h3>
 <button id="moreButton"></button>
 <p id="description"></p>
-<img id="image">
+<img id="image" />
 
 <style>
-* { box-sizing: border-box; }
-body { font-family: sans-serif; margin: 20px; padding: 0; }
-button { display: block; margin-bottom: 10px; }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: sans-serif;
+    margin: 20px;
+    padding: 0;
+  }
+  button {
+    display: block;
+    margin-bottom: 10px;
+  }
 </style>
 ```
 
---------------------------------
+---
 
 ### Implement React Class Component Lifecycle Methods: componentDidMount, componentDidUpdate, componentWillUnmount
 
@@ -14463,7 +14699,7 @@ This snippet demonstrates the implementation of `componentDidMount`, `componentD
 ```js
 class ChatRoom extends Component {
   state = {
-    serverUrl: 'https://localhost:1234'
+    serverUrl: "https://localhost:1234",
   };
 
   componentDidMount() {
@@ -14488,7 +14724,7 @@ class ChatRoom extends Component {
 }
 ```
 
---------------------------------
+---
 
 ### Directly Calculating Derived State in React Components
 
@@ -14498,14 +14734,14 @@ This example demonstrates the recommended approach for handling derived data whe
 
 ```js
 function TodoList({ todos, filter }) {
-  const [newTodo, setNewTodo] = useState('');
+  const [newTodo, setNewTodo] = useState("");
   // ✅ This is fine if getFilteredTodos() is not slow.
   const visibleTodos = getFilteredTodos(todos, filter);
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Default inference mode examples
 
@@ -14537,7 +14773,7 @@ function calculateTotal(items) {
 }
 ```
 
---------------------------------
+---
 
 ### Simulate chat connection service (JavaScript)
 
@@ -14546,7 +14782,7 @@ Source: https://react.dev/reference/react/useEffectEvent
 This JavaScript module provides a mock `createConnection` function that simulates connecting to a chat server. It includes methods for `connect`, `on` (for a 'connected' event), and `disconnect`. This simplified implementation helps demonstrate the `useEffect` and `useEffectEvent` behavior without requiring a real backend.
 
 ```js
-const serverUrl = 'https://localhost:1234';
+const serverUrl = "https://localhost:1234";
 
 export function createConnection(roomId) {
   // A real implementation would actually connect to the server
@@ -14562,21 +14798,21 @@ export function createConnection(roomId) {
     },
     on(event, callback) {
       if (connectedCallback) {
-        throw Error('Cannot add the handler twice.');
+        throw Error("Cannot add the handler twice.");
       }
-      if (event !== 'connected') {
+      if (event !== "connected") {
         throw Error('Only "connected" event is supported.');
       }
       connectedCallback = callback;
     },
     disconnect() {
       clearTimeout(timeout);
-    }
+    },
   };
 }
 ```
 
---------------------------------
+---
 
 ### Using `useDeferredValue` in a React Component for Deferred State
 
@@ -14585,16 +14821,16 @@ Source: https://react.dev/reference/react/useDeferredValue
 This example demonstrates how to integrate `useDeferredValue` within a functional React component. It shows importing the hook, using `useState` to manage a `query`, and then applying `useDeferredValue` to create a `deferredQuery`, which can be used for less urgent UI updates.
 
 ```js
-import { useState, useDeferredValue } from 'react';
+import { useState, useDeferredValue } from "react";
 
 function SearchPage() {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### React Props with Default Values Using Destructuring
 
@@ -14608,7 +14844,7 @@ function Avatar({ person, size = 100 }) {
 }
 ```
 
---------------------------------
+---
 
 ### Implement Quantity Stepper with React `useActionState` and `Action` props
 
@@ -14617,20 +14853,23 @@ Source: https://react.dev/reference/react/useActionState
 This example demonstrates building a quantity stepper component for a shopping cart using React's `useActionState` hook to manage server-side state updates and `Action` props for component interaction. It integrates `useOptimistic` and `startTransition` within the `QuantityStepper` component to provide an instant UI update while the actual action is pending, enhancing user experience. The `App.js` orchestrates the main checkout flow, `QuantityStepper.js` handles the UI and optimistic updates, `Total.js` displays the calculated total, and `api.js` simulates asynchronous backend calls.
 
 ```js
-import { useActionState } from 'react';
-import { addToCart, removeFromCart } from './api';
-import QuantityStepper from './QuantityStepper';
-import Total from './Total';
+import { useActionState } from "react";
+import { addToCart, removeFromCart } from "./api";
+import QuantityStepper from "./QuantityStepper";
+import Total from "./Total";
 
 export default function Checkout() {
-  const [count, dispatchAction, isPending] = useActionState(updateCartAction, 0);
+  const [count, dispatchAction, isPending] = useActionState(
+    updateCartAction,
+    0,
+  );
 
   function addAction() {
-    dispatchAction({type: 'ADD'});
+    dispatchAction({ type: "ADD" });
   }
 
   function removeAction() {
-    dispatchAction({type: 'REMOVE'});
+    dispatchAction({ type: "REMOVE" });
   }
 
   return (
@@ -14652,10 +14891,10 @@ export default function Checkout() {
 
 async function updateCartAction(prevCount, actionPayload) {
   switch (actionPayload.type) {
-    case 'ADD': {
+    case "ADD": {
       return await addToCart(prevCount);
     }
-    case 'REMOVE': {
+    case "REMOVE": {
       return await removeFromCart(prevCount);
     }
   }
@@ -14664,28 +14903,32 @@ async function updateCartAction(prevCount, actionPayload) {
 ```
 
 ```js
-import { startTransition, useOptimistic } from 'react';
+import { startTransition, useOptimistic } from "react";
 
-export default function QuantityStepper({value, increaseAction, decreaseAction}) {
+export default function QuantityStepper({
+  value,
+  increaseAction,
+  decreaseAction,
+}) {
   const [optimisticValue, setOptimisticValue] = useOptimistic(value);
   const isPending = value !== optimisticValue;
   function handleIncrease() {
     startTransition(async () => {
-      setOptimisticValue(c => c + 1);
+      setOptimisticValue((c) => c + 1);
       await increaseAction();
     });
   }
 
   function handleDecrease() {
     startTransition(async () => {
-      setOptimisticValue(c => Math.max(0, c - 1));
+      setOptimisticValue((c) => Math.max(0, c - 1));
       await decreaseAction();
     });
   }
 
   return (
     <span className="stepper">
-      <span className="pending">{isPending && '🌀'}</span>
+      <span className="pending">{isPending && "🌀"}</span>
       <span className="qty">{optimisticValue}</span>
       <span className="buttons">
         <button onClick={handleIncrease}>▲</button>
@@ -14697,17 +14940,17 @@ export default function QuantityStepper({value, increaseAction, decreaseAction})
 ```
 
 ```js
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
   minimumFractionDigits: 0,
 });
 
-export default function Total({quantity, isPending}) {
+export default function Total({ quantity, isPending }) {
   return (
     <div className="row total">
       <span>Total</span>
-      {isPending ? '🌀 Updating...' : formatter.format(quantity * 9999)}
+      {isPending ? "🌀 Updating..." : formatter.format(quantity * 9999)}
     </div>
   );
 }
@@ -14715,12 +14958,12 @@ export default function Total({quantity, isPending}) {
 
 ```js
 export async function addToCart(count) {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   return count + 1;
 }
 
 export async function removeFromCart(count) {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   return Math.max(0, count - 1);
 }
 ```
@@ -14787,7 +15030,7 @@ hr {
 }
 ```
 
---------------------------------
+---
 
 ### CSS Video Details Page Layout Components
 
@@ -14842,7 +15085,8 @@ Styles video details page with full-width thumbnail (16:9 aspect ratio), back na
 }
 
 .fallback {
-  background: #f6f7f8 linear-gradient(to right, #e6e6e6 5%, #cccccc 25%, #e6e6e6 35%) no-repeat;
+  background: #f6f7f8
+    linear-gradient(to right, #e6e6e6 5%, #cccccc 25%, #e6e6e6 35%) no-repeat;
   background-size: 800px 104px;
   display: block;
   line-height: 1.25;
@@ -14851,7 +15095,7 @@ Styles video details page with full-width thumbnail (16:9 aspect ratio), back na
 }
 ```
 
---------------------------------
+---
 
 ### Original React PureComponent Class Component Example
 
@@ -14860,27 +15104,32 @@ Source: https://react.dev/reference/react/PureComponent
 This snippet presents a React application featuring a `PureComponent` class component named `Greeting`. The `Greeting` component logs its render time and displays a personalized greeting. The `MyApp` component manages state for a name and an address, passing the name prop to `Greeting` to demonstrate how `PureComponent` optimizes re-renders based on prop changes. The accompanying CSS styles the input labels.
 
 ```js
-import { PureComponent, useState } from 'react';
+import { PureComponent, useState } from "react";
 
 class Greeting extends PureComponent {
   render() {
     console.log("Greeting was rendered at", new Date().toLocaleTimeString());
-    return <h3>Hello{this.props.name && ', '}{this.props.name}!</h3>;
+    return (
+      <h3>
+        Hello{this.props.name && ", "}
+        {this.props.name}!
+      </h3>
+    );
   }
 }
 
 export default function MyApp() {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
   return (
     <>
       <label>
-        Name{': '}
-        <input value={name} onChange={e => setName(e.target.value)} />
+        Name{": "}
+        <input value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label>
-        Address{': '}
-        <input value={address} onChange={e => setAddress(e.target.value)} />
+        Address{": "}
+        <input value={address} onChange={(e) => setAddress(e.target.value)} />
       </label>
       <Greeting name={name} />
     </>
@@ -14895,7 +15144,7 @@ label {
 }
 ```
 
---------------------------------
+---
 
 ### Focus Input Field on Button Click in React
 
@@ -14904,33 +15153,35 @@ Source: https://react.dev/learn/manipulating-the-dom-with-refs
 This example demonstrates how to programmatically focus an input field in React when a button is clicked. It utilizes the `useRef` hook to obtain a direct reference to the DOM input element and then calls its `focus()` method.
 
 ```js
-import { useRef } from 'react';
+import { useRef } from "react";
 
 export default function Page() {
   const inputRef = useRef(null);
   return (
     <>
       <nav>
-        <button onClick={() => {
-          inputRef.current.focus();
-        }}>
+        <button
+          onClick={() => {
+            inputRef.current.focus();
+          }}
+        >
           Search
         </button>
       </nav>
-      <input
-        ref={inputRef}
-        placeholder="Looking for something?"
-      />
+      <input ref={inputRef} placeholder="Looking for something?" />
     </>
   );
 }
 ```
 
 ```css
-button { display: block; margin-bottom: 10px; }
+button {
+  display: block;
+  margin-bottom: 10px;
+}
 ```
 
---------------------------------
+---
 
 ### JavaScript: Implement Cached Asynchronous Data Fetching
 
@@ -14966,7 +15217,7 @@ export function fetchVideoDetails(id) {
 }
 ```
 
---------------------------------
+---
 
 ### Migrating from react-test-renderer/shallow to react-shallow-renderer
 
@@ -14983,7 +15234,7 @@ npm install react-shallow-renderer --save-dev
 + import ShallowRenderer from 'react-shallow-renderer';
 ```
 
---------------------------------
+---
 
 ### Conditional Rendering with Logical AND Operator in React
 
@@ -14992,12 +15243,10 @@ Source: https://react.dev/learn
 Demonstrates using the logical AND (&&) operator for conditional rendering when only an if branch is needed without an else. This short-circuit evaluation technique renders the component only if the condition is true, otherwise renders nothing. It's useful for simple show/hide scenarios.
 
 ```javascript
-<div>
-  {isLoggedIn && <AdminPanel />}
-</div>
+<div>{isLoggedIn && <AdminPanel />}</div>
 ```
 
---------------------------------
+---
 
 ### Complete React Tic-Tac-Toe game with history and time travel setup
 
@@ -15006,7 +15255,7 @@ Source: https://react.dev/learn/tutorial-tic-tac-toe
 This comprehensive snippet provides the full implementation of a React Tic-Tac-Toe game, including the 'Square', 'Board', and 'Game' components. It sets up the core game logic, state management for turns and history, and the structure required for adding time travel capabilities. The accompanying CSS styles the game board and elements.
 
 ```js
-import { useState } from 'react';
+import { useState } from "react";
 
 function Square({ value, onSquareClick }) {
   return (
@@ -15023,9 +15272,9 @@ function Board({ xIsNext, squares, onPlay }) {
     }
     const nextSquares = squares.slice();
     if (xIsNext) {
-      nextSquares[i] = 'X';
+      nextSquares[i] = "X";
     } else {
-      nextSquares[i] = 'O';
+      nextSquares[i] = "O";
     }
     onPlay(nextSquares);
   }
@@ -15033,9 +15282,9 @@ function Board({ xIsNext, squares, onPlay }) {
   const winner = calculateWinner(squares);
   let status;
   if (winner) {
-    status = 'Winner: ' + winner;
+    status = "Winner: " + winner;
   } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+    status = "Next player: " + (xIsNext ? "X" : "O");
   }
 
   return (
@@ -15077,9 +15326,9 @@ export default function Game() {
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0) {
-      description = 'Go to move #' + move;
+      description = "Go to move #" + move;
     } else {
-      description = 'Go to game start';
+      description = "Go to game start";
     }
     return (
       <li key={move}>
@@ -15149,7 +15398,7 @@ body {
 
 .board-row:after {
   clear: both;
-  content: '';
+  content: "";
   display: table;
 }
 
@@ -15167,7 +15416,7 @@ body {
 }
 ```
 
---------------------------------
+---
 
 ### Stream React App with onShellReady Callback
 
@@ -15177,15 +15426,15 @@ Configures renderToPipeableStream to start streaming HTML to the client once the
 
 ```javascript
 const { pipe } = renderToPipeableStream(<App />, {
-  bootstrapScripts: ['/main.js'],
+  bootstrapScripts: ["/main.js"],
   onShellReady() {
-    response.setHeader('content-type', 'text/html');
+    response.setHeader("content-type", "text/html");
     pipe(response);
-  }
+  },
 });
 ```
 
---------------------------------
+---
 
 ### React Home Page with Search Functionality - React
 
@@ -15223,7 +15472,7 @@ export default function Home() {
 }
 ```
 
---------------------------------
+---
 
 ### React Chat Room with Static useEffect Dependencies
 
@@ -15232,14 +15481,14 @@ Source: https://react.dev/reference/react/useEffect
 This example shows a React `ChatRoom` component where `useEffect` is used to establish a chat connection only once after the initial render. Since `serverUrl` and `roomId` are hardcoded outside the component and not reactive, an empty dependency array `[]` is used, preventing the effect from re-running on subsequent renders.
 
 ```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useState, useEffect } from "react";
+import { createConnection } from "./chat.js";
 
-const serverUrl = 'https://localhost:1234';
-const roomId = 'music';
+const serverUrl = "https://localhost:1234";
+const roomId = "music";
 
 function ChatRoom() {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const connection = createConnection(serverUrl, roomId);
@@ -15251,8 +15500,8 @@ function ChatRoom() {
     <>
       <h1>Welcome to the {roomId} room!</h1>
       <label>
-        Your message:{' '}
-        <input value={message} onChange={e => setMessage(e.target.value)} />
+        Your message:{" "}
+        <input value={message} onChange={(e) => setMessage(e.target.value)} />
       </label>
     </>
   );
@@ -15263,7 +15512,7 @@ export default function App() {
   return (
     <>
       <button onClick={() => setShow(!show)}>
-        {show ? 'Close chat' : 'Open chat'}
+        {show ? "Close chat" : "Open chat"}
       </button>
       {show && <hr />}
       {show && <ChatRoom />}
@@ -15277,16 +15526,18 @@ export function createConnection(serverUrl, roomId) {
   // A real implementation would actually connect to the server
   return {
     connect() {
-      console.log('✅ Connecting to "' + roomId + '" room at ' + serverUrl + '...');
+      console.log(
+        '✅ Connecting to "' + roomId + '" room at ' + serverUrl + "...",
+      );
     },
     disconnect() {
       console.log('❌ Disconnected from "' + roomId + '" room at ' + serverUrl);
-    }
+    },
   };
 }
 ```
 
---------------------------------
+---
 
 ### Render div element with className in React
 
@@ -15298,7 +15549,7 @@ Basic example of rendering a built-in browser component (<div>) with a className
 <div className="wrapper">Some content</div>
 ```
 
---------------------------------
+---
 
 ### Secure Data Fetching with Object Tainting
 
@@ -15308,20 +15559,20 @@ Demonstrates the secure approach using React's experimental_taintObjectReference
 
 ```javascript
 // api.js
-import {experimental_taintObjectReference} from 'react';
+import { experimental_taintObjectReference } from "react";
 
 export async function getUser(id) {
   const user = await db`SELECT * FROM users WHERE id = ${id}`;
   experimental_taintObjectReference(
-    'Do not pass the entire user object to the client. ' +
-      'Instead, pick off the specific properties you need for this use case.',
+    "Do not pass the entire user object to the client. " +
+      "Instead, pick off the specific properties you need for this use case.",
     user,
   );
   return user;
 }
 ```
 
---------------------------------
+---
 
 ### Configure Utility and Accessibility CSS Classes
 
@@ -15359,7 +15610,7 @@ Provides utility CSS classes for common layout patterns including screen-reader-
 }
 ```
 
---------------------------------
+---
 
 ### Migrated React Function Component with memo Example
 
@@ -15368,25 +15619,30 @@ Source: https://react.dev/reference/react/PureComponent
 This snippet demonstrates the refactored `Greeting` component as a functional component, wrapped with React's `memo` higher-order component to achieve similar performance optimizations as `PureComponent`. The `MyApp` component remains unchanged, continuing to manage state for name and address and passing the name prop to the memoized `Greeting` component. This illustrates the recommended approach for optimizing functional components. The accompanying CSS styles the input labels.
 
 ```js
-import { memo, useState } from 'react';
+import { memo, useState } from "react";
 
 const Greeting = memo(function Greeting({ name }) {
   console.log("Greeting was rendered at", new Date().toLocaleTimeString());
-  return <h3>Hello{name && ', '}{name}!</h3>;
+  return (
+    <h3>
+      Hello{name && ", "}
+      {name}!
+    </h3>
+  );
 });
 
 export default function MyApp() {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
   return (
     <>
       <label>
-        Name{': '}
-        <input value={name} onChange={e => setName(e.target.value)} />
+        Name{": "}
+        <input value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label>
-        Address{': '}
-        <input value={address} onChange={e => setAddress(e.target.value)} />
+        Address{": "}
+        <input value={address} onChange={(e) => setAddress(e.target.value)} />
       </label>
       <Greeting name={name} />
     </>
@@ -15401,7 +15657,7 @@ label {
 }
 ```
 
---------------------------------
+---
 
 ### Integrate Server Function directly with React Form Action
 
@@ -15412,18 +15668,18 @@ This example illustrates a simplified way to use Server Functions by directly pa
 ```jsx
 "use client";
 
-import {updateName} from './actions';
+import { updateName } from "./actions";
 
 function UpdateName() {
   return (
     <form action={updateName}>
       <input type="text" name="name" />
     </form>
-  )
+  );
 }
 ```
 
---------------------------------
+---
 
 ### Basic `prerender` function signature in JavaScript
 
@@ -15435,7 +15691,7 @@ This snippet illustrates the basic signature of the `prerender` function. It tak
 const {prelude, postponed} = await prerender(reactNode, options?)
 ```
 
---------------------------------
+---
 
 ### Importing and defining useEffectEvent within a React component
 
@@ -15444,16 +15700,16 @@ Source: https://react.dev/reference/react/useEffectEvent
 This example demonstrates how to import `useEffectEvent` and `useEffect` from React, and then define an Effect Event named `onConnected` within a functional component. The `onConnected` event encapsulates logic that can access component props like `theme` without causing the Effect to re-synchronize.
 
 ```js
-import { useEffectEvent, useEffect } from 'react';
+import { useEffectEvent, useEffect } from "react";
 
 function ChatRoom({ roomId, theme }) {
   const onConnected = useEffectEvent(() => {
-    showNotification('Connected!', theme);
+    showNotification("Connected!", theme);
   });
 }
 ```
 
---------------------------------
+---
 
 ### Correct: Passing Props for Parent State Access in React (JavaScript)
 
@@ -15463,21 +15719,17 @@ This example illustrates the best practice for handling parent state access in R
 
 ```js
 // ✅ Better: Pass props to static component
-function ThemedButton({theme}) {
-  return (
-    <button className={theme}>
-      Click me
-    </button>
-  );
+function ThemedButton({ theme }) {
+  return <button className={theme}>Click me</button>;
 }
 
 function Parent() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
   return <ThemedButton theme={theme} />;
 }
 ```
 
---------------------------------
+---
 
 ### Define and Render a Basic React Component with Props and Styling
 
@@ -15499,18 +15751,21 @@ function Avatar() {
 }
 
 export default function Profile() {
-  return (
-    <Avatar />
-  );
+  return <Avatar />;
 }
 ```
 
 ```css
-body { min-height: 120px; }
-.avatar { margin: 20px; border-radius: 50%; }
+body {
+  min-height: 120px;
+}
+.avatar {
+  margin: 20px;
+  border-radius: 50%;
+}
 ```
 
---------------------------------
+---
 
 ### Example usage of RowList component with multiple children in React
 
@@ -15526,7 +15781,7 @@ This JSX snippet illustrates how to pass multiple `<p>` tags as children to the 
 </RowList>
 ```
 
---------------------------------
+---
 
 ### React Error Boundary Integration with `useTransition` for Async Operations
 
@@ -15582,16 +15837,16 @@ export default function App() {
 ```
 
 ```javascript
-import React, { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import './styles.css';
-import App from './App';
+import React, { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles.css";
+import App from "./App";
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <App />
-  </StrictMode>
+  </StrictMode>,
 );
 ```
 
@@ -15607,7 +15862,7 @@ root.render(
 }
 ```
 
---------------------------------
+---
 
 ### React useOptimistic: Optimistic List Addition with Reducer
 
@@ -15616,19 +15871,17 @@ Source: https://react.dev/reference/react/useOptimistic
 This example demonstrates how to use `useOptimistic` with a reducer to optimistically add new items to a list. The reducer ensures that the optimistic state is re-calculated if the base list changes during an asynchronous operation, preventing stale state issues. A `pending` flag is used to visually indicate items that are still being added.
 
 ```js
-import { useState, startTransition } from 'react';
-import { addTodo } from './actions.js';
-import TodoList from './TodoList';
+import { useState, startTransition } from "react";
+import { addTodo } from "./actions.js";
+import TodoList from "./TodoList";
 
 export default function App() {
-  const [todos, setTodos] = useState([
-    { id: 1, text: 'Learn React' }
-  ]);
+  const [todos, setTodos] = useState([{ id: 1, text: "Learn React" }]);
 
   async function addTodoAction(newTodo) {
     const savedTodo = await addTodo(newTodo);
     startTransition(() => {
-      setTodos(todos => [...todos, savedTodo]);
+      setTodos((todos) => [...todos, savedTodo]);
     });
   }
 
@@ -15637,15 +15890,15 @@ export default function App() {
 ```
 
 ```js
-import { useOptimistic, startTransition } from 'react';
+import { useOptimistic, startTransition } from "react";
 
 export default function TodoList({ todos, addTodoAction }) {
   const [optimisticTodos, addOptimisticTodo] = useOptimistic(
     todos,
     (currentTodos, newTodo) => [
       ...currentTodos,
-      { id: newTodo.id, text: newTodo.text, pending: true }
-    ]
+      { id: newTodo.id, text: newTodo.text, pending: true },
+    ],
   );
 
   function handleAddTodo(text) {
@@ -15658,9 +15911,9 @@ export default function TodoList({ todos, addTodoAction }) {
 
   return (
     <div>
-      <button onClick={() => handleAddTodo('New todo')}>Add Todo</button>
+      <button onClick={() => handleAddTodo("New todo")}>Add Todo</button>
       <ul>
-        {optimisticTodos.map(todo => (
+        {optimisticTodos.map((todo) => (
           <li key={todo.id}>
             {todo.text} {todo.pending && "(Adding...)"}
           </li>
@@ -15679,7 +15932,7 @@ export async function addTodo(todo) {
 }
 ```
 
---------------------------------
+---
 
 ### Initial React Profile Editor Component Markup
 
@@ -15692,25 +15945,23 @@ export default function EditProfile() {
   return (
     <form>
       <label>
-        First name:{' '}
-        <b>Jane</b>
+        First name: <b>Jane</b>
         <input />
       </label>
       <label>
-        Last name:{' '}
-        <b>Jacobs</b>
+        Last name: <b>Jacobs</b>
         <input />
       </label>
-      <button type="submit">
-        Edit Profile
-      </button>
-      <p><i>Hello, Jane Jacobs!</i></p>
+      <button type="submit">Edit Profile</button>
+      <p>
+        <i>Hello, Jane Jacobs!</i>
+      </p>
     </form>
   );
 }
 ```
 
---------------------------------
+---
 
 ### React Routing with React Router (JavaScript)
 
@@ -15719,25 +15970,23 @@ Source: https://react.dev/blog/2025/02/14/sunsetting-create-react-app
 This JavaScript code demonstrates how to implement client-side routing in a React application using the `react-router` library. It defines a `createBrowserRouter` instance with distinct paths (`/` and `/dashboard`) mapped to `Home` and `Dashboard` components, respectively. The `RouterProvider` then makes these routes available, enabling shareable URLs and a more structured approach to navigation compared to state-based routing.
 
 ```js
-import {RouterProvider, createBrowserRouter} from 'react-router';
+import { RouterProvider, createBrowserRouter } from "react-router";
 
-import Home from './Home';
-import Dashboard from './Dashboard';
+import Home from "./Home";
+import Dashboard from "./Dashboard";
 
 // ✅ Each route has it's own URL
 const router = createBrowserRouter([
-  {path: '/', element: <Home />},
-  {path: '/dashboard', element: <Dashboard />}
+  { path: "/", element: <Home /> },
+  { path: "/dashboard", element: <Dashboard /> },
 ]);
 
 export default function App() {
-  return (
-    <RouterProvider value={router} />
-  )
+  return <RouterProvider value={router} />;
 }
 ```
 
---------------------------------
+---
 
 ### Reading the Current Value of a Ref in React
 
@@ -15752,7 +16001,7 @@ function handleStopClick() {
 }
 ```
 
---------------------------------
+---
 
 ### React useEffect with specified dependencies preventing re-runs
 
@@ -15761,17 +16010,17 @@ Source: https://react.dev/learn/synchronizing-with-effects
 This example demonstrates a React `useEffect` hook with `isPlaying` correctly specified as a dependency. The effect now only re-runs when the `isPlaying` prop changes, effectively preventing unnecessary executions caused by unrelated state updates (like typing in an input field).
 
 ```js
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 
 function VideoPlayer({ src, isPlaying }) {
   const ref = useRef(null);
 
   useEffect(() => {
     if (isPlaying) {
-      console.log('Calling video.play()');
+      console.log("Calling video.play()");
       ref.current.play();
     } else {
-      console.log('Calling video.pause()');
+      console.log("Calling video.pause()");
       ref.current.pause();
     }
   }, [isPlaying]);
@@ -15781,12 +16030,12 @@ function VideoPlayer({ src, isPlaying }) {
 
 export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   return (
     <>
-      <input value={text} onChange={e => setText(e.target.value)} />
+      <input value={text} onChange={(e) => setText(e.target.value)} />
       <button onClick={() => setIsPlaying(!isPlaying)}>
-        {isPlaying ? 'Pause' : 'Play'}
+        {isPlaying ? "Pause" : "Play"}
       </button>
       <VideoPlayer
         isPlaying={isPlaying}
@@ -15798,11 +16047,17 @@ export default function App() {
 ```
 
 ```css
-input, button { display: block; margin-bottom: 20px; }
-video { width: 250px; }
+input,
+button {
+  display: block;
+  margin-bottom: 20px;
+}
+video {
+  width: 250px;
+}
 ```
 
---------------------------------
+---
 
 ### Optimizing Re-renders by Extracting Form Component (React, JavaScript)
 
@@ -15821,16 +16076,16 @@ function App() {
 }
 
 function SignupForm() {
-  const [firstName, setFirstName] = useState('');
+  const [firstName, setFirstName] = useState("");
   return (
     <form>
-      <input value={firstName} onChange={e => setFirstName(e.target.value)} />
+      <input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
     </form>
   );
 }
 ```
 
---------------------------------
+---
 
 ### SomeContext.Consumer
 
@@ -15838,7 +16093,7 @@ Source: https://react.dev/reference/react/createContext
 
 A legacy way to read context values before useContext existed. Although still supported, newly written code should use useContext() instead for better readability and performance.
 
-```APIDOC
+````APIDOC
 ## SomeContext.Consumer
 
 ### Description
@@ -15851,26 +16106,27 @@ A legacy way to read context values. Before `useContext` existed, this was the p
     <button className={theme} />
   )}
 </ThemeContext.Consumer>
-```
+````
 
 ### Props
+
 - **children** (function) - Required - A render function that receives the current context value. React calls this function with the current context value determined by the same algorithm as `useContext()` does, and renders the result. React re-runs this function and updates the UI whenever the context from parent components changes.
 
 ### Legacy Example
+
 ```js
 function Button() {
   // 🟡 Legacy way (not recommended)
   return (
     <ThemeContext.Consumer>
-      {theme => (
-        <button className={theme} />
-      )}
+      {(theme) => <button className={theme} />}
     </ThemeContext.Consumer>
   );
 }
 ```
 
 ### Recommended Alternative
+
 ```js
 function Button() {
   // ✅ Recommended way
@@ -15880,10 +16136,12 @@ function Button() {
 ```
 
 ### Notes
+
 - This approach is older and less readable than `useContext()`
 - Newly written code should use `useContext()` instead
 - Still works for backward compatibility
-```
+
+````
 
 --------------------------------
 
@@ -15900,9 +16158,9 @@ it ('renders with button disabled', async () => {
   });
   expect(container.querySelector('button')).toBeDisabled();
 });
-```
+````
 
---------------------------------
+---
 
 ### useMemo Hook - Cache Expensive Calculations
 
@@ -15917,7 +16175,7 @@ function TodoList({ todos, tab, theme }) {
 }
 ```
 
---------------------------------
+---
 
 ### Valid useMemo with complete dependencies
 
@@ -15930,14 +16188,14 @@ Demonstrates correct useMemo usage with all required dependencies included in th
 function Component({ data, filter }) {
   const filtered = useMemo(
     () => data.filter(filter),
-    [data, filter] // All dependencies included
+    [data, filter], // All dependencies included
   );
 
   return <List items={filtered} />;
 }
 ```
 
---------------------------------
+---
 
 ### Inefficient useRef Initialization in React
 
@@ -15951,7 +16209,7 @@ function Video() {
   // ...
 ```
 
---------------------------------
+---
 
 ### Basic `createPortal` Syntax in React JSX
 
@@ -15966,7 +16224,7 @@ This snippet presents the fundamental syntax of `createPortal` within React JSX.
 </div>
 ```
 
---------------------------------
+---
 
 ### Utility Functions for Todo Management - JavaScript
 
@@ -15981,26 +16239,26 @@ export function createTodos() {
     todos.push({
       id: i,
       text: "Todo " + (i + 1),
-      completed: Math.random() > 0.5
+      completed: Math.random() > 0.5,
     });
   }
   return todos;
 }
 
 export function filterTodos(todos, tab) {
-  return todos.filter(todo => {
-    if (tab === 'all') {
+  return todos.filter((todo) => {
+    if (tab === "all") {
       return true;
-    } else if (tab === 'active') {
+    } else if (tab === "active") {
       return !todo.completed;
-    } else if (tab === 'completed') {
+    } else if (tab === "completed") {
       return todo.completed;
     }
   });
 }
 ```
 
---------------------------------
+---
 
 ### Correctly Handling Form Submission with React Event Handler
 
@@ -16014,15 +16272,15 @@ function Form() {
 
   function handleSubmit() {
     // ✅ Good: Event-specific logic is called from event handlers
-    post('/api/register');
-    showNotification('Successfully registered!', theme);
+    post("/api/register");
+    showNotification("Successfully registered!", theme);
   }
 
   // ...
 }
 ```
 
---------------------------------
+---
 
 ### Create and Render a React Component into a Dynamically Created DOM Node
 
@@ -16031,13 +16289,13 @@ Source: https://react.dev/reference/react-dom/client/createRoot
 This snippet shows how to create a new DOM element using `document.createElement()`, establish a React root on it, render a React component (`<Comment />`) into this new element, and then append it to the document. This is useful for dynamically injecting React-managed UI into an existing page structure.
 
 ```js
-const domNode = document.createElement('div');
+const domNode = document.createElement("div");
 const root = createRoot(domNode);
 root.render(<Comment />);
 document.body.appendChild(domNode); // You can add it anywhere in the document
 ```
 
---------------------------------
+---
 
 ### React Chat Room with Dynamic useEffect Dependencies
 
@@ -16046,12 +16304,12 @@ Source: https://react.dev/reference/react/useEffect
 This example demonstrates a React `ChatRoom` component that uses `useEffect` to manage a chat connection. The effect's dependency array includes `serverUrl` and `roomId`, causing the connection to re-establish whenever these reactive values change. This ensures the chat dynamically updates when the user selects a different room or modifies the server URL.
 
 ```js
-import { useState, useEffect } from 'react';
-import { createConnection } from './chat.js';
+import { useState, useEffect } from "react";
+import { createConnection } from "./chat.js";
 
 function ChatRoom({ roomId }) {
-  const [serverUrl, setServerUrl] = useState('https://localhost:1234');
-  const [message, setMessage] = useState('');
+  const [serverUrl, setServerUrl] = useState("https://localhost:1234");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const connection = createConnection(serverUrl, roomId);
@@ -16064,16 +16322,16 @@ function ChatRoom({ roomId }) {
   return (
     <>
       <label>
-        Server URL:{' '}
+        Server URL:{" "}
         <input
           value={serverUrl}
-          onChange={e => setServerUrl(e.target.value)}
+          onChange={(e) => setServerUrl(e.target.value)}
         />
       </label>
       <h1>Welcome to the {roomId} room!</h1>
       <label>
-        Your message:{' '}
-        <input value={message} onChange={e => setMessage(e.target.value)} />
+        Your message:{" "}
+        <input value={message} onChange={(e) => setMessage(e.target.value)} />
       </label>
     </>
   );
@@ -16081,25 +16339,22 @@ function ChatRoom({ roomId }) {
 
 export default function App() {
   const [show, setShow] = useState(false);
-  const [roomId, setRoomId] = useState('general');
+  const [roomId, setRoomId] = useState("general");
   return (
     <>
       <label>
-        Choose the chat room:{' '}
-        <select
-          value={roomId}
-          onChange={e => setRoomId(e.target.value)}
-        >
+        Choose the chat room:{" "}
+        <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
           <option value="general">general</option>
           <option value="travel">travel</option>
           <option value="music">music</option>
         </select>
         <button onClick={() => setShow(!show)}>
-          {show ? 'Close chat' : 'Open chat'}
+          {show ? "Close chat" : "Open chat"}
         </button>
       </label>
       {show && <hr />}
-      {show && <ChatRoom roomId={roomId}/>}
+      {show && <ChatRoom roomId={roomId} />}
     </>
   );
 }
@@ -16110,21 +16365,27 @@ export function createConnection(serverUrl, roomId) {
   // A real implementation would actually connect to the server
   return {
     connect() {
-      console.log('✅ Connecting to "' + roomId + '" room at ' + serverUrl + '...');
+      console.log(
+        '✅ Connecting to "' + roomId + '" room at ' + serverUrl + "...",
+      );
     },
     disconnect() {
       console.log('❌ Disconnected from "' + roomId + '" room at ' + serverUrl);
-    }
+    },
   };
 }
 ```
 
 ```css
-input { margin-bottom: 10px; }
-button { margin-left: 5px; }
+input {
+  margin-bottom: 10px;
+}
+button {
+  margin-left: 5px;
+}
 ```
 
---------------------------------
+---
 
 ### Type Inference for useMemo in React (TypeScript)
 
@@ -16137,7 +16398,7 @@ Explains that `useMemo` automatically infers the type of its memoized value from
 const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
 ```
 
---------------------------------
+---
 
 ### CSS Shimmer Loading Animation for Content Placeholders
 
@@ -16157,7 +16418,8 @@ Creates a shimmer/skeleton loading effect using animated background gradients. D
 }
 
 .fallback {
-  background: #f6f7f8 linear-gradient(to right, #e6e6e6 5%, #cccccc 25%, #e6e6e6 35%) no-repeat;
+  background: #f6f7f8
+    linear-gradient(to right, #e6e6e6 5%, #cccccc 25%, #e6e6e6 35%) no-repeat;
   background-size: 800px 104px;
   display: block;
   line-height: 1.25;
@@ -16184,7 +16446,7 @@ Creates a shimmer/skeleton loading effect using animated background gradients. D
 }
 ```
 
---------------------------------
+---
 
 ### Video Search and Filter Implementation
 
@@ -16232,7 +16494,7 @@ export default function Home() {
 }
 ```
 
---------------------------------
+---
 
 ### React Compiler: Valid static JavaScript patterns for components
 
@@ -16242,7 +16504,7 @@ This snippet provides examples of JavaScript code that is compatible with the Re
 
 ```js
 // ✅ Use normal property access
-function Component({propName, props}) {
+function Component({ propName, props }) {
   const value = props[propName]; // Analyzable
   return <div>{value}</div>;
 }
@@ -16253,7 +16515,7 @@ function Component() {
 }
 ```
 
---------------------------------
+---
 
 ### Video Data Fetching with Caching
 
@@ -16308,7 +16570,7 @@ export function fetchVideoDetails(id) {
 }
 ```
 
---------------------------------
+---
 
 ### Declare State Variable with useState
 
@@ -16323,7 +16585,7 @@ function MyButton() {
 }
 ```
 
---------------------------------
+---
 
 ### Demonstrating React useEffect re-runs without dependencies
 
@@ -16332,17 +16594,17 @@ Source: https://react.dev/learn/synchronizing-with-effects
 This example illustrates how a React `useEffect` hook, when called without a dependency array, re-runs its effect function after every render. It shows a video player component whose play/pause state is controlled by a prop, and a text input that triggers re-renders, causing the effect to re-execute unnecessarily.
 
 ```js
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from "react";
 
 function VideoPlayer({ src, isPlaying }) {
   const ref = useRef(null);
 
   useEffect(() => {
     if (isPlaying) {
-      console.log('Calling video.play()');
+      console.log("Calling video.play()");
       ref.current.play();
     } else {
-      console.log('Calling video.pause()');
+      console.log("Calling video.pause()");
       ref.current.pause();
     }
   });
@@ -16352,12 +16614,12 @@ function VideoPlayer({ src, isPlaying }) {
 
 export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   return (
     <>
-      <input value={text} onChange={e => setText(e.target.value)} />
+      <input value={text} onChange={(e) => setText(e.target.value)} />
       <button onClick={() => setIsPlaying(!isPlaying)}>
-        {isPlaying ? 'Pause' : 'Play'}
+        {isPlaying ? "Pause" : "Play"}
       </button>
       <VideoPlayer
         isPlaying={isPlaying}
@@ -16369,11 +16631,17 @@ export default function App() {
 ```
 
 ```css
-input, button { display: block; margin-bottom: 20px; }
-video { width: 250px; }
+input,
+button {
+  display: block;
+  margin-bottom: 20px;
+}
+video {
+  width: 250px;
+}
 ```
 
---------------------------------
+---
 
 ### Create a custom React `useWindowListener` hook for global event handling
 
@@ -16382,35 +16650,37 @@ Source: https://react.dev/reference/react/useEffect
 This example illustrates a custom React hook, `useWindowListener`, designed to attach and detach event listeners to the `window` object. It leverages `useEffect` to ensure proper event listener management (adding on mount, removing on unmount). The `App` component uses this hook to track mouse pointer movement and update a visual indicator, demonstrating how to abstract global event subscriptions.
 
 ```js
-import { useState } from 'react';
-import { useWindowListener } from './useWindowListener.js';
+import { useState } from "react";
+import { useWindowListener } from "./useWindowListener.js";
 
 export default function App() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
-  useWindowListener('pointermove', (e) => {
+  useWindowListener("pointermove", (e) => {
     setPosition({ x: e.clientX, y: e.clientY });
   });
 
   return (
-    <div style={{
-      position: 'absolute',
-      backgroundColor: 'pink',
-      borderRadius: '50%',
-      opacity: 0.6,
-      transform: `translate(${position.x}px, ${position.y}px)`,
-      pointerEvents: 'none',
-      left: -20,
-      top: -20,
-      width: 40,
-      height: 40,
-    }} />
+    <div
+      style={{
+        position: "absolute",
+        backgroundColor: "pink",
+        borderRadius: "50%",
+        opacity: 0.6,
+        transform: `translate(${position.x}px, ${position.y}px)`,
+        pointerEvents: "none",
+        left: -20,
+        top: -20,
+        width: 40,
+        height: 40,
+      }}
+    />
   );
 }
 ```
 
 ```js
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useWindowListener(eventType, listener) {
   useEffect(() => {
@@ -16428,7 +16698,7 @@ body {
 }
 ```
 
---------------------------------
+---
 
 ### Asynchronous rendering in React Server Components
 
@@ -16437,13 +16707,13 @@ Source: https://react.dev/reference/react/cache
 This example demonstrates the syntax for asynchronous rendering specifically within React Server Components. Components can be declared `async` and use the `await` keyword directly to fetch data, simplifying data loading logic. This capability is exclusive to Server Components; Client Components typically use hooks like `use()` for asynchronous data handling.
 
 ```javascript
-async function AnimatedWeatherCard({city}) {
-	const temperature = await getTemperature(city);
-	// ...
+async function AnimatedWeatherCard({ city }) {
+  const temperature = await getTemperature(city);
+  // ...
 }
 ```
 
---------------------------------
+---
 
 ### Mock API Utility for Planet and Place Data
 
@@ -16453,83 +16723,108 @@ This JavaScript file provides mock API functions (`fetchData`, `fetchPlanets`, `
 
 ```js
 export function fetchData(url) {
-  if (url === '/planets') {
+  if (url === "/planets") {
     return fetchPlanets();
-  } else if (url.startsWith('/planets/')) {
+  } else if (url.startsWith("/planets/")) {
     const match = url.match(/^\/planets\/([\w-]+)\/places(\/)?$/);
     if (!match || !match[1] || !match[1].length) {
-      throw Error('Expected URL like "/planets/earth/places". Received: "' + url + '".');
+      throw Error(
+        'Expected URL like "/planets/earth/places". Received: "' + url + '".',
+      );
     }
     return fetchPlaces(match[1]);
-  } else throw Error('Expected URL like "/planets" or "/planets/earth/places". Received: "' + url + '".');
+  } else
+    throw Error(
+      'Expected URL like "/planets" or "/planets/earth/places". Received: "' +
+        url +
+        '".',
+    );
 }
 
 async function fetchPlanets() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
-      resolve([{
-        id: 'earth',
-        name: 'Earth'
-      }, {
-        id: 'venus',
-        name: 'Venus'
-      }, {
-        id: 'mars',
-        name: 'Mars'
-      }]);
+      resolve([
+        {
+          id: "earth",
+          name: "Earth",
+        },
+        {
+          id: "venus",
+          name: "Venus",
+        },
+        {
+          id: "mars",
+          name: "Mars",
+        },
+      ]);
     }, 1000);
   });
 }
 
 async function fetchPlaces(planetId) {
-  if (typeof planetId !== 'string') {
+  if (typeof planetId !== "string") {
     throw Error(
-      'fetchPlaces(planetId) expects a string argument. ' +
-      'Instead received: ' + planetId + '.'
+      "fetchPlaces(planetId) expects a string argument. " +
+        "Instead received: " +
+        planetId +
+        ".",
     );
   }
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
-      if (planetId === 'earth') {
-        resolve([{
-          id: 'laos',
-          name: 'Laos'
-        }, {
-          id: 'spain',
-          name: 'Spain'
-        }, {
-          id: 'vietnam',
-          name: 'Vietnam'
-        }]);
-      } else if (planetId === 'venus') {
-        resolve([{
-          id: 'aurelia',
-          name: 'Aurelia'
-        }, {
-          id: 'diana-chasma',
-          name: 'Diana Chasma'
-        }, {
-          id: 'kumsong-vallis',
-          name: 'Kŭmsŏng Vallis'
-        }]);
-      } else if (planetId === 'mars') {
-        resolve([{
-          id: 'aluminum-city',
-          name: 'Aluminum City'
-        }, {
-          id: 'new-new-york',
-          name: 'New New York'
-        }, {
-          id: 'vishniac',
-          name: 'Vishniac'
-        }]);
-      } else throw Error('Unknown planet ID: ' + planetId);
+      if (planetId === "earth") {
+        resolve([
+          {
+            id: "laos",
+            name: "Laos",
+          },
+          {
+            id: "spain",
+            name: "Spain",
+          },
+          {
+            id: "vietnam",
+            name: "Vietnam",
+          },
+        ]);
+      } else if (planetId === "venus") {
+        resolve([
+          {
+            id: "aurelia",
+            name: "Aurelia",
+          },
+          {
+            id: "diana-chasma",
+            name: "Diana Chasma",
+          },
+          {
+            id: "kumsong-vallis",
+            name: "Kŭmsŏng Vallis",
+          },
+        ]);
+      } else if (planetId === "mars") {
+        resolve([
+          {
+            id: "aluminum-city",
+            name: "Aluminum City",
+          },
+          {
+            id: "new-new-york",
+            name: "New New York",
+          },
+          {
+            id: "vishniac",
+            name: "Vishniac",
+          },
+        ]);
+      } else throw Error("Unknown planet ID: " + planetId);
     }, 1000);
   });
 }
 ```
 
---------------------------------
+---
 
 ### Identifying Impure useMemo Calculations by Mutating Props in JavaScript
 
@@ -16538,10 +16833,10 @@ Source: https://react.dev/reference/react/useMemo
 This example illustrates an incorrect `useMemo` implementation where an array received as a prop (`todos`) is mutated directly. In Strict Mode, this impurity would cause the `push` operation to occur twice, leading to unexpected data modifications. It highlights the importance of avoiding mutation of existing objects within `useMemo`.
 
 ```js
-  const visibleTodos = useMemo(() => {
-    // 🚩 Mistake: mutating a prop
-    todos.push({ id: 'last', text: 'Go for a walk!' });
-    const filtered = filterTodos(todos, tab);
-    return filtered;
-  }, [todos, tab]);
+const visibleTodos = useMemo(() => {
+  // 🚩 Mistake: mutating a prop
+  todos.push({ id: "last", text: "Go for a walk!" });
+  const filtered = filterTodos(todos, tab);
+  return filtered;
+}, [todos, tab]);
 ```

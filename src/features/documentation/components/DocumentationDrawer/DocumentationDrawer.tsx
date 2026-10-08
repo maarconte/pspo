@@ -1,21 +1,24 @@
+import "./DocumentationDrawer.scss";
+
 import React, { useState } from "react";
+
 import { Drawer } from "rsuite";
 import { FileText } from "lucide-react";
-import { useLocation } from "react-router-dom";
-import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
-import { useModules } from "../../../admin/hooks/useModules";
 import { getFormationLabel } from "../../../../utils/helpers/formationLabel";
-import "./DocumentationDrawer.scss";
+import { useLocation } from "react-router-dom";
+import { useModules } from "../../../admin/hooks/useModules";
+import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 
 export const DocumentationDrawer: React.FC = () => {
   const location = useLocation();
-  const isAllowedPath = location.pathname === "/" || location.pathname === "/quizz";
+  const isAllowedPath =
+    location.pathname === "/" || location.pathname === "/quizz";
   const [isOpen, setIsOpen] = useState(false);
 
   const formation = useQuestionsStore((s) => s.formation);
   const { modules } = useModules();
   const currentModule = modules.find(
-    (m) => m.title === getFormationLabel(formation)
+    (m) => m.title === getFormationLabel(formation),
   );
   const pdfUrl = currentModule?.pdfUrl;
 
@@ -32,7 +35,7 @@ export const DocumentationDrawer: React.FC = () => {
         id="documentation-tab"
       >
         <FileText size={18} />
-        <span className="doc-tab__label">Documentation</span>
+        <span className="doc-tab__label">Docs</span>
       </div>
 
       <Drawer
@@ -47,14 +50,14 @@ export const DocumentationDrawer: React.FC = () => {
           <Drawer.Title>
             <div className="d-flex align-items-center gap-2">
               <FileText size={20} />
-              <span>Documentation</span>
+              <span>Docs</span>
             </div>
           </Drawer.Title>
         </Drawer.Header>
         <Drawer.Body className="doc-drawer__body">
           <iframe
             src={pdfUrl}
-            title="Documentation PDF"
+            title="Docs PDF"
             className="doc-drawer__iframe"
           />
         </Drawer.Body>

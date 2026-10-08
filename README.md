@@ -5,27 +5,32 @@ An interactive study platform designed for Professional Scrum Product Owner (PSP
 ## 🚀 Key Features
 
 ### 📝 Interactive Quiz Mode
+
 - **Realistic Simulation**: 80 randomly selected questions per session.
 - **Time Pressure**: Built-in 60-minute timer for exam conditions.
 - **Immediate Feedback**: Optional answer disclosure with detailed feedback.
 - **Bookmarking**: Save difficult questions to review them later in your profile.
 
 ### 📊 Performance Analytics
+
 - **Personal Dashboard**: Track your success rate and average response time over time.
 - **History Tracker**: Review previous sessions and identify patterns in your errors.
 - **Wrong Answers Analysis**: A dedicated section to specifically review and master the concepts you missed.
 
 ### 👥 Collaboration & Co-op
-- **Co-op Mode**: Study together! Add participants and rotate turns automatically as you progress through the quiz.
+
+- **Co-op**: Study together! Add participants and rotate turns automatically as you progress through the quiz.
 - **Activity Monitoring**: Visual indicators of whose turn it is in co-op sessions.
 
 ### 🔐 Security & UX
+
 - **Magic Link Auth**: Secure, passwordless authentication via email.
 - **Idle Timeout**: Automatic protection that logs out inactive sessions after 30 minutes.
 - **Premium UI**: Modern glassmorphism design with smooth animations and responsive layouts.
 - **Info Popups**: Contextual notifications for new features and helpful study tips.
 
 ### 🛠 Administrative Dashboard
+
 - **Question Management**: Full CRUD capabilities for the question database.
 - **Module Management**: Configure each module (question count, duration, pass threshold), attach a PDF course support and a rich-text "Useful links" section shown as a side tab to learners.
 - **User Permissions**: Role-based access control (Admin, Developer, Client).
@@ -34,16 +39,19 @@ An interactive study platform designed for Professional Scrum Product Owner (PSP
 ## 🛠 Tech Stack
 
 ### Core
+
 - **React 19** - UI Library (utilizing the new React Compiler)
 - **TypeScript** - Strict static typing
 - **Vite** - High-performance build tool
 - **React Router 7** - Declarative routing
 
 ### State Management & Data
+
 - **Zustand** - Atomic state management with persistence
 - **Firebase** - Authentication (Magic Links), Firestore (Database), and Cloud Functions
 
 ### UI & Styling
+
 - **SCSS** - Modular design system
 - **Lucide React** - Modern iconography
 - **RSuite** - Specialized UI components
@@ -56,17 +64,18 @@ The application tracks user engagement and learning progress through custom GA4 
 
 ### Implemented Events
 
-| Event Name | Description | Parameters |
-|:---|:---|:---|
-| `login_success` | User successfully authenticated via Magic Link. | - |
-| `quiz_started` | A new quiz session was initiated. | `formation`, `is_logged_in` |
-| `coop_session_started` | A collaborative session began with 2+ participants. | `formation`, `participant_count` |
-| `quiz_completed` | User reached the end of the quiz. | `formation`, `score_pct`, `passed`, `total_time_sec`, `questions_answered`, `bookmarks_count` |
-| `quiz_restarted` | User reset the current session to start over. | `formation`, `previous_score_pct` |
-| `question_bookmarked` | A question was saved for future review. | `question_id`, `question_index` |
-| `question_unbookmarked`| A question was removed from bookmarks. | `question_id`, `question_index` |
+| Event Name              | Description                                         | Parameters                                                                                    |
+| :---------------------- | :-------------------------------------------------- | :-------------------------------------------------------------------------------------------- |
+| `login_success`         | User successfully authenticated via Magic Link.     | -                                                                                             |
+| `quiz_started`          | A new quiz session was initiated.                   | `formation`, `is_logged_in`                                                                   |
+| `coop_session_started`  | A collaborative session began with 2+ participants. | `formation`, `participant_count`                                                              |
+| `quiz_completed`        | User reached the end of the quiz.                   | `formation`, `score_pct`, `passed`, `total_time_sec`, `questions_answered`, `bookmarks_count` |
+| `quiz_restarted`        | User reset the current session to start over.       | `formation`, `previous_score_pct`                                                             |
+| `question_bookmarked`   | A question was saved for future review.             | `question_id`, `question_index`                                                               |
+| `question_unbookmarked` | A question was removed from bookmarks.              | `question_id`, `question_index`                                                               |
 
 ### Debugging
+
 To enable GA4 debug mode locally, add `?ga_debug` to the URL. This will bypass the localhost disable filter and send events to the GA4 DebugView.
 
 ## 🏗️ Architecture
@@ -96,6 +105,7 @@ src/
 ### Setup
 
 1. **Install dependencies**:
+
    ```bash
    npm install
    ```
@@ -111,6 +121,7 @@ src/
 ### Quality Standards
 
 This project adheres to the **"Torvalds Quality Protocol"**:
+
 - **Strict Typing**: No `any` shortcuts.
 - **Atomic Selectors**: Zustand stores must be consumed via selectors to prevent unnecessary re-renders.
 - **React 19 Actions**: Prioritize `useActionState` and modern form handling.

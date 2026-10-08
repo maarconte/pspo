@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Drawer, Input, List } from "rsuite";
-import { Button } from "../../../../ui";
-import { Button_Type, Button_Style } from "../../../../ui/Button/Button.types";
-import { Users, Plus, Trash2, X } from "lucide-react";
-import { useCoopStore } from "../../../../stores/useCoopStore";
-import { useUserStore } from "../../../../stores/useUserStore";
-import { useLocation } from "react-router-dom";
 import "./CoopDrawer.scss";
+
+import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
+import { Drawer, Input, List } from "rsuite";
+import { Plus, Trash2, Users, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+
+import { Button } from "../../../../ui";
+import { useCoopStore } from "../../../../stores/useCoopStore";
+import { useLocation } from "react-router-dom";
+import { useUserStore } from "../../../../stores/useUserStore";
 
 export const CoopDrawer: React.FC = () => {
   const { user } = useUserStore();
   const location = useLocation();
-  const isAllowedPath = location.pathname === "/" || location.pathname === "/quizz";
+  const isAllowedPath =
+    location.pathname === "/" || location.pathname === "/quizz";
 
-  const currentUserName = user?.displayName || user?.email?.split("@")[0] || null;
+  const currentUserName =
+    user?.displayName || user?.email?.split("@")[0] || null;
 
   const {
     participants,
@@ -25,7 +29,9 @@ export const CoopDrawer: React.FC = () => {
     clearParticipants,
   } = useCoopStore();
 
-  const isUserInParticipants = currentUserName ? participants.includes(currentUserName) : false;
+  const isUserInParticipants = currentUserName
+    ? participants.includes(currentUserName)
+    : false;
 
   const [newName, setNewName] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +82,7 @@ export const CoopDrawer: React.FC = () => {
         id="coop-mode-tab"
       >
         <Users size={18} />
-        <span className="coop-tab__label">Co-op Mode</span>
+        <span className="coop-tab__label">Co-op</span>
         {participants.length > 1 && (
           <span className="coop-tab__badge">{participants.length}</span>
         )}
@@ -94,7 +100,7 @@ export const CoopDrawer: React.FC = () => {
           <Drawer.Title>
             <div className="d-flex align-items-center gap-2">
               <Users size={20} />
-              <span>Co-op Mode ({participants.length})</span>
+              <span>Co-op ({participants.length})</span>
             </div>
           </Drawer.Title>
         </Drawer.Header>
@@ -105,7 +111,9 @@ export const CoopDrawer: React.FC = () => {
             </p>
 
             <div className="coop-drawer__form">
-              <div className={`coop-drawer__input-group ${error ? "has-error" : ""}`}>
+              <div
+                className={`coop-drawer__input-group ${error ? "has-error" : ""}`}
+              >
                 <Input
                   placeholder="First name..."
                   value={newName}
@@ -140,27 +148,27 @@ export const CoopDrawer: React.FC = () => {
                     />
                   </div>
                   <List hover className="coop-drawer__list">
-                  {participants.map((name, index) => (
-                    <List.Item key={`${name}-${index}`} className="coop-drawer__item">
-                      <div className="d-flex justify-content-between align-items-center w-100">
-                        <span className="coop-drawer__name">{name}</span>
-                        <Button
-                          onClick={() => handleRemove(index)}
-                          className="coop-drawer__remove-btn"
-                          type={Button_Type.WHITE}
-                          size="sm"
-                          icon={<Trash2 size={16} />}
-
-                        />
-                      </div>
-                    </List.Item>
-                  ))}
+                    {participants.map((name, index) => (
+                      <List.Item
+                        key={`${name}-${index}`}
+                        className="coop-drawer__item"
+                      >
+                        <div className="d-flex justify-content-between align-items-center w-100">
+                          <span className="coop-drawer__name">{name}</span>
+                          <Button
+                            onClick={() => handleRemove(index)}
+                            className="coop-drawer__remove-btn"
+                            type={Button_Type.WHITE}
+                            size="sm"
+                            icon={<Trash2 size={16} />}
+                          />
+                        </div>
+                      </List.Item>
+                    ))}
                   </List>
                 </>
               ) : (
-                <div className="coop-drawer__empty">
-                  No participants yet
-                </div>
+                <div className="coop-drawer__empty">No participants yet</div>
               )}
             </div>
           </div>

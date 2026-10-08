@@ -1,23 +1,20 @@
 import "./assets/scss/style.scss";
 import "rsuite/dist/rsuite.min.css";
 
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Suspense } from "react";
+import { Footer, Header, Loader } from "./ui";
 import { Route, HashRouter as Router, Routes } from "react-router-dom";
 
 import AuthChecker from "./features/auth/components/Auth/AuthChecker";
-import { Header, Footer, Loader } from "./ui";
-import { QuestionsLoader } from "./features/quiz";
-import routes from "./utils/routes";
-import { queryClient } from "./lib/react-query/queryClient";
-
-
-
-import { MagicLinkRedirector } from "./features/auth/components/MagicLinkRedirector/MagicLinkRedirector";
 import { CoopDrawer } from "./features/coop/components/CoopDrawer/CoopDrawer";
 import { DocumentationDrawer } from "./features/documentation/components/DocumentationDrawer/DocumentationDrawer";
-import { UsefulLinksDrawer } from "./features/useful-links/components/UsefulLinksDrawer/UsefulLinksDrawer";
 import { InfoPopup } from "./features/info-popup/components/InfoPopup/InfoPopup";
+import { MagicLinkRedirector } from "./features/auth/components/MagicLinkRedirector/MagicLinkRedirector";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { QuestionsLoader } from "./features/quiz";
+import { Suspense } from "react";
+import { UsefulLinksDrawer } from "./features/useful-links/components/UsefulLinksDrawer/UsefulLinksDrawer";
+import { queryClient } from "./lib/react-query/queryClient";
+import routes from "./utils/routes";
 
 function App() {
   return (
@@ -31,7 +28,6 @@ function App() {
           <MagicLinkRedirector />
           <Header />
           <Suspense fallback={<Loader />}>
-
             <Routes>
               {routes.map((route) => (
                 <Route
@@ -48,8 +44,7 @@ function App() {
                   }
                 />
               ))}
-              </Routes>
-
+            </Routes>
           </Suspense>
           <Footer />
         </QuestionsLoader>

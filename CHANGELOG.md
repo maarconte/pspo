@@ -24,7 +24,7 @@ Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
 ### Ajouté
 
-- Liens utiles par module (THA-596) : un éditeur de texte riche (gras, italique, listes, liens) dans la modale « Edit module », sous le support de cours PDF. Si le champ est renseigné, un onglet « Liens utiles » apparaît sur le côté pendant le choix du module et le parcours d'examen ; il déplie un volet affichant le texte mis en forme, les liens s'ouvrant dans un nouvel onglet. Champ vide = pas d'onglet.
+- Links par module (THA-596) : un éditeur de texte riche (gras, italique, listes, liens) dans la modale « Edit module », sous le support de cours PDF. Si le champ est renseigné, un onglet « Links » apparaît sur le côté pendant le choix du module et le parcours d'examen ; il déplie un volet affichant le texte mis en forme, les liens s'ouvrant dans un nouvel onglet. Champ vide = pas d'onglet.
 
 ## [2.6.0] - 2026-10-06
 
