@@ -9,24 +9,70 @@
     overflow-y: auto;
   }
 
+  // The global `.answer` styles (QuestionAnswer) draw the check box on the
+  // label's ::before/::after, which breaks here: the label wraps an <Input>
+  // that has its own label. Draw the control on the input itself instead.
   .answer {
     padding: 0.5rem;
     display: flex;
-    gap: 0.5rem;
-    align-items: baseline;
+    gap: 0.75rem;
+    align-items: center;
     margin-bottom: 1rem;
     border-radius: 8px;
 
-    input {
+    label::before,
+    label::after {
+      content: none !important;
+    }
+
+    > label {
+      flex: 1;
+      margin-left: 0;
+      padding: 0;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      margin: 0 !important;
+      border: 1px solid $primary-200;
+      border-radius: 3px;
+      background-color: #fff;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+
+      &:checked {
+        border-color: $primary-500;
+        background-color: $primary-500;
+        box-shadow: inset 0 0 0 3px #fff;
+      }
+
+      &:focus-visible {
+        outline: 2px solid $primary-300;
+        outline-offset: 2px;
+      }
+    }
+
+    input[type="radio"] {
+      border-radius: 50%;
+    }
+
+    // Keep the text input and the delete button on the same line as the
+    // check box: no floating-label offset, no bottom margin.
+    .input-box input {
       margin-top: 0 !important;
     }
 
-    label:before {
-      top: 20px;
+    // Correct answers: tint the text input too
+    &.bg-success .input-box input {
+      background-color: $success-50;
     }
 
-    label:after {
-      top: 24px;
+    > button {
+      flex-shrink: 0;
+      margin-bottom: 0 !important;
     }
   }
 
