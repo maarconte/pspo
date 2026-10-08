@@ -3,7 +3,7 @@ import { ArrowLeft, CheckCircle2, Layers, Plus } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useModules } from '../features/admin/hooks/useModules';
-import { updateModule, deleteModule } from '../features/admin/api/modules.api';
+import { updateModule, deleteModule, reorderModules } from '../features/admin/api/modules.api';
 import { getFormationValue } from '../utils/helpers/formationLabel';
 import { ModulesTable } from '../features/admin/components/ModulesTable/ModulesTable';
 import { ModuleFormModal } from '../features/admin/components/ModuleFormModal/ModuleFormModal';
@@ -64,6 +64,14 @@ export default function AdminModules() {
       toast.error('Une erreur est survenue lors de la mise à jour du statut');
     } finally {
       setTogglingModuleId(null);
+    }
+  };
+
+  const handleReorder = async (orderedIds: string[]) => {
+    try {
+      await reorderModules(orderedIds);
+    } catch {
+      toast.error("Une erreur est survenue lors du changement d'ordre");
     }
   };
 
@@ -152,6 +160,7 @@ export default function AdminModules() {
             onDelete={handleDeleteClick}
             onImportCsv={handleImportCsvClick}
             onAddQuestion={setAddQuestionModule}
+            onReorder={handleReorder}
             togglingModuleId={togglingModuleId}
           />
         )}
