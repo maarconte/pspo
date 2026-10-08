@@ -2,7 +2,7 @@ import { FC, useId, useState } from "react";
 import { CheckCircle, Info, XCircle } from "lucide-react";
 import "./style.scss";
 import { QuestionAnswerProps } from "./QuestionAnswer.types";
-import SafeHtml from "../../../../ui/SafeHtml/SafeHtml";
+import FeedbackBox from "../FeedbackBox";
 
 /**
  * Review Torvalds: 10/10
@@ -21,6 +21,7 @@ const QuestionAnswer: FC<QuestionAnswerProps> = ({
   const generatedId = useId();
   const [isExplanationOpen, setIsExplanationOpen] = useState(false);
   const hasExplanation = !!explanation?.trim();
+  const isCorrect = status === "success" || status === "missed";
   const inputId = `answer-${generatedId}`;
 
   // Build classes based on status and selection
@@ -67,9 +68,7 @@ const QuestionAnswer: FC<QuestionAnswerProps> = ({
         )}
       </div>
       {hasExplanation && isExplanationOpen && (
-        <div id={`${inputId}-explanation`} className={`answer__explanation ${status !== "default" ? status : ""}`}>
-          <SafeHtml html={explanation!} />
-        </div>
+        <FeedbackBox id={`${inputId}-explanation`} className={`feedback-box--answer ${isCorrect ? "feedback-box--correct" : ""}`} html={explanation} />
       )}
     </>
   );
