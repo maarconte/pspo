@@ -10,7 +10,7 @@ import { FeedbackProps } from "./Feedback.types";
 import Input from "../../../../ui/Input/Input";
 import Modal from "../../../../ui/Modal/Modal";
 import { QUESTIONS_COLLECTION } from "../../../../utils/constants";
-import SafeHtml from "../../../../ui/SafeHtml/SafeHtml";
+import FeedbackBox from "../FeedbackBox";
 import { toast } from "react-toastify";
 import { useUpdateDoc } from "../../../../utils/hooks/";
 import { createComment } from "../../../../utils/helpers/comments";
@@ -56,14 +56,7 @@ const Feedback: FC<FeedbackProps> = ({ question, showReportButton = true }) => {
 
   return (
     <div className="Feedback">
-      <div className="feedback-box">
-        <strong>Feedback: </strong>
-        {question.feedback ? (
-          <SafeHtml html={question.feedback} />
-        ) : (
-          "No feedback for this question"
-        )}
-      </div>
+      <FeedbackBox html={question.feedback} emptyLabel="No feedback for this question" />
       {showReportButton && (
         <div className="d-flex justify-content-end align-items-center mt-1">
           <Button

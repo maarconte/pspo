@@ -71,6 +71,10 @@ const QuestionCard: FC<QuestionCardProps> = ({
     return "default";
   };
 
+  // Per-option feedback is only exposed in correction mode, never during the exam.
+  const getExplanation = (index: number) =>
+    showAnswer ? question.answerExplanations?.[index] : undefined;
+
   // --- HANDLERS ---
   const handleToggleMultiple = (index: number) => {
     const currentAnswers = Array.isArray(userAnswer?.answer)
@@ -117,6 +121,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
           onChange={() => handleToggleBoolean(val)}
           isReadOnly={readOnly}
           status={getAnswerStatus(idx)}
+          explanation={getExplanation(idx)}
           id={""}
         />
       ));
@@ -136,6 +141,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
         }}
         isReadOnly={readOnly}
         status={getAnswerStatus(index)}
+        explanation={getExplanation(index)}
         id={""}
       />
     ));

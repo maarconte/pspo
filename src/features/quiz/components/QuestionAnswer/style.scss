@@ -110,3 +110,25 @@
 		transition: 0.5s;
 	}
 }
+
+// ─── Per-option feedback (correction mode only) ───────────────────────────────
+
+.answer__info {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	padding: 4px;
+	border: none;
+	border-radius: 50%;
+	background: transparent;
+	color: $primary-300;
+	cursor: pointer;
+	transition: color 0.2s ease, background-color 0.2s ease;
+
+	&:hover,
+	&--open {
+		color: $primary-500;
+		background-color: rgba($primary-500, 0.08);
+	}
+}
+
