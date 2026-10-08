@@ -263,3 +263,5 @@ export const deleteUser = functions.https.onCall(async (data, context) => {
 		);
 	}
 });
+
+export * from './ticketNotifications';

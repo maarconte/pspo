@@ -1,4 +1,4 @@
-import { useEffect, useRef, useActionState } from 'react';
+import { useEffect, useRef, useState, useActionState } from 'react';
 import { X, Send, MessageSquare } from 'lucide-react';
 import { useTicketMessages } from '../../hooks/useTicketMessages';
 import { sendMessage } from '../../api/messages.api';
@@ -20,6 +20,38 @@ interface TicketDetailModalProps {
 }
 
 type MessageFormState = { error: string | null };
+
+const Screenshot = ({ url }: { url: string }) => {
+  const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>(
+    'loading',
+  );
+
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer">
+      {status === 'loading' && (
+        <div className="ticket-modal__screenshot-loader" role="status">
+          <div className="ticket-modal__screenshot-spinner" />
+        </div>
+      )}
+      {status === 'error' && (
+        <p className="ticket-modal__screenshot-error" role="alert">
+          Impossible d'afficher la capture d'écran. Cliquez pour l'ouvrir dans un nouvel
+          onglet ; si elle ne charge pas, un VPN ou un proxy d'entreprise la bloque peut-être.
+        </p>
+      )}
+      {status !== 'error' && (
+        <img
+          src={url}
+          alt="Capture d'écran du bug"
+          className="ticket-modal__screenshot"
+          hidden={status === 'loading'}
+          onLoad={() => setStatus('loaded')}
+          onError={() => setStatus('error')}
+        />
+      )}
+    </a>
+  );
+};
 
 export const TicketDetailModal = ({
   ticket,
@@ -141,13 +173,7 @@ export const TicketDetailModal = ({
           <div className="ticket-modal__description">
             <p>{ticket.description}</p>
             {ticket.imageUrl && (
-              <a href={ticket.imageUrl} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={ticket.imageUrl}
-                  alt="Capture d'écran du bug"
-                  className="ticket-modal__screenshot"
-                />
-              </a>
+              <Screenshot key={ticket.imageUrl} url={ticket.imageUrl} />
             )}
           </div>
         )}
