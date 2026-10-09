@@ -1,16 +1,15 @@
 import "./style.scss";
 
 import { Bookmark, Check, LayoutGrid, X } from "lucide-react";
-import { ReactNode } from "react";
-
-import Button from "../../../../ui/Button/Button";
 import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
-
-import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import {
   ReviewFilter,
   getQuestionStatus as computeStatus,
 } from "../../utils/reviewFilter";
+
+import Button from "../../../../ui/Button/Button";
+import { ReactNode } from "react";
+import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 
 type Props = {
   setCurrentQuestion: (index: number) => void;
@@ -26,10 +25,30 @@ const FILTERS: {
   icon: ReactNode;
   type: Button_Type;
 }[] = [
-  { value: "all", label: "All", icon: <LayoutGrid />, type: Button_Type.PRIMARY },
-  { value: "incorrect", label: "Incorrect", icon: <X />, type: Button_Type.ERROR },
-  { value: "correct", label: "Correct", icon: <Check />, type: Button_Type.SUCCESS },
-  { value: "bookmarked", label: "Bookmarked", icon: <Bookmark />, type: Button_Type.WARNING },
+  {
+    value: "all",
+    label: "All",
+    icon: <LayoutGrid />,
+    type: Button_Type.PRIMARY,
+  },
+  {
+    value: "incorrect",
+    label: "Incorrect",
+    icon: <X />,
+    type: Button_Type.ERROR,
+  },
+  {
+    value: "correct",
+    label: "Correct",
+    icon: <Check />,
+    type: Button_Type.SUCCESS,
+  },
+  {
+    value: "bookmarked",
+    label: "Bookmarked",
+    icon: <Bookmark />,
+    type: Button_Type.WARNING,
+  },
 ];
 
 export default function QuestionNavigation({
@@ -68,7 +87,7 @@ export default function QuestionNavigation({
               label={label}
               icon={icon}
               type={type}
-              size="S"
+              size="M"
               buttonType="button"
               style={filter === value ? Button_Style.SOLID : Button_Style.TONAL}
               onClick={() => onFilterChange(value)}
