@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 import { Question } from "../../../../../utils/types";
 import { findDuplicateQuestions } from "./duplicateDetection";
 
-const makeQuestion = (id: string, title: string): Question => ({
+const makeQuestion = (id: string, title: string, type?: string): Question => ({
   id,
   title,
+  type,
   feedback: "",
   answers: [],
   answerType: "S",
@@ -75,5 +76,27 @@ describe("findDuplicateQuestions", () => {
     const questions = [makeQuestion("1", ""), makeQuestion("2", "")];
 
     expect(findDuplicateQuestions(questions)).toEqual([]);
+  });
+
+  it("does not group identical titles that belong to different modules", () => {
+    const questions = [
+      makeQuestion("1", "What is Scrum?", "pspo-I"),
+      makeQuestion("2", "What is Scrum?", "PSM"),
+    ];
+
+    expect(findDuplicateQuestions(questions)).toEqual([]);
+  });
+
+  it("still groups identical titles within the same module", () => {
+    const questions = [
+      makeQuestion("1", "What is Scrum?", "PSM"),
+      makeQuestion("2", "What is Scrum?", "PSM"),
+      makeQuestion("3", "What is Scrum?", "pspo-I"),
+    ];
+
+    const groups = findDuplicateQuestions(questions);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0].questions.map((q) => q.id)).toEqual(["1", "2"]);
   });
 });
