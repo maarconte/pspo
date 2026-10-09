@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui";
 import Counter from "../features/quiz/components/Counter/Counter";
 import { ReviewFilter, matchesReviewFilter } from "../features/quiz/utils/reviewFilter";
+import ReviewEmptyState from "../features/quiz/components/ReviewEmptyState/ReviewEmptyState";
 import DomainScores from "../features/quiz/components/DomainScores/DomainScores";
 import { Drawer } from "rsuite";
 import Modal from "../ui/Modal/Modal";
@@ -38,6 +39,9 @@ export default function Quizz() {
   const [isFinished, setIsFinished] = useState(false);
   const [showDomainScores, setShowDomainScores] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
+  const filteredIndexes = questions
+    .map((_, i) => i)
+    .filter((i) => matchesReviewFilter(reviewFilter, questions[i], userAnswers[i]));
   const hasDomains = questions.some((q) => q.domain?.trim());
   const [isPaused, setIsPaused] = useState(false);
   // useRef: no re-render needed — only used in the toast callback
@@ -347,17 +351,17 @@ export default function Quizz() {
                 showAnswer={showAnswer}
               />
             )
-          : questions.map((question, index) =>
-              matchesReviewFilter(reviewFilter, question, userAnswers[index]) ? (
+          : filteredIndexes.length === 0
+            ? <ReviewEmptyState />
+            : filteredIndexes.map((index) => (
                 <QuestionCard
                   key={index}
-                  question={question}
+                  question={questions[index]}
                   currentQuestion={index}
                   showAnswer={true}
                   showDomain
                 />
-              ) : null
-            )}
+              ))}
         {/* Navigation / Bottom Restart */}
         {isFinished ? (
           <div className="d-flex justify-content-center mt-5 mb-5">

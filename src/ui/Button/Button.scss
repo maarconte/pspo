@@ -114,6 +114,38 @@ a.btn:hover {
     }
   }
 
+  &-tonal.btn-success {
+    background-color: $success_100;
+    color: $success_700;
+
+    &:hover {
+      background-color: $success_200;
+    }
+
+    &:disabled {
+      background-color: $success_100;
+      border-color: $success_200;
+    }
+  }
+
+  &-solid.btn-success {
+    background-color: $success_500;
+    color: $success_900;
+
+    &:hover:not(:disabled) {
+      background-color: $success_600;
+    }
+  }
+
+  &-solid.btn-warning {
+    background-color: $warning_500;
+    color: $warning_900;
+
+    &:hover:not(:disabled) {
+      background-color: $warning_600;
+    }
+  }
+
   // Secondary
   &-solid.btn-secondary {
     background-color: $secondary_500;

@@ -1,5 +1,11 @@
 import "./style.scss";
 
+import { Bookmark, Check, LayoutGrid, X } from "lucide-react";
+import { ReactNode } from "react";
+
+import Button from "../../../../ui/Button/Button";
+import { Button_Style, Button_Type } from "../../../../ui/Button/Button.types";
+
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import {
   ReviewFilter,
@@ -14,11 +20,16 @@ type Props = {
   onFilterChange?: (filter: ReviewFilter) => void;
 };
 
-const FILTERS: { value: ReviewFilter; label: string }[] = [
-  { value: "all", label: "All" },
-  { value: "incorrect", label: "Incorrect" },
-  { value: "correct", label: "Correct" },
-  { value: "bookmarked", label: "Bookmarked" },
+const FILTERS: {
+  value: ReviewFilter;
+  label: string;
+  icon: ReactNode;
+  type: Button_Type;
+}[] = [
+  { value: "all", label: "All", icon: <LayoutGrid />, type: Button_Type.PRIMARY },
+  { value: "incorrect", label: "Incorrect", icon: <X />, type: Button_Type.ERROR },
+  { value: "correct", label: "Correct", icon: <Check />, type: Button_Type.SUCCESS },
+  { value: "bookmarked", label: "Bookmarked", icon: <Bookmark />, type: Button_Type.WARNING },
 ];
 
 export default function QuestionNavigation({
@@ -51,15 +62,17 @@ export default function QuestionNavigation({
     <>
       {isFinished && onFilterChange && (
         <div className="QuestionNavigation__filters">
-          {FILTERS.map(({ value, label }) => (
-            <button
+          {FILTERS.map(({ value, label, icon, type }) => (
+            <Button
               key={value}
-              type="button"
-              className={`QuestionNavigation__filter ${filter === value ? "active" : ""}`}
+              label={label}
+              icon={icon}
+              type={type}
+              size="S"
+              buttonType="button"
+              style={filter === value ? Button_Style.SOLID : Button_Style.TONAL}
               onClick={() => onFilterChange(value)}
-            >
-              {label}
-            </button>
+            />
           ))}
         </div>
       )}
