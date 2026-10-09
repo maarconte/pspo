@@ -5,6 +5,7 @@ import { Button_Style, Button_Type } from "../ui/Button/Button.types";
 import Counter from "../features/quiz/components/Counter/Counter";
 import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard";
 import QuestionNavigation from "../features/quiz/components/QuestionNavigation/QuestionNavigation";
+import DomainScores from "../features/quiz/components/DomainScores/DomainScores";
 import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
 import { Drawer } from "rsuite";
 import Modal from "../ui/Modal/Modal";
@@ -366,6 +367,7 @@ export default function Quizz() {
             currentQuestion={currentQuestion}
             isFinished={isFinished}
           />
+          {isFinished && <DomainScores />}
         </Drawer.Body>
       </Drawer>
       <Modal

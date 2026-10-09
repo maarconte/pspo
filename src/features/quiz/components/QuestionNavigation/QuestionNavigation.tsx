@@ -1,6 +1,7 @@
 import "./style.scss";
 
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { isAnswerCorrect } from "../../utils/isAnswerCorrect";
 
 type Props = {
   setCurrentQuestion: (index: number) => void;
@@ -32,19 +33,7 @@ export default function QuestionNavigation({
     const userAnswer = userAnswers[index];
     if (!question || !userAnswer || userAnswer.answer === undefined) return "not-answered";
 
-    const correctAnswer = question.answer;
-    const userAnswerValue = userAnswer.answer;
-    let isCorrect = false;
-
-    if (Array.isArray(correctAnswer) && Array.isArray(userAnswerValue)) {
-      if (correctAnswer.length === userAnswerValue.length) {
-        const sortedCorrect = [...correctAnswer].sort();
-        const sortedUser = [...userAnswerValue].sort();
-        isCorrect = sortedCorrect.every((val, idx) => val === sortedUser[idx]);
-      }
-    } else {
-      isCorrect = correctAnswer === userAnswerValue;
-    }
+    const isCorrect = isAnswerCorrect(question, userAnswer.answer);
 
     return isCorrect ? "correct" : "incorrect";
   };
