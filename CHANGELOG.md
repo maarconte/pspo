@@ -3,6 +3,16 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.10.1] - 2026-10-09
+
+### Corrigé
+
+- La détection des doublons dans l'administration ne considère plus comme doublons des questions au titre identique qui figurent dans deux modules différents ; seuls les doublons au sein d'un même module sont signalés.
+
+### Modifié
+
+- Réorganisation des modèles CSV d'import en sous-dossiers par formation (PSM_AI, PSPO, PSPO_AI, SAFe_POPM, SAFe_SMTC, SAFe_Teams) et mise en forme homogène des fichiers.
+
 ## [2.10.0] - 2026-10-08
 
 ### Ajouté
