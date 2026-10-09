@@ -1,19 +1,60 @@
+@use "../../../../assets/scss/variables" as *;
+
 .DomainScores {
   width: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid $primary-50;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  &:hover,
+  &[open] {
+    background: #fff;
+    border-color: rgba(82, 54, 171, 0.1);
+  }
+
+  &[open] .DomainScores__chevron {
+    transform: rotate(180deg);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
 
   &__title {
+    flex: 1;
+    margin: 0;
     font-size: 1rem;
-    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: $primary-800;
+  }
+
+  &__chevron {
+    color: $primary-300;
+    transition: transform 0.3s ease;
   }
 
   &__list {
     list-style: none;
-
-    padding: 0;
+    margin: 0;
+    padding: 1rem 1.5rem 1.5rem;
+    border-top: 1px solid $primary-50;
   }
 
   &__item {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   &__label {
@@ -28,7 +69,18 @@
     opacity: 0.7;
   }
 
-  .rs-progress {
-    padding: 0;
+  .rs-progress-line {
+    padding: 0 30px 0 0;
+    justify-content: space-between;
+    .rs-progress-info {
+      width: auto;
+      min-width: 3em;
+      margin: 0 0 0 0.5rem;
+      padding: 0;
+      text-align: right;
+    }
+    .rs-progress-line-outer {
+      flex: 1;
+    }
   }
 }

@@ -40,14 +40,12 @@ export default function Quizz() {
   );
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
-  const [showDomainScores, setShowDomainScores] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
   const filteredIndexes = questions
     .map((_, i) => i)
     .filter((i) =>
       matchesReviewFilter(reviewFilter, questions[i], userAnswers[i]),
     );
-  const hasDomains = questions.some((q) => q.domain?.trim());
   const [isPaused, setIsPaused] = useState(false);
   // useRef: no re-render needed — only used in the toast callback
   const timeSpentRef = useRef(0);
@@ -243,7 +241,6 @@ export default function Quizz() {
     setScore(0);
     setShowAnswer(false);
     setIsFinished(false);
-    setShowDomainScores(false);
     setReviewFilter("all");
     setIsPaused(false);
     timeSpentRef.current = 0;
@@ -278,38 +275,29 @@ export default function Quizz() {
           )}
 
           {isFinished && (
-            <div className="w-100 d-flex flex-column gap-2 mb-2">
+            <div className="w-100 d-flex flex-column gap-2 2">
               <QuizzScore />
-              <div className="d-flex justify-content-center gap-1">
+              <DomainScores />
+              <div className="d-flex justify-content-between align-items-center gap-1">
                 <Button
                   label="Restart Quiz"
                   type={Button_Type.PRIMARY}
                   onClick={handleRestart}
                 />
-                {hasDomains && (
+                <div className="d-flex gap-1">
                   <Button
-                    label={
-                      showDomainScores
-                        ? "Hide score per domain"
-                        : "Score per domain"
-                    }
+                    label="Navigation"
                     style={Button_Style.OUTLINED}
-                    onClick={() => setShowDomainScores(!showDomainScores)}
+                    onClick={() => setOpen(!open)}
                   />
-                )}
-                <Button
-                  label="Navigation"
-                  style={Button_Style.OUTLINED}
-                  onClick={() => setOpen(!open)}
-                />
-                <Button
-                  label=""
-                  style={Button_Style.OUTLINED}
-                  onClick={() => setOpen(!open)}
-                  icon={<Filter size={24} />}
-                />
+                  <Button
+                    label=""
+                    style={Button_Style.OUTLINED}
+                    onClick={() => setOpen(!open)}
+                    icon={<Filter size={24} />}
+                  />
+                </div>
               </div>
-              {hasDomains && showDomainScores && <DomainScores />}
             </div>
           )}
           {!isFinished &&

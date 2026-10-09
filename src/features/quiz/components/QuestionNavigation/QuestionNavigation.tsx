@@ -28,7 +28,6 @@ const FILTERS: {
   {
     value: "all",
     label: "All",
-    icon: <LayoutGrid />,
     type: Button_Type.PRIMARY,
   },
   {

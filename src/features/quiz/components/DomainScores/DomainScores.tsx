@@ -1,8 +1,9 @@
 import "./style.scss";
 
+import { ChevronDown } from "lucide-react";
 import { Progress } from "rsuite";
-import { computeDomainScores } from "../../utils/computeDomainScores";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
+import { computeDomainScores } from "../../utils/computeDomainScores";
 
 export default function DomainScores() {
   const questions = useQuestionsStore((s) => s.questions);
@@ -12,8 +13,11 @@ export default function DomainScores() {
   if (scores.length === 0) return null;
 
   return (
-    <section className="DomainScores">
-      <h3 className="DomainScores__title">Score per domain</h3>
+    <details className="DomainScores">
+      <summary className="DomainScores__header">
+        <h3 className="DomainScores__title">Score per domain</h3>
+        <ChevronDown size={20} className="DomainScores__chevron" />
+      </summary>
       <ul className="DomainScores__list">
         {scores.map(({ domain, correct, total, percentage }) => (
           <li key={domain} className="DomainScores__item">
@@ -27,6 +31,6 @@ export default function DomainScores() {
           </li>
         ))}
       </ul>
-    </section>
+    </details>
   );
 }
