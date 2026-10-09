@@ -1,17 +1,20 @@
 import { AlertTriangle, Filter, Trophy, User } from "lucide-react";
 import { Button_Style, Button_Type } from "../ui/Button/Button.types";
 import React, { useEffect, useRef, useState } from "react";
+import {
+  ReviewFilter,
+  matchesReviewFilter,
+} from "../features/quiz/utils/reviewFilter";
 
 import { Button } from "../ui";
 import Counter from "../features/quiz/components/Counter/Counter";
-import { ReviewFilter, matchesReviewFilter } from "../features/quiz/utils/reviewFilter";
-import ReviewEmptyState from "../features/quiz/components/ReviewEmptyState/ReviewEmptyState";
 import DomainScores from "../features/quiz/components/DomainScores/DomainScores";
 import { Drawer } from "rsuite";
 import Modal from "../ui/Modal/Modal";
 import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard";
 import QuestionNavigation from "../features/quiz/components/QuestionNavigation/QuestionNavigation";
 import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
+import ReviewEmptyState from "../features/quiz/components/ReviewEmptyState/ReviewEmptyState";
 import StatCard from "../ui/StatCard/StatCard";
 import { toast } from "react-toastify";
 import { trackEvent } from "../lib/analytics";
@@ -41,7 +44,9 @@ export default function Quizz() {
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
   const filteredIndexes = questions
     .map((_, i) => i)
-    .filter((i) => matchesReviewFilter(reviewFilter, questions[i], userAnswers[i]));
+    .filter((i) =>
+      matchesReviewFilter(reviewFilter, questions[i], userAnswers[i]),
+    );
   const hasDomains = questions.some((q) => q.domain?.trim());
   const [isPaused, setIsPaused] = useState(false);
   // useRef: no re-render needed — only used in the toast callback
@@ -293,7 +298,12 @@ export default function Quizz() {
                   />
                 )}
                 <Button
-                  label="Filter"
+                  label="Navigation"
+                  style={Button_Style.OUTLINED}
+                  onClick={() => setOpen(!open)}
+                />
+                <Button
+                  label=""
                   style={Button_Style.OUTLINED}
                   onClick={() => setOpen(!open)}
                   icon={<Filter size={24} />}
@@ -343,25 +353,27 @@ export default function Quizz() {
             })()}
         </div>
         {/* Question */}
-        {!isFinished
-          ? questions[currentQuestion] && (
-              <QuestionCard
-                question={questions[currentQuestion]}
-                currentQuestion={currentQuestion}
-                showAnswer={showAnswer}
-              />
-            )
-          : filteredIndexes.length === 0
-            ? <ReviewEmptyState />
-            : filteredIndexes.map((index) => (
-                <QuestionCard
-                  key={index}
-                  question={questions[index]}
-                  currentQuestion={index}
-                  showAnswer={true}
-                  showDomain
-                />
-              ))}
+        {!isFinished ? (
+          questions[currentQuestion] && (
+            <QuestionCard
+              question={questions[currentQuestion]}
+              currentQuestion={currentQuestion}
+              showAnswer={showAnswer}
+            />
+          )
+        ) : filteredIndexes.length === 0 ? (
+          <ReviewEmptyState />
+        ) : (
+          filteredIndexes.map((index) => (
+            <QuestionCard
+              key={index}
+              question={questions[index]}
+              currentQuestion={index}
+              showAnswer={true}
+              showDomain
+            />
+          ))
+        )}
         {/* Navigation / Bottom Restart */}
         {isFinished ? (
           <div className="d-flex justify-content-center mt-5 mb-5">
