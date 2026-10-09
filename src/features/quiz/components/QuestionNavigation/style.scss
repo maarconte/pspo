@@ -61,3 +61,26 @@
     }
   }
 }
+
+.QuestionNavigation__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.QuestionNavigation__filter {
+  padding: 2px 10px;
+  border: 1px solid $primary-100;
+  border-radius: 999px;
+  background: transparent;
+  color: $primary-500;
+  font-size: 0.8125rem;
+
+  &.active {
+    background-color: $primary-500;
+    border-color: $primary-500;
+    color: $primary-50;
+  }
+}

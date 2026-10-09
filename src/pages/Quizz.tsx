@@ -1,9 +1,10 @@
-import { AlertTriangle, Trophy, User } from "lucide-react";
+import { AlertTriangle, Filter, Trophy, User } from "lucide-react";
 import { Button_Style, Button_Type } from "../ui/Button/Button.types";
 import React, { useEffect, useRef, useState } from "react";
 
 import { Button } from "../ui";
 import Counter from "../features/quiz/components/Counter/Counter";
+import { ReviewFilter, matchesReviewFilter } from "../features/quiz/utils/reviewFilter";
 import DomainScores from "../features/quiz/components/DomainScores/DomainScores";
 import { Drawer } from "rsuite";
 import Modal from "../ui/Modal/Modal";
@@ -36,6 +37,7 @@ export default function Quizz() {
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
   const [showDomainScores, setShowDomainScores] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
   const hasDomains = questions.some((q) => q.domain?.trim());
   const [isPaused, setIsPaused] = useState(false);
   // useRef: no re-render needed — only used in the toast callback
@@ -233,6 +235,7 @@ export default function Quizz() {
     setShowAnswer(false);
     setIsFinished(false);
     setShowDomainScores(false);
+    setReviewFilter("all");
     setIsPaused(false);
     timeSpentRef.current = 0;
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -286,9 +289,10 @@ export default function Quizz() {
                   />
                 )}
                 <Button
-                  label="Navigation"
+                  label="Filter"
                   style={Button_Style.OUTLINED}
                   onClick={() => setOpen(!open)}
+                  icon={<Filter size={24} />}
                 />
               </div>
               {hasDomains && showDomainScores && <DomainScores />}
@@ -343,15 +347,17 @@ export default function Quizz() {
                 showAnswer={showAnswer}
               />
             )
-          : questions.map((question, index) => (
-              <QuestionCard
-                key={index}
-                question={question}
-                currentQuestion={index}
-                showAnswer={true}
-                showDomain
-              />
-            ))}
+          : questions.map((question, index) =>
+              matchesReviewFilter(reviewFilter, question, userAnswers[index]) ? (
+                <QuestionCard
+                  key={index}
+                  question={question}
+                  currentQuestion={index}
+                  showAnswer={true}
+                  showDomain
+                />
+              ) : null
+            )}
         {/* Navigation / Bottom Restart */}
         {isFinished ? (
           <div className="d-flex justify-content-center mt-5 mb-5">
@@ -395,6 +401,8 @@ export default function Quizz() {
             setCurrentQuestion={handleQuestionChange}
             currentQuestion={currentQuestion}
             isFinished={isFinished}
+            filter={reviewFilter}
+            onFilterChange={setReviewFilter}
           />
         </Drawer.Body>
       </Drawer>
