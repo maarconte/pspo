@@ -16,6 +16,7 @@ import Feedback from "../Feedback";
 import Modal from "../../../../ui/Modal/Modal";
 import QuestionAnswer from "../QuestionAnswer/QuestionAnswer";
 import { QuestionCardProps } from "./QuestionCard.types";
+import { Tag } from "rsuite";
 import { trackEvent } from "../../../../lib/analytics";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 
@@ -28,6 +29,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
   currentQuestion,
   showAnswer,
   isReadOnly = false,
+  showDomain = false,
 }) => {
   // --- SELECTORS (Atomic for performance) ---
   const userAnswer = useQuestionsStore((s) => s.userAnswers[currentQuestion]);
@@ -191,6 +193,12 @@ const QuestionCard: FC<QuestionCardProps> = ({
             );
           })}
         </Modal>
+      )}
+
+      {showDomain && question.domain && (
+        <Tag className="question-domain" color="violet" size="md">
+          {question.domain}
+        </Tag>
       )}
 
       <div className="d-flex justify-content-between gap-1">

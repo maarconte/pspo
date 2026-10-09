@@ -4,4 +4,6 @@ export interface QuestionCardProps {
   currentQuestion: number;
   showAnswer: boolean;
   isReadOnly?: boolean;
+  /** Show the question's domain tag above the title (end-of-quiz review only). */
+  showDomain?: boolean;
 }

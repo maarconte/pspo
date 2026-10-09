@@ -321,6 +321,7 @@ export default function Quizz() {
                 question={question}
                 currentQuestion={index}
                 showAnswer={true}
+                showDomain
               />
             ))}
         {/* Navigation / Bottom Restart */}
