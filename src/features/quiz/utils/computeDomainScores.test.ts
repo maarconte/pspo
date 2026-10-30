@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Question } from "../../../utils/types";
-import { computeDomainScores } from "./computeDomainScores";
+import { computeDomainScores, NO_DOMAIN_LABEL } from "./computeDomainScores";
 
 const q = (id: string, answer: Question["answer"], domain?: string): Question => ({
   id,
@@ -27,8 +27,14 @@ describe("computeDomainScores", () => {
     ]);
   });
 
-  it("ignores questions without a domain", () => {
-    const scores = computeDomainScores([q("1", 0, "Scrum"), q("2", 0)], [{ answer: 0 }, { answer: 0 }]);
-    expect(scores).toEqual([{ domain: "Scrum", correct: 1, total: 1, percentage: 100 }]);
+  it("groups questions without a domain last", () => {
+    const scores = computeDomainScores(
+      [q("1", 0, "Scrum"), q("2", 0), q("3", 1)],
+      [{ answer: 0 }, { answer: 0 }, { answer: 0 }]
+    );
+    expect(scores).toEqual([
+      { domain: "Scrum", correct: 1, total: 1, percentage: 100 },
+      { domain: NO_DOMAIN_LABEL, correct: 1, total: 2, percentage: 50 },
+    ]);
   });
 });

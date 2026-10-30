@@ -59,6 +59,70 @@
     letter-spacing: 0.01em;
   }
 
+  &__domain-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__domains {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__domain-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: rgba($primary-500, 0.1);
+    color: $primary-800;
+    font-size: 0.85rem;
+    font-weight: 500;
+
+    button {
+      display: inline-flex;
+      padding: 0.15rem;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba($primary-500, 0.2);
+      }
+    }
+  }
+
+  &__hint {
+    font-size: 0.8rem;
+    color: #777;
+  }
+
+  &__domain-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  &__domain-chip--suggested {
+    border: 1px dashed rgba($primary-500, 0.5);
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    padding-right: 0.75rem;
+
+    &:hover {
+      background: rgba($primary-500, 0.1);
+    }
+  }
+
   &__error {
     color: $secondary-600;
     font-size: 0.8rem;

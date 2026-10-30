@@ -1,12 +1,14 @@
 import "./style.scss";
 
-import { FileText, Pencil, Trash2 } from "lucide-react";
+import { FileText, Pencil, Plus, Trash2, X } from "lucide-react";
 import { createModule, updateModule } from "../../api/modules.api";
 import { useEffect, useRef, useState } from "react";
 
 import Modal from "../../../../ui/Modal/Modal";
 import type { Module } from "../../types/module.types";
 import RichTextEditor from "../../../../ui/RichTextEditor";
+import { getQuestionDomains } from "../../utils/moduleDomains";
+import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { toast } from "react-toastify";
 
 interface ModuleFormModalProps {
@@ -73,8 +75,15 @@ export const ModuleFormModal = ({
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [removeExistingPdf, setRemoveExistingPdf] = useState(false);
+  const [domains, setDomains] = useState<string[]>(module?.domains ?? []);
+  const [domainInput, setDomainInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const allQuestions = useQuestionsStore((s) => s.allQuestions);
+  // Domains already set on this module's questions (e.g. CSV import) that the module doesn't declare yet.
+  const suggestedDomains = module
+    ? getQuestionDomains(allQuestions, module).filter((d) => !domains.includes(d))
+    : [];
 
   // Re-sync the form whenever a new module is opened for editing (or the modal reopens in add mode).
   useEffect(() => {
@@ -84,6 +93,8 @@ export const ModuleFormModal = ({
       setPdfFile(null);
       setPdfError(null);
       setRemoveExistingPdf(false);
+      setDomains(module?.domains ?? []);
+      setDomainInput("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, module?.id]);
@@ -138,6 +149,17 @@ export const ModuleFormModal = ({
     setRemoveExistingPdf(true);
   };
 
+  const addDomain = () => {
+    const value = domainInput.trim();
+    if (!value) return;
+    const exists = domains.some((d) => d.toLowerCase() === value.toLowerCase());
+    if (!exists) setDomains((prev) => [...prev, value]);
+    setDomainInput("");
+  };
+
+  const removeDomain = (domain: string) =>
+    setDomains((prev) => prev.filter((d) => d !== domain));
+
   const handleConfirm = async () => {
     if (!isFormValid) return;
 
@@ -151,6 +173,7 @@ export const ModuleFormModal = ({
         minSuccessPercent: Number(form.minSuccessPercent),
         pdfFile: pdfFile ?? undefined,
         usefulLinks: form.usefulLinks,
+        domains,
       };
 
       if (isEditMode && module) {
@@ -339,6 +362,71 @@ export const ModuleFormModal = ({
             />
             {pdfError && <span className="module-form__error">{pdfError}</span>}
           </div>
+        </div>
+        <div className="module-form__field">
+          <label htmlFor="module-domain">Domains</label>
+          <div className="module-form__domain-row">
+            <input
+              id="module-domain"
+              type="text"
+              placeholder="Add a domain"
+              value={domainInput}
+              onChange={(e) => setDomainInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  // Don't submit the surrounding modal/form.
+                  e.preventDefault();
+                  addDomain();
+                }
+              }}
+            />
+            <button
+              type="button"
+              className="module-form__icon-btn"
+              onClick={addDomain}
+              disabled={!domainInput.trim()}
+              title="Add domain"
+            >
+              <Plus size={18} />
+            </button>
+          </div>
+          {suggestedDomains.length > 0 && (
+            <div className="module-form__domain-suggestions">
+              <span className="module-form__hint">Already used by questions:</span>
+              <ul className="module-form__domains">
+                {suggestedDomains.map((domain) => (
+                  <li key={domain}>
+                    <button
+                      type="button"
+                      className="module-form__domain-chip module-form__domain-chip--suggested"
+                      onClick={() => setDomains((prev) => [...prev, domain])}
+                      title={`Add ${domain}`}
+                    >
+                      <Plus size={12} />
+                      {domain}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {domains.length > 0 && (
+            <ul className="module-form__domains">
+              {domains.map((domain) => (
+                <li key={domain} className="module-form__domain-chip">
+                  {domain}
+                  <button
+                    type="button"
+                    onClick={() => removeDomain(domain)}
+                    title={`Remove ${domain}`}
+                    aria-label={`Remove ${domain}`}
+                  >
+                    <X size={14} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div className="module-form__field">
           <label htmlFor="module-useful-links">Links du module</label>

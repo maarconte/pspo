@@ -95,6 +95,7 @@ export const createModule = async (
     pdfPath: pdfPath ?? null,
     pdfSizeBytes: pdfSizeBytes ?? null,
     usefulLinks: payload.usefulLinks || null,
+    domains: payload.domains ?? [],
     completedCount: 0,
     // Appended after existing modules; reordering renumbers everything from 0.
     order: Date.now(),

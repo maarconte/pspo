@@ -12,6 +12,8 @@ export interface Module {
   pdfSizeBytes?: number;
   /** Admin-authored HTML (formatted text + links) shown in the "Links" side tab. Empty/absent = no tab. */
   usefulLinks?: string | null;
+  /** Domains (topic categories) questions of this module can be tagged with, picked from the question editor. */
+  domains?: string[];
   /** Number of quiz sessions completed for this module, incremented on quiz completion. */
   completedCount?: number;
   /** Display position (ascending) in the module select and the admin table. Absent on legacy modules. */
@@ -26,10 +28,11 @@ export type CreateModulePayload = Pick<
 > & {
   pdfFile?: File;
   usefulLinks?: string;
+  domains?: string[];
 };
 
 export type UpdateModulePayload = Partial<
-  Pick<Module, 'title' | 'isActive' | 'quizDuration' | 'questionCount' | 'minSuccessPercent'>
+  Pick<Module, 'title' | 'isActive' | 'quizDuration' | 'questionCount' | 'minSuccessPercent' | 'domains'>
 > & {
   pdfFile?: File;
   /** Empty string clears the field. */
