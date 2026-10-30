@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 
 import Modal from "../../../../ui/Modal/Modal";
 import type { Module } from "../../types/module.types";
+import type { Question } from "../../../../utils/types";
 import RichTextEditor from "../../../../ui/RichTextEditor";
 import { getQuestionDomains } from "../../utils/moduleDomains";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
@@ -62,12 +63,19 @@ const untouchedFields: TouchedFields = {
   usefulLinks: false,
 };
 
+/** Declared domains plus those already set on the module's questions (e.g. CSV import). */
+const initialDomains = (module: Module | null | undefined, questions: Question[]): string[] =>
+  module
+    ? Array.from(new Set([...(module.domains ?? []), ...getQuestionDomains(questions, module)]))
+    : [];
+
 export const ModuleFormModal = ({
   isOpen,
   onClose,
   module,
 }: ModuleFormModalProps) => {
   const isEditMode = !!module;
+  const allQuestions = useQuestionsStore((s) => s.allQuestions);
   const [form, setForm] = useState(
     module ? stateFromModule(module) : emptyState,
   );
@@ -75,12 +83,11 @@ export const ModuleFormModal = ({
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [removeExistingPdf, setRemoveExistingPdf] = useState(false);
-  const [domains, setDomains] = useState<string[]>(module?.domains ?? []);
+  const [domains, setDomains] = useState<string[]>(() => initialDomains(module, allQuestions));
   const [domainInput, setDomainInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const allQuestions = useQuestionsStore((s) => s.allQuestions);
-  // Domains already set on this module's questions (e.g. CSV import) that the module doesn't declare yet.
+  // Domains removed by the admin from the form stay offered here so they can be re-added.
   const suggestedDomains = module
     ? getQuestionDomains(allQuestions, module).filter((d) => !domains.includes(d))
     : [];
@@ -93,7 +100,7 @@ export const ModuleFormModal = ({
       setPdfFile(null);
       setPdfError(null);
       setRemoveExistingPdf(false);
-      setDomains(module?.domains ?? []);
+      setDomains(initialDomains(module, allQuestions));
       setDomainInput("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
