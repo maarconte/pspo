@@ -46,6 +46,12 @@ const Button: FC<ButtonProps> = ({
         return "#5236ab";
       case "tonal-enabled-warning":
         return "#af7e19";
+      case "tonal-enabled-success":
+        return "#719e4d";
+      case "solid-enabled-success":
+        return "#435e2d";
+      case "solid-enabled-warning":
+        return "#674b0f";
       default:
         break;
     }

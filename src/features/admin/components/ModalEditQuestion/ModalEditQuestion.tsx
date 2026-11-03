@@ -23,7 +23,9 @@ import Select from "../../../../ui/Select/Select";
 import SelectAnswerType from "../SelectAnswerType/SelectAnswerType";
 import { getFormationValue } from "../../../../utils/helpers/formationLabel";
 import { toast } from "react-toastify";
+import { getQuestionDomains } from "../../utils/moduleDomains";
 import { useModules } from "../../hooks/useModules";
+import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 
 const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
   isOpen,
@@ -38,6 +40,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
     collectionName: QUESTIONS_COLLECTION,
   });
   const { modules } = useModules();
+  const allQuestions = useQuestionsStore((s) => s.allQuestions);
   // RichTextEditor only reads its value on mount: bump this to remount the
   // per-answer editors when answers are removed and indices shift.
   const [explanationsVersion, setExplanationsVersion] = useState(0);
@@ -61,6 +64,15 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
     return newAnswer;
   };
 
+  // Domains declared on the module plus those already used by its questions (e.g. CSV import).
+  const getModuleDomains = (type?: string): string[] => {
+    const module = modules.find((m) => getFormationValue(m.title) === type);
+    if (!module) return [];
+    return Array.from(
+      new Set([...(module.domains ?? []), ...getQuestionDomains(allQuestions, module)]),
+    ).sort((a, b) => a.localeCompare(b));
+  };
+
   return (
     <div className="ModalEditQuestion">
       <Formik
@@ -78,6 +90,7 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                 answerExplanations: [],
                 isFlagged: false,
                 type: defaultType || "pspo-I",
+                domain: "",
               }
         }
         onSubmit={async (values) => {
@@ -134,7 +147,32 @@ const ModalEditQuestion: FC<ModalEditQuestionProps> = ({
                     ))}
                   </Field>
                 </div>
-                <div className="col-sm-9">
+                <div className="col-sm-3">
+                  <h2 className="h6 mb-1">Domain</h2>
+                  <Field
+                    as="select"
+                    id="domain"
+                    name="domain"
+                    value={values.domain ?? ""}
+                    onChange={handleChange}
+                    className="select-modal"
+                  >
+                    <option value="">No domain</option>
+                    {/* Keep a domain that was removed from the module (or imported) selectable so saving doesn't silently drop it. */}
+                    {[
+                      ...getModuleDomains(values.type),
+                      ...(values.domain &&
+                      !getModuleDomains(values.type).includes(values.domain)
+                        ? [values.domain]
+                        : []),
+                    ].map((domain) => (
+                      <option key={domain} value={domain}>
+                        {domain}
+                      </option>
+                    ))}
+                  </Field>
+                </div>
+                <div className="col-sm-6">
                   <h2 className="h6 mb-1">Answer Type</h2>
                   <div className="d-flex gap-05 mb-2">
                     <Field

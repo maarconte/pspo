@@ -29,7 +29,7 @@ export type Question = {
    * HTML (rich text), shown next to each option in correction mode.
    */
   answerExplanations?: string[];
-  /** Free-text topic/category imported from external question banks. Not surfaced in the UI yet. */
+  /** Topic/category: picked from the `domains` of the question's module, or imported from external question banks. */
   domain?: string;
 };
 

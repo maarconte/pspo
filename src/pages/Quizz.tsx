@@ -1,22 +1,28 @@
+import { AlertTriangle, Filter, Trophy, User } from "lucide-react";
+import { Button_Style, Button_Type } from "../ui/Button/Button.types";
 import React, { useEffect, useRef, useState } from "react";
+import {
+  ReviewFilter,
+  matchesReviewFilter,
+} from "../features/quiz/utils/reviewFilter";
 
 import { Button } from "../ui";
-import { Button_Style, Button_Type } from "../ui/Button/Button.types";
 import Counter from "../features/quiz/components/Counter/Counter";
+import DomainScores from "../features/quiz/components/DomainScores/DomainScores";
+import { Drawer } from "rsuite";
+import Modal from "../ui/Modal/Modal";
 import QuestionCard from "../features/quiz/components/QuestionCard/QuestionCard";
 import QuestionNavigation from "../features/quiz/components/QuestionNavigation/QuestionNavigation";
 import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
-import { Drawer } from "rsuite";
-import Modal from "../ui/Modal/Modal";
+import ReviewEmptyState from "../features/quiz/components/ReviewEmptyState/ReviewEmptyState";
+import StatCard from "../ui/StatCard/StatCard";
 import { toast } from "react-toastify";
+import { trackEvent } from "../lib/analytics";
+import { useCoopStore } from "../stores/useCoopStore";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
 import { useQuizStatsStore } from "../stores/useQuizStatsStore";
-import { useUserStore } from "../stores/useUserStore";
 import { useSaveQuizSession } from "../hooks/useSaveQuizSession";
-import { useCoopStore } from "../stores/useCoopStore";
-import { AlertTriangle, Trophy, User } from "lucide-react";
-import StatCard from "../ui/StatCard/StatCard";
-import { trackEvent } from "../lib/analytics";
+import { useUserStore } from "../stores/useUserStore";
 
 export default function Quizz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -26,10 +32,20 @@ export default function Quizz() {
   const calculateScore = useQuestionsStore((s) => s.calculateScore);
   const getSuccessPercentage = useQuestionsStore((s) => s.getSuccessPercentage);
   const userAnswers = useQuestionsStore((s) => s.userAnswers);
-  const minSuccessPercent = useQuestionsStore((s) => s.quizConfig.minSuccessPercent);
-  const durationMinutes = useQuestionsStore((s) => s.quizConfig.durationMinutes);
+  const minSuccessPercent = useQuestionsStore(
+    (s) => s.quizConfig.minSuccessPercent,
+  );
+  const durationMinutes = useQuestionsStore(
+    (s) => s.quizConfig.durationMinutes,
+  );
   const [showAnswer, setShowAnswer] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
+  const filteredIndexes = questions
+    .map((_, i) => i)
+    .filter((i) =>
+      matchesReviewFilter(reviewFilter, questions[i], userAnswers[i]),
+    );
   const [isPaused, setIsPaused] = useState(false);
   // useRef: no re-render needed — only used in the toast callback
   const timeSpentRef = useRef(0);
@@ -50,11 +66,16 @@ export default function Quizz() {
   const setTotalTimeSpent = useQuestionsStore((s) => s.setTotalTimeSpent);
 
   const { participants } = useCoopStore();
-  const currentParticipant = participants.length > 0 ? participants[currentQuestion % participants.length] : null;
+  const currentParticipant =
+    participants.length > 0
+      ? participants[currentQuestion % participants.length]
+      : null;
 
   const notificationContent = (time: string) => (
     <div className="toast-content">
-      <p className={`mb-0 time fs-4 fw-bold color-${toastType(timeSpentRef.current)}`}>
+      <p
+        className={`mb-0 time fs-4 fw-bold color-${toastType(timeSpentRef.current)}`}
+      >
         {time}
       </p>
     </div>
@@ -101,7 +122,10 @@ export default function Quizz() {
 
   useEffect(() => {
     if (participants.length >= 2) {
-      trackEvent('coop_session_started', { participant_count: participants.length, formation });
+      trackEvent("coop_session_started", {
+        participant_count: participants.length,
+        formation,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -151,17 +175,17 @@ export default function Quizz() {
     const summary = getSummary?.();
     const finalScore = calculateScore?.();
     const scorePct = getSuccessPercentage();
-    trackEvent('quiz_completed', {
-      formation: formation || 'unknown',
+    trackEvent("quiz_completed", {
+      formation: formation || "unknown",
       score_pct: scorePct,
       passed: scorePct >= minSuccessPercent,
       total_time_sec: summary ? Math.round(summary.totalTimeMs / 1000) : 0,
       questions_answered: summary?.totalQuestions ?? 0,
-      bookmarks_count: summary?.details.filter((d) => d.isBookmarked).length ?? 0,
+      bookmarks_count:
+        summary?.details.filter((d) => d.isBookmarked).length ?? 0,
     });
 
     if (user?.uid) {
-
       if (summary) {
         setTotalTimeSpent(summary.totalTimeMs);
       }
@@ -208,12 +232,16 @@ export default function Quizz() {
   };
 
   const handleRestart = () => {
-    trackEvent('quiz_restarted', { formation, previous_score_pct: getSuccessPercentage() });
+    trackEvent("quiz_restarted", {
+      formation,
+      previous_score_pct: getSuccessPercentage(),
+    });
     startNewExam();
     setCurrentQuestion(0);
     setScore(0);
     setShowAnswer(false);
     setIsFinished(false);
+    setReviewFilter("all");
     setIsPaused(false);
     timeSpentRef.current = 0;
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -239,25 +267,36 @@ export default function Quizz() {
               setIsPaused={setIsPaused}
               finishQuizz={finishQuizz}
               currentQuestion={currentQuestion}
-              onTick={(seconds) => { timeSpentRef.current = seconds; }}
+              onTick={(seconds) => {
+                timeSpentRef.current = seconds;
+              }}
               durationMinutes={durationMinutes}
             />
           )}
 
           {isFinished && (
-            <div className="w-100 d-flex flex-column gap-2 mb-2">
+            <div className="w-100 d-flex flex-column gap-2 2">
               <QuizzScore />
-              <div className="d-flex justify-content-center gap-1">
+              <DomainScores />
+              <div className="d-flex justify-content-between align-items-center gap-1">
                 <Button
                   label="Restart Quiz"
                   type={Button_Type.PRIMARY}
                   onClick={handleRestart}
                 />
-                <Button
-                  label="Navigation"
-                  style={Button_Style.OUTLINED}
-                  onClick={() => setOpen(!open)}
-                />
+                <div className="d-flex gap-1">
+                  <Button
+                    label="Navigation"
+                    style={Button_Style.OUTLINED}
+                    onClick={() => setOpen(!open)}
+                  />
+                  <Button
+                    label=""
+                    style={Button_Style.OUTLINED}
+                    onClick={() => setOpen(!open)}
+                    icon={<Filter size={24} />}
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -281,11 +320,7 @@ export default function Quizz() {
                           <AlertTriangle size={24} strokeWidth={2.5} />
                         )
                       }
-                      value={
-                        answeredCount === 0
-                          ? "—"
-                          : `${correctCount}%`
-                      }
+                      value={answeredCount === 0 ? "—" : `${correctCount}%`}
                       label="Current Score"
                     />
                   )}
@@ -306,22 +341,27 @@ export default function Quizz() {
             })()}
         </div>
         {/* Question */}
-        {!isFinished
-          ? questions[currentQuestion] && (
-              <QuestionCard
-                question={questions[currentQuestion]}
-                currentQuestion={currentQuestion}
-                showAnswer={showAnswer}
-              />
-            )
-          : questions.map((question, index) => (
-              <QuestionCard
-                key={index}
-                question={question}
-                currentQuestion={index}
-                showAnswer={true}
-              />
-            ))}
+        {!isFinished ? (
+          questions[currentQuestion] && (
+            <QuestionCard
+              question={questions[currentQuestion]}
+              currentQuestion={currentQuestion}
+              showAnswer={showAnswer}
+            />
+          )
+        ) : filteredIndexes.length === 0 ? (
+          <ReviewEmptyState />
+        ) : (
+          filteredIndexes.map((index) => (
+            <QuestionCard
+              key={index}
+              question={questions[index]}
+              currentQuestion={index}
+              showAnswer={true}
+              showDomain
+            />
+          ))
+        )}
         {/* Navigation / Bottom Restart */}
         {isFinished ? (
           <div className="d-flex justify-content-center mt-5 mb-5">
@@ -365,6 +405,8 @@ export default function Quizz() {
             setCurrentQuestion={handleQuestionChange}
             currentQuestion={currentQuestion}
             isFinished={isFinished}
+            filter={reviewFilter}
+            onFilterChange={setReviewFilter}
           />
         </Drawer.Body>
       </Drawer>
@@ -392,7 +434,9 @@ export default function Quizz() {
         <div
           className={`coop-current-participant ${open ? "drawer-open" : ""}`}
         >
-          <p className="coop-current-participant__name"><User size={24}/> {currentParticipant}</p>
+          <p className="coop-current-participant__name">
+            <User size={24} /> {currentParticipant}
+          </p>
         </div>
       )}
     </div>

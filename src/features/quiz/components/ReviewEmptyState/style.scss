@@ -1,0 +1,16 @@
+@use '../../../../assets/scss/variables' as *;
+
+.ReviewEmptyState {
+  text-align: center;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  background: $primary-50;
+  border-radius: 16px;
+  border: 2px dashed $primary-100;
+
+  p {
+    color: $primary-400;
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+}

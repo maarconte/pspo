@@ -1,12 +1,21 @@
 import "./style.scss";
 
-import { FileText, Pencil, Trash2 } from "lucide-react";
+import { FileText, Pencil, Plus, Trash2, X } from "lucide-react";
 import { createModule, updateModule } from "../../api/modules.api";
 import { useEffect, useRef, useState } from "react";
 
 import Modal from "../../../../ui/Modal/Modal";
 import type { Module } from "../../types/module.types";
+import type { Question } from "../../../../utils/types";
 import RichTextEditor from "../../../../ui/RichTextEditor";
+import {
+  MAX_TOTAL_PERCENT,
+  autoBalancePercents,
+  getQuestionDomains,
+  sanitizePercentInput,
+  totalPercent,
+} from "../../utils/moduleDomains";
+import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { toast } from "react-toastify";
 
 interface ModuleFormModalProps {
@@ -60,12 +69,24 @@ const untouchedFields: TouchedFields = {
   usefulLinks: false,
 };
 
+/** Declared domains plus those already set on the module's questions (e.g. CSV import). */
+const initialDomains = (module: Module | null | undefined, questions: Question[]): string[] =>
+  module
+    ? Array.from(new Set([...(module.domains ?? []), ...getQuestionDomains(questions, module)]))
+    : [];
+
+const initialPercents = (module: Module | null | undefined): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(module?.domainPercents ?? {}).map(([domain, value]) => [domain, String(value)]),
+  );
+
 export const ModuleFormModal = ({
   isOpen,
   onClose,
   module,
 }: ModuleFormModalProps) => {
   const isEditMode = !!module;
+  const allQuestions = useQuestionsStore((s) => s.allQuestions);
   const [form, setForm] = useState(
     module ? stateFromModule(module) : emptyState,
   );
@@ -73,8 +94,17 @@ export const ModuleFormModal = ({
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [removeExistingPdf, setRemoveExistingPdf] = useState(false);
+  const [domains, setDomains] = useState<string[]>(() => initialDomains(module, allQuestions));
+  const [domainPercents, setDomainPercents] = useState<Record<string, string>>(() =>
+    initialPercents(module),
+  );
+  const [domainInput, setDomainInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // Domains removed by the admin from the form stay offered here so they can be re-added.
+  const suggestedDomains = module
+    ? getQuestionDomains(allQuestions, module).filter((d) => !domains.includes(d))
+    : [];
 
   // Re-sync the form whenever a new module is opened for editing (or the modal reopens in add mode).
   useEffect(() => {
@@ -84,6 +114,9 @@ export const ModuleFormModal = ({
       setPdfFile(null);
       setPdfError(null);
       setRemoveExistingPdf(false);
+      setDomains(initialDomains(module, allQuestions));
+      setDomainPercents(initialPercents(module));
+      setDomainInput("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, module?.id]);
@@ -107,8 +140,15 @@ export const ModuleFormModal = ({
     Number(form.minSuccessPercent) >= MIN_PERCENT &&
     Number(form.minSuccessPercent) <= MAX_PERCENT;
 
+  const domainsTotal = totalPercent(domains, domainPercents);
+  const isDomainTotalValid = domainsTotal <= MAX_TOTAL_PERCENT;
+
   const isFormValid =
-    isTitleValid && isDurationValid && isQuestionCountValid && isPercentValid;
+    isTitleValid &&
+    isDurationValid &&
+    isQuestionCountValid &&
+    isPercentValid &&
+    isDomainTotalValid;
 
   const markTouched = (field: keyof TouchedFields) =>
     setTouched((prev) => ({ ...prev, [field]: true }));
@@ -138,6 +178,22 @@ export const ModuleFormModal = ({
     setRemoveExistingPdf(true);
   };
 
+  const addDomain = () => {
+    const value = domainInput.trim();
+    if (!value) return;
+    const exists = domains.some((d) => d.toLowerCase() === value.toLowerCase());
+    if (!exists) setDomains((prev) => [...prev, value]);
+    setDomainInput("");
+  };
+
+  const removeDomain = (domain: string) => {
+    setDomains((prev) => prev.filter((d) => d !== domain));
+    setDomainPercents(({ [domain]: _removed, ...rest }) => rest);
+  };
+
+  const changeDomainPercent = (domain: string, raw: string) =>
+    setDomainPercents((prev) => ({ ...prev, [domain]: sanitizePercentInput(raw) }));
+
   const handleConfirm = async () => {
     if (!isFormValid) return;
 
@@ -151,6 +207,10 @@ export const ModuleFormModal = ({
         minSuccessPercent: Number(form.minSuccessPercent),
         pdfFile: pdfFile ?? undefined,
         usefulLinks: form.usefulLinks,
+        domains,
+        domainPercents: Object.fromEntries(
+          domains.map((domain) => [domain, Number(domainPercents[domain]) || 0]),
+        ),
       };
 
       if (isEditMode && module) {
@@ -339,6 +399,106 @@ export const ModuleFormModal = ({
             />
             {pdfError && <span className="module-form__error">{pdfError}</span>}
           </div>
+        </div>
+        <div className="module-form__field">
+          <label htmlFor="module-domain">Domains</label>
+          <div className="module-form__domain-row">
+            <input
+              id="module-domain"
+              type="text"
+              placeholder="Add a domain"
+              value={domainInput}
+              onChange={(e) => setDomainInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  // Don't submit the surrounding modal/form.
+                  e.preventDefault();
+                  addDomain();
+                }
+              }}
+            />
+            <button
+              type="button"
+              className="module-form__icon-btn"
+              onClick={addDomain}
+              disabled={!domainInput.trim()}
+              title="Add domain"
+            >
+              <Plus size={18} />
+            </button>
+          </div>
+          {suggestedDomains.length > 0 && (
+            <div className="module-form__domain-suggestions">
+              <span className="module-form__hint">Already used by questions:</span>
+              <ul className="module-form__domains">
+                {suggestedDomains.map((domain) => (
+                  <li key={domain}>
+                    <button
+                      type="button"
+                      className="module-form__domain-chip module-form__domain-chip--suggested"
+                      onClick={() => setDomains((prev) => [...prev, domain])}
+                      title={`Add ${domain}`}
+                    >
+                      <Plus size={12} />
+                      {domain}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {domains.length > 0 && (
+            <>
+              <ul className="module-form__domain-percents">
+                {domains.map((domain) => (
+                  <li key={domain} className="module-form__domain-percent">
+                    <label htmlFor={`domain-percent-${domain}`}>{domain}</label>
+                    <input
+                      id={`domain-percent-${domain}`}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      placeholder="0"
+                      value={domainPercents[domain] ?? ""}
+                      onChange={(e) => changeDomainPercent(domain, e.target.value)}
+                    />
+                    <span aria-hidden="true">%</span>
+                    <button
+                      type="button"
+                      className="module-form__icon-btn"
+                      onClick={() => removeDomain(domain)}
+                      title={`Remove ${domain}`}
+                      aria-label={`Remove ${domain}`}
+                    >
+                      <X size={14} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="module-form__domain-total">
+                <button
+                  type="button"
+                  className="module-form__auto-balance"
+                  onClick={() => setDomainPercents(autoBalancePercents(domains))}
+                >
+                  Auto-équilibrer
+                </button>
+                <span
+                  className={isDomainTotalValid ? "module-form__hint" : "module-form__error"}
+                  role="status"
+                >
+                  Total configuré : {domainsTotal}%
+                  {isDomainTotalValid &&
+                    ` (${MAX_TOTAL_PERCENT - domainsTotal}% restants pour les questions sans domaine)`}
+                </span>
+              </div>
+              {!isDomainTotalValid && (
+                <span className="module-form__error" role="alert">
+                  Le total ne peut pas dépasser 100%
+                </span>
+              )}
+            </>
+          )}
         </div>
         <div className="module-form__field">
           <label htmlFor="module-useful-links">Links du module</label>

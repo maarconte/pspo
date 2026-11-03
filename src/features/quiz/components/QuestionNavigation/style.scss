@@ -1,4 +1,4 @@
-@use '../../../../assets/scss/variables' as *;
+@use "../../../../assets/scss/variables" as *;
 
 .QuestionNavigation {
   display: grid;
@@ -60,4 +60,14 @@
       color: $primary-700;
     }
   }
+}
+
+.QuestionNavigation__filters {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  width: 180px;
+  margin: 0 auto 1.5rem;
 }
