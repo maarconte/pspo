@@ -45,6 +45,7 @@ export default function Home() {
   const questionCount = currentModule?.questionCount ?? 80;
   const durationMinutes = parseDurationMinutes(currentModule?.quizDuration) ?? 60;
   const minSuccessPercent = currentModule?.minSuccessPercent ?? 85;
+  const domainPercents = currentModule?.domainPercents;
   const maxErrors = questionCount - Math.ceil((questionCount * minSuccessPercent) / 100);
 
   // Keep the selected formation pointed at an active module: switch away from
@@ -63,8 +64,8 @@ export default function Home() {
   // in sync with the module currently selected, so it applies both to the
   // initial question set and to the exam started from this screen.
   useEffect(() => {
-    setQuizConfig({ questionCount, durationMinutes, minSuccessPercent });
-  }, [questionCount, durationMinutes, minSuccessPercent, setQuizConfig]);
+    setQuizConfig({ questionCount, durationMinutes, minSuccessPercent, domainPercents });
+  }, [questionCount, durationMinutes, minSuccessPercent, domainPercents, setQuizConfig]);
 
   const handleStartExam = () => {
     if (!user && !isDismissed && !isExpired) {

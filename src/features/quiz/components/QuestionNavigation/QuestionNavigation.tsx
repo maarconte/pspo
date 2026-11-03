@@ -22,7 +22,7 @@ type Props = {
 const FILTERS: {
   value: ReviewFilter;
   label: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   type: Button_Type;
 }[] = [
   {

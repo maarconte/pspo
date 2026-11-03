@@ -1,12 +1,15 @@
 import { toast } from "react-toastify";
 import { create } from "zustand";
 import { shuffleQuestionAnswers } from "../utils/helpers/shuffleAnswers";
+import { selectQuestionsByDomain } from "../utils/helpers/selectQuestionsByDomain";
 import { Question, UserAnswer } from "../utils/types";
 
 export interface QuizConfig {
 	questionCount: number;
 	durationMinutes: number;
 	minSuccessPercent: number;
+	/** Per-domain share (0-100) of the questions drawn; absent = plain random draw. */
+	domainPercents?: Record<string, number>;
 }
 
 export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
@@ -189,8 +192,11 @@ export const useQuestionsStore = create<QuestionsState>((set, get) => ({
 
 		let newQuestions: Question[] = [];
 		if (selectedQuestionsByType.length > 0) {
-			const shuffled = [...selectedQuestionsByType].sort(() => Math.random() - 0.5);
-			newQuestions = shuffled.slice(0, quizConfig.questionCount).map(shuffleQuestionAnswers);
+			newQuestions = selectQuestionsByDomain(
+				selectedQuestionsByType,
+				quizConfig.questionCount,
+				quizConfig.domainPercents,
+			).map(shuffleQuestionAnswers);
 		}
 
 		set({
