@@ -9,6 +9,10 @@
   z-index: 1022;
   background-color: #fff;
   overflow: hidden;
+  // Cap the height to the viewport; only the body scrolls so header and footer stay visible.
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 2rem);
 
   @include breakpoint(mobile) {
     width: 93%;
@@ -30,6 +34,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    flex-shrink: 0;
 
     margin-bottom: 16px;
 
@@ -40,6 +45,9 @@
 
   &__body {
     margin-bottom: 24px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
 
     p {
       margin-bottom: 1rem;
@@ -47,6 +55,7 @@
   }
 
   &__footer {
+    flex-shrink: 0;
     display: flex;
     justify-content: flex-end;
     align-items: center;
