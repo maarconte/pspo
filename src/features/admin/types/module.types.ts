@@ -14,6 +14,8 @@ export interface Module {
   usefulLinks?: string | null;
   /** Domains (topic categories) questions of this module can be tagged with, picked from the question editor. */
   domains?: string[];
+  /** Integer share (0-100) of quiz questions per domain; the sum is at most 100, the rest is for questions without domain. */
+  domainPercents?: Record<string, number>;
   /** Number of quiz sessions completed for this module, incremented on quiz completion. */
   completedCount?: number;
   /** Display position (ascending) in the module select and the admin table. Absent on legacy modules. */
@@ -29,10 +31,11 @@ export type CreateModulePayload = Pick<
   pdfFile?: File;
   usefulLinks?: string;
   domains?: string[];
+  domainPercents?: Record<string, number>;
 };
 
 export type UpdateModulePayload = Partial<
-  Pick<Module, 'title' | 'isActive' | 'quizDuration' | 'questionCount' | 'minSuccessPercent' | 'domains'>
+  Pick<Module, 'title' | 'isActive' | 'quizDuration' | 'questionCount' | 'minSuccessPercent' | 'domains' | 'domainPercents'>
 > & {
   pdfFile?: File;
   /** Empty string clears the field. */

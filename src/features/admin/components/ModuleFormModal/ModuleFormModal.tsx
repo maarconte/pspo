@@ -8,7 +8,13 @@ import Modal from "../../../../ui/Modal/Modal";
 import type { Module } from "../../types/module.types";
 import type { Question } from "../../../../utils/types";
 import RichTextEditor from "../../../../ui/RichTextEditor";
-import { getQuestionDomains } from "../../utils/moduleDomains";
+import {
+  MAX_TOTAL_PERCENT,
+  autoBalancePercents,
+  getQuestionDomains,
+  sanitizePercentInput,
+  totalPercent,
+} from "../../utils/moduleDomains";
 import { useQuestionsStore } from "../../../../stores/useQuestionsStore";
 import { toast } from "react-toastify";
 
@@ -69,6 +75,11 @@ const initialDomains = (module: Module | null | undefined, questions: Question[]
     ? Array.from(new Set([...(module.domains ?? []), ...getQuestionDomains(questions, module)]))
     : [];
 
+const initialPercents = (module: Module | null | undefined): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(module?.domainPercents ?? {}).map(([domain, value]) => [domain, String(value)]),
+  );
+
 export const ModuleFormModal = ({
   isOpen,
   onClose,
@@ -84,6 +95,9 @@ export const ModuleFormModal = ({
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [removeExistingPdf, setRemoveExistingPdf] = useState(false);
   const [domains, setDomains] = useState<string[]>(() => initialDomains(module, allQuestions));
+  const [domainPercents, setDomainPercents] = useState<Record<string, string>>(() =>
+    initialPercents(module),
+  );
   const [domainInput, setDomainInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -101,6 +115,7 @@ export const ModuleFormModal = ({
       setPdfError(null);
       setRemoveExistingPdf(false);
       setDomains(initialDomains(module, allQuestions));
+      setDomainPercents(initialPercents(module));
       setDomainInput("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,8 +140,15 @@ export const ModuleFormModal = ({
     Number(form.minSuccessPercent) >= MIN_PERCENT &&
     Number(form.minSuccessPercent) <= MAX_PERCENT;
 
+  const domainsTotal = totalPercent(domains, domainPercents);
+  const isDomainTotalValid = domainsTotal <= MAX_TOTAL_PERCENT;
+
   const isFormValid =
-    isTitleValid && isDurationValid && isQuestionCountValid && isPercentValid;
+    isTitleValid &&
+    isDurationValid &&
+    isQuestionCountValid &&
+    isPercentValid &&
+    isDomainTotalValid;
 
   const markTouched = (field: keyof TouchedFields) =>
     setTouched((prev) => ({ ...prev, [field]: true }));
@@ -164,8 +186,13 @@ export const ModuleFormModal = ({
     setDomainInput("");
   };
 
-  const removeDomain = (domain: string) =>
+  const removeDomain = (domain: string) => {
     setDomains((prev) => prev.filter((d) => d !== domain));
+    setDomainPercents(({ [domain]: _removed, ...rest }) => rest);
+  };
+
+  const changeDomainPercent = (domain: string, raw: string) =>
+    setDomainPercents((prev) => ({ ...prev, [domain]: sanitizePercentInput(raw) }));
 
   const handleConfirm = async () => {
     if (!isFormValid) return;
@@ -181,6 +208,9 @@ export const ModuleFormModal = ({
         pdfFile: pdfFile ?? undefined,
         usefulLinks: form.usefulLinks,
         domains,
+        domainPercents: Object.fromEntries(
+          domains.map((domain) => [domain, Number(domainPercents[domain]) || 0]),
+        ),
       };
 
       if (isEditMode && module) {
@@ -418,21 +448,56 @@ export const ModuleFormModal = ({
             </div>
           )}
           {domains.length > 0 && (
-            <ul className="module-form__domains">
-              {domains.map((domain) => (
-                <li key={domain} className="module-form__domain-chip">
-                  {domain}
-                  <button
-                    type="button"
-                    onClick={() => removeDomain(domain)}
-                    title={`Remove ${domain}`}
-                    aria-label={`Remove ${domain}`}
-                  >
-                    <X size={14} />
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="module-form__domain-percents">
+                {domains.map((domain) => (
+                  <li key={domain} className="module-form__domain-percent">
+                    <label htmlFor={`domain-percent-${domain}`}>{domain}</label>
+                    <input
+                      id={`domain-percent-${domain}`}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      placeholder="0"
+                      value={domainPercents[domain] ?? ""}
+                      onChange={(e) => changeDomainPercent(domain, e.target.value)}
+                    />
+                    <span aria-hidden="true">%</span>
+                    <button
+                      type="button"
+                      className="module-form__icon-btn"
+                      onClick={() => removeDomain(domain)}
+                      title={`Remove ${domain}`}
+                      aria-label={`Remove ${domain}`}
+                    >
+                      <X size={14} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="module-form__domain-total">
+                <button
+                  type="button"
+                  className="module-form__auto-balance"
+                  onClick={() => setDomainPercents(autoBalancePercents(domains))}
+                >
+                  Auto-équilibrer
+                </button>
+                <span
+                  className={isDomainTotalValid ? "module-form__hint" : "module-form__error"}
+                  role="status"
+                >
+                  Total configuré : {domainsTotal}%
+                  {isDomainTotalValid &&
+                    ` (${MAX_TOTAL_PERCENT - domainsTotal}% restants pour les questions sans domaine)`}
+                </span>
+              </div>
+              {!isDomainTotalValid && (
+                <span className="module-form__error" role="alert">
+                  Le total ne peut pas dépasser 100%
+                </span>
+              )}
+            </>
           )}
         </div>
         <div className="module-form__field">
