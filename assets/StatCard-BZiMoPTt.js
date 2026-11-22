@@ -1,2 +1,0 @@
-import{j as s}from"./index-DrfIw3OU.js";const i=({value:e,label:a,icon:r,variant:t="default",className:n="",isFeatured:c=!1})=>s.jsxs("div",{className:`stat-card ${t!=="default"?t:""} ${c?"is-featured":""} ${n}`.trim(),children:[s.jsx("div",{className:"icon-container",children:r}),s.jsxs("div",{className:"stat-content",children:[s.jsx("strong",{children:e}),s.jsx("span",{children:a})]})]});export{i as S};
-//# sourceMappingURL=StatCard-BZiMoPTt.js.map
