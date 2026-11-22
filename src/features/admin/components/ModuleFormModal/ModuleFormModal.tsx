@@ -2,6 +2,7 @@ import "./style.scss";
 
 import { FileText, Pencil, Plus, Trash2, X } from "lucide-react";
 import { createModule, updateModule } from "../../api/modules.api";
+import { DuplicateModuleTitleError } from "../../api/moduleErrors";
 import { useEffect, useRef, useState } from "react";
 
 import Modal from "../../../../ui/Modal/Modal";
@@ -100,6 +101,7 @@ export const ModuleFormModal = ({
   );
   const [domainInput, setDomainInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTitleTaken, setIsTitleTaken] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Domains removed by the admin from the form stay offered here so they can be re-added.
   const suggestedDomains = module
@@ -111,6 +113,7 @@ export const ModuleFormModal = ({
     if (isOpen) {
       setForm(module ? stateFromModule(module) : emptyState);
       setTouched(untouchedFields);
+      setIsTitleTaken(false);
       setPdfFile(null);
       setPdfError(null);
       setRemoveExistingPdf(false);
@@ -225,7 +228,11 @@ export const ModuleFormModal = ({
         toast.success("Module bien ajouté");
       }
       onClose();
-    } catch {
+    } catch (error) {
+      if (error instanceof DuplicateModuleTitleError) {
+        setIsTitleTaken(true);
+        return;
+      }
       toast.error(
         isEditMode
           ? "Une erreur est survenue lors de la mise à jour du module"
@@ -263,7 +270,10 @@ export const ModuleFormModal = ({
               placeholder="Module #1"
               value={form.title}
               onChange={(e) =>
-                setForm((f) => ({ ...f, title: e.target.value }))
+                {
+                  setIsTitleTaken(false);
+                  setForm((f) => ({ ...f, title: e.target.value }));
+                }
               }
               onBlur={() => markTouched("title")}
               required
@@ -271,6 +281,11 @@ export const ModuleFormModal = ({
             {touched.title && !isTitleValid && (
               <span className="module-form__error">
                 {REQUIRED_FIELD_MESSAGE}
+              </span>
+            )}
+            {isTitleTaken && (
+              <span className="module-form__error" role="alert">
+                A module with this title already exists.
               </span>
             )}
           </div>
