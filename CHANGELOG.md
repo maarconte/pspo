@@ -3,6 +3,21 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.11.0] - 2026-11-22
+
+### Ajouté
+
+- ROTI (Return On Time Invested) :
+  - Pop-up de fin de quiz (THA-267) : à la sortie d'un quiz terminé (ou au restart), une jauge colorée de 1 à 5 (du rouge au vert) permet de noter son apprentissage, avec un commentaire facultatif pour les notes ≤ 3. La note est rattachée au module du quiz.
+  - Page dédiée `/roti` (THA-268), accessible à tous et depuis le footer : explication du ROTI et vote. Elle est en anglais par défaut, avec un sélecteur English / Français (seule page de l'app à proposer deux langues).
+  - Page d'administration `/admin/roti` (THA-269), réservée aux admins et devs et accessible depuis le header : nombre de notes, moyenne, répartition par note, derniers commentaires et filtre par module.
+  - Limite d'une note par mois et par utilisateur (les admins et devs en sont exemptés). Pour un utilisateur connecté, elle est imposée par les règles Firestore ; pour un visiteur anonyme, elle repose sur le navigateur (contournable).
+  - Collections `roti` (production) et `roti_dev` (`npm run dev`), comme pour les questions et les modules, avec leurs règles Firestore.
+
+### Modifié
+
+- CLAUDE.md : l'application est en anglais par défaut.
+
 ## [2.10.1] - 2026-10-09
 
 ### Corrigé
