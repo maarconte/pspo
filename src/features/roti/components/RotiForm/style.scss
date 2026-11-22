@@ -1,4 +1,5 @@
 @use "../../../../assets/scss/variables" as *;
+@use "../../styles/score-colors" as *;
 
 .roti-form {
   display: flex;
@@ -21,26 +22,7 @@
     position: relative;
     cursor: pointer;
     // Each step carries its own colour: red -> orange -> yellow -> greens.
-    --roti-color: #{$secondary-500};
-    --roti-text: #fff;
-
-    &[data-score="2"] {
-      --roti-color: #f28c28;
-    }
-
-    &[data-score="3"] {
-      --roti-color: #{$warning-500};
-      --roti-text: #{$primary-900};
-    }
-
-    &[data-score="4"] {
-      --roti-color: #{$success-400};
-      --roti-text: #{$primary-900};
-    }
-
-    &[data-score="5"] {
-      --roti-color: #{$success-600};
-    }
+    @include roti-score-colors;
 
     input {
       position: absolute;
