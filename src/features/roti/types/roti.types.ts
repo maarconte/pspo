@@ -12,14 +12,6 @@ export const ROTI_COMMENT_MAX_SCORE: RotiScore = 3;
 
 export const ROTI_COMMENT_MAX_LENGTH = 1000;
 
-export const ROTI_SCORE_LABELS: Record<RotiScore, string> = {
-  1: "Je n'ai rien appris, j'ai perdu mon temps",
-  2: '',
-  3: '',
-  4: '',
-  5: "J'ai appris plein de choses !",
-};
-
 export interface RotiEntry {
   id: string;
   score: RotiScore;

@@ -6,3 +6,4 @@ export { computeRotiStats, canComment } from './utils/roti.utils';
 export { default as RotiPrompt } from './components/RotiPrompt/RotiPrompt';
 export { default as RotiForm } from './components/RotiForm/RotiForm';
 export { useRotiPromptStore } from './stores/useRotiPromptStore';
+export * from './i18n/roti.i18n';

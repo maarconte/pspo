@@ -6,7 +6,7 @@ vi.mock('../../api/roti.api', () => ({ submitRoti: vi.fn() }));
 import { submitRoti } from '../../api/roti.api';
 import RotiForm from './RotiForm';
 
-const submitButton = () => screen.getByRole('button', { name: 'Valider' });
+const submitButton = () => screen.getByRole('button', { name: 'Submit' });
 const pick = (score: number) => fireEvent.click(screen.getByLabelText(String(score)));
 
 describe('RotiForm', () => {
@@ -36,18 +36,18 @@ describe('RotiForm', () => {
 
   it('shows the comment field only for scores <= 3', () => {
     render(<RotiForm source="quiz" />);
-    expect(screen.queryByLabelText(/Commentaire/)).toBeNull();
+    expect(screen.queryByLabelText(/Comment/)).toBeNull();
     pick(3);
-    expect(screen.getByLabelText(/Commentaire/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Comment/)).toBeInTheDocument();
     pick(4);
-    expect(screen.queryByLabelText(/Commentaire/)).toBeNull();
+    expect(screen.queryByLabelText(/Comment/)).toBeNull();
   });
 
   it('submits the score, comment and source, then calls onSuccess', async () => {
     const onSuccess = vi.fn();
     render(<RotiForm source="page" onSuccess={onSuccess} />);
     pick(2);
-    fireEvent.change(screen.getByLabelText(/Commentaire/), { target: { value: 'bof' } });
+    fireEvent.change(screen.getByLabelText(/Comment/), { target: { value: 'bof' } });
     fireEvent.click(submitButton());
 
     await waitFor(() => expect(onSuccess).toHaveBeenCalled());
@@ -66,7 +66,15 @@ describe('RotiForm', () => {
     pick(5);
     fireEvent.click(submitButton());
 
-    expect(await screen.findByRole('alert')).toHaveTextContent("Impossible d'enregistrer");
+    expect(await screen.findByRole('alert')).toHaveTextContent("Unable to save");
     expect(onSuccess).not.toHaveBeenCalled();
+  });
+
+  it('renders French texts when lang is fr', () => {
+    render(<RotiForm source="page" lang="fr" />);
+    pick(1);
+    expect(screen.getByRole('button', { name: 'Valider' })).toBeInTheDocument();
+    expect(screen.getByLabelText(/Commentaire/)).toBeInTheDocument();
+    expect(screen.getByText("J'ai appris plein de choses !")).toBeInTheDocument();
   });
 });

@@ -121,6 +121,10 @@ Requires `LINEAR_API_KEY` in the shell env or in `.env.local`. When the user ask
 
 No enforced commit message format. The `commit-msg` Husky hook has been removed.
 
+## Language
+
+The application is **in English by default**: all user-facing text (labels, buttons, modals, toasts, error messages) must be written in English. A page may offer an explicit language switch when it is a product decision (currently only the ROTI page, `src/pages/Roti.tsx`, with its texts in `src/features/roti/i18n/roti.i18n.ts`); everything else stays English-only. Code, comments and commit messages are English too.
+
 ## Code Quality Standards
 
 - **No `any`** — use proper types.

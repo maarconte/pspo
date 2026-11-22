@@ -1,7 +1,11 @@
 import { Modal } from "../../../../ui";
+import { ROTI_TEXTS } from "../../i18n/roti.i18n";
 import RotiForm from "../RotiForm/RotiForm";
 import { toast } from "react-toastify";
 import { useRotiPromptStore } from "../../stores/useRotiPromptStore";
+
+// The pop-up is always English: only the ROTI page offers a language switch.
+const t = ROTI_TEXTS.en;
 
 export const ROTI_PAGE_HREF = `${import.meta.env.BASE_URL}#/roti`;
 
@@ -12,7 +16,7 @@ export default function RotiPrompt() {
 
   const handleSuccess = () => {
     close();
-    toast.success("La note de votre ROTI est bien prise en compte, merci !");
+    toast.success(t.form.successToast);
   };
 
   return (
@@ -20,15 +24,14 @@ export default function RotiPrompt() {
       isOpen={isOpen}
       onClose={close}
       setIsClosed={close}
-      title="ROTI !"
+      title={t.prompt.title}
       hideButtons
       closeOnBackdropClick
     >
       <p>
-        Prenons justement le temps de faire une petite{" "}
-        <strong>rétrospective</strong> : un ROTI ! Tu ne connais pas ?{" "}
+        {t.prompt.intro}{' '}
         <a href={ROTI_PAGE_HREF} target="_blank" rel="noopener noreferrer">
-          Je t'explique ici ;)
+          {t.prompt.link}
         </a>
       </p>
       <RotiForm source="quiz" onSuccess={handleSuccess} />

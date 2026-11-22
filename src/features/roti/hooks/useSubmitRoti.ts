@@ -5,7 +5,8 @@ import { isRotiScore } from '../utils/roti.utils';
 
 export interface SubmitRotiState {
   status: 'idle' | 'success' | 'error';
-  error?: string;
+  /** Error code; the form maps it to a translated message. */
+  error?: 'noScore' | 'saveFailed';
 }
 
 /**
@@ -16,7 +17,7 @@ export const useSubmitRoti = (source: RotiSource, moduleId?: string | null) =>
   useActionState<SubmitRotiState, FormData>(async (_prev, formData) => {
     const score = Number(formData.get('score'));
     if (!isRotiScore(score)) {
-      return { status: 'error', error: 'Veuillez sélectionner une note.' };
+      return { status: 'error', error: 'noScore' };
     }
     try {
       await submitRoti({
@@ -27,6 +28,6 @@ export const useSubmitRoti = (source: RotiSource, moduleId?: string | null) =>
       });
       return { status: 'success' };
     } catch {
-      return { status: 'error', error: "Impossible d'enregistrer le ROTI." };
+      return { status: 'error', error: 'saveFailed' };
     }
   }, { status: 'idle' });

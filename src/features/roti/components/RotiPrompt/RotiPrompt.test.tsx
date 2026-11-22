@@ -17,15 +17,15 @@ describe('RotiPrompt', () => {
 
   it('renders nothing while closed', () => {
     render(<RotiPrompt />);
-    expect(screen.queryByText('ROTI !')).toBeNull();
+    expect(screen.queryByText('ROTI!')).toBeNull();
   });
 
   it('opens from the store with a link to the ROTI page in a new tab', () => {
     render(<RotiPrompt />);
     act(() => useRotiPromptStore.getState().open());
 
-    expect(screen.getByText('ROTI !')).toBeInTheDocument();
-    const link = screen.getByRole('link', { name: /Je t'explique ici/ });
+    expect(screen.getByText('ROTI!')).toBeInTheDocument();
+    const link = screen.getByRole('link', { name: /I'll explain here/ });
     expect(link).toHaveAttribute('target', '_blank');
     expect(link.getAttribute('href')).toMatch(/#\/roti$/);
   });
@@ -35,12 +35,12 @@ describe('RotiPrompt', () => {
     act(() => useRotiPromptStore.getState().open());
 
     fireEvent.click(screen.getByLabelText('4'));
-    fireEvent.click(screen.getByRole('button', { name: 'Valider' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
     await waitFor(() => expect(useRotiPromptStore.getState().isOpen).toBe(false));
     expect(submitRoti).toHaveBeenCalledWith(expect.objectContaining({ score: 4, source: 'quiz' }));
     expect(toast.success).toHaveBeenCalledWith(
-      'La note de votre ROTI est bien prise en compte, merci !',
+      'Your ROTI rating has been recorded, thank you!',
     );
   });
 

@@ -6,16 +6,17 @@ import { useSubmitRoti } from '../../hooks/useSubmitRoti';
 import {
   ROTI_COMMENT_MAX_LENGTH,
   ROTI_SCORES,
-  ROTI_SCORE_LABELS,
   type RotiScore,
   type RotiSource,
 } from '../../types/roti.types';
+import { DEFAULT_ROTI_LANG, ROTI_TEXTS, type RotiLang } from '../../i18n/roti.i18n';
 import { canComment } from '../../utils/roti.utils';
 
 interface RotiFormProps {
   source: RotiSource;
   moduleId?: string | null;
   onSuccess?: () => void;
+  lang?: RotiLang;
   submitLabel?: string;
 }
 
@@ -24,8 +25,10 @@ export default function RotiForm({
   source,
   moduleId,
   onSuccess,
-  submitLabel = 'Valider',
+  lang = DEFAULT_ROTI_LANG,
+  submitLabel,
 }: RotiFormProps) {
+  const t = ROTI_TEXTS[lang].form;
   const [score, setScore] = useState<RotiScore | null>(null);
   const [state, formAction, isPending] = useSubmitRoti(source, moduleId);
   const groupId = useId();
@@ -37,7 +40,7 @@ export default function RotiForm({
   return (
     <form action={formAction} className="roti-form">
       <fieldset className="roti-form__gauge">
-        <legend className="visually-hidden">Note du ROTI</legend>
+        <legend className="visually-hidden">{t.ratingGroup}</legend>
         <div className="roti-form__steps">
           {ROTI_SCORES.map((value) => (
             <label
@@ -58,31 +61,31 @@ export default function RotiForm({
           ))}
         </div>
         <div id={`${groupId}-legend`} className="roti-form__legend">
-          <span>{ROTI_SCORE_LABELS[1]}</span>
-          <span>{ROTI_SCORE_LABELS[5]}</span>
+          <span>{t.lowLabel}</span>
+          <span>{t.highLabel}</span>
         </div>
       </fieldset>
 
       {canComment(score) && (
         <label className="roti-form__comment">
-          <span>Commentaire (facultatif)</span>
+          <span>{t.commentLabel}</span>
           <textarea
             name="comment"
             rows={3}
             maxLength={ROTI_COMMENT_MAX_LENGTH}
-            placeholder="Qu'est-ce qui aurait pu être mieux ?"
+            placeholder={t.commentPlaceholder}
           />
         </label>
       )}
 
       {state.status === 'error' && (
         <p className="roti-form__error" role="alert">
-          {state.error}
+          {state.error && t.errors[state.error]}
         </p>
       )}
 
       <Button
-        label={submitLabel}
+        label={submitLabel ?? t.submit}
         buttonType="submit"
         disabled={score === null}
         isLoader={isPending}
