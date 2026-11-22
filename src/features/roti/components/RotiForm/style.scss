@@ -1,0 +1,115 @@
+@use "../../../../assets/scss/variables" as *;
+
+.roti-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__gauge {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+
+  &__step {
+    position: relative;
+    cursor: pointer;
+    // Each step carries its own colour: red -> orange -> yellow -> greens.
+    --roti-color: #{$secondary-500};
+    --roti-text: #fff;
+
+    &[data-score="2"] {
+      --roti-color: #f28c28;
+    }
+
+    &[data-score="3"] {
+      --roti-color: #{$warning-500};
+      --roti-text: #{$primary-900};
+    }
+
+    &[data-score="4"] {
+      --roti-color: #{$success-400};
+      --roti-text: #{$primary-900};
+    }
+
+    &[data-score="5"] {
+      --roti-color: #{$success-600};
+    }
+
+    input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      cursor: pointer;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 3rem;
+      border-radius: 10px;
+      border: 2px solid var(--roti-color);
+      font-weight: 700;
+      color: $primary-900;
+      transition: all 0.2s ease;
+    }
+
+    &:hover span {
+      background: color-mix(in srgb, var(--roti-color) 25%, transparent);
+    }
+
+    &.is-filled span {
+      background: var(--roti-color);
+      color: var(--roti-text);
+    }
+
+    input:focus-visible + span {
+      outline: 2px solid $primary-700;
+      outline-offset: 2px;
+    }
+  }
+
+  &__legend {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: $primary-700;
+  }
+
+  &__comment {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.9rem;
+
+    textarea {
+      resize: vertical;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid $primary-100;
+      font: inherit;
+    }
+  }
+
+  &__error {
+    color: $secondary-600;
+    margin: 0;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
