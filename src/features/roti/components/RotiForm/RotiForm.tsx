@@ -2,6 +2,7 @@ import './style.scss';
 
 import { useEffect, useId, useState } from 'react';
 import { Button } from '../../../../ui';
+import { useRotiEligibility } from '../../hooks/useRotiEligibility';
 import { useSubmitRoti } from '../../hooks/useSubmitRoti';
 import {
   ROTI_COMMENT_MAX_LENGTH,
@@ -32,10 +33,23 @@ export default function RotiForm({
   const [score, setScore] = useState<RotiScore | null>(null);
   const [state, formAction, isPending] = useSubmitRoti(source, moduleId);
   const groupId = useId();
+  const { canSubmit, isLoading, markSubmitted } = useRotiEligibility();
 
   useEffect(() => {
-    if (state.status === 'success') onSuccess?.();
-  }, [state.status, onSuccess]);
+    // Marked here (not in the action) so the form is still mounted to call
+    // onSuccess before it switches to the "already submitted" message.
+    if (state.status === 'success') {
+      markSubmitted();
+      onSuccess?.();
+    } else if (state.error === 'alreadySubmitted') {
+      markSubmitted();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
+
+  if (!canSubmit) {
+    return <p className="roti-form__done">{t.alreadySubmitted}</p>;
+  }
 
   return (
     <form action={formAction} className="roti-form">
@@ -87,7 +101,7 @@ export default function RotiForm({
       <Button
         label={submitLabel ?? t.submit}
         buttonType="submit"
-        disabled={score === null}
+        disabled={score === null || isLoading}
         isLoader={isPending}
       />
     </form>

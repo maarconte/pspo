@@ -11,7 +11,8 @@ export interface RotiTexts {
     commentLabel: string;
     commentPlaceholder: string;
     submit: string;
-    errors: { noScore: string; saveFailed: string };
+    errors: { noScore: string; saveFailed: string; alreadySubmitted: string };
+    alreadySubmitted: string;
     successToast: string;
   };
   prompt: {
@@ -46,7 +47,10 @@ export const ROTI_TEXTS: Record<RotiLang, RotiTexts> = {
       errors: {
         noScore: 'Please select a rating.',
         saveFailed: 'Unable to save your ROTI.',
+        alreadySubmitted: 'You have already submitted your ROTI this month.',
       },
+      alreadySubmitted:
+        'You have already submitted your ROTI this month. Thank you, see you next month!',
       successToast: 'Your ROTI rating has been recorded, thank you!',
     },
     prompt: {
@@ -86,7 +90,10 @@ export const ROTI_TEXTS: Record<RotiLang, RotiTexts> = {
       errors: {
         noScore: 'Veuillez sélectionner une note.',
         saveFailed: "Impossible d'enregistrer le ROTI.",
+        alreadySubmitted: 'Vous avez déjà soumis votre ROTI ce mois-ci.',
       },
+      alreadySubmitted:
+        'Vous avez déjà soumis votre ROTI ce mois-ci. Merci, rendez-vous le mois prochain !',
       successToast: 'La note de votre ROTI est bien prise en compte, merci !',
     },
     prompt: {

@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { RotiEntry } from '../types/roti.types';
-import { canComment, computeRotiStats, isRotiScore, normalizeComment } from './roti.utils';
+import {
+  canComment,
+  computeRotiStats,
+  getRotiDocId,
+  getRotiMonthKey,
+  isRotiScore,
+  normalizeComment,
+} from './roti.utils';
 
 const entry = (score: number, ms: number, comment?: string) =>
   ({ id: `${ms}`, score, comment, createdAt: { toMillis: () => ms } }) as unknown as RotiEntry;
@@ -46,5 +53,21 @@ describe('computeRotiStats', () => {
     expect(stats.average).toBe(3);
     expect(stats.distribution).toEqual({ 1: 1, 2: 0, 3: 1, 4: 0, 5: 1 });
     expect(stats.comments.map((c) => c.comment)).toEqual(['new', 'old']);
+  });
+});
+
+describe('getRotiMonthKey / getRotiDocId', () => {
+  it('uses the UTC month, unpadded (mirrors firestore.rules)', () => {
+    expect(getRotiMonthKey(new Date('2026-11-22T10:00:00Z'))).toBe('2026-11');
+    expect(getRotiMonthKey(new Date('2026-03-01T00:00:00Z'))).toBe('2026-3');
+  });
+  it('uses UTC at month boundaries', () => {
+    expect(getRotiMonthKey(new Date('2026-11-30T23:59:59Z'))).toBe('2026-11');
+    expect(getRotiMonthKey(new Date('2026-12-01T00:00:00Z'))).toBe('2026-12');
+  });
+  it('builds one id per user and month', () => {
+    const date = new Date('2026-11-22T10:00:00Z');
+    expect(getRotiDocId('u1', date)).toBe('u1_2026-11');
+    expect(getRotiDocId('u1', date)).not.toBe(getRotiDocId('u2', date));
   });
 });

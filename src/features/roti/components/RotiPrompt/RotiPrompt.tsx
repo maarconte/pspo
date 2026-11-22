@@ -1,4 +1,5 @@
 import { Modal } from "../../../../ui";
+import { useRotiEligibility } from "../../hooks/useRotiEligibility";
 import { ROTI_TEXTS } from "../../i18n/roti.i18n";
 import RotiForm from "../RotiForm/RotiForm";
 import { toast } from "react-toastify";
@@ -13,6 +14,7 @@ export const ROTI_PAGE_HREF = `${import.meta.env.BASE_URL}#/roti`;
 export default function RotiPrompt() {
   const isOpen = useRotiPromptStore((s) => s.isOpen);
   const close = useRotiPromptStore((s) => s.close);
+  const { canSubmit } = useRotiEligibility();
 
   const handleSuccess = () => {
     close();
@@ -21,7 +23,8 @@ export default function RotiPrompt() {
 
   return (
     <Modal
-      isOpen={isOpen}
+      // Already rated this month: the pop-up never shows (admins/devs are exempt).
+      isOpen={isOpen && canSubmit}
       onClose={close}
       setIsClosed={close}
       title={t.prompt.title}

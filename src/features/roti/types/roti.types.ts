@@ -29,6 +29,8 @@ export interface SubmitRotiPayload {
   comment?: string;
   source: RotiSource;
   moduleId?: string | null;
+  /** Admins and devs may rate as often as they want (tests). */
+  unlimited?: boolean;
 }
 
 export interface RotiStats {

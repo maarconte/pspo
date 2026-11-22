@@ -40,3 +40,14 @@ export const computeRotiStats = (entries: RotiEntry[]): RotiStats => {
     comments: entries.filter((e) => e.comment).sort((a, b) => toMillis(b) - toMillis(a)),
   };
 };
+
+/**
+ * Month identifier (UTC, unpadded, e.g. "2026-11"). Must stay identical to the
+ * `request.time` based id built in firestore.rules.
+ */
+export const getRotiMonthKey = (date: Date = new Date()): string =>
+  `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}`;
+
+/** Deterministic document id: one ROTI per signed-in user and month. */
+export const getRotiDocId = (uid: string, date: Date = new Date()): string =>
+  `${uid}_${getRotiMonthKey(date)}`;

@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { addDoc, serverTimestamp } from 'firebase/firestore';
+import { addDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 
 vi.mock('../../../lib/firebase/firestore', () => ({ db: {} }));
 vi.mock('../../../lib/firebase/auth', () => ({ auth: { currentUser: null } }));
 
 import { auth } from '../../../lib/firebase/auth';
-import { submitRoti } from './roti.api';
+import { RotiAlreadySubmittedError, submitRoti } from './roti.api';
+import { getRotiDocId } from '../utils/roti.utils';
 
 const savedDoc = () => vi.mocked(addDoc).mock.calls[0][1] as Record<string, unknown>;
 
@@ -34,10 +35,41 @@ describe('submitRoti', () => {
     });
   });
 
-  it('attaches the uid of a signed-in user', async () => {
-    (auth as { currentUser: unknown }).currentUser = { uid: 'u1' };
-    await submitRoti({ score: 5, source: 'page', moduleId: 'm1' });
-    expect(savedDoc()).toMatchObject({ userId: 'u1', moduleId: 'm1', source: 'page' });
+  describe('signed-in user (limit: one per month)', () => {
+    beforeEach(() => {
+      (auth as { currentUser: unknown }).currentUser = { uid: 'u1' };
+    });
+
+    it('writes to the deterministic uid_month document', async () => {
+      await submitRoti({ score: 5, source: 'page', moduleId: 'm1' });
+      expect(doc).toHaveBeenCalledWith({}, expect.any(String), getRotiDocId('u1'));
+      expect(addDoc).not.toHaveBeenCalled();
+      expect(vi.mocked(setDoc).mock.calls[0][1]).toMatchObject({
+        userId: 'u1',
+        moduleId: 'm1',
+        source: 'page',
+      });
+    });
+
+    it('turns a permission-denied write into RotiAlreadySubmittedError', async () => {
+      vi.mocked(setDoc).mockRejectedValueOnce({ code: 'permission-denied' });
+      await expect(submitRoti({ score: 3, source: 'quiz' })).rejects.toBeInstanceOf(
+        RotiAlreadySubmittedError,
+      );
+    });
+
+    it('rethrows other errors untouched', async () => {
+      const boom = new Error('network');
+      vi.mocked(setDoc).mockRejectedValueOnce(boom);
+      await expect(submitRoti({ score: 3, source: 'quiz' })).rejects.toBe(boom);
+    });
+
+    it('lets admins/devs (unlimited) write a fresh document every time', async () => {
+      await submitRoti({ score: 4, source: 'quiz', unlimited: true });
+      expect(setDoc).not.toHaveBeenCalled();
+      expect(addDoc).toHaveBeenCalledTimes(1);
+      expect(savedDoc()).toMatchObject({ userId: 'u1' });
+    });
   });
 
   it('keeps a trimmed comment for a low score', async () => {

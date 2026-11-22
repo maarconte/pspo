@@ -3,7 +3,17 @@ import { toast } from 'react-toastify';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('react-toastify', () => ({ toast: { success: vi.fn() } }));
-vi.mock('../../api/roti.api', () => ({ submitRoti: vi.fn().mockResolvedValue(undefined) }));
+const elig = vi.hoisted(() => ({
+  canSubmit: true,
+  isExempt: false,
+  isLoading: false,
+  markSubmitted: vi.fn(),
+}));
+vi.mock('../../hooks/useRotiEligibility', () => ({ useRotiEligibility: () => elig }));
+vi.mock('../../api/roti.api', () => ({
+  submitRoti: vi.fn().mockResolvedValue(undefined),
+  RotiAlreadySubmittedError: class RotiAlreadySubmittedError extends Error {},
+}));
 
 import { submitRoti } from '../../api/roti.api';
 import { useRotiPromptStore } from '../../stores/useRotiPromptStore';
@@ -12,6 +22,7 @@ import RotiPrompt from './RotiPrompt';
 describe('RotiPrompt', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    Object.assign(elig, { canSubmit: true, isExempt: false, isLoading: false });
     useRotiPromptStore.setState({ isOpen: false });
   });
 
@@ -52,5 +63,12 @@ describe('RotiPrompt', () => {
     expect(useRotiPromptStore.getState().isOpen).toBe(false);
     expect(submitRoti).not.toHaveBeenCalled();
     expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  it('never shows when the user already rated this month', () => {
+    elig.canSubmit = false;
+    render(<RotiPrompt />);
+    act(() => useRotiPromptStore.getState().open());
+    expect(screen.queryByText('ROTI!')).toBeNull();
   });
 });
