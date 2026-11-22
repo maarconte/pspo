@@ -25,3 +25,12 @@ export const QUESTIONS_COLLECTION =
 export const MODULES_COLLECTION =
   import.meta.env.VITE_FIREBASE_MODULES_COLLECTION ||
   (import.meta.env.DEV ? "modules_dev" : "modules");
+
+/**
+ * Firestore collection used for ROTI (Return On Time Invested) ratings.
+ * Defaults to "roti_dev" in `npm run dev` and "roti" in production builds.
+ * Override with VITE_FIREBASE_ROTI_COLLECTION.
+ */
+export const ROTI_COLLECTION =
+  import.meta.env.VITE_FIREBASE_ROTI_COLLECTION ||
+  (import.meta.env.DEV ? "roti_dev" : "roti");
