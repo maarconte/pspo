@@ -1,18 +1,18 @@
 import "./style.scss";
 import "./style-mobile.scss";
 
-import { FC } from "react";
-import { User, LogOut, Bug } from "lucide-react";
-import { NotificationBadge } from "../../../features/support/components/NotificationBadge/NotificationBadge";
+import { Bug, LogOut, User } from "lucide-react";
+import { Button_Style, Button_Type } from "../../Button/Button.types";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useUserStore } from "../../../stores/useUserStore";
-import { useUserRole } from "../../../features/auth/hooks/useUserRole";
-import { useLogout } from "../../../features/auth/hooks/useLogout";
-import logo from "../../../assets/img/StudyGroup.webp";
-import { HeaderProps } from "./Header.types";
 import Button from "../../Button";
-import { Button_Type, Button_Style } from "../../Button/Button.types";
+import { FC } from "react";
+import { HeaderProps } from "./Header.types";
+import { NotificationBadge } from "../../../features/support/components/NotificationBadge/NotificationBadge";
+import logo from "../../../assets/img/StudyGroup.webp";
+import { useLogout } from "../../../features/auth/hooks/useLogout";
+import { useUserRole } from "../../../features/auth/hooks/useUserRole";
+import { useUserStore } from "../../../stores/useUserStore";
 
 const Header: FC<HeaderProps> = () => {
   const { user } = useUserStore();
@@ -20,7 +20,10 @@ const Header: FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const { logout } = useLogout();
 
-  const userInitial = user?.displayName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "?";
+  const userInitial =
+    user?.displayName?.charAt(0).toUpperCase() ||
+    user?.email?.charAt(0).toUpperCase() ||
+    "?";
 
   return (
     <header className="Header">
@@ -34,13 +37,14 @@ const Header: FC<HeaderProps> = () => {
         {user ? (
           <div className="header-right-content">
             <nav className="header-nav">
-            <Link to="/profile" className="nav-link">
-              Profile
-            </Link>
-
               {isAdmin && (
                 <Link to="/admin" className="nav-link">
                   Edit questions
+                </Link>
+              )}
+              {isAdmin && (
+                <Link to="/admin/roti" className="nav-link">
+                  ROTI
                 </Link>
               )}
               {isDev && (
@@ -50,10 +54,20 @@ const Header: FC<HeaderProps> = () => {
               )}
               <Link to="/support" className="nav-link nav-link--support">
                 <Bug size={24} />
+                <span>Support</span>
                 <NotificationBadge />
               </Link>
-              <Button onClick={logout} icon={<LogOut size={16} />} type={Button_Type.ERROR} style={Button_Style.TONAL} isIconButton />
-          </nav>
+              <Link to="/profile" className="nav-link">
+                Profile
+              </Link>
+              <Button
+                onClick={logout}
+                icon={<LogOut size={16} />}
+                type={Button_Type.ERROR}
+                style={Button_Style.TONAL}
+                isIconButton
+              />
+            </nav>
           </div>
         ) : (
           <button className="btn-login" onClick={() => navigate("/login")}>

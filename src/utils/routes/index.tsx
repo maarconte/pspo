@@ -9,6 +9,8 @@ const Quizz = lazy(() => import("../../pages/Quizz"));
 const UserManagement = lazy(() => import("../../pages/UserManagement/UserManagement"));
 const Profile = lazy(() => import("../../pages/Profile"));
 const Support = lazy(() => import("../../pages/Support"));
+const Roti = lazy(() => import("../../pages/Roti"));
+const AdminRoti = lazy(() => import("../../pages/AdminRoti"));
 // MagicLinkVerification is a named export, so we need to map it to default
 const MagicLinkVerification = lazy(() => import("../../features/auth/components/MagicLinkVerification").then(module => ({ default: module.MagicLinkVerification })));
 
@@ -59,6 +61,16 @@ const routes: RouteType[] = [
     protected: true,
   },
   {
+    path: "/admin/roti",
+    component: () => (
+      <RoleChecker allowedRoles={['admin', 'dev']}>
+        <AdminRoti />
+      </RoleChecker>
+    ),
+    name: "AdminRoti",
+    protected: true,
+  },
+  {
     path: "/dev/users",
     component: () => (
       <RoleChecker allowedRoles={['dev']}>
@@ -85,6 +97,12 @@ const routes: RouteType[] = [
     component: Profile,
     name: "Profile",
     protected: true,
+  },
+  {
+    path: "/roti",
+    component: Roti,
+    name: "Roti",
+    protected: false,
   },
   {
     path: "/support",

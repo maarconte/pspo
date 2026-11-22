@@ -143,6 +143,48 @@ service cloud.firestore {
       allow create, delete: if isAdmin();
     }
 
+    // Collections roti / roti_dev : notes ROTI (Return On Time Invested).
+    // Création ouverte aux visiteurs comme aux utilisateurs connectés, avec
+    // validation stricte du contenu ; lecture et suppression réservées aux admins.
+    function isValidRoti() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['score', 'comment', 'source', 'formation', 'userId', 'createdAt'])
+        && d.keys().hasAll(['score', 'source', 'userId', 'createdAt'])
+        && d.score is int && d.score >= 1 && d.score <= 5
+        && d.source in ['quiz', 'page']
+        && (!('comment' in d) || (d.comment is string && d.comment.size() <= 1000 && d.score <= 3))
+        && (!('formation' in d) || d.formation == null || (d.formation is string && d.formation.size() <= 100))
+        && (d.userId == null || d.userId == request.auth.uid)
+        && d.createdAt == request.time;
+    }
+
+    // Limite d'une note ROTI par mois : un utilisateur connecté (non admin) doit
+    // écrire dans le document `{uid}_{année}-{mois}` (mois UTC, sans zéro devant),
+    // ce qui rend toute seconde écriture du même mois impossible (update interdit).
+    // Les admins et devs écrivent sans limite (tests). Les visiteurs anonymes ne
+    // peuvent être limités que côté client.
+    function canCreateRoti(entryId) {
+      return isValidRoti() && (
+        isAdmin()
+        || (isAuthenticated()
+            && request.resource.data.userId == request.auth.uid
+            && entryId == request.auth.uid + '_' + string(request.time.year()) + '-' + string(request.time.month()))
+        || (!isAuthenticated() && request.resource.data.userId == null)
+      );
+    }
+
+    match /roti/{entryId} {
+      allow create: if canCreateRoti(entryId);
+      allow read, delete: if isAdmin();
+      allow update: if false;
+    }
+
+    match /roti_dev/{entryId} {
+      allow create: if canCreateRoti(entryId);
+      allow read, delete: if isAdmin();
+      allow update: if false;
+    }
+
     // Collection tickets
     match /tickets/{ticketId} {
       // Les clients authentifiés peuvent lire (pour voir leurs tickets ou liste partagée)

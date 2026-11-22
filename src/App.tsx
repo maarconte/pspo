@@ -11,6 +11,7 @@ import { InfoPopup } from "./features/info-popup/components/InfoPopup/InfoPopup"
 import { MagicLinkRedirector } from "./features/auth/components/MagicLinkRedirector/MagicLinkRedirector";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { QuestionsLoader } from "./features/quiz";
+import { RotiPrompt } from "./features/roti";
 import { Suspense } from "react";
 import { UsefulLinksDrawer } from "./features/useful-links/components/UsefulLinksDrawer/UsefulLinksDrawer";
 import { queryClient } from "./lib/react-query/queryClient";
@@ -24,6 +25,7 @@ function App() {
         <DocumentationDrawer />
         <UsefulLinksDrawer />
         <InfoPopup />
+        <RotiPrompt />
         <QuestionsLoader>
           <MagicLinkRedirector />
           <Header />

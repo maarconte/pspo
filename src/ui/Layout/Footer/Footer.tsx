@@ -37,6 +37,9 @@ const Footer = () => {
                 Scrum Guide
               </Link>
             </li>
+            <li>
+              <Link to="/roti">Learn about the ROTI</Link>
+            </li>
           </ul>
         </div>
 

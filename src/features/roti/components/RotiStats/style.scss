@@ -1,0 +1,121 @@
+@use "../../../../assets/scss/variables" as *;
+@use "../../styles/score-colors" as *;
+
+.roti-stats {
+  margin: 1.5rem 0;
+
+  &__filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+
+    select {
+      padding: 0.35rem 0.5rem;
+      border-radius: 8px;
+      border: 1px solid $primary-100;
+      font: inherit;
+    }
+  }
+
+  &__message {
+    color: $primary-700;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__distribution {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    li {
+      display: grid;
+      grid-template-columns: 1.5rem 1fr 6rem;
+      align-items: center;
+      gap: 0.75rem;
+      @include roti-score-colors;
+    }
+  }
+
+  &__score {
+    font-weight: 700;
+  }
+
+  &__bar-track {
+    height: 1rem;
+    border-radius: 999px;
+    background: $primary-50;
+    overflow: hidden;
+  }
+
+  &__bar {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--roti-color);
+    transition: width 0.3s ease;
+  }
+
+  &__count {
+    font-size: 0.85rem;
+    color: $primary-700;
+    text-align: right;
+  }
+
+  &__comments {
+    h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.75rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      @include roti-score-colors;
+
+      p {
+        margin: 0;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      small {
+        color: $primary-700;
+      }
+    }
+  }
+
+  &__comment-score {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    background: var(--roti-color);
+    color: var(--roti-text);
+  }
+}

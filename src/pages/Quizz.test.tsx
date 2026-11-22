@@ -8,6 +8,7 @@ import { useQuizStatsStore } from "../stores/useQuizStatsStore";
 import { toast } from "react-toastify";
 import { MemoryRouter } from "react-router-dom";
 import { useCoopStore } from "../stores/useCoopStore";
+import { useRotiPromptStore } from "../features/roti";
 
 // Mocking external dependencies
 vi.mock("../stores/useQuestionsStore", () => ({
@@ -22,6 +23,8 @@ vi.mock("../stores/useQuestionsStore", () => ({
       score: 0,
       userAnswers: [],
       setScore: vi.fn(),
+      startNewExam: vi.fn(),
+      setTotalTimeSpent: vi.fn(),
       formation: "pspo-I",
       calculateScore: vi.fn(() => 0),
       getSuccessPercentage: vi.fn(() => 0),
@@ -34,6 +37,12 @@ vi.mock("../stores/useQuestionsStore", () => ({
 }));
 
 vi.mock("react-toastify");
+
+// The finished-quiz view renders these; they need stores/providers that
+// are irrelevant to what this file tests.
+vi.mock("../features/quiz/components/QuestionCard/QuestionCard", () => ({ default: () => null }));
+vi.mock("../features/quiz/components/QuizzScore/QuizzScore", () => ({ default: () => null }));
+vi.mock("../features/quiz/components/DomainScores/DomainScores", () => ({ default: () => null }));
 
 vi.mock("../hooks/useSaveQuizSession", () => ({
   useSaveQuizSession: vi.fn(() => ({ mutate: vi.fn() })),
@@ -257,5 +266,64 @@ describe("Quizz Component - Coop Mode", () => {
 
     expect(screen.queryByText("Alice")).toBeNull();
     expect(screen.queryByText("Bob")).toBeNull();
+  });
+});
+
+describe("Quizz Component - ROTI prompt", () => {
+  const finishQuiz = () => {
+    fireEvent.click(screen.getByRole("button", { name: "Finish" }));
+    // The confirmation modal adds a second "Finish" button.
+    const buttons = screen.getAllByRole("button", { name: "Finish" });
+    fireEvent.click(buttons[buttons.length - 1]);
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    useRotiPromptStore.setState({ isOpen: false });
+  });
+
+  it("does not open the prompt while the quiz is in progress", () => {
+    const { unmount } = render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+    unmount();
+    expect(useRotiPromptStore.getState().isOpen).toBe(false);
+  });
+
+  it("does not open the prompt as soon as the quiz finishes", () => {
+    render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+    finishQuiz();
+    expect(screen.getAllByText("Restart Quiz").length).toBeGreaterThan(0);
+    expect(useRotiPromptStore.getState().isOpen).toBe(false);
+  });
+
+  it("opens the prompt when leaving a finished quiz", () => {
+    const { unmount } = render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+    finishQuiz();
+    unmount();
+    expect(useRotiPromptStore.getState().isOpen).toBe(true);
+    expect(useRotiPromptStore.getState().formation).toBe("pspo-I");
+  });
+
+  it("opens the prompt when restarting a finished quiz", () => {
+    render(
+      <MemoryRouter>
+        <Quizz />
+      </MemoryRouter>
+    );
+    finishQuiz();
+    fireEvent.click(screen.getAllByText("Restart Quiz")[0]);
+    expect(useRotiPromptStore.getState().isOpen).toBe(true);
+    expect(useRotiPromptStore.getState().formation).toBe("pspo-I");
   });
 });

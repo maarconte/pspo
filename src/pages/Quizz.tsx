@@ -17,6 +17,7 @@ import QuizzScore from "../features/quiz/components/QuizzScore/QuizzScore";
 import ReviewEmptyState from "../features/quiz/components/ReviewEmptyState/ReviewEmptyState";
 import StatCard from "../ui/StatCard/StatCard";
 import { toast } from "react-toastify";
+import { useRotiPromptStore } from "../features/roti";
 import { trackEvent } from "../lib/analytics";
 import { useCoopStore } from "../stores/useCoopStore";
 import { useQuestionsStore } from "../stores/useQuestionsStore";
@@ -51,6 +52,21 @@ export default function Quizz() {
   const timeSpentRef = useRef(0);
   const [open, setOpen] = React.useState(false);
   const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
+  const openRotiPrompt = useRotiPromptStore((s) => s.open);
+  // Mirrors isFinished so the unmount cleanup sees its latest value.
+  const isFinishedRef = useRef(false);
+  isFinishedRef.current = isFinished;
+  const formationRef = useRef(formation);
+  formationRef.current = formation;
+
+  // Leaving a finished quiz (navigation) triggers the ROTI pop-up, which is
+  // mounted at the app level and so survives this page unmounting.
+  useEffect(
+    () => () => {
+      if (isFinishedRef.current) openRotiPrompt(formationRef.current);
+    },
+    [openRotiPrompt],
+  );
 
   const startTracking = useQuizStatsStore((s) => s.startTracking);
   const startQuestion = useQuizStatsStore((s) => s.startQuestion);
@@ -232,6 +248,7 @@ export default function Quizz() {
   };
 
   const handleRestart = () => {
+    openRotiPrompt(formation);
     trackEvent("quiz_restarted", {
       formation,
       previous_score_pct: getSuccessPercentage(),

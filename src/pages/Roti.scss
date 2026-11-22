@@ -1,0 +1,53 @@
+@use '../assets/scss/variables' as *;
+
+.roti-page {
+  padding: 2rem 0 4rem;
+
+  .container {
+    max-width: 720px;
+  }
+
+  &__language {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    h1 {
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  &__subtitle {
+    font-size: 1.1rem;
+    color: $primary-500;
+    font-weight: 600;
+  }
+
+  section {
+    margin-bottom: 2rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  ol {
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__vote {
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid $primary-50;
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
