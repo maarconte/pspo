@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RotiEntry } from '../../types/roti.types';
-import { computeRotiStats } from '../../utils/roti.utils';
+import { computeRotiStats, listRotiFormations } from '../../utils/roti.utils';
 
 vi.mock('../../hooks/useRotiStats', () => ({ useRotiStats: vi.fn() }));
 
@@ -21,6 +21,7 @@ const entry = (id: string, score: number, ms: number, extra: Partial<RotiEntry> 
 const mockHook = (entries: RotiEntry[], over: Record<string, unknown> = {}) =>
   vi.mocked(useRotiStats).mockReturnValue({
     stats: computeRotiStats(entries),
+    formations: listRotiFormations(entries),
     isLoading: false,
     error: null,
     ...over,
@@ -75,5 +76,23 @@ describe('RotiStats', () => {
     mockHook([entry('a', 4, 1)]);
     render(<RotiStats />);
     expect(screen.queryByText('Latest comments')).toBeNull();
+  });
+
+  it('offers a module filter built from the ratings and passes it to the hook', () => {
+    mockHook([entry('a', 4, 1, { formation: 'pspo-I' }), entry('b', 2, 2, { formation: 'psm' }), entry('c', 5, 3)]);
+    render(<RotiStats />);
+    const select = screen.getByLabelText('Module');
+    expect(screen.getByRole('option', { name: 'All modules' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'PSPO-I' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'psm' })).toBeInTheDocument();
+
+    fireEvent.change(select, { target: { value: 'psm' } });
+    expect(useRotiStats).toHaveBeenLastCalledWith('psm');
+  });
+
+  it('hides the filter when no rating has a module', () => {
+    mockHook([entry('a', 4, 1)]);
+    render(<RotiStats />);
+    expect(screen.queryByLabelText('Module')).toBeNull();
   });
 });

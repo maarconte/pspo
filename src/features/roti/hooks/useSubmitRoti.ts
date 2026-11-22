@@ -12,9 +12,9 @@ export interface SubmitRotiState {
 
 /**
  * Form action state for a ROTI submission (monthly limit: see useRotiEligibility). The form must provide `score`
- * and optionally `comment`; `source` and `moduleId` are fixed by the caller.
+ * and optionally `comment`; `source` and `formation` are fixed by the caller.
  */
-export const useSubmitRoti = (source: RotiSource, moduleId?: string | null) => {
+export const useSubmitRoti = (source: RotiSource, formation?: string | null) => {
   const { isExempt, canSubmit } = useRotiEligibility();
 
   return useActionState<SubmitRotiState, FormData>(async (_prev, formData) => {
@@ -30,7 +30,7 @@ export const useSubmitRoti = (source: RotiSource, moduleId?: string | null) => {
         score: score as RotiScore,
         comment: String(formData.get('comment') ?? ''),
         source,
-        moduleId,
+        formation,
         unlimited: isExempt,
       });
       return { status: 'success' };

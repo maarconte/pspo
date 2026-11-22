@@ -51,3 +51,7 @@ export const getRotiMonthKey = (date: Date = new Date()): string =>
 /** Deterministic document id: one ROTI per signed-in user and month. */
 export const getRotiDocId = (uid: string, date: Date = new Date()): string =>
   `${uid}_${getRotiMonthKey(date)}`;
+
+/** Distinct formations found in the ratings, sorted (entries without one are skipped). */
+export const listRotiFormations = (entries: RotiEntry[]): string[] =>
+  [...new Set(entries.map((e) => e.formation).filter((f): f is string => !!f))].sort();

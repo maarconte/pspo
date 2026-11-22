@@ -56,12 +56,14 @@ export default function Quizz() {
   // Mirrors isFinished so the unmount cleanup sees its latest value.
   const isFinishedRef = useRef(false);
   isFinishedRef.current = isFinished;
+  const formationRef = useRef(formation);
+  formationRef.current = formation;
 
   // Leaving a finished quiz (navigation) triggers the ROTI pop-up, which is
   // mounted at the app level and so survives this page unmounting.
   useEffect(
     () => () => {
-      if (isFinishedRef.current) openRotiPrompt();
+      if (isFinishedRef.current) openRotiPrompt(formationRef.current);
     },
     [openRotiPrompt],
   );
@@ -246,7 +248,7 @@ export default function Quizz() {
   };
 
   const handleRestart = () => {
-    openRotiPrompt();
+    openRotiPrompt(formation);
     trackEvent("quiz_restarted", {
       formation,
       previous_score_pct: getSuccessPercentage(),

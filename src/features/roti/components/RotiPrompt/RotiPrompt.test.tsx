@@ -23,7 +23,7 @@ describe('RotiPrompt', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     Object.assign(elig, { canSubmit: true, isExempt: false, isLoading: false });
-    useRotiPromptStore.setState({ isOpen: false });
+    useRotiPromptStore.setState({ isOpen: false, formation: null });
   });
 
   it('renders nothing while closed', () => {
@@ -52,6 +52,19 @@ describe('RotiPrompt', () => {
     expect(submitRoti).toHaveBeenCalledWith(expect.objectContaining({ score: 4, source: 'quiz' }));
     expect(toast.success).toHaveBeenCalledWith(
       'Your ROTI rating has been recorded, thank you!',
+    );
+  });
+
+  it('saves the formation of the quiz that opened it', async () => {
+    render(<RotiPrompt />);
+    act(() => useRotiPromptStore.getState().open('pspo-I'));
+
+    fireEvent.click(screen.getByLabelText('5'));
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => expect(submitRoti).toHaveBeenCalled());
+    expect(submitRoti).toHaveBeenCalledWith(
+      expect.objectContaining({ score: 5, source: 'quiz', formation: 'pspo-I' }),
     );
   });
 

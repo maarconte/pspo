@@ -1,6 +1,8 @@
 import "./style.scss";
 
 import { MessageSquare, Star, Users } from "lucide-react";
+import { useState } from "react";
+import { getFormationLabel } from "../../../../utils/helpers/formationLabel";
 import StatCard from "../../../../ui/StatCard/StatCard";
 import { useRotiStats } from "../../hooks/useRotiStats";
 import { ROTI_SCORES, type RotiEntry } from "../../types/roti.types";
@@ -12,7 +14,8 @@ const formatDate = (entry: RotiEntry): string =>
 
 /** Admin block: ROTI ratings submitted from the end-of-quiz pop-up and the ROTI page. */
 export default function RotiStats() {
-  const { stats, isLoading, error } = useRotiStats();
+  const [formation, setFormation] = useState("");
+  const { stats, formations, isLoading, error } = useRotiStats(formation || undefined);
 
   if (error) {
     return (
@@ -28,10 +31,26 @@ export default function RotiStats() {
 
   return (
     <section className="roti-stats">
+      {formations.length > 0 && (
+        <label className="roti-stats__filter">
+          <span>Module</span>
+          <select value={formation} onChange={(e) => setFormation(e.target.value)}>
+            <option value="">All modules</option>
+            {formations.map((f) => (
+              <option key={f} value={f}>
+                {getFormationLabel(f)}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+
       {isLoading ? (
         <p className="roti-stats__message">Loading...</p>
       ) : stats.total === 0 ? (
-        <p className="roti-stats__message">No ROTI rating yet.</p>
+        <p className="roti-stats__message">
+          {formation ? "No ROTI rating for this module yet." : "No ROTI rating yet."}
+        </p>
       ) : (
         <>
           <div className="roti-stats__cards">

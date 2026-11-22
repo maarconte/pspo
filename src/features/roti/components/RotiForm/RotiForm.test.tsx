@@ -66,7 +66,7 @@ describe('RotiForm', () => {
       score: 2,
       comment: 'bof',
       source: 'page',
-      moduleId: undefined,
+      formation: undefined,
       unlimited: false,
     });
   });

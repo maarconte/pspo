@@ -14,6 +14,7 @@ export const ROTI_PAGE_HREF = `${import.meta.env.BASE_URL}#/roti`;
 export default function RotiPrompt() {
   const isOpen = useRotiPromptStore((s) => s.isOpen);
   const close = useRotiPromptStore((s) => s.close);
+  const formation = useRotiPromptStore((s) => s.formation);
   const { canSubmit } = useRotiEligibility();
 
   const handleSuccess = () => {
@@ -37,7 +38,7 @@ export default function RotiPrompt() {
           {t.prompt.link}
         </a>
       </p>
-      <RotiForm source="quiz" onSuccess={handleSuccess} />
+      <RotiForm source="quiz" formation={formation} onSuccess={handleSuccess} />
     </Modal>
   );
 }

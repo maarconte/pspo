@@ -17,8 +17,12 @@ export interface RotiEntry {
   score: RotiScore;
   comment?: string;
   source: RotiSource;
-  /** Module the quiz belonged to (quiz source only). */
-  moduleId?: string | null;
+  /**
+   * Module the quiz belonged to, as the app identifies it: the formation value
+   * (e.g. "pspo-I"), not the module document id. Absent on rating from the
+   * ROTI page and on entries saved before this field existed.
+   */
+  formation?: string | null;
   /** UID of the author; null for anonymous visitors. */
   userId: string | null;
   createdAt: Timestamp;
@@ -28,7 +32,7 @@ export interface SubmitRotiPayload {
   score: RotiScore;
   comment?: string;
   source: RotiSource;
-  moduleId?: string | null;
+  formation?: string | null;
   /** Admins and devs may rate as often as they want (tests). */
   unlimited?: boolean;
 }

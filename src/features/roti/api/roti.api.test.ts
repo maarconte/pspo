@@ -30,7 +30,7 @@ describe('submitRoti', () => {
       score: 4,
       source: 'quiz',
       userId: null,
-      moduleId: null,
+      formation: null,
       createdAt: 'ts',
     });
   });
@@ -41,12 +41,12 @@ describe('submitRoti', () => {
     });
 
     it('writes to the deterministic uid_month document', async () => {
-      await submitRoti({ score: 5, source: 'page', moduleId: 'm1' });
+      await submitRoti({ score: 5, source: 'page', formation: 'pspo-I' });
       expect(doc).toHaveBeenCalledWith({}, expect.any(String), getRotiDocId('u1'));
       expect(addDoc).not.toHaveBeenCalled();
       expect(vi.mocked(setDoc).mock.calls[0][1]).toMatchObject({
         userId: 'u1',
-        moduleId: 'm1',
+        formation: 'pspo-I',
         source: 'page',
       });
     });

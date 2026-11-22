@@ -41,7 +41,7 @@ export const submitRoti = async (payload: SubmitRotiPayload): Promise<void> => {
   const data = {
     score: payload.score,
     source: payload.source,
-    moduleId: payload.moduleId ?? null,
+    formation: payload.formation ?? null,
     userId: uid,
     ...(comment ? { comment } : {}),
     createdAt: serverTimestamp(),

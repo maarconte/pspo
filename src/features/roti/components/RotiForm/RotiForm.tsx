@@ -15,7 +15,8 @@ import { canComment } from '../../utils/roti.utils';
 
 interface RotiFormProps {
   source: RotiSource;
-  moduleId?: string | null;
+  /** Formation of the quiz that was just completed, when there is one. */
+  formation?: string | null;
   onSuccess?: () => void;
   lang?: RotiLang;
   submitLabel?: string;
@@ -24,14 +25,14 @@ interface RotiFormProps {
 /** 5-step gauge (required) + optional comment for scores <= 3. */
 export default function RotiForm({
   source,
-  moduleId,
+  formation,
   onSuccess,
   lang = DEFAULT_ROTI_LANG,
   submitLabel,
 }: RotiFormProps) {
   const t = ROTI_TEXTS[lang].form;
   const [score, setScore] = useState<RotiScore | null>(null);
-  const [state, formAction, isPending] = useSubmitRoti(source, moduleId);
+  const [state, formAction, isPending] = useSubmitRoti(source, formation);
   const groupId = useId();
   const { canSubmit, isLoading, markSubmitted } = useRotiEligibility();
 

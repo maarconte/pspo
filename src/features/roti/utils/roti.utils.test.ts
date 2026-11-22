@@ -6,6 +6,7 @@ import {
   getRotiDocId,
   getRotiMonthKey,
   isRotiScore,
+  listRotiFormations,
   normalizeComment,
 } from './roti.utils';
 
@@ -69,5 +70,12 @@ describe('getRotiMonthKey / getRotiDocId', () => {
     const date = new Date('2026-11-22T10:00:00Z');
     expect(getRotiDocId('u1', date)).toBe('u1_2026-11');
     expect(getRotiDocId('u1', date)).not.toBe(getRotiDocId('u2', date));
+  });
+});
+
+describe('listRotiFormations', () => {
+  it('returns the distinct formations, sorted, ignoring entries without one', () => {
+    const e = (formation?: string | null) => ({ formation }) as unknown as RotiEntry;
+    expect(listRotiFormations([e('psm'), e('pspo-I'), e('psm'), e(null), e()])).toEqual(['psm', 'pspo-I']);
   });
 });

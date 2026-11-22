@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react';
 import { subscribeToRoti } from '../api/roti.api';
-import type { RotiStats } from '../types/roti.types';
-import { computeRotiStats } from '../utils/roti.utils';
+import type { RotiEntry } from '../types/roti.types';
+import { computeRotiStats, listRotiFormations } from '../utils/roti.utils';
 
-export const useRotiStats = () => {
-  const [stats, setStats] = useState<RotiStats>(() => computeRotiStats([]));
+/**
+ * Live ROTI stats. `formation` narrows them to one module; leave it out for
+ * every rating (including those from the ROTI page, which have no module).
+ */
+export const useRotiStats = (formation?: string) => {
+  const [entries, setEntries] = useState<RotiEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const unsubscribe = subscribeToRoti(
-      (entries) => {
-        setStats(computeRotiStats(entries));
+      (data) => {
+        setEntries(data);
         setIsLoading(false);
       },
       (err) => {
@@ -22,5 +26,9 @@ export const useRotiStats = () => {
     return () => unsubscribe();
   }, []);
 
-  return { stats, isLoading, error };
+  const stats = computeRotiStats(
+    formation ? entries.filter((e) => e.formation === formation) : entries,
+  );
+
+  return { stats, formations: listRotiFormations(entries), isLoading, error };
 };

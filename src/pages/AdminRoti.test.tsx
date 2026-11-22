@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 vi.mock('../features/roti/hooks/useRotiStats', () => ({
   useRotiStats: () => ({
     stats: { total: 0, average: null, distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }, comments: [] },
+    formations: [],
     isLoading: false,
     error: null,
   }),

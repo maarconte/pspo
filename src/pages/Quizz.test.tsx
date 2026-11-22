@@ -312,6 +312,7 @@ describe("Quizz Component - ROTI prompt", () => {
     finishQuiz();
     unmount();
     expect(useRotiPromptStore.getState().isOpen).toBe(true);
+    expect(useRotiPromptStore.getState().formation).toBe("pspo-I");
   });
 
   it("opens the prompt when restarting a finished quiz", () => {
@@ -323,5 +324,6 @@ describe("Quizz Component - ROTI prompt", () => {
     finishQuiz();
     fireEvent.click(screen.getAllByText("Restart Quiz")[0]);
     expect(useRotiPromptStore.getState().isOpen).toBe(true);
+    expect(useRotiPromptStore.getState().formation).toBe("pspo-I");
   });
 });
