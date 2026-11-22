@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import type { Module } from "../../types/module.types";
+import { DuplicateModuleTitleError } from "../../api/moduleErrors";
+import { updateModule } from "../../api/modules.api";
 import { ModuleFormModal } from "./ModuleFormModal";
 
 vi.mock("../../api/modules.api", () => ({
@@ -101,5 +103,23 @@ describe("ModuleFormModal domain percentages", () => {
     expect(field("Domaine B").value).toBe("33");
     expect(field("Domaine C").value).toBe("33");
     expect(screen.getByText(/Total configuré : 100%/)).toBeInTheDocument();
+  });
+});
+
+describe("ModuleFormModal title uniqueness", () => {
+  it("shows an inline error and keeps the modal open when the title is already taken", async () => {
+    vi.mocked(updateModule).mockRejectedValueOnce(new DuplicateModuleTitleError("PSM"));
+    const onClose = vi.fn();
+    render(<ModuleFormModal isOpen onClose={onClose} module={module} />);
+
+    fireEvent.change(screen.getByLabelText("Title"), { target: { value: "PSM" } });
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("already exists");
+    expect(onClose).not.toHaveBeenCalled();
+
+    // Editing the title clears the error.
+    fireEvent.change(screen.getByLabelText("Title"), { target: { value: "PSM 2" } });
+    await waitFor(() => expect(screen.queryByRole("alert")).toBeNull());
   });
 });
