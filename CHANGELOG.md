@@ -3,6 +3,16 @@
 Toutes les évolutions notables du projet sont documentées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
 
+## [2.11.1] - 2026-11-22
+
+### Corrigé
+
+- Renommer un module dans l'administration ne fait plus disparaître ses questions : leur étiquette de module (`type`) est désormais réécrite avec le nouveau titre. Les questions sont migrées avant l'enregistrement du titre, ce qui permet de réessayer en cas d'échec. Les questions déjà orphelines (module renommé avant ce correctif) ne sont pas récupérées automatiquement.
+
+### Ajouté
+
+- Contrôle d'unicité du titre d'un module à la création et au renommage (comparaison sans tenir compte de la casse ni des espaces autour) : un titre déjà utilisé est refusé avec un message sous le champ Titre, sans rien modifier.
+
 ## [2.11.0] - 2026-11-22
 
 ### Ajouté
